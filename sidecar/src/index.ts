@@ -23,7 +23,7 @@ import { authChecker } from "./lib/authChecker";
 import { createDbConnection } from "./db";
 import * as config from "./config";
 import { ResolverContext } from "./lib/types";
-import ApiRoutes from "./rest/api";
+import ApiRoutes from "./rest";
 
 // Set timezone of server to UTC
 // BE CAREFUL, THIS IS NOT ENOUGH. ALWAYS RUN YOUR SCRIPTS WITH TZ=UTC
