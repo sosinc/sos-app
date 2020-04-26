@@ -1,0 +1,85 @@
+* Data model
+
+** Employee
+| Column        | Type                      |
+|---------------+---------------------------|
+| ecode         | text                      |
+| profileId     | FK -> Profile             |
+| joiningDate   | Datetime                  |
+| relieving Date | Datetime                  |
+| designation   | FK -> EmployeeDesignation |
+
+** Designation
+| Column      | Type |
+| designation | text |
+
+** User
+| Column   | Type       |
+|----------+------------|
+| password | text       |
+| name     | text       |
+| avatar   | text       |
+| bio      | text       |
+
+** Email
+| Column      | Type          |
+|-------------+---------------|
+| email       | text          |
+| is_verified | boolean       |
+| userId      | FK -> Profile |
+
+** ? Social Media Profiles
+| Column   | Type |
+|----------+------|
+| type     | text |
+| name     | text |
+| web_url  | text |
+| feed_url | text |
+
+** Client Account
+| Column      | Type |
+|-------------+------|
+| name        | text |
+| description | text |
+| logo        | text |
+
+** Project
+| Column            | Type                 |
+|-------------------+----------------------|
+| name              | text                 |
+| description       | text                 |
+| logo              | text                 |
+| client_account_id | FK -> Client Account |
+
+** Team
+| Column     | Type          |
+|------------+---------------|
+| name       | text          |
+| project_id | FK -> Project |
+
+** Teams Employees
+| Column                | Type              |
+|-----------------------+-------------------|
+| employee_id           | FK -> Employee    |
+| team_id               | FK -> Team        |
+| effective_designation | FK -> Designation |
+| max_billable_hours    | Float             |
+
+** Daily Status Update
+| Column         | Type          |
+|----------------+---------------|
+| project_id     | FK -> Project |
+| user_id        | FK -> User    |
+| body           | text          |
+| issue_id       | text          |
+| is_delivered   | boolean       |
+| billable_hours | Float         |
+
+** Activity
+| Column     | Type       |
+|------------+------------|
+| user_id    | FK -> User |
+| entity     | text       |
+| operation  | text       |
+| payload    | jsonb      |
+| project_id | FK -> Team |

@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "strictFunctionTypes": false,
+    "lib": ["dom", "es2018"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "outDir": "./dist",
+    "skipLibCheck": true,
+    "removeComments": false,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "target": "es6",
+    "typeRoots": ["./src/lib/types", "./node_modules/@types"]
+  },
+  "exclude": ["./node_modules"],
+  "include": ["src/**/*.tsx", "src/**/*.ts", "src/**/*.js", "src/**/*.jx"]
+}

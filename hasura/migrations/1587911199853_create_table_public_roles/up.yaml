@@ -1,0 +1,10 @@
+- args:
+    cascade: false
+    read_only: false
+    sql: CREATE TABLE "public"."roles"("id" integer NOT NULL, "name" text NOT NULL,
+      PRIMARY KEY ("id") , UNIQUE ("id"), UNIQUE ("name"));
+  type: run_sql
+- args:
+    name: roles
+    schema: public
+  type: add_existing_table_or_view

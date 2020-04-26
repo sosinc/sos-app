@@ -1,0 +1,18 @@
+[
+  {
+    "name": "development",
+    "type": "postgres",
+    "synchronize": false,
+    "logging": true,
+    "entities": ["src/entity/**/*.entity.ts"],
+    "migrationsTableName": "typeormmigrations"
+  },
+  {
+    "name": "production",
+    "type": "postgres",
+    "synchronize": false,
+    "logging": true,
+    "entities": ["dist/entity/**/*.entity.js"],
+    "migrationsTableName": "typeormmigrations"
+  }
+]
