@@ -58,12 +58,14 @@ export class AuthResolver {
     }
   }
 
-  @Mutation(returns => User)
-  async signUp(
-    @Arg("email") email: string,
-    @Arg("password") password: string,
-    @Ctx() { req: { session } }: ResolverContext
-  ): Promise<User> {
+  @Mutation(returns => User, {
+    description: `
+      Create new user with email only.
+      Frontend should make a call to sendPasswordResetOtp behind the scenes
+      and ask for new password and OTP.
+      Password should then be set with resetPassword.`,
+  })
+  async signUp(@Arg("email") email: string): Promise<User> {
     const exists = await this.userRepo.findOne({ email });
     if (exists) {
       throw new ServerError("Email already in use", { status: 409 });
@@ -71,14 +73,10 @@ export class AuthResolver {
 
     await this.userRepo.save({
       email,
-      passwordHash: await hash(password, 10),
+      passwordHash: await hash(makeRandom(20), 10),
       role: 1,
     });
     const user = await this.userRepo.findOneOrFail({ email });
-
-    if (user && session) {
-      session.user = await this.userRepo.findOne({ id: user.id });
-    }
 
     return user;
   }
