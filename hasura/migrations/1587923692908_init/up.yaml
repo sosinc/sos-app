@@ -1,10 +1,15 @@
 - args:
-    remote_schemas:
+    allowlist:
+    - collection: allowed-queries
+    query_collections:
     - definition:
-        forward_client_headers: true
-        timeout_seconds: 60
-        url: http://hot:4000/graphql
-      name: hot
+        queries:
+        - name: login
+          query: |-
+            mutation {
+              login
+            }
+      name: allowed-queries
     tables:
     - object_relationships:
       - name: project
@@ -44,7 +49,7 @@
       - name: employees
         using:
           foreign_key_constraint_on:
-            column: designation
+            column: designationCode
             table:
               name: employee
               schema: public
@@ -61,9 +66,9 @@
               name: daily_status_update
               schema: public
       object_relationships:
-      - name: designationName
+      - name: designation
         using:
-          foreign_key_constraint_on: designation
+          foreign_key_constraint_on: designationCode
       - name: team_employee
         using:
           manual_configuration:
@@ -75,8 +80,22 @@
       - name: user
         using:
           foreign_key_constraint_on: email
+      select_permissions:
+      - permission:
+          columns:
+          - ecode
+          - email
+          - joining_date
+          - relieving_date
+          filter:
+            email:
+              _eq: ""
+        role: user
       table:
         name: employee
+        schema: public
+    - table:
+        name: otp
         schema: public
     - array_relationships:
       - name: activities
@@ -99,6 +118,9 @@
           foreign_key_constraint_on: client_id
       table:
         name: project
+        schema: public
+    - table:
+        name: roles
         schema: public
     - array_relationships:
       - name: daily_status_updates
@@ -152,6 +174,14 @@
           passwordHash: password
         custom_root_fields: {}
       object_relationships:
+      - name: employee
+        using:
+          manual_configuration:
+            column_mapping:
+              email: email
+            remote_table:
+              name: employee
+              schema: public
       - name: eployee
         using:
           manual_configuration:
@@ -167,14 +197,15 @@
           - bio
           - id
           - name
-          filter: {}
+          filter:
+            id:
+              _eq: X-Hasura-User-Id
         role: user
       table:
         name: user
         schema: public
       update_permissions:
       - permission:
-          check: {}
           columns:
           - avatar
           - bio

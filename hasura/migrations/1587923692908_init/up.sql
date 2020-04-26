@@ -44,19 +44,12 @@ CREATE TABLE public.designation (
     name text
 );
 COMMENT ON COLUMN public.designation.name IS 'Display name of designation';
-INSERT INTO public.designation (value, name)
-VALUES
- ('PM', 'Project Manager'),
- ('TL', 'Technical Lead'),
- ('SSE', 'Senior Software Engineer'),
- ('SE', 'Software Engineer'),
- ('SA', 'Solutions Architect');
 CREATE TABLE public.employee (
     ecode text NOT NULL,
     email text NOT NULL,
     joining_date date,
     relieving_date date,
-    designation text
+    "designationCode" text
 );
 CREATE TABLE public.migrations (
     id integer NOT NULL,
@@ -71,6 +64,13 @@ CREATE SEQUENCE public.migrations_id_seq
     NO MAXVALUE
     CACHE 1;
 ALTER SEQUENCE public.migrations_id_seq OWNED BY public.migrations.id;
+CREATE TABLE public.otp (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    otp text NOT NULL,
+    "userId" uuid NOT NULL,
+    type text NOT NULL
+);
 CREATE TABLE public.project (
     name text NOT NULL,
     client_id uuid NOT NULL,
@@ -81,6 +81,10 @@ CREATE TABLE public.project (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL
 );
 COMMENT ON TABLE public.project IS 'A client''s project';
+CREATE TABLE public.roles (
+    id integer NOT NULL,
+    name text NOT NULL
+);
 CREATE TABLE public.team (
     name text NOT NULL,
     project_id uuid NOT NULL,
@@ -98,18 +102,35 @@ CREATE TABLE public.team_employee (
     updated_at timestamp with time zone DEFAULT now() NOT NULL
 );
 COMMENT ON TABLE public.team_employee IS 'An employee can be in multiple teams across projects';
+CREATE TABLE public.typeormmigrations (
+    id integer NOT NULL,
+    "timestamp" bigint NOT NULL,
+    name character varying NOT NULL
+);
+CREATE SEQUENCE public.typeormmigrations_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+ALTER SEQUENCE public.typeormmigrations_id_seq OWNED BY public.typeormmigrations.id;
 CREATE TABLE public."user" (
     "passwordHash" text NOT NULL,
-    name text NOT NULL,
+    name text,
     avatar text,
     bio text,
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
-    email text NOT NULL
+    email text NOT NULL,
+    role integer NOT NULL
 );
 COMMENT ON TABLE public."user" IS 'User of the application';
 ALTER TABLE ONLY public.migrations ALTER COLUMN id SET DEFAULT nextval('public.migrations_id_seq'::regclass);
+ALTER TABLE ONLY public.typeormmigrations ALTER COLUMN id SET DEFAULT nextval('public.typeormmigrations_id_seq'::regclass);
+ALTER TABLE ONLY public.typeormmigrations
+    ADD CONSTRAINT "PK_61e49e6c8df5ff28b7c9f723a28" PRIMARY KEY (id);
 ALTER TABLE ONLY public.migrations
     ADD CONSTRAINT "PK_8c82d7f526340ab734260ea46be" PRIMARY KEY (id);
 ALTER TABLE ONLY public.activity
@@ -126,12 +147,18 @@ ALTER TABLE ONLY public.employee
     ADD CONSTRAINT employee_email_key UNIQUE (email);
 ALTER TABLE ONLY public.employee
     ADD CONSTRAINT employee_pkey PRIMARY KEY (ecode);
+ALTER TABLE ONLY public.otp
+    ADD CONSTRAINT otp_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY public.project
     ADD CONSTRAINT project_client_id_name_key UNIQUE (client_id, name);
 ALTER TABLE ONLY public.project
     ADD CONSTRAINT project_id_key UNIQUE (id);
 ALTER TABLE ONLY public.project
     ADD CONSTRAINT project_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.roles
+    ADD CONSTRAINT roles_name_key UNIQUE (name);
+ALTER TABLE ONLY public.roles
+    ADD CONSTRAINT roles_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY public.team_employee
     ADD CONSTRAINT team_employee_ecode_key UNIQUE (ecode);
 ALTER TABLE ONLY public.team_employee
@@ -169,9 +196,11 @@ ALTER TABLE ONLY public.daily_status_update
 ALTER TABLE ONLY public.daily_status_update
     ADD CONSTRAINT daily_status_update_team_id_fkey FOREIGN KEY (team_id) REFERENCES public.team(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.employee
-    ADD CONSTRAINT employee_designation_fkey FOREIGN KEY (designation) REFERENCES public.designation(value) ON UPDATE RESTRICT ON DELETE RESTRICT;
+    ADD CONSTRAINT employee_designation_fkey FOREIGN KEY ("designationCode") REFERENCES public.designation(value) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.employee
     ADD CONSTRAINT employee_email_fkey FOREIGN KEY (email) REFERENCES public."user"(email) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ALTER TABLE ONLY public.otp
+    ADD CONSTRAINT "otp_userId_fkey" FOREIGN KEY ("userId") REFERENCES public."user"(id);
 ALTER TABLE ONLY public.project
     ADD CONSTRAINT project_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.client(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.team_employee
@@ -180,3 +209,5 @@ ALTER TABLE ONLY public.team_employee
     ADD CONSTRAINT team_employee_team_id_fkey FOREIGN KEY (team_id) REFERENCES public.team(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.team
     ADD CONSTRAINT team_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.project(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_role_fkey FOREIGN KEY (role) REFERENCES public.roles(id) ON UPDATE RESTRICT ON DELETE RESTRICT;

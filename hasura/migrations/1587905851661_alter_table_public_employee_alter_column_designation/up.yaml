@@ -1,5 +1,0 @@
-- args:
-    cascade: false
-    read_only: false
-    sql: alter table "public"."employee" rename column "designation" to "designationCode";
-  type: run_sql
