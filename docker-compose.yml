@@ -37,7 +37,7 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
       HASURA_GRAPHQL_ADMIN_SECRET: myadminsupersecretkey
       HASURA_GRAPHQL_AUTH_HOOK: http://sidecar/v1/api/authenticate
-      HASURA_GRAPHQL_AUTH_HOOK_MODE: POST
+      HASURA_GRAPHQL_AUTH_HOOK_MODE: GET
 
   sidecar:
     build: ./sidecar

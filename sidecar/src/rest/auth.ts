@@ -3,11 +3,11 @@ import { User } from "../entity/User.entity";
 
 const api = Router();
 
-api.post("/authenticate", (req, res) => {
+api.get("/authenticate", (req, res) => {
   const user = req.session?.user as User;
 
   if (!user) {
-    res.status(403).json({
+    return res.status(403).json({
       status: "I've never seen this man in my life",
     });
   }
@@ -15,6 +15,7 @@ api.post("/authenticate", (req, res) => {
   console.log("USER", user);
 
   return res.json({
+    "x-hasura-role": "user",
     "x-hasura-user-id": user.id,
   });
 });
