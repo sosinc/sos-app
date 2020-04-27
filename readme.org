@@ -1,85 +1,56 @@
-* Data model
+* Humans OF Trantor
 
-** Employee
-| Column        | Type                      |
-|---------------+---------------------------|
-| ecode         | text                      |
-| profileId     | FK -> Profile             |
-| joiningDate   | Datetime                  |
-| relieving Date | Datetime                  |
-| designation   | FK -> EmployeeDesignation |
+#+begin_quote
+Humans of Trantor aims to be a backbone on which Engineers of Trantor can build
+products for development of our colleagues.
+#+end_quote
 
-** Designation
-| Column      | Type |
-| designation | text |
+** Development
 
-** User
-| Column   | Type       |
-|----------+------------|
-| password | text       |
-| name     | text       |
-| avatar   | text       |
-| bio      | text       |
+*** Prerequisites
 
-** Email
-| Column      | Type          |
-|-------------+---------------|
-| email       | text          |
-| is_verified | boolean       |
-| userId      | FK -> Profile |
+Following must be installed:
+1. [[https://www.docker.com/][Docker]]
+2. [[https://docs.docker.com/compose/][Docker Compose]]
+3. [[https://hasura.io/docs/1.0/graphql/manual/hasura-cli/index.html#installation][Hasura CLI]]
 
-** ? Social Media Profiles
-| Column   | Type |
-|----------+------|
-| type     | text |
-| name     | text |
-| web_url  | text |
-| feed_url | text |
+*** Setup
 
-** Client Account
-| Column      | Type |
-|-------------+------|
-| name        | text |
-| description | text |
-| logo        | text |
+1. *Start the services*
+  #+begin_src sh
+  cd /path/to/humans-of-trantor
+  docker-compose up
+  #+end_src
 
-** Project
-| Column            | Type                 |
-|-------------------+----------------------|
-| name              | text                 |
-| description       | text                 |
-| logo              | text                 |
-| client_account_id | FK -> Client Account |
+2. Copy =.env= files
 
-** Team
-| Column     | Type          |
-|------------+---------------|
-| name       | text          |
-| project_id | FK -> Project |
+  #+begin_src sh
+    # hasura/.env
+    export HASURA_GRAPHQL_ADMIN_SECRET=myadminsupersecretkey
+  #+end_src
 
-** Teams Employees
-| Column                | Type              |
-|-----------------------+-------------------|
-| employee_id           | FK -> Employee    |
-| team_id               | FK -> Team        |
-| effective_designation | FK -> Designation |
-| max_billable_hours    | Float             |
+  #+begin_src sh
+    # sidecar/.env
+    NODE_ENV="development"
+    EXPRESS_SESSION_SECRET="EXPRESS_SESSION_SECRET"
+    REDISCLOUD_SESSION_URL="redis://redis:6379"
+    GRAPHQL_LOGGER=true
+    HOSTNAME="localhost"
+    SMTP_HOST="smtp.ethereal.email"
+    SMTP_PORT="587"
+    SMTP_USER="marcia.kirlin65@ethereal.email"
+    SMTP_PASSWORD="EN2pw6VzAZnkyzAuDb"
+    APP_NAME="Humans Of Trantor"
+  #+end_src
 
-** Daily Status Update
-| Column         | Type          |
-|----------------+---------------|
-| project_id     | FK -> Project |
-| user_id        | FK -> User    |
-| body           | text          |
-| issue_id       | text          |
-| is_delivered   | boolean       |
-| billable_hours | Float         |
+3. *Apply [[https://hasura.io/docs/1.0/graphql/manual/migrations/index.html][hasura migration]]*
+   #+begin_src sh
+     cd ./hasura
+     source ./.env
+     hasura migrate apply
+   #+end_src
 
-** Activity
-| Column     | Type       |
-|------------+------------|
-| user_id    | FK -> User |
-| entity     | text       |
-| operation  | text       |
-| payload    | jsonb      |
-| project_id | FK -> Team |
+4. *Start hasura console*
+  #+begin_src sh
+    hasura console
+  #+end_src

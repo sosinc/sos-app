@@ -44,6 +44,14 @@ CREATE TABLE public.designation (
     name text
 );
 COMMENT ON COLUMN public.designation.name IS 'Display name of designation';
+INSERT
+ INTO public.designation (value, name)
+VALUES
+  ('PM', 'Project Manager'),
+  ('SA', 'Solutions Architect'),
+  ('TL', 'Team Lead'),
+  ('SSE', 'Senior Software Engineer'),
+  ('SE', 'Software Engineer');
 CREATE TABLE public.employee (
     ecode text NOT NULL,
     email text NOT NULL,
