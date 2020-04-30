@@ -1,9 +1,4 @@
-* Humans OF Trantor
-
-#+begin_quote
-Humans of Trantor aims to be a backbone on which Engineers of Trantor can build
-products for development of our colleagues.
-#+end_quote
+* SoS App
 
 ** Development
 
