@@ -35,7 +35,7 @@ Following must be installed:
     SMTP_PORT="587"
     SMTP_USER="marcia.kirlin65@ethereal.email"
     SMTP_PASSWORD="EN2pw6VzAZnkyzAuDb"
-    APP_NAME="Humans Of Trantor"
+    APP_NAME="SoS App"
   #+end_src
 
 3. *Apply [[https://hasura.io/docs/1.0/graphql/manual/migrations/index.html][hasura migration]]*
