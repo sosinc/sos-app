@@ -10,4 +10,4 @@ RUN yarn
 
 COPY . /app
 
-RUN yarn build && yarn start
+RUN yarn build

@@ -10,7 +10,7 @@ const {
 // create reusable transporter object using the default SMTP transport
 const transporter = createTransport({
   host: SMTP_HOST,
-  port: SMTP_PORT,
+  port: parseInt(SMTP_PORT, 10),
   secure: false, // true for 465, false for other ports
   auth: {
     user: SMTP_USER,

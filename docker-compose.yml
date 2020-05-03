@@ -11,7 +11,6 @@ services:
 
   redis:
     image: redis:alpine
-    restart: always
     volumes:
       - ./docker-volumes/redis:/data
 
@@ -27,7 +26,7 @@ services:
       PGADMIN_DEFAULT_PASSWORD: hot
 
   hasura:
-    image: hasura/graphql-engine:v1.1.1
+    image: hasura/graphql-engine:v1.2.0
     ports:
     - "8080:8080"
     depends_on:
@@ -49,4 +48,8 @@ services:
       DATABASE_URL: postgres://hot:hot@postgres:5432/hot
     volumes:
       - "./sidecar/:/app"
+    depends_on:
+      - postgres
+      - redis
+      - hasura
     command: yarn dev
