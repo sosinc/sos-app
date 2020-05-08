@@ -1,0 +1,6 @@
+- args:
+    role: app_admin
+    table:
+      name: organization
+      schema: public
+  type: drop_update_permission

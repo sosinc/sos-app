@@ -13,7 +13,7 @@ CREATE TABLE public.role (
     id text NOT NULL,
     name text NOT NULL
 );
-INSERT INTO public.role (id, name) VALUES ('USER', 'User'), ('ADMIN', 'Admin');
+INSERT INTO public.role (id, name) VALUES ('USER', 'User'), ('APP_ADMIN', 'Application Admin');
 CREATE TABLE public."user" (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     name text NOT NULL,

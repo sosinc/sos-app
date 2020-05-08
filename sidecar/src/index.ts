@@ -77,7 +77,7 @@ const createApp = async () => {
         sameSite: config.isProduction && "none",
         domain: config.isProduction ? config.HOSTNAME : undefined,
       },
-      name: "hot.cookie",
+      name: "sos.cookie",
       proxy: config.isProduction,
       resave: false,
       saveUninitialized: false,

@@ -2,6 +2,7 @@ import { Resolver, Mutation, Arg, Query, Ctx, Authorized } from "type-graphql";
 import { InjectRepository } from "typeorm-typedi-extensions";
 import { compare, hash } from "bcrypt";
 import { Repository } from "typeorm";
+import { AuthenticationError } from "apollo-server-errors";
 import { User } from "../../entity/User.entity";
 import { ResolverContext } from "../../lib/types";
 import ServerError from "../../lib/ServerError";
@@ -37,6 +38,12 @@ export class AuthResolver {
         });
       }
 
+      if (!user.passwordHash) {
+        throw new ServerError("Please set your password to login", {
+          status: 412,
+        });
+      }
+
       const isValidPassword = await compare(password, user.passwordHash);
       if (!isValidPassword) {
         throw new ServerError("Invalid email/password", {
@@ -52,6 +59,14 @@ export class AuthResolver {
 
       throw new ServerError(error.message);
     }
+  }
+
+  @Authorized()
+  @Mutation(returns => String)
+  async logout(@Ctx() { req }: ResolverContext) {
+    req.session = null;
+
+    return "ok";
   }
 
   @Mutation(returns => String)

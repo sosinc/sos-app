@@ -1,0 +1,17 @@
+- args:
+    permission:
+      allow_aggregations: false
+      backend_only: false
+      columns:
+      - logo
+      - logo_square
+      - name
+      - id
+      computed_fields: []
+      filter: {}
+      limit: null
+    role: app_admin
+    table:
+      name: organization
+      schema: public
+  type: create_select_permission

@@ -23,7 +23,7 @@ const createAdminUsers = async () => {
     const user = new User();
     user.email = email;
     user.name = "Admin";
-    user.role_id = "ADMIN";
+    user.role_id = "APP_ADMIN";
 
     return user;
   });
