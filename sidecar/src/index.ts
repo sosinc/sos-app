@@ -24,6 +24,7 @@ import { createDbConnection } from "./db";
 import * as config from "./config";
 import { ResolverContext } from "./lib/types";
 import ApiRoutes from "./rest";
+import seed from "./seed";
 
 // Set timezone of server to UTC
 // BE CAREFUL, THIS IS NOT ENOUGH. ALWAYS RUN YOUR SCRIPTS WITH TZ=UTC
@@ -143,6 +144,8 @@ const createApp = async () => {
 const run = async () => {
   const app = await createApp();
   const port = process.env.PORT || 4000;
+
+  await seed();
 
   app.listen(port, () => {
     console.info(`🚀 Server ready at http://localhost:${port}`);

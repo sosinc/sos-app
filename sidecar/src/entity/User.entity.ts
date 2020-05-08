@@ -1,5 +1,6 @@
-import { Entity, BaseEntity, Column, PrimaryColumn } from "typeorm";
+import { Entity, BaseEntity, Column, PrimaryColumn, ManyToOne, JoinColumn } from "typeorm";
 import { Field, ObjectType } from "type-graphql";
+import { Role } from "./Role.entity";
 
 @ObjectType()
 @Entity({ name: "user" })
@@ -23,10 +24,14 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   avatar: string;
 
-  @Field({ nullable: true })
-  @Column({ nullable: true })
-  bio: string;
+  @Field(type => Role)
+  @ManyToOne(type => Role)
+  @JoinColumn({
+    name: "role_id",
+    referencedColumnName: "id",
+  })
+  role: Role;
 
-  @Column({ nullable: false })
-  role: number;
+  @Column()
+  role_id: string;
 }

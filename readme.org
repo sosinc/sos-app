@@ -1,15 +1,40 @@
-* SoS App
+#+title: [S]nake [O]il [S]oftware App
 
-** Development
+SoS is an insolent app meant for Software Development teams to be more effective
+in creating good quality software.
 
-*** Prerequisites
+It does so by bringing transparency in your team and by aiming to save you from
+meetings.
+
+Being an insolent software, you can start using it without waiting on anyone to
+adopt it organization wide. Although to get most out of SoS, it is better if you
+join along your team.
+
+* MVP
+
+SoS is in early stages of development. In its MVP form, it has following goals:
+
+#+begin_quote
+Replace daily standup meetings while enhancing its intended value
+#+end_quote
+
+It does so by allowing developers to update their team on:
+   - What they are working on today
+   - What they accomplished the previous working day
+   - Any challenges and impediments they are facing for a particular task
+
+* Development Setup
+
+Follow this guide to setup an environment for developing SoS app
+
+** Prerequisites
 
 Following must be installed:
 1. [[https://www.docker.com/][Docker]]
 2. [[https://docs.docker.com/compose/][Docker Compose]]
 3. [[https://hasura.io/docs/1.0/graphql/manual/hasura-cli/index.html#installation][Hasura CLI]]
 
-*** Setup
+** Setup
 
 1. *Start the services*
   #+begin_src sh

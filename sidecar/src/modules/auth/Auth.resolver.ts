@@ -7,7 +7,6 @@ import { ResolverContext } from "../../lib/types";
 import ServerError from "../../lib/ServerError";
 import { CurrentUser } from "../../lib/middleware/currentUser";
 import mail from "../../lib/mail";
-import { Otp } from "../../entity/Otp.entity";
 import makeRandom from "../../lib/makeRandom";
 
 const { APP_NAME = "App" } = process.env;
@@ -17,13 +16,10 @@ export class AuthResolver {
   @InjectRepository(User)
   private userRepo: Repository<User>;
 
-  @InjectRepository(Otp)
-  private otpRepo: Repository<Otp>;
-
   @Authorized()
   @Query(returns => User)
   async me(@CurrentUser() user) {
-    return user;
+    return this.userRepo.findOneOrFail(user.id, { relations: ["role"] });
   }
 
   @Mutation(returns => User)
@@ -58,44 +54,21 @@ export class AuthResolver {
     }
   }
 
-  @Mutation(returns => User, {
-    description: `
-      Create new user with email only.
-      Frontend should make a call to sendPasswordResetOtp behind the scenes
-      and ask for new password and OTP.
-      Password should then be set with resetPassword.`,
-  })
-  async signUp(@Arg("email") email: string): Promise<User> {
-    const exists = await this.userRepo.findOne({ email });
-    if (exists) {
-      throw new ServerError("Email already in use", { status: 409 });
-    }
-
-    await this.userRepo.save({
-      email,
-      passwordHash: await hash(makeRandom(20), 10),
-      role: 1,
-    });
-    const user = await this.userRepo.findOneOrFail({ email });
-
-    return user;
-  }
-
   @Mutation(returns => String)
-  async sendPasswordResetOtp(@Arg("email") email: string) {
+  async sendPasswordResetOtp(@Ctx() { req }: ResolverContext, @Arg("email") email: string) {
     try {
       const user = await this.userRepo.findOneOrFail({ email });
 
-      const otp = new Otp();
-      otp.otp = makeRandom(6).toUpperCase();
-      otp.otpType = "Password Reset";
-      otp.userId = user.id;
-      await this.otpRepo.save(otp);
+      const otp = makeRandom(6).toUpperCase();
+      req.session.passwordReset = {
+        otp,
+      };
+      req.session.cookie.maxAge = 1000 * 60 * 5;
 
       mail.sendMail({
         to: email,
         subject: `Password reset OTP from "${APP_NAME}"`,
-        html: `<p>Your OTP is</p> <h1>${otp.otp} </h1>`,
+        html: `<p>Your OTP is</p> <h1>${otp} </h1>`,
       });
     } catch (err) {
       console.error("[Error: sendPasswordResetOtp]", err);
@@ -106,18 +79,15 @@ export class AuthResolver {
 
   @Mutation(returns => User)
   async resetPassword(
+    @Ctx() { req }: ResolverContext,
     @Arg("email") email: string,
     @Arg("newPassword") newPassword: string,
-    @Arg("opt") otp: string
+    @Arg("otp") inputOtp: string
   ): Promise<User> {
     const user = await this.userRepo.findOne({ email });
-    const otpDoc = await this.otpRepo
-      .createQueryBuilder()
-      .where("created_at > NOW() - INTERVAL '15 minutes'")
-      .andWhere("otp = :otp", { otp })
-      .getOne();
+    const otp = req.session.passwordReset?.otp;
 
-    if (!user || !otpDoc || user.id !== otpDoc.userId) {
+    if (!user || !otp || otp !== inputOtp) {
       throw new ServerError("Invalid credentials.", { status: 401 });
     }
 
