@@ -1,0 +1,126 @@
+- args:
+    is_enum: false
+    name: organization
+    schema: public
+  type: track_table
+- args:
+    permission:
+      allow_upsert: true
+      backend_only: false
+      check: {}
+      columns:
+      - logo
+      - logo_square
+      - name
+      set: {}
+    role: app_admin
+    table:
+      name: organization
+      schema: public
+  type: create_insert_permission
+- args:
+    permission:
+      allow_aggregations: false
+      backend_only: false
+      columns:
+      - logo
+      - logo_square
+      - name
+      - id
+      computed_fields: []
+      filter: {}
+      limit: null
+    role: app_admin
+    table:
+      name: organization
+      schema: public
+  type: create_select_permission
+- args:
+    permission:
+      backend_only: false
+      check: {}
+      columns:
+      - logo
+      - logo_square
+      - name
+      filter: {}
+      set: {}
+    role: app_admin
+    table:
+      name: organization
+      schema: public
+  type: create_update_permission
+- args:
+    is_enum: false
+    name: project
+    schema: public
+  type: track_table
+- args:
+    permission:
+      allow_upsert: true
+      backend_only: false
+      check: {}
+      columns:
+      - description
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - organization_id
+      - pr_link_template
+      set: {}
+    role: app_admin
+    table:
+      name: project
+      schema: public
+  type: create_insert_permission
+- args:
+    permission:
+      allow_aggregations: false
+      backend_only: false
+      columns:
+      - description
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      - created_at
+      - updated_at
+      - id
+      - organization_id
+      computed_fields: []
+      filter: {}
+      limit: null
+    role: app_admin
+    table:
+      name: project
+      schema: public
+  type: create_select_permission
+- args:
+    permission:
+      backend_only: false
+      columns:
+      - description
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - organization_id
+      - pr_link_template
+      filter: {}
+      set: {}
+    role: app_admin
+    table:
+      name: project
+      schema: public
+  type: create_update_permission
+- args:
+    permission:
+      backend_only: false
+      filter: {}
+    role: app_admin
+    table:
+      name: project
+      schema: public
+  type: create_delete_permission

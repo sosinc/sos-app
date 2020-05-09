@@ -1,0 +1,42 @@
+- args:
+    role: app_admin
+    table:
+      name: project
+      schema: public
+  type: drop_delete_permission
+- args:
+    role: app_admin
+    table:
+      name: project
+      schema: public
+  type: drop_update_permission
+- args:
+    role: app_admin
+    table:
+      name: project
+      schema: public
+  type: drop_select_permission
+- args:
+    role: app_admin
+    table:
+      name: project
+      schema: public
+  type: drop_insert_permission
+- args:
+    role: app_admin
+    table:
+      name: organization
+      schema: public
+  type: drop_update_permission
+- args:
+    role: app_admin
+    table:
+      name: organization
+      schema: public
+  type: drop_select_permission
+- args:
+    role: app_admin
+    table:
+      name: organization
+      schema: public
+  type: drop_insert_permission

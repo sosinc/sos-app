@@ -2,7 +2,15 @@ version: 2
 tables:
 - table:
     schema: public
-    name: organization
+    name: organizations
+  array_relationships:
+  - name: projects
+    using:
+      foreign_key_constraint_on:
+        column: organization_id
+        table:
+          schema: public
+          name: projects
   insert_permissions:
   - role: app_admin
     permission:
@@ -32,8 +40,60 @@ tables:
       check: {}
 - table:
     schema: public
-    name: role
+    name: projects
+  object_relationships:
+  - name: organization
+    using:
+      foreign_key_constraint_on: organization_id
+  insert_permissions:
+  - role: app_admin
+    permission:
+      check: {}
+      columns:
+      - description
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - organization_id
+      - pr_link_template
+      backend_only: false
+  select_permissions:
+  - role: app_admin
+    permission:
+      columns:
+      - description
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      - created_at
+      - updated_at
+      - id
+      - organization_id
+      filter: {}
+  update_permissions:
+  - role: app_admin
+    permission:
+      columns:
+      - description
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - organization_id
+      - pr_link_template
+      filter: {}
+      check: null
+  delete_permissions:
+  - role: app_admin
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: roles
   is_enum: true
 - table:
     schema: public
-    name: user
+    name: users
