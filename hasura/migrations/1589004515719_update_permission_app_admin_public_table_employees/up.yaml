@@ -1,0 +1,24 @@
+- args:
+    permission:
+      allow_aggregations: false
+      backend_only: false
+      columns:
+      - joining_date
+      - relieving_date
+      - designation_id
+      - ecode
+      - email
+      - headshot
+      - name
+      - created_at
+      - updated_at
+      - organization_id
+      - user_id
+      computed_fields: []
+      filter: {}
+      limit: null
+    role: app_admin
+    table:
+      name: employees
+      schema: public
+  type: create_select_permission

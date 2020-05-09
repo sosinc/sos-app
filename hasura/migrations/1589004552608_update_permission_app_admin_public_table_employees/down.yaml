@@ -1,0 +1,26 @@
+- args:
+    role: app_admin
+    table:
+      name: employees
+      schema: public
+  type: drop_insert_permission
+- args:
+    permission:
+      backend_only: false
+      check: {}
+      columns:
+      - designation_id
+      - ecode
+      - email
+      - headshot
+      - joining_date
+      - name
+      - organization_id
+      - relieving_date
+      - user_id
+      set: {}
+    role: app_admin
+    table:
+      name: employees
+      schema: public
+  type: create_insert_permission

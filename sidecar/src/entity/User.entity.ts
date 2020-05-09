@@ -3,7 +3,7 @@ import { Field, ObjectType } from "type-graphql";
 import { Role } from "./Role.entity";
 
 @ObjectType()
-@Entity({ name: "user" })
+@Entity({ name: "users" })
 export class User extends BaseEntity {
   @Field()
   @PrimaryColumn()
@@ -16,9 +16,6 @@ export class User extends BaseEntity {
   @Field({ nullable: true })
   @Column({ nullable: true })
   name: string;
-
-  @Column({ nullable: false })
-  passwordHash: string;
 
   @Field({ nullable: true })
   @Column({ nullable: true })

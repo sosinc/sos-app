@@ -7,6 +7,7 @@
  */
 
 import { User } from "./entity/User.entity";
+import { UserLogin } from "./entity/UserLogin.entity";
 
 const createAdminUsers = async () => {
   const adminEmails = (process.env.SOS_ADMIN_EMAILS || "")

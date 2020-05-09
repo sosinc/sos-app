@@ -2,7 +2,7 @@ import { Entity, BaseEntity, PrimaryColumn, Column } from "typeorm";
 import { ObjectType, Field } from "type-graphql";
 
 @ObjectType()
-@Entity({ name: "role" })
+@Entity({ name: "roles" })
 export class Role extends BaseEntity {
   @Field()
   @PrimaryColumn()

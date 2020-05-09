@@ -9,6 +9,7 @@ import ServerError from "../../lib/ServerError";
 import { CurrentUser } from "../../lib/middleware/currentUser";
 import mail from "../../lib/mail";
 import makeRandom from "../../lib/makeRandom";
+import { UserLogin } from "../../entity/UserLogin.entity";
 
 const { APP_NAME = "App" } = process.env;
 
@@ -16,6 +17,9 @@ const { APP_NAME = "App" } = process.env;
 export class AuthResolver {
   @InjectRepository(User)
   private userRepo: Repository<User>;
+
+  @InjectRepository(UserLogin)
+  private userLoginRepo: Repository<UserLogin>;
 
   @Authorized()
   @Query(returns => User)
@@ -30,7 +34,21 @@ export class AuthResolver {
     @Ctx() { req: { session } }: ResolverContext
   ): Promise<User> {
     try {
-      const user = await this.userRepo.findOne({ email });
+      const userLogin = await this.userLoginRepo.findOne({ public_key: email, provider: "EMAIL" });
+
+      if (!userLogin) {
+        throw new ServerError("Invalid email/password", {
+          status: 403,
+        });
+      }
+
+      if (!userLogin.private_key) {
+        throw new ServerError("Please set your password to login", {
+          status: 412,
+        });
+      }
+
+      const user = await this.userRepo.findOne({});
 
       if (!user) {
         throw new ServerError("Invalid email/password", {
@@ -38,13 +56,7 @@ export class AuthResolver {
         });
       }
 
-      if (!user.passwordHash) {
-        throw new ServerError("Please set your password to login", {
-          status: 412,
-        });
-      }
-
-      const isValidPassword = await compare(password, user.passwordHash);
+      const isValidPassword = await compare(password, userLogin.private_key);
       if (!isValidPassword) {
         throw new ServerError("Invalid email/password", {
           status: 403,
@@ -72,7 +84,7 @@ export class AuthResolver {
   @Mutation(returns => String)
   async sendPasswordResetOtp(@Ctx() { req }: ResolverContext, @Arg("email") email: string) {
     try {
-      const user = await this.userRepo.findOneOrFail({ email });
+      await this.userLoginRepo.findOneOrFail({ public_key: email, provider: "EMAIL" });
 
       const otp = makeRandom(6).toUpperCase();
       req.session.passwordReset = {
@@ -99,16 +111,16 @@ export class AuthResolver {
     @Arg("newPassword") newPassword: string,
     @Arg("otp") inputOtp: string
   ): Promise<User> {
-    const user = await this.userRepo.findOne({ email });
+    const userLogin = await this.userLoginRepo.findOne({ public_key: email, provider: "EMAIL" });
     const otp = req.session.passwordReset?.otp;
 
-    if (!user || !otp || otp !== inputOtp) {
+    if (!userLogin || !otp || otp !== inputOtp) {
       throw new ServerError("Invalid credentials.", { status: 401 });
     }
 
-    user.passwordHash = await hash(newPassword, 10);
-    await this.userRepo.save(user);
+    userLogin.private_key = await hash(newPassword, 10);
+    await this.userLoginRepo.save(userLogin);
 
-    return this.userRepo.findOneOrFail({ id: user.id });
+    return this.userRepo.findOneOrFail({ id: userLogin.user_id });
   }
 }

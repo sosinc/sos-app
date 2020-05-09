@@ -35,16 +35,17 @@ services:
       HASURA_GRAPHQL_DATABASE_URL: postgres://hot:hot@postgres:5432/hot
       HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
       HASURA_GRAPHQL_ADMIN_SECRET: myadminsupersecretkey
-      HASURA_GRAPHQL_AUTH_HOOK: http://sidecar/v1/api/authenticate
+      HASURA_GRAPHQL_AUTH_HOOK: http://sidecar:8080/v1/api/authenticate
       HASURA_GRAPHQL_AUTH_HOOK_MODE: GET
+      NEW_USER_WEBHOOK: http://sidecar:8080/v1/api/on-new-user
 
   sidecar:
     build: ./sidecar
     ports:
       - "4000:80"
-      - "9229:9229"
     environment:
-      PORT: 80
+      GRAPHQL_PORT: 80
+      REST_PORT: 8080
       DATABASE_URL: postgres://hot:hot@postgres:5432/hot
       SOS_ADMIN_EMAILS: "admin@test.com"
     volumes:

@@ -13,7 +13,7 @@ import cookieParser from "cookie-parser";
 import csrf from "csurf";
 import useragent from "express-useragent";
 import redis from "redis";
-import express, { Request, Response } from "express";
+import express, { Request, Response, Express } from "express";
 import morgan from "morgan";
 import path from "path";
 import { buildSchema } from "type-graphql";
@@ -45,7 +45,6 @@ const createApp = async () => {
   }
 
   try {
-    await createDbConnection();
     // Set Up Express
     const app = express()
       .enable("trust proxy")
@@ -99,40 +98,6 @@ const createApp = async () => {
       app.use(csrfHandler);
     }
 
-    const schema = await buildSchema({
-      authChecker,
-      resolvers: [path.join(__dirname, config.resolverPaths)],
-      container: Container,
-    });
-
-    app.use("/v1/api", ApiRoutes);
-
-    const apolloServer = new ApolloServer({
-      context: ({ req, res }: { req: Request; res: Response }): ResolverContext => ({
-        req,
-        res,
-      }),
-      formatError: err => {
-        console.error(err);
-
-        return {
-          message: err.message,
-          data: err.extensions?.exception?.data || {},
-          stacktrace: config.isProduction ? null : err.extensions?.exception?.stacktrace,
-        };
-      },
-      introspection: true,
-      playground: true,
-      schema,
-    });
-
-    // Apply cors + GraphiQL middleware
-    apolloServer.applyMiddleware({
-      cors: config.apolloCors,
-      app,
-      path: "/v1/graphql",
-    });
-
     return app;
   } catch (err) {
     console.error("[Error src/index]", err);
@@ -141,14 +106,69 @@ const createApp = async () => {
   }
 };
 
-const run = async () => {
+const createGraphqlApp = async () => {
   const app = await createApp();
-  const port = process.env.PORT || 4000;
+
+  const schema = await buildSchema({
+    authChecker,
+    resolvers: [path.join(__dirname, config.resolverPaths)],
+    container: Container,
+  });
+
+  const apolloServer = new ApolloServer({
+    context: ({ req, res }: { req: Request; res: Response }): ResolverContext => ({
+      req,
+      res,
+    }),
+    formatError: err => {
+      console.error(err);
+
+      return {
+        message: err.message,
+        data: err.extensions?.exception?.data || {},
+        stacktrace: config.isProduction ? null : err.extensions?.exception?.stacktrace,
+      };
+    },
+    introspection: true,
+    playground: true,
+    schema,
+  });
+
+  // Apply cors + GraphiQL middleware
+  apolloServer.applyMiddleware({
+    cors: config.apolloCors,
+    app,
+    path: "/v1/graphql",
+  });
+
+  return app;
+};
+
+const createRestApp = async () => {
+  const app = await createApp();
+
+  app.use("/v1/api", ApiRoutes);
+
+  return app;
+};
+
+const run = async () => {
+  await createDbConnection();
+
+  const graphqlApp = await createGraphqlApp();
+  const restApp = await createRestApp();
+
+  const graphqlPort = process.env.GRAPHQL_PORT || 4000;
+  const restPort = process.env.REST_PORT || 4040;
 
   await seed();
 
-  app.listen(port, () => {
-    console.info(`🚀 Server ready at http://localhost:${port}`);
+  graphqlApp.listen(graphqlPort, () => {
+    console.info(`🚀 Graphql Server ready at http://localhost:${graphqlPort}`);
+  });
+
+  restApp.listen(restPort, () => {
+    console.info(`🚀 REST Server ready at http://localhost:${restPort}`);
   });
 };
 

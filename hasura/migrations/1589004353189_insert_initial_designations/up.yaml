@@ -1,0 +1,8 @@
+- args:
+    cascade: false
+    read_only: false
+    sql: "INSERT INTO designations (id, name) VALUES \n('PM', 'Project Manager'),
+      \n('SA', 'Solutions Architect'),\n('TL', 'Technical Lead'),\n('ATL', 'Associate
+      Technical Lead'),\n('SSE', 'Senior Software Engineer'),\n('SE', 'Software Engineer'),\n('ASE',
+      'Associate Software Engineer'),\n('PC', 'Project Coordinator');"
+  type: run_sql

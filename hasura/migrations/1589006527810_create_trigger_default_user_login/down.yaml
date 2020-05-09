@@ -1,0 +1,3 @@
+- args:
+    name: default_user_login
+  type: delete_event_trigger
