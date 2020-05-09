@@ -1,0 +1,14 @@
+- args:
+    permission:
+      backend_only: false
+      columns:
+      - ecode
+      - organization_id
+      - team_id
+      filter: {}
+      set: {}
+    role: app_admin
+    table:
+      name: team_members
+      schema: public
+  type: create_update_permission

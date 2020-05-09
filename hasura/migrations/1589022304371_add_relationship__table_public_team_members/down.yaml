@@ -1,0 +1,6 @@
+- args:
+    relationship: team
+    table:
+      name: team_members
+      schema: public
+  type: drop_relationship

@@ -1,0 +1,14 @@
+- args:
+    name: teams
+    table:
+      name: employees
+      schema: public
+    using:
+      manual_configuration:
+        column_mapping:
+          ecode: ecode
+          organization_id: organization_id
+        remote_table:
+          name: team_members
+          schema: public
+  type: create_array_relationship

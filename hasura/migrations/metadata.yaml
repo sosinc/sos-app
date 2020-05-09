@@ -14,6 +14,16 @@ tables:
   - name: organization
     using:
       foreign_key_constraint_on: organization_id
+  array_relationships:
+  - name: team_members
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: team_members
+        column_mapping:
+          ecode: ecode
+          organization_id: organization_id
   insert_permissions:
   - role: app_admin
     permission:
@@ -153,6 +163,14 @@ tables:
   - name: organization
     using:
       foreign_key_constraint_on: organization_id
+  array_relationships:
+  - name: teams
+    using:
+      foreign_key_constraint_on:
+        column: project_id
+        table:
+          schema: public
+          name: teams
   insert_permissions:
   - role: app_admin
     permission:
@@ -181,6 +199,25 @@ tables:
       - id
       - organization_id
       filter: {}
+  - role: user
+    permission:
+      columns:
+      - id
+      - name
+      - logo
+      - logo_square
+      - description
+      - organization_id
+      - issue_link_template
+      - pr_link_template
+      - created_at
+      - updated_at
+      filter:
+        teams:
+          members:
+            employee:
+              user_id:
+                _eq: X-Hasura-User-Id
   update_permissions:
   - role: app_admin
     permission:
@@ -217,11 +254,79 @@ tables:
       filter: {}
 - table:
     schema: public
+    name: team_members
+  object_relationships:
+  - name: employee
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: employees
+        column_mapping:
+          ecode: ecode
+          organization_id: organization_id
+  - name: team
+    using:
+      foreign_key_constraint_on: team_id
+  insert_permissions:
+  - role: app_admin
+    permission:
+      check: {}
+      columns:
+      - ecode
+      - organization_id
+      - team_id
+      backend_only: false
+  select_permissions:
+  - role: app_admin
+    permission:
+      columns:
+      - ecode
+      - created_at
+      - updated_at
+      - organization_id
+      - team_id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+      - ecode
+      - team_id
+      - created_at
+      - updated_at
+      - organization_id
+      filter:
+        employee:
+          user_id:
+            _eq: X-Hasura-User-Id
+  update_permissions:
+  - role: app_admin
+    permission:
+      columns:
+      - ecode
+      - organization_id
+      - team_id
+      filter: {}
+      check: null
+  delete_permissions:
+  - role: app_admin
+    permission:
+      filter: {}
+- table:
+    schema: public
     name: teams
   object_relationships:
   - name: project
     using:
       foreign_key_constraint_on: project_id
+  array_relationships:
+  - name: members
+    using:
+      foreign_key_constraint_on:
+        column: team_id
+        table:
+          schema: public
+          name: team_members
   insert_permissions:
   - role: app_admin
     permission:
@@ -248,6 +353,23 @@ tables:
       - id
       - project_id
       filter: {}
+  - role: user
+    permission:
+      columns:
+      - id
+      - name
+      - logo
+      - logo_square
+      - issue_link_template
+      - pr_link_template
+      - project_id
+      - created_at
+      - updated_at
+      filter:
+        members:
+          employee:
+            user_id:
+              _eq: X-Hasura-User-Id
   update_permissions:
   - role: app_admin
     permission:

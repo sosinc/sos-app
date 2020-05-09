@@ -1,0 +1,28 @@
+- args:
+    permission:
+      allow_aggregations: false
+      backend_only: false
+      columns:
+      - id
+      - name
+      - logo
+      - logo_square
+      - description
+      - organization_id
+      - issue_link_template
+      - pr_link_template
+      - created_at
+      - updated_at
+      computed_fields: []
+      filter:
+        teams:
+          members:
+            employee:
+              user_id:
+                _eq: X-Hasura-User-Id
+      limit: null
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: create_select_permission

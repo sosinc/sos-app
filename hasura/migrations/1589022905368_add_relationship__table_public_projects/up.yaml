@@ -1,0 +1,12 @@
+- args:
+    name: teams
+    table:
+      name: projects
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: project_id
+        table:
+          name: teams
+          schema: public
+  type: create_array_relationship
