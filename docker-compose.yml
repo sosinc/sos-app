@@ -38,6 +38,7 @@ services:
       HASURA_GRAPHQL_AUTH_HOOK: http://sidecar:8080/v1/api/authenticate
       HASURA_GRAPHQL_AUTH_HOOK_MODE: GET
       NEW_USER_WEBHOOK: http://sidecar:8080/v1/api/on-new-user
+      NEW_EMPLOYEE_WEBHOOK: http://sidecar:8080/v1/api/on-new-employee
 
   sidecar:
     build: ./sidecar

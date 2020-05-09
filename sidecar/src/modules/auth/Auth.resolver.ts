@@ -48,7 +48,7 @@ export class AuthResolver {
         });
       }
 
-      const user = await this.userRepo.findOne({});
+      const user = await this.userRepo.findOne(userLogin.user_id, { relations: ["role"] });
 
       if (!user) {
         throw new ServerError("Invalid email/password", {
@@ -88,6 +88,7 @@ export class AuthResolver {
 
       const otp = makeRandom(6).toUpperCase();
       req.session.passwordReset = {
+        email,
         otp,
       };
       req.session.cookie.maxAge = 1000 * 60 * 5;
@@ -107,12 +108,17 @@ export class AuthResolver {
   @Mutation(returns => User)
   async resetPassword(
     @Ctx() { req }: ResolverContext,
-    @Arg("email") email: string,
     @Arg("newPassword") newPassword: string,
     @Arg("otp") inputOtp: string
   ): Promise<User> {
-    const userLogin = await this.userLoginRepo.findOne({ public_key: email, provider: "EMAIL" });
     const otp = req.session.passwordReset?.otp;
+    const email = req.session.passwordReset?.email;
+
+    if (!otp || !email) {
+      throw new ServerError("Please request for a password-reset-otp first", { status: 403 });
+    }
+
+    const userLogin = await this.userLoginRepo.findOne({ public_key: email, provider: "EMAIL" });
 
     if (!userLogin || !otp || otp !== inputOtp) {
       throw new ServerError("Invalid credentials.", { status: 401 });

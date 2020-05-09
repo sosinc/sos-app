@@ -73,13 +73,14 @@ const createApp = async () => {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 Week
         secure: config.isProduction,
-        sameSite: config.isProduction && "none",
+        sameSite: config.isProduction ? "strict" : "lax",
         domain: config.isProduction ? config.HOSTNAME : undefined,
       },
       name: "sos.cookie",
       proxy: config.isProduction,
       resave: false,
       saveUninitialized: false,
+      unset: "destroy",
     });
     app.use(sessionHandler);
 
