@@ -44,6 +44,23 @@ tables:
       - organization_id
       - user_id
       filter: {}
+  - role: user
+    permission:
+      columns:
+      - created_at
+      - designation_id
+      - ecode
+      - email
+      - headshot
+      - joining_date
+      - name
+      - organization_id
+      - relieving_date
+      - updated_at
+      - user_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
   update_permissions:
   - role: app_admin
     permission:
@@ -77,6 +94,13 @@ tables:
     schema: public
     name: organizations
   array_relationships:
+  - name: employees
+    using:
+      foreign_key_constraint_on:
+        column: organization_id
+        table:
+          schema: public
+          name: employees
   - name: projects
     using:
       foreign_key_constraint_on:
@@ -102,6 +126,17 @@ tables:
       - name
       - id
       filter: {}
+  - role: user
+    permission:
+      columns:
+      - id
+      - name
+      - logo
+      - logo_square
+      filter:
+        employees:
+          user_id:
+            _eq: X-Hasura-User-Id
   update_permissions:
   - role: app_admin
     permission:
@@ -167,6 +202,19 @@ tables:
     schema: public
     name: roles
   is_enum: true
+  select_permissions:
+  - role: app_admin
+    permission:
+      columns:
+      - id
+      - name
+      filter: {}
+  - role: user
+    permission:
+      columns:
+      - id
+      - name
+      filter: {}
 - table:
     schema: public
     name: teams
@@ -222,6 +270,45 @@ tables:
 - table:
     schema: public
     name: users
+  object_relationships:
+  - name: role
+    using:
+      foreign_key_constraint_on: role_id
+  array_relationships:
+  - name: as_employee
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          schema: public
+          name: employees
+  select_permissions:
+  - role: app_admin
+    permission:
+      columns:
+      - id
+      - name
+      - avatar
+      - email
+      - created_by
+      - created_at
+      - updated_at
+      - role_id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+      - avatar
+      - created_at
+      - email
+      - id
+      - name
+      - role_id
+      - updated_at
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      limit: 1
   event_triggers:
   - name: default_user_login
     definition:

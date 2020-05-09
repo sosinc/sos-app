@@ -11,10 +11,7 @@ export const createDbConnection = async (): Promise<Connection> => {
     ...options,
     name: "default",
     url: DATABASE_URL,
-    logging: true,
   });
-
-  await connection.runMigrations();
 
   return connection;
 };

@@ -1,6 +1,6 @@
 - args:
     is_enum: false
-    name: organization
+    name: organizations
     schema: public
   type: track_table
 - args:
@@ -15,7 +15,7 @@
       set: {}
     role: app_admin
     table:
-      name: organization
+      name: organizations
       schema: public
   type: create_insert_permission
 - args:
@@ -32,7 +32,7 @@
       limit: null
     role: app_admin
     table:
-      name: organization
+      name: organizations
       schema: public
   type: create_select_permission
 - args:
@@ -47,12 +47,12 @@
       set: {}
     role: app_admin
     table:
-      name: organization
+      name: organizations
       schema: public
   type: create_update_permission
 - args:
     is_enum: false
-    name: project
+    name: projects
     schema: public
   type: track_table
 - args:
@@ -71,7 +71,7 @@
       set: {}
     role: app_admin
     table:
-      name: project
+      name: projects
       schema: public
   type: create_insert_permission
 - args:
@@ -94,7 +94,7 @@
       limit: null
     role: app_admin
     table:
-      name: project
+      name: projects
       schema: public
   type: create_select_permission
 - args:
@@ -112,7 +112,7 @@
       set: {}
     role: app_admin
     table:
-      name: project
+      name: projects
       schema: public
   type: create_update_permission
 - args:
@@ -121,6 +121,6 @@
       filter: {}
     role: app_admin
     table:
-      name: project
+      name: projects
       schema: public
   type: create_delete_permission

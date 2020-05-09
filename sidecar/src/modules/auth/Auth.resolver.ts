@@ -21,10 +21,9 @@ export class AuthResolver {
   @InjectRepository(UserLogin)
   private userLoginRepo: Repository<UserLogin>;
 
-  @Authorized()
-  @Query(returns => User)
-  async me(@CurrentUser() user) {
-    return this.userRepo.findOneOrFail(user.id, { relations: ["role"] });
+  @Query()
+  ping(): string {
+    return "pong";
   }
 
   @Mutation(returns => User)
