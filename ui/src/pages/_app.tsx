@@ -3,8 +3,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import configureStore from 'src/configureStore';
-
-import './global.scss';
+import 'src/scss/global.scss';
 
 const { store, persistor } = configureStore();
 

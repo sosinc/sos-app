@@ -1,0 +1,15 @@
+@import 'src/scss/variables';
+@import 'src/scss/fonts';
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: $color-bg-primary;
+  font-family: Inter, serif;
+  color: $color-text-primary;
+  font-size: 15px;
+}
