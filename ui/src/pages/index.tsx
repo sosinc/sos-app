@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import FullPageLayout from 'src/components/FullPageLayout';
+import LoginForm from 'src/components/LoginForm';
 import c from './index.module.scss';
 
 const Index = () => {
@@ -43,6 +44,10 @@ const Index = () => {
               commitments, challenges and more.
             </p>
           </span>
+
+          <div className={c.loginForm}>
+            <LoginForm />
+          </div>
         </div>
       </FullPageLayout>
     </>

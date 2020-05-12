@@ -1,0 +1,19 @@
+%animate {
+  animation-duration: 1.5s;
+  animation-delay: 0s;
+  transition-timing-function: ease-out;
+  animation-fill-mode: both;
+}
+
+%shadowBox {
+  background-color: $color-shadowbox-bg;
+  box-shadow: 11px 4px 24px $color-shadowbox-shadow;
+  border: 1px solid $color-shadowbox-border;
+  padding: 6px;
+  border-radius: 4px;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: $color-shadowbox-bg--hover;
+  }
+}
