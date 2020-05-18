@@ -60,3 +60,14 @@ services:
       - redis
       - hasura
     command: yarn dev
+
+  ui:
+    build: ./ui
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: "3000"
+    volumes:
+      - ./ui:/app
+      - /app/node_modules
+    command: yarn dev
