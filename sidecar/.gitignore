@@ -1,7 +1,6 @@
 .env
 env.sh
 dist
-yarn.lock
 .yarnrc
 .yarn
 package-lock.json
