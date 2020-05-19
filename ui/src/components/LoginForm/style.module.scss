@@ -13,15 +13,21 @@
   }
 }
 
+.inputFieldContainer {
+  flex-grow: 1;
+  margin: 0 16px;
+}
+
 .input {
   background: none;
   border: none;
   font-weight: 400;
-  flex-grow: 1;
-  margin: 0 16px;
   color: $color-input-text;
   transition: all 0.2s;
   border-radius: 4px;
+  outline: none;
+  padding: 10px;
+  width: 100%;
 
   height: 48px;
 
@@ -30,6 +36,16 @@
     padding: 6px;
     margin: 0 0 8px 0;
   }
+}
+
+.formError{
+  border: 1px solid #dc3925;
+}
+
+.validationMessage{
+  position: absolute;
+  bottom: -16px;
+  left: 25px;
 }
 
 .loginButton {
@@ -46,4 +62,5 @@
   font-size: 14px;
   transition: all 0.2s;
   flex-shrink: 0;
+  outline: none;
 }
