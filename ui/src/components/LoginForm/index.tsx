@@ -6,6 +6,8 @@ import c from './style.module.scss';
 
 const Login: React.FC = () => {
   const [doEmailExist, setEmail] = useState(false);
+  const [emailInputClass, setEmailInputClass] = useState<string>('');
+  const [passwordInputClass, setPasswordInputClass] = useState<string>(c.hiddenFieldAtRight);
 
   const form = useFormik({
     initialValues: {
@@ -29,8 +31,18 @@ const Login: React.FC = () => {
 
   const changeInputField = () => {
     if (form.values.email.length) {
-      setEmail(true);
+      setEmailInputClass(c.swipeLeft);
+      setPasswordInputClass('');
+      setTimeout(() => {
+        setEmail(true);
+      }, 1000);
     }
+  };
+
+  const resetInputFields = () => {
+    setEmailInputClass('');
+    setPasswordInputClass(c.swipeRight);
+    setEmail(false);
   };
 
   const inputClass = (type: 'email' | 'password') => {
@@ -47,36 +59,33 @@ const Login: React.FC = () => {
       <span className={c.validationMessage}>{form.errors.password}</span>
     ) : null;
 
-  const emailField = !doEmailExist && (
-    <div className={c.inputFieldContainer}>
+  const emailField = (
+    <div className={`${c.inputFieldContainer} ${emailInputClass}`}>
       <input
         id="email"
-        name="email"
-        type="email"
         placeholder="enter your work email"
-        onChange={form.handleChange}
-        onBlur={form.handleBlur}
-        value={form.values.email}
-        className={inputClass('email')}
+        {...form.getFieldProps('email')}
+        className={`${inputClass('email')}`}
       />
       {errorMessage}
     </div>
   );
 
-  const passwordField = doEmailExist && (
-    <div className={c.inputFieldContainer}>
-      <input
-        id="password"
-        name="password"
-        type="password"
-        placeholder="enter your password"
-        onChange={form.handleChange}
-        onBlur={form.handleBlur}
-        value={form.values.password}
-        className={`${inputClass('password')}`}
-      />
-      {errorMessagePassword}
-    </div>
+  const passwordField = (
+    <span className={`${c.backToEmailField} ${passwordInputClass}`}>
+      <button type="button" onClick={resetInputFields}>
+        B
+      </button>
+      <div className={`${c.inputFieldContainer} ${passwordInputClass}`}>
+        <input
+          id="password"
+          placeholder="enter your password"
+          {...form.getFieldProps('password')}
+          className={`${inputClass('password')}`}
+        />
+        {errorMessagePassword}
+      </div>
+    </span>
   );
 
   const loginButton = doEmailExist ? (
@@ -91,9 +100,10 @@ const Login: React.FC = () => {
 
   return (
     <form className={c.loginForm} onSubmit={form.handleSubmit}>
-      {emailField}
-      {passwordField}
-
+      <div className={c.fieldsContainer}>
+        {emailField}
+        {passwordField}
+      </div>
       {loginButton}
     </form>
   );
