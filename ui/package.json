@@ -23,7 +23,7 @@
     "classnames": "^2.2.6",
     "common-tags": "^1.8.0",
     "dayjs": "^1.8.17",
-    "formik": "^2.0.8",
+    "formik": "^2.1.4",
     "history": "^4.10.1",
     "next": "^9.3.6",
     "node-sass": "^4.14.1",
@@ -35,7 +35,7 @@
     "redux-persist": "^6.0.0",
     "rxjs": "6",
     "typescript": "^3.8.3",
-    "yup": "^0.27.0"
+    "yup": "^0.28.5"
   },
   "devDependencies": {
     "prettier": "^1.19.1",
