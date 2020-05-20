@@ -50,22 +50,22 @@
 
 @keyframes swipe-right {
   0% {
-    left: 0;
+    left: 100%;
   }
 
   100% {
-    left: 100%;
+    left: 0;
   }
 }
 
 .swipeLeft {
-  animation: swipe-left 500ms ease-in 0s 1 forwards;
+  animation: swipe-left 2000ms linear 0s 1 forwards;
   position: absolute;
   visibility: hidden;
 }
 
 .swipeRight{
-  animation: swipe-right 500ms ease-in 3s 1 forwards;
+  animation: swipe-right 2000ms linear 3s 1 forwards;
   position: absolute;
   left: 100%;
   visibility: hidden;
@@ -114,4 +114,14 @@
   transition: all 0.2s;
   flex-shrink: 0;
   outline: none;
+}
+
+.arrowIconContainer {
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+.arrowIcon {
+  height: 100%;
+  width: 100%;
 }
