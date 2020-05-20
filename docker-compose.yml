@@ -55,6 +55,7 @@ services:
       SOS_ADMIN_EMAILS: "admin@test.com"
     volumes:
       - "./sidecar/:/app"
+      - /app/node_modules
     depends_on:
       - postgres
       - redis
