@@ -38,11 +38,11 @@ Following must be installed:
 
 1. *Start the services*
   #+begin_src sh
-  cd /path/to/humans-of-trantor
+  cd /path/to/sos-app
   docker-compose up
   #+end_src
 
-2. Copy =.env= files
+2. Create =.env= files
 
   #+begin_src sh
     # hasura/.env
