@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useFormik } from 'formik';
+import { FormikProps, withFormik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
 
@@ -8,36 +8,19 @@ import c from './style.module.scss';
 
 const cx = classNames.bind(c);
 
-interface LoginFormValues {
-  email: string;
-  password: string;
-}
-
-const Login: React.FC = () => {
+const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
   const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
 
-  const form = useFormik<LoginFormValues>({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-
-    validationSchema: Yup.object({
-      email: Yup.string()
-        .email('Invalid email address')
-        .required('Required'),
-      password: Yup.string()
-        .max(15, 'Must be 15 characters or less')
-        .required('Required'),
-    }),
-
-    onSubmit: (values) => {
-      console.warn('SUBMITTING', values);
-    },
-  });
-
   const gotoStep2 = () => {
-    setFormStep('step2');
+    try {
+      if (props.values.email && !props.errors.email) {
+        setFormStep('step2');
+      }
+      props.handleSubmit();
+      // props.validateField('email');
+    } catch (err) {
+      console.warn('FORMIK ERR', err);
+    }
   };
 
   const gotoStep1 = () => {
@@ -56,27 +39,22 @@ const Login: React.FC = () => {
     );
 
   return (
-    <form className={cx('login-form', { 'has-error': !form.isValid })} onSubmit={form.handleSubmit}>
+    <form
+      className={cx('login-form', { 'has-error': !props.isValid })}
+      onSubmit={props.handleSubmit}>
       <div className={cx('fields-container')}>
         <div className={cx('2-step-swiper', cx(formStep))}>
           <TextField
             className={cx('email')}
             placeholder="> enter your work email"
             type="email"
-            meta={form.getFieldMeta('email')}
-            field={form.getFieldProps('email')}
+            name="email"
           />
 
           <div className={cx('password')}>
             <span className={cx('back-icon')} onClick={gotoStep1} />
 
-            <TextField
-              className={``}
-              placeholder="*******"
-              type="password"
-              field={form.getFieldProps('password')}
-              meta={form.getFieldMeta('password')}
-            />
+            <TextField placeholder="*******" type="password" name="password" />
           </div>
         </div>
       </div>
@@ -86,4 +64,22 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+interface LoginFormValues {
+  email: string;
+  password: string;
+}
+
+export default withFormik<{}, LoginFormValues>({
+  validationSchema: Yup.object({
+    email: Yup.string()
+      .email('Invalid email address')
+      .required('Required'),
+    password: Yup.string()
+      .max(15, 'Must be 15 characters or less')
+      .required('Required'),
+  }),
+
+  handleSubmit: (values, bag) => {
+    console.warn('SUBMITTING', values, bag);
+  },
+})(Login);

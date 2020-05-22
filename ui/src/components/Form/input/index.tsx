@@ -1,36 +1,44 @@
 import classNames from 'classnames/bind';
-import { FieldInputProps, FieldMetaProps } from 'formik';
-import c from './style.module.scss';
+import { connect, FormikContextType, getIn } from 'formik';
+import styles from './style.module.scss';
 
-const cx = classNames.bind(c);
+const c = classNames.bind(styles);
 
-const TextField: React.FC<{
+interface TextFieldProps {
+  name: string;
   className?: string;
   placeholder?: string;
   type?: string;
-  meta: FieldMetaProps<string>;
-  field: FieldInputProps<string>;
-}> = (p) => {
-  const hasError = p.meta.touched && p.meta.error;
+}
+
+const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = ({
+  formik,
+  ...p
+}) => {
+  const error = getIn(formik.errors, p.name);
+  const inputProps = formik.getFieldProps(p.name);
+
   const MaybeErrorMessage = () => {
-    if (!hasError) {
+    if (!error) {
       return null;
     }
 
-    return <span className={cx('error-icon')} title={p.meta.error} />;
+    return <span className={c('error-icon')} title={error} />;
   };
 
-  const containerClass = cx('input-field-container', p.className, {
-    'has-error': hasError,
+  console.warn('INPUT PROPS', inputProps);
+
+  const containerClass = c('input-field-container', p.className, {
+    'has-error': error,
   });
 
   return (
     <div className={containerClass}>
-      <input type={p.type || 'text'} placeholder={p.placeholder} {...p.field} />
+      <input type={p.type || 'text'} placeholder={p.placeholder} {...inputProps} />
 
       <MaybeErrorMessage />
     </div>
   );
 };
 
-export default TextField;
+export default connect(TextField) as React.FC<TextFieldProps>;
