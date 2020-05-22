@@ -1,21 +1,106 @@
 @import 'src/scss/lib';
 
-.loginForm {
+.back-icon {
+  background: url('/assets/images/leftArrow.svg') 0 0 no-repeat;
+  background-size: contain;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+
+.error-icon {
+  $width: 20px;
+
+  position: absolute;
+  border-radius: $width / 2;
+  width: $width;
+  background: url('/assets/images/info-error.svg');
+  background-size: $width;
+  height: $width;
+  font-size: 13px;
+  top: calc(50% - 10px);
+  right: 8px;
+  font-weight: bolder;
+  font-family: inherit;
+}
+
+.login-form {
   @extend %shadowBox;
 
   font: inherit;
   width: 500px;
   max-width: 90vw;
   display: flex;
+  position: relative;
 
   @media(max-width: $sm) {
     flex-direction: column;
   }
+
+  &.has-error {
+    background: $color-error-bg;
+  }
 }
 
-.inputFieldContainer {
-  flex-grow: 1;
+.2-step-swiper {
+  position: absolute;
+  width: 200%;
+  left: 0;
+  display: flex;
+  transition: all 100ms linear;
+
+  &.step1 {
+    left: 0;
+  }
+
+  &.step2 {
+    left: -100%;
+  }
+}
+
+.fields-container {
+  position: relative;
+  width: 100%;
   margin: 0 16px;
+  overflow: hidden;
+}
+
+.email {
+  width: 100%;
+}
+
+.password {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.loginButton {
+  padding: 0 4em;
+
+  height: 48px;
+
+  background: $color-button_cta-bg;
+  border: none;
+  border-radius: 4px;
+  color: $color-button-text;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  outline: none;
+}
+
+
+
+.input-field-container {
+  flex-grow: 1;
+  position: relative;
+
+  input {
+    @extend .input;
+  }
 }
 
 .input {
@@ -38,90 +123,16 @@
   }
 }
 
-@keyframes swipe-left {
-  0% {
-    left: 0;
-  }
-
-  100% {
-    left: -100%;
-  }
-}
-
-@keyframes swipe-right {
-  0% {
-    left: 100%;
-  }
-
-  100% {
-    left: 0;
-  }
-}
-
-.swipeLeft {
+.swipe-left {
   animation: swipe-left 2000ms linear 0s 1 forwards;
   position: absolute;
   visibility: hidden;
 }
 
-.swipeRight{
+.swipe-right{
   animation: swipe-right 2000ms linear 3s 1 forwards;
   position: absolute;
   left: 100%;
   visibility: hidden;
   top: 0;
-}
-
-.hiddenFieldAtRight {
-  position: absolute;
-  left: 100%;
-  visibility: hidden;
-  top:0;
-}
-
-.backToEmailField{
-  display: flex;
-}
-
-.fieldsContainer {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-
-.formError {
-  border: 1px solid $color-error-border;
-}
-
-.validationMessage{
-  position: absolute;
-  bottom: -16px;
-  left: 25px;
-}
-
-.loginButton {
-  padding: 0 4em;
-
-  height: 48px;
-
-  background: $color-button_cta-bg;
-  border: none;
-  border-radius: 4px;
-  color: $color-button-text;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s;
-  flex-shrink: 0;
-  outline: none;
-}
-
-.arrowIconContainer {
-  cursor: pointer;
-  margin: 0 auto;
-}
-
-.arrowIcon {
-  height: 100%;
-  width: 100%;
 }

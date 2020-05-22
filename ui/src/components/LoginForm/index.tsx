@@ -1,15 +1,50 @@
-import { useFormik } from 'formik';
+import classNames from 'classnames/bind';
+import { FieldInputProps, FieldMetaProps, useFormik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
 
 import c from './style.module.scss';
 
-const Login: React.FC = () => {
-  const [doEmailExist, setEmail] = useState(false);
-  const [emailInputClass, setEmailInputClass] = useState<string>('');
-  const [passwordInputClass, setPasswordInputClass] = useState<string>(c.hiddenFieldAtRight);
+const cx = classNames.bind(c);
 
-  const form = useFormik({
+const TextField: React.FC<{
+  className?: string;
+  placeholder?: string;
+  type?: string;
+  meta: FieldMetaProps<string>;
+  field: FieldInputProps<string>;
+}> = (p) => {
+  const hasError = p.meta.touched && p.meta.error;
+  const MaybeErrorMessage = () => {
+    if (!hasError) {
+      return null;
+    }
+
+    return <span className={cx('error-icon')} title={p.meta.error} />;
+  };
+
+  const containerClass = cx('input-field-container', p.className, {
+    'has-error': hasError,
+  });
+
+  return (
+    <div className={containerClass}>
+      <input type={p.type || 'text'} placeholder={p.placeholder} {...p.field} />
+
+      <MaybeErrorMessage />
+    </div>
+  );
+};
+
+interface LoginFormValues {
+  email: string;
+  password: string;
+}
+
+const Login: React.FC = () => {
+  const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
+
+  const form = useFormik<LoginFormValues>({
     initialValues: {
       email: '',
       password: '',
@@ -24,88 +59,56 @@ const Login: React.FC = () => {
         .required('Required'),
     }),
 
-    onSubmit: () => {
-      setEmail(true);
+    onSubmit: (values) => {
+      console.warn('SUBMITTING', values);
     },
   });
 
-  const changeInputField = () => {
-    if (form.values.email.length) {
-      setEmailInputClass(c.swipeLeft);
-      setPasswordInputClass('');
-      setEmail(true);
-      // setTimeout(() => {
-      // setEmail(true);
-      // }, 3000);
-    }
+  const gotoStep2 = () => {
+    setFormStep('step2');
   };
 
-  const resetInputFields = () => {
-    setEmailInputClass('');
-    setPasswordInputClass(c.swipeRight);
-    setEmail(false);
+  const gotoStep1 = () => {
+    setFormStep('step1');
   };
 
-  const inputClass = (type: 'email' | 'password') => {
-    return form.errors[type] && form.touched[type] ? `${c.formError} ${c.input}` : c.input;
-  };
-
-  const errorMessage =
-    form.touched.email && form.errors.email ? (
-      <span className={c.validationMessage}>{form.errors.email}</span>
-    ) : null;
-
-  const errorMessagePassword =
-    form.touched.password && form.errors.password ? (
-      <span className={c.validationMessage}>{form.errors.password}</span>
-    ) : null;
-
-  const emailField = (
-    <div className={`${c.inputFieldContainer} ${emailInputClass}`}>
-      <input
-        id="email"
-        placeholder="enter your work email"
-        {...form.getFieldProps('email')}
-        className={`${inputClass('email')}`}
-      />
-      {errorMessage}
-    </div>
-  );
-
-  const passwordField = (
-    <span className={`${c.backToEmailField} ${passwordInputClass}`}>
-      <span className={c.arrowIconContainer} onClick={resetInputFields}>
-        <img className={c.arrowIcon} src="/assets/images/leftArrow.svg" alt="back" />
-      </span>
-
-      <div className={`${c.inputFieldContainer}`}>
-        <input
-          id="password"
-          placeholder="enter your password"
-          {...form.getFieldProps('password')}
-          className={`${inputClass('password')}`}
-        />
-        {errorMessagePassword}
-      </div>
-    </span>
-  );
-
-  const loginButton = doEmailExist ? (
-    <button className={c.loginButton} type="submit">
-      Login
-    </button>
-  ) : (
-    <button className={c.loginButton} type="button" onClick={changeInputField}>
-      Login
-    </button>
-  );
+  const loginButton =
+    formStep === 'step2' ? (
+      <button className={c.loginButton} type="submit">
+        Login
+      </button>
+    ) : (
+        <button className={c.loginButton} type="button" onClick={gotoStep2}>
+          Login
+        </button>
+      );
 
   return (
-    <form className={c.loginForm} onSubmit={form.handleSubmit}>
-      <div className={c.fieldsContainer}>
-        {emailField}
-        {passwordField}
+    <form className={cx('login-form', { 'has-error': !form.isValid })} onSubmit={form.handleSubmit}>
+      <div className={cx('fields-container')}>
+        <div className={cx('2-step-swiper', cx(formStep))}>
+          <TextField
+            className={cx('email')}
+            placeholder="> enter your work email"
+            type="email"
+            meta={form.getFieldMeta('email')}
+            field={form.getFieldProps('email')}
+          />
+
+          <div className={cx('password')}>
+            <span className={cx('back-icon')} onClick={gotoStep1} />
+
+            <TextField
+              className={``}
+              placeholder="*******"
+              type="password"
+              field={form.getFieldProps('password')}
+              meta={form.getFieldMeta('password')}
+            />
+          </div>
+        </div>
       </div>
+
       {loginButton}
     </form>
   );
