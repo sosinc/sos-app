@@ -1,0 +1,60 @@
+@import 'src/scss/lib';
+
+.input-field-container {
+  flex-grow: 1;
+  position: relative;
+
+  input {
+    @extend .input;
+  }
+}
+
+.input {
+  background: none;
+  border: none;
+  font-weight: 400;
+  color: $color-input-text;
+  transition: all 0.2s;
+  border-radius: 4px;
+  outline: none;
+  padding: 10px;
+  width: 100%;
+
+  height: 48px;
+
+  @media(max-width: $sm) {
+    border: 1px solid $color-boundary;
+    padding: 6px;
+    margin: 0 0 8px 0;
+  }
+}
+
+.error-icon {
+  $width: 20px;
+
+  position: absolute;
+  border-radius: $width / 2;
+  width: $width;
+  background: url('/assets/images/info-error.svg');
+  background-size: $width;
+  height: $width;
+  font-size: 13px;
+  top: calc(50% - 10px);
+  right: 8px;
+  font-weight: bolder;
+  font-family: inherit;
+}
+
+.swipe-left {
+  animation: swipe-left 2000ms linear 0s 1 forwards;
+  position: absolute;
+  visibility: hidden;
+}
+
+.swipe-right{
+  animation: swipe-right 2000ms linear 3s 1 forwards;
+  position: absolute;
+  left: 100%;
+  visibility: hidden;
+  top: 0;
+}
