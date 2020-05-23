@@ -3,7 +3,7 @@ import { FormikProps, withFormik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
 
-import TextField from '../Form/input';
+import TextField from '../Form/TextField';
 import c from './style.module.scss';
 
 const cx = classNames.bind(c);
