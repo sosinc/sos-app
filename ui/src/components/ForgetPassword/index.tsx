@@ -6,14 +6,10 @@ import * as Yup from 'yup';
 import TextField from '../Form/TextField';
 import c from './style.module.scss';
 
-import ForgetPassword from '../ForgetPassword';
-import Modal from '../Modal';
-
 const cx = classNames.bind(c);
 
-const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
+const ForgetPassword: React.FC<FormikProps<LoginFormValues>> = (props) => {
   const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
-  const [isModalOpen, setModalOpen] = useState(true);
 
   const gotoStep2 = () => {
     try {
@@ -31,65 +27,57 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
     setFormStep('step1');
   };
 
-  const loginButton =
+  const resetPasswordButton =
     formStep === 'step2' ? (
       <button className={c.loginButton} type="submit">
-        Login
+        Reset
       </button>
     ) : (
       <button className={c.loginButton} type="button" onClick={gotoStep2}>
-        Login
+        Send OTP
       </button>
     );
 
-  const handleModal = () => {
-    setModalOpen(false);
-  };
-
   return (
-    <>
-      <div className={c.loginForm}>
-        <form
-          className={cx('login-form', { 'has-error': !props.isValid })}
-          onSubmit={props.handleSubmit}>
-          <div className={cx('fields-container')}>
-            <div className={cx('2-step-swiper', cx(formStep))}>
-              <TextField
-                className={cx('email')}
-                placeholder="> enter your work email"
-                type="email"
-                name="email"
-              />
+    <form
+      className={cx('login-form', { 'has-error': !props.isValid })}
+      onSubmit={props.handleSubmit}>
+      <div className={cx('fields-container')}>
+        <div className={cx('2-step-swiper', cx(formStep))}>
+          <TextField
+            className={cx('email')}
+            placeholder="> enter your registered email"
+            type="email"
+            name="email"
+          />
 
-              <div className={cx('password')}>
-                <span className={cx('back-icon')} onClick={gotoStep1} />
+          <div className={cx('password')}>
+            <span className={cx('back-icon')} onClick={gotoStep1} />
 
-                <TextField placeholder="*******" type="password" name="password" />
-              </div>
-            </div>
+            <TextField placeholder="otp" type="text" name="otp" />
+            <TextField placeholder="> enter new password" type="password" name="password" />
           </div>
-
-          {loginButton}
-          <p onClick={() => setModalOpen(true)}>Forget password?</p>
-        </form>
+        </div>
       </div>
 
-      <Modal onClose={handleModal} isOpen={isModalOpen}>
-        <ForgetPassword />
-      </Modal>
-    </>
+      <div className={cx('button-container')}>{resetPasswordButton}</div>
+    </form>
   );
 };
 
 interface LoginFormValues {
   email: string;
   password: string;
+  otp: string;
 }
 
 export default withFormik<{}, LoginFormValues>({
   validationSchema: Yup.object({
     email: Yup.string()
       .email('Invalid email address')
+      .required('Required'),
+    otp: Yup.string()
+      .min(4, 'Must be 4 or more')
       .required('Required'),
     password: Yup.string()
       .max(15, 'Must be 15 characters or less')
@@ -99,4 +87,4 @@ export default withFormik<{}, LoginFormValues>({
   handleSubmit: (values, bag) => {
     console.warn('SUBMITTING', values, bag);
   },
-})(Login);
+})(ForgetPassword);

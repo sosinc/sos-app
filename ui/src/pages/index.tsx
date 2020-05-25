@@ -45,7 +45,7 @@ const Index = () => {
             </p>
           </span>
 
-          <div className={c.loginForm}>
+          <div>
             <LoginForm />
           </div>
         </div>

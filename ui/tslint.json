@@ -3,6 +3,7 @@
   "rules": {
     "quotemark": [true, "single", "jsx-double"],
     "jsx-wrap-multiline": false,
-    "interface-name": false
+    "interface-name": false,
+    "jsx-no-lambda": false
   }
 }
