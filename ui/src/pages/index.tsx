@@ -45,9 +45,7 @@ const Index = () => {
             </p>
           </span>
 
-          <div>
-            <LoginForm />
-          </div>
+          <LoginForm />
         </div>
       </FullPageLayout>
     </>

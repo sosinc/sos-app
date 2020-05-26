@@ -13,7 +13,7 @@ const cx = classNames.bind(c);
 
 const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
   const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
-  const [isModalOpen, setModalOpen] = useState(true);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const gotoStep2 = () => {
     try {
@@ -47,8 +47,8 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
   };
 
   return (
-    <>
-      <div className={c.loginForm}>
+    <div>
+      <div className={cx('login-form-container')}>
         <form
           className={cx('login-form', { 'has-error': !props.isValid })}
           onSubmit={props.handleSubmit}>
@@ -78,7 +78,7 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
       <Modal onClose={handleModal} isOpen={isModalOpen}>
         <ForgetPassword />
       </Modal>
-    </>
+    </div>
   );
 };
 
