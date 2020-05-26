@@ -43,9 +43,7 @@ const ForgetPassword: React.FC<FormikProps<LoginFormValues>> = (props) => {
 
   return (
     <>
-      <form
-        className={c('login-form', c(formStep), { 'has-error': !props.isValid })}
-        onSubmit={props.handleSubmit}>
+      <form className={c('login-form', c(formStep))} onSubmit={props.handleSubmit}>
         <div className={c('fields-container')}>
           <div className={c('title-container')}>
             <h2 className={c('form-title')}>Forget Password</h2>
@@ -54,7 +52,7 @@ const ForgetPassword: React.FC<FormikProps<LoginFormValues>> = (props) => {
 
           <div className={c('2-step-swiper', c(formStep))}>
             <TextField
-              className={c('email')}
+              className={c('email', { 'has-error': !props.isValid })}
               placeholder="> enter your registered email"
               type="email"
               name="email"
@@ -64,8 +62,18 @@ const ForgetPassword: React.FC<FormikProps<LoginFormValues>> = (props) => {
               <div className={c('back-icon')} onClick={gotoStep1} />
 
               <div className={c('password-fields')}>
-                <TextField placeholder="OTP" type="text" name="otp" />
-                <TextField placeholder="> enter new password" type="password" name="password" />
+                <TextField
+                  placeholder="OTP"
+                  type="text"
+                  name="otp"
+                  className={c('email', { 'has-error': !props.isValid })}
+                />
+                <TextField
+                  placeholder="> enter new password"
+                  type="password"
+                  name="password"
+                  className={c('email', { 'has-error': !props.isValid })}
+                />
               </div>
             </div>
           </div>
