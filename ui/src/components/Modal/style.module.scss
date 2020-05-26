@@ -1,3 +1,13 @@
+.backdrop {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: 10;
+  backdrop-filter: blur(3px) grayscale(0.8);
+}
+
 .container {
     position: fixed;
     top: 0px;
@@ -15,20 +25,36 @@
 }
 
 .modal{
-  margin: auto;
-  border: 1px solid rgb(187, 187, 187);
-  padding: 5px;
-
   width: 480px;
   flex-direction: column;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 4px 78px;
   background: rgb(31, 33, 41);
   border-radius: 4px;
-  min-height: 27em;
-
+  position: relative;
 }
 
-.blur{
-  filter: blur(8px);
-  -webkit-filter: blur(8px);
+.back-icon-container{
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  cursor: pointer;
+  z-index:1;
+
+  &:hover {
+    background: rgb(42, 45, 56);
+  }
+}
+
+.back-icon {
+  background: url('/assets/images/close.svg') 0 0 no-repeat;
+  background-size: contain;
+  width: 16px;
+  height: 16px;
 }

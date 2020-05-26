@@ -1,26 +1,24 @@
 @import 'src/scss/lib';
 
-.back-icon {
-  background: url('/assets/images/leftArrow.svg') 0 0 no-repeat;
-  background-size: contain;
-  width: 22px;
-  height: 22px;
-  cursor: pointer;
-}
-
 .login-form {
-  @extend %shadowBox;
-
   font: inherit;
-  width: 500px;
   max-width: 90vw;
   display: flex;
   position: relative;
+  padding: 46px;
+  min-height: 17em;
 
   @media(max-width: $sm) {
     flex-direction: column;
   }
 
+  &.step1 {
+    height: 17em;
+  }
+
+  &.step2 {
+    height: 22em;
+  }
   &.has-error {
     background: $color-error-bg;
   }
@@ -53,29 +51,64 @@
   width: 100%;
 }
 
-.password {
+.back-icon {
+  background: url('/assets/images/leftArrow.svg') 0 0 no-repeat;
+  background-size: contain;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+
+.password-container {
+  width: 100%;
   display: flex;
   align-items: center;
-  width: 100%;
+}
+
+.password-fields {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-grow: 1;
+
+  > * {
+    width: 100%;
+    margin-bottom: 1em;
+  }
 }
 
 .loginButton {
-  padding: 0 4em;
-
-  height: 48px;
-
   background: $color-button_cta-bg;
-  border: none;
-  border-radius: 4px;
   color: $color-button-text;
-  font-weight: 600;
   cursor: pointer;
-  font-size: 14px;
   transition: all 0.2s;
-  flex-shrink: 0;
   outline: none;
+  width: 300px;
+  height: 48px;
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 32px;
+  border-radius: 4px;
+  border: none;
 }
-.button-container{
-  display: flex;
-  flex-direction: row;
+
+.title-container{
+  /* padding: 46px; */
+}
+
+.form-title{
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.form-text{
+  width: 380px;
+  font-size: 15px;
+  line-height: 24px;
+  text-align: center;
+  color: rgb(218, 223, 231);
+  margin-bottom: 32px;
 }

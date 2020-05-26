@@ -15,14 +15,17 @@ const Modal: React.FC<ModalProps> = (p) => {
   }
 
   return (
-    <div className={c('container')}>
-      <div className={c('modal')}>
-        <a className="close" onClick={() => p.onClose()}>
-          close
-        </a>
-        {p.children}
+    <>
+      <div className={c('backdrop')} />
+      <div className={c('container')} onClick={p.onClose}>
+         <div className={c('modal')} onClick={(e) => e.stopPropagation()}>
+          <div className={c('back-icon-container')}>
+            <span title="close" className={c('back-icon')} onClick={p.onClose} />
+          </div>
+          {p.children}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
