@@ -45,7 +45,7 @@ const ForgetPassword: React.FC<FormikProps<LoginFormValues>> = (props) => {
     <>
       <form className={c('login-form', c(formStep))} onSubmit={props.handleSubmit}>
         <div className={c('fields-container')}>
-          <div className={c('title-container')}>
+          <div>
             <h2 className={c('form-title')}>Forget Password</h2>
             <p className={c('form-text')}> {otpMessage} </p>
           </div>

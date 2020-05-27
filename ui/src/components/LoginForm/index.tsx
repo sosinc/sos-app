@@ -60,21 +60,18 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
                 type="email"
                 name="email"
               />
-
               <div className={cx('password')}>
                 <span className={cx('back-icon')} onClick={gotoStep1} />
-
                 <TextField placeholder="*******" type="password" name="password" />
               </div>
             </div>
           </div>
-
           {loginButton}
         </form>
+        <p className={cx('forget-password-text')} onClick={() => setModalOpen(true)}>
+          Forget password?
+        </p>
       </div>
-      <p className={cx('forget-password-text')} onClick={() => setModalOpen(true)}>
-        Forget password?
-      </p>
       <Modal onClose={handleModal} isOpen={isModalOpen}>
         <ForgetPassword />
       </Modal>
