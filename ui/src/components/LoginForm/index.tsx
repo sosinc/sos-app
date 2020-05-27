@@ -3,11 +3,12 @@ import { FormikProps, withFormik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
 
-import TextField from '../Form/TextField';
-import c from './style.module.scss';
+import TextField from 'src/components/Form/TextField';
+import Modal from 'src/components/Modal';
+import ResetPassword from 'src/components/ResetPassword';
+import hasFormError from 'src/lib/hasFormError';
 
-import Modal from '../Modal';
-import ResetPassword from '../ResetPassword';
+import c from './style.module.scss';
 
 const cx = classNames.bind(c);
 
@@ -15,42 +16,44 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
   const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const gotoStep2 = () => {
-    try {
-      if (props.values.email && !props.errors.email) {
-        setFormStep('step2');
-      }
-      props.handleSubmit();
-      // props.validateField('email');
-    } catch (err) {
-      console.warn('FORMIK ERR', err);
+  /*
+   * Field in step2 need to be marked untouch by hand for some reason.
+   * Otherwise formik says step2 is invalid even when the user hasn't even
+   * seen that field yet. Use this function mark fields in  step2 as valid
+   * when it makes sense.
+   */
+  const untouchStep2 = () => {
+    props.setTouched({ password: false });
+  };
+
+  const gotoNextStep = () => {
+    // Cannot use validateField because of formik issue: https://github.com/jaredpalmer/formik/issues/2291
+    if (formStep === 'step1' && props.values.email && !props.errors.email) {
+      setFormStep('step2');
+      untouchStep2();
+
+      return;
     }
+
+    props.submitForm();
   };
 
   const gotoStep1 = () => {
     setFormStep('step1');
+    untouchStep2();
   };
-
-  const loginButton =
-    formStep === 'step2' ? (
-      <button className={c.loginButton} type="submit">
-        Login
-      </button>
-    ) : (
-        <button className={c.loginButton} type="button" onClick={gotoStep2}>
-          Login
-        </button>
-      );
 
   const handleModal = () => {
     setModalOpen(false);
   };
 
+  const formHasError = hasFormError(props);
+
   return (
     <div className={cx('container')}>
       <div className={cx('login-form-container')}>
         <form
-          className={cx('login-form', { 'has-error': !props.isValid })}
+          className={cx('login-form', { 'has-error': formHasError })}
           onSubmit={props.handleSubmit}>
           <div className={cx('fields-container')}>
             <div className={cx('2-step-swiper', cx(formStep))}>
@@ -59,6 +62,7 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
                 placeholder="> enter your work email"
                 type="email"
                 name="email"
+                onBlur={() => untouchStep2()}
               />
               <div className={cx('password')}>
                 <span className={cx('back-icon')} onClick={gotoStep1} />
@@ -66,7 +70,10 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
               </div>
             </div>
           </div>
-          {loginButton}
+
+          <button className={c.loginButton} type="button" onClick={gotoNextStep}>
+            Login
+          </button>
         </form>
         <p className={cx('reset-password-text')} onClick={() => setModalOpen(true)}>
           Reset password
