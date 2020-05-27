@@ -1,0 +1,5 @@
+- args:
+    cascade: false
+    read_only: false
+    sql: alter table "public"."organizations" rename column "square_logo" to "logo";
+  type: run_sql
