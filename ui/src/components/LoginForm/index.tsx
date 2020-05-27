@@ -6,8 +6,8 @@ import * as Yup from 'yup';
 import TextField from '../Form/TextField';
 import c from './style.module.scss';
 
-import ForgetPassword from '../ForgetPassword';
 import Modal from '../Modal';
+import ResetPassword from '../ResetPassword';
 
 const cx = classNames.bind(c);
 
@@ -37,17 +37,17 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
         Login
       </button>
     ) : (
-      <button className={c.loginButton} type="button" onClick={gotoStep2}>
-        Login
-      </button>
-    );
+        <button className={c.loginButton} type="button" onClick={gotoStep2}>
+          Login
+        </button>
+      );
 
   const handleModal = () => {
     setModalOpen(false);
   };
 
   return (
-    <div>
+    <div className={cx('container')}>
       <div className={cx('login-form-container')}>
         <form
           className={cx('login-form', { 'has-error': !props.isValid })}
@@ -68,12 +68,12 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
           </div>
           {loginButton}
         </form>
-        <p className={cx('forget-password-text')} onClick={() => setModalOpen(true)}>
-          Forget password?
+        <p className={cx('reset-password-text')} onClick={() => setModalOpen(true)}>
+          Reset password
         </p>
       </div>
       <Modal onClose={handleModal} isOpen={isModalOpen}>
-        <ForgetPassword />
+        <ResetPassword />
       </Modal>
     </div>
   );
