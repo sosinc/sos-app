@@ -6,10 +6,14 @@ import * as Yup from 'yup';
 import TextField from '../Form/TextField';
 import c from './style.module.scss';
 
+import ForgetPassword from '../ForgetPassword';
+import Modal from '../Modal';
+
 const cx = classNames.bind(c);
 
 const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
   const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const gotoStep2 = () => {
     try {
@@ -38,29 +42,40 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
       </button>
     );
 
+  const handleModal = () => {
+    setModalOpen(false);
+  };
+
   return (
-    <form
-      className={cx('login-form', { 'has-error': !props.isValid })}
-      onSubmit={props.handleSubmit}>
-      <div className={cx('fields-container')}>
-        <div className={cx('2-step-swiper', cx(formStep))}>
-          <TextField
-            className={cx('email')}
-            placeholder="> enter your work email"
-            type="email"
-            name="email"
-          />
-
-          <div className={cx('password')}>
-            <span className={cx('back-icon')} onClick={gotoStep1} />
-
-            <TextField placeholder="*******" type="password" name="password" />
+    <div>
+      <div className={cx('login-form-container')}>
+        <form
+          className={cx('login-form', { 'has-error': !props.isValid })}
+          onSubmit={props.handleSubmit}>
+          <div className={cx('fields-container')}>
+            <div className={cx('2-step-swiper', cx(formStep))}>
+              <TextField
+                className={cx('email')}
+                placeholder="> enter your work email"
+                type="email"
+                name="email"
+              />
+              <div className={cx('password')}>
+                <span className={cx('back-icon')} onClick={gotoStep1} />
+                <TextField placeholder="*******" type="password" name="password" />
+              </div>
+            </div>
           </div>
-        </div>
+          {loginButton}
+        </form>
+        <p className={cx('forget-password-text')} onClick={() => setModalOpen(true)}>
+          Forget password?
+        </p>
       </div>
-
-      {loginButton}
-    </form>
+      <Modal onClose={handleModal} isOpen={isModalOpen}>
+        <ForgetPassword />
+      </Modal>
+    </div>
   );
 };
 

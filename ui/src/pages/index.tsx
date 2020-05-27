@@ -45,9 +45,7 @@ const Index = () => {
             </p>
           </span>
 
-          <div className={c.loginForm}>
-            <LoginForm />
-          </div>
+          <LoginForm />
         </div>
       </FullPageLayout>
     </>

@@ -1,0 +1,116 @@
+@import 'src/scss/lib';
+
+.login-form {
+  font: inherit;
+  max-width: 90vw;
+  display: flex;
+  position: relative;
+  padding: 46px;
+  min-height: 17em;
+
+  @media(max-width: $sm) {
+    flex-direction: column;
+  }
+
+  &.step1 {
+    height: 17em;
+  }
+
+  &.step2 {
+    height: 22em;
+  }
+  &.has-error {
+    background: $color-error-bg;
+  }
+}
+
+.2-step-swiper {
+  position: absolute;
+  width: 200%;
+  left: 0;
+  display: flex;
+  transition: all 100ms linear;
+
+  &.step1 {
+    left: 0;
+  }
+
+  &.step2 {
+    left: -100%;
+  }
+}
+
+.fields-container {
+  position: relative;
+  width: 100%;
+  margin: 0 16px;
+  overflow: hidden;
+}
+
+.email {
+  width: 100%;
+  height: 48px;
+
+  &.has-error {
+    background: $color-error-bg;
+  }
+}
+
+.back-icon {
+  background: url('/assets/images/leftArrow.svg') 0 0 no-repeat;
+  background-size: contain;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+
+.password-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.password-fields {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-grow: 1;
+
+  > * {
+    width: 100%;
+    margin-bottom: 1em;
+  }
+}
+
+.loginButton {
+  background: $color-button_cta-bg;
+  color: $color-button-text;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
+  width: 300px;
+  height: 48px;
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 32px;
+  border-radius: 4px;
+  border: none;
+}
+
+.form-title{
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  margin-bottom: 6px;
+  color: $color-text-primary;
+}
+
+.form-text{
+  width: 380px;
+  font-size: 15px;
+  line-height: 24px;
+  text-align: center;
+  color: $color-text-dim1;
+  margin-bottom: 32px;
+}

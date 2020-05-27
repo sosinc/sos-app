@@ -34,7 +34,7 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
 
   return (
     <div className={containerClass}>
-      <input type={p.type || 'text'} placeholder={p.placeholder} {...inputProps} />
+      <input type={p.type || 'text'} tabIndex={-1} placeholder={p.placeholder} {...inputProps} />
 
       <MaybeErrorMessage />
     </div>

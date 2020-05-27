@@ -1,0 +1,11 @@
+- args:
+    cascade: false
+    read_only: false
+    sql: COMMENT ON COLUMN "public"."organizations"."logo_square" IS E'A banner is
+      a  logo in landscape mode';
+  type: run_sql
+- args:
+    cascade: false
+    read_only: false
+    sql: alter table "public"."organizations" rename column "logo_square" to "banner";
+  type: run_sql
