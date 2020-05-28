@@ -67,6 +67,7 @@
 .org-container{
   display: flex;
   flex-direction: column;
+  color: $color-text-primary;
 }
 
 .org-icon {
@@ -76,10 +77,97 @@
   height: 45px;
   cursor: pointer;
   margin: 0 auto;
-  border: 1px solid;
+  margin-bottom: 1em;
 }
 
 .org-add{
   text-decoration: none;
-  color: $color-text-primary;
+  color: $color-cta;
+  margin-top: 1em;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.org-container {
+  @extend %animate;
+
+  animation-name: undim-sliding-down;
+  animation-delay: 0.6s;
+  margin-top: 3em;
+}
+
+.org-form {
+  font: inherit;
+  width: 900px;
+  max-width: 90vw;
+  display: grid;
+  position: relative;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+  grid-auto-rows: minmax(2em, auto);
+  grid-gap: 12px;
+
+  @media(max-width: $sm) {
+    flex-direction: column;
+  }
+
+  &.has-error {
+    background: $color-error-bg;
+  }
+}
+
+.title{
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.name-wrapper{
+  grid-row: 2;
+  grid-column: 1;
+}
+
+.logo{
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.banner{
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.image-preview{
+  border: 1px solid;
+  border-radius: 50%;
+  width: 5em;
+  height: 5em;
+  position: relative;
+
+  & span{
+    position: absolute;
+  }
+}
+
+.preview{
+  visibility: hidden;
+  position: absolute;
+ }
+
+.saveButton {
+  padding: 0 4em;
+  height: 48px;
+  background: $color-button_cta-bg;
+  border: none;
+  border-radius: 4px;
+  color: $color-button-text;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  outline: none;
+  grid-row: 4;
+  grid-column: 1;
 }
