@@ -8,7 +8,7 @@ import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
-const ForgetPassword: React.FC<FormikProps<LoginFormValues>> = (props) => {
+const ResetPassword: React.FC<FormikProps<LoginFormValues>> = (props) => {
   const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
 
   const gotoStep2 = () => {
@@ -33,10 +33,10 @@ const ForgetPassword: React.FC<FormikProps<LoginFormValues>> = (props) => {
         Reset
       </button>
     ) : (
-      <button className={style.loginButton} type="button" onClick={gotoStep2}>
-        Send OTP
-      </button>
-    );
+        <button className={style.loginButton} type="button" onClick={gotoStep2}>
+          Send OTP
+        </button>
+      );
 
   const otpMessage =
     'We will send you a otp to verify your email account and fill the otp and your new password';
@@ -46,7 +46,7 @@ const ForgetPassword: React.FC<FormikProps<LoginFormValues>> = (props) => {
       <form className={c('login-form', c(formStep))} onSubmit={props.handleSubmit}>
         <div className={c('fields-container')}>
           <div>
-            <h2 className={c('form-title')}>Forget Password</h2>
+            <h2 className={c('form-title')}>Reset Password</h2>
             <p className={c('form-text')}> {otpMessage} </p>
           </div>
 
@@ -106,4 +106,4 @@ export default withFormik<{}, LoginFormValues>({
   handleSubmit: (values, bag) => {
     console.warn('SUBMITTING', values, bag);
   },
-})(ForgetPassword);
+})(ResetPassword);

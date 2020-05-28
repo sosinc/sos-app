@@ -8,6 +8,7 @@ interface TextFieldProps {
   name: string;
   className?: string;
   placeholder?: string;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   type?: string;
 }
 
@@ -15,7 +16,8 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
   formik,
   ...p
 }) => {
-  const error = getIn(formik.errors, p.name);
+  const isTouched = getIn(formik.touched, p.name);
+  const error = isTouched ? getIn(formik.errors, p.name) : null;
   const inputProps = formik.getFieldProps(p.name);
 
   const MaybeErrorMessage = () => {
@@ -26,7 +28,11 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
     return <span className={c('error-icon')} title={error} />;
   };
 
-  console.warn('INPUT PROPS', inputProps);
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    // tslint:disable-next-line:no-unused-expression
+    p.onBlur && p.onBlur(e);
+    inputProps.onBlur(e);
+  };
 
   const containerClass = c('input-field-container', p.className, {
     'has-error': error,
@@ -34,7 +40,13 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
 
   return (
     <div className={containerClass}>
-      <input type={p.type || 'text'} tabIndex={-1} placeholder={p.placeholder} {...inputProps} />
+      <input
+        type={p.type || 'text'}
+        tabIndex={-1}
+        placeholder={p.placeholder}
+        {...inputProps}
+        onBlur={handleBlur}
+      />
 
       <MaybeErrorMessage />
     </div>
