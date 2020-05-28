@@ -17,7 +17,7 @@
   }
 
   &.step2 {
-    height: 22em;
+    height: 23em;
   }
   &.has-error {
     background: $color-error-bg;
@@ -48,9 +48,9 @@
 }
 
 .email {
-  width: 100%;
-  height: 48px;
+  width: 98%;
 
+  @extend %shadowBox;
   &.has-error {
     background: $color-error-bg;
   }

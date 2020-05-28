@@ -46,6 +46,7 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
         placeholder={p.placeholder}
         {...inputProps}
         onBlur={handleBlur}
+        value={inputProps.value === undefined ? '' : inputProps.value}
       />
 
       <MaybeErrorMessage />

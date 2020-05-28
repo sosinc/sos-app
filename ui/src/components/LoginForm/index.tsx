@@ -75,9 +75,11 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
             Login
           </button>
         </form>
-        <p className={cx('reset-password-text')} onClick={() => setModalOpen(true)}>
-          Reset password
-        </p>
+        <span>
+          <p className={cx('reset-password-text')} onClick={() => setModalOpen(true)}>
+            Reset password
+          </p>
+        </span>
       </div>
       <Modal onClose={handleModal} isOpen={isModalOpen}>
         <ResetPassword />

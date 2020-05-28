@@ -3,7 +3,8 @@ import { FormikProps, withFormik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
 
-import TextField from '../Form/TextField';
+import TextField from 'src/components/Form/TextField';
+import hasFormError from 'src/lib/hasFormError';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -11,35 +12,37 @@ const c = classNames.bind(style);
 const ResetPassword: React.FC<FormikProps<LoginFormValues>> = (props) => {
   const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
 
-  const gotoStep2 = () => {
-    try {
-      if (props.values.email && !props.errors.email) {
-        setFormStep('step2');
-      }
-      props.handleSubmit();
-      // props.validateField('email');
-    } catch (err) {
-      console.warn('FORMIK ERR', err);
+  /*
+   * Field in step2 need to be marked untouch by hand for some reason.
+   * Otherwise formik says step2 is invalid even when the user hasn't even
+   * seen that field yet. Use this function mark fields in  step2 as valid
+   * when it makes sense.
+   */
+  const untouchStep2 = () => {
+    props.setTouched({ password: false });
+  };
+
+  const gotoNextStep = () => {
+    // Cannot use validateField because of formik issue: https://github.com/jaredpalmer/formik/issues/2291
+    if (formStep === 'step1' && props.values.email && !props.errors.email) {
+      setFormStep('step2');
+      untouchStep2();
+
+      return;
     }
+
+    props.submitForm();
   };
 
   const gotoStep1 = () => {
     setFormStep('step1');
+    untouchStep2();
   };
-
-  const resetPasswordButton =
-    formStep === 'step2' ? (
-      <button className={style.loginButton} type="submit">
-        Reset
-      </button>
-    ) : (
-        <button className={style.loginButton} type="button" onClick={gotoStep2}>
-          Send OTP
-        </button>
-      );
 
   const otpMessage =
     'We will send you a otp to verify your email account and fill the otp and your new password';
+
+  const formHasError = hasFormError(props);
 
   return (
     <>
@@ -52,10 +55,11 @@ const ResetPassword: React.FC<FormikProps<LoginFormValues>> = (props) => {
 
           <div className={c('2-step-swiper', c(formStep))}>
             <TextField
-              className={c('email', { 'has-error': !props.isValid })}
+              className={c('email', { 'has-error': formHasError })}
               placeholder="> enter your registered email"
               type="email"
               name="email"
+              onBlur={() => untouchStep2()}
             />
 
             <div className={c('password-container')}>
@@ -66,20 +70,22 @@ const ResetPassword: React.FC<FormikProps<LoginFormValues>> = (props) => {
                   placeholder="OTP"
                   type="text"
                   name="otp"
-                  className={c('email', { 'has-error': !props.isValid })}
+                  className={c('email', { 'has-error': formHasError })}
                 />
                 <TextField
                   placeholder="> enter new password"
                   type="password"
                   name="password"
-                  className={c('email', { 'has-error': !props.isValid })}
+                  className={c('email', { 'has-error': formHasError })}
                 />
               </div>
             </div>
           </div>
         </div>
       </form>
-      {resetPasswordButton}
+      <button className={c('loginButton')} type="button" onClick={gotoNextStep}>
+        {formStep === 'step2' ? 'Reset' : 'Send OTP'}
+      </button>
     </>
   );
 };
