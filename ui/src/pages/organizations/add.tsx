@@ -2,17 +2,35 @@ import classNames from 'classnames/bind';
 import { FormikProps, withFormik } from 'formik';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useState, useRef } from 'react';
 import * as Yup from 'yup';
 
 import TextField from 'src/components/Form/TextField';
 import FullPageLayout from 'src/components/FullPageLayout';
-import hasFormError from 'src/lib/hasFormError';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
 const AddOrg: React.FC<FormikProps<LoginFormValues>> = (props) => {
-  const formHasError = hasFormError(props);
+  const [logo, setLogo] = useState('');
+  const [banner, setBanner] = useState('');
+  const inputEl = useRef(null);
+
+  const handleFileUpload = (event: any) => {
+    /* const reader = new FileReader();
+     * const file = event.target.files[0]; */
+    const url = URL.createObjectURL(event.target.files[0]);
+    if (event.target.name === 'logo') {
+      setLogo(url);
+      return;
+    }
+    setBanner(url);
+    /* reader.onloadend = () => {
+     *   setLogo(reader.result);
+     * };
+     * reader.readAsDataURL(file); */
+  };
+
   return (
     <>
       <Head>
@@ -34,35 +52,51 @@ const AddOrg: React.FC<FormikProps<LoginFormValues>> = (props) => {
 
         <div className={c('content')}>
           <div className={c('org-container')}>
-            <form
-              className={c('org-form', { 'has-error': formHasError })}
-              onSubmit={props.handleSubmit}>
+            <form className={c('org-form')} onSubmit={props.handleSubmit}>
               <h2 className={c('title')}> Create Oranization</h2>
               <div className={c('name-wrapper')}>
-                <TextField placeholder="> enter your work name" type="name" name="name" />
-              </div>
-              <div className={c('image-preview', 'logo')}>
-                <span>Logo</span>
+                <span className={c('field-title')}>Name</span>
                 <TextField
-                  className={c('preview')}
-                  placeholder="select logo"
-                  type="file"
-                  name="logo"
-                />
-              </div>
-              <div className={c('image-preview', 'banner')}>
-                <span>Banner</span>
-                <TextField
-                  className={c('preview')}
-                  placeholder="select banner"
-                  type="file"
-                  name="banner"
+                  className={c('over-ride')}
+                  placeholder="> enter your work name"
+                  type="name"
+                  name="name"
                 />
               </div>
 
-              <button className={c('saveButton')} type="submit">
-                Save
-              </button>
+              <div className={c('image-preview', 'org-logo')} onClick={() => inputEl.current}>
+                <span className={c('field-title')}>Logo</span>
+                <input
+                  className={c('input-file')}
+                  name="logo"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileUpload}
+                  ref={inputEl}
+                  style={{ display: 'none' }}
+                />
+                {logo.length && <img className={c('preview-image')} src={logo} alt="org-logo" />}
+              </div>
+
+              <div className={c('image-preview', 'banner')}>
+                <span className={c('field-title')}>Banner</span>
+                <input
+                  className={c('input-file')}
+                  name="banner"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileUpload}
+                />
+                {banner.length && (
+                  <img className={c('preview-image')} src={banner} alt="org-banner" />
+                )}
+              </div>
+
+              <div className={c('button-wrapper')}>
+                <button className={c('saveButton')} type="submit">
+                  Save
+                </button>
+              </div>
             </form>{' '}
           </div>
         </div>
