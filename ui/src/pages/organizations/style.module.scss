@@ -153,30 +153,6 @@
   grid-row: 3;
 }
 
-.org-logo{
-  position: relative;
-  border: 1px solid $color-text-dim3;
-  width: 10em;
-  height: 10em;
-  border-radius: 3px;
-}
-
-.banner{
-  position: relative;
-  border: 1px solid $color-text-dim3;
-  height: 10em;
-  border-radius: 3px;
-}
-
-.preview-image {
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  z-index: -1;
-  position:absolute;
-}
-
 .input-file{
   width: 100%;
   height: 100%;

@@ -2,9 +2,9 @@ import classNames from 'classnames/bind';
 import { FormikProps, withFormik } from 'formik';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
 import * as Yup from 'yup';
 
+import FileField from 'src/components/Form/FileField';
 import TextField from 'src/components/Form/TextField';
 import FullPageLayout from 'src/components/FullPageLayout';
 import style from './style.module.scss';
@@ -12,36 +12,6 @@ import style from './style.module.scss';
 const c = classNames.bind(style);
 
 const AddOrg: React.FC<FormikProps<OrganizationFormValues>> = (props) => {
-  const [logo, setLogo] = useState('');
-  const [banner, setBanner] = useState('');
-
-  const logoMeta = props.getFieldMeta('logo');
-
-  console.log(logoMeta.error);
-
-  const handleFileUpload = (event: any) => {
-    const url = URL.createObjectURL(event.target.files[0]);
-    if (event.target.name === 'logo') {
-      setLogo(url);
-    } else {
-      setBanner(url);
-    }
-    const fieldProps = props.getFieldProps(event.target.name);
-    fieldProps.onChange(event);
-  };
-
-  const orgLogo = logo.length ? (
-    <img className={c('preview-image')} src={logo} alt="org-logo" />
-  ) : (
-    ''
-  );
-
-  const orgBanner = banner.length ? (
-    <img className={c('preview-image')} src={banner} alt="org-banner" />
-  ) : (
-    ''
-  );
-
   return (
     <>
       <Head>
@@ -77,30 +47,12 @@ const AddOrg: React.FC<FormikProps<OrganizationFormValues>> = (props) => {
 
               <div className={c('image-wrapper-logo', 'wrapper')}>
                 <span className={c('field-title')}>Logo</span>
-                <div className={c('org-logo')}>
-                  <input
-                    className={c('input-file')}
-                    type="file"
-                    accept="image/*"
-                    {...props.getFieldProps('logo')}
-                    onChange={handleFileUpload}
-                  />
-                  {orgLogo}
-                </div>
+                <FileField className={'org-logo'} type={'file'} name="logo" />
               </div>
 
               <div className={c('image-wrapper-banner', 'wrapper')}>
                 <span className={c('field-title')}>Banner</span>
-                <div className={c('banner')}>
-                  <input
-                    className={c('input-file')}
-                    type="file"
-                    accept="image/*"
-                    {...props.getFieldProps('banner')}
-                    onChange={handleFileUpload}
-                  />
-                  {orgBanner}
-                </div>
+                <FileField className={'org-banner'} type="file" name="banner" />
               </div>
 
               <div className={c('button-wrapper')}>
@@ -122,30 +74,26 @@ interface OrganizationFormValues {
   logo: File;
 }
 
-const FILE_SIZE = 160 * 1024;
-const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
+//const FILE_SIZE = 160 * 1024;
+//const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
 
 export default withFormik<{}, OrganizationFormValues>({
   handleSubmit: (values, bag) => {
+    bag.setFieldTouched('logo', true);
     console.warn('SUBMITTING', values, bag);
   },
   validationSchema: Yup.object().shape({
-    banner: Yup.mixed()
-      .required('A file is required')
-      .test('fileSize', 'File too large', (value) => value && value.size <= FILE_SIZE)
-      .test(
-        'fileFormat',
-        'Unsupported Format',
-        (value) => value && SUPPORTED_FORMATS.includes(value.type),
-      ),
-    logo: Yup.mixed()
-      .required('A file is required')
-      .test('fileSize', 'File too large', (value) => value && value.size <= FILE_SIZE)
-      .test(
-        'fileFormat',
-        'Unsupported Format',
-        (value) => value && SUPPORTED_FORMATS.includes(value.type),
-      ),
+    /* banner: Yup.mixed()
+     *   .required('A file is required')
+     *   .test('fileSize', 'File too large', (value) => value && value.size <= FILE_SIZE)
+     *   .test(
+     *     'fileFormat',
+     *     'Unsupported Format',
+     *     (value) => value && SUPPORTED_FORMATS.includes(value.type),
+     *   ), */
+
+    banner: Yup.string().required('Required'),
+    logo: Yup.string().required('Required'),
     name: Yup.string()
       .min(2, 'Must be 2 characters or more')
       .max(16, 'Must be 16 characters or less')
