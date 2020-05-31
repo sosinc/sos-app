@@ -58,7 +58,7 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
           <div className={cx('fields-container')}>
             <div className={cx('2-step-swiper', cx(formStep))}>
               <TextField
-                className={cx('email')}
+                className={'login-form'}
                 placeholder="> enter your work email"
                 type="email"
                 name="email"
@@ -66,7 +66,12 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
               />
               <div className={cx('password')}>
                 <span className={cx('back-icon')} onClick={gotoStep1} />
-                <TextField placeholder="*******" type="password" name="password" />
+                <TextField
+                  className={'login-form'}
+                  placeholder="*******"
+                  type="password"
+                  name="password"
+                />
               </div>
             </div>
           </div>

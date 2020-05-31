@@ -3,9 +3,30 @@
 .input-field-container {
   flex-grow: 1;
   position: relative;
+  width: 100%;
 
   input {
     @extend .input;
+  }
+}
+
+.login-form {
+  flex-grow: 1;
+  position: relative;
+  width: 100%;
+
+  input {
+    @extend .input;
+  }
+}
+
+.reset-form {
+  flex-grow: 1;
+  position: relative;
+  width: 100%;
+
+  input {
+    @extend .input-reset;
   }
 }
 
@@ -22,6 +43,26 @@
   box-shadow: none;
 
   height: 48px;
+
+  @media(max-width: $sm) {
+    border: 1px solid $color-boundary;
+    padding: 6px;
+    margin: 0 0 8px 0;
+  }
+}
+
+.input-reset {
+  background: none;
+  border-radius: 4px;
+  border: 1px solid $color-text-dim3;
+  font-weight: 400;
+  color: $color-input-text;
+  transition: all 0.2s;
+  outline: none;
+  padding: 10px;
+  width: 100%;
+  box-shadow: none;
+  height: 40px;
 
   @media(max-width: $sm) {
     border: 1px solid $color-boundary;

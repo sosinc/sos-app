@@ -55,7 +55,6 @@ const ResetPassword: React.FC<FormikProps<LoginFormValues>> = (props) => {
 
           <div className={c('2-step-swiper', c(formStep))}>
             <TextField
-              className={c('email', { 'has-error': formHasError })}
               placeholder="> enter your registered email"
               type="email"
               name="email"

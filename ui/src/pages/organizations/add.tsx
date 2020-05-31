@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import { FormikProps, withFormik } from 'formik';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import * as Yup from 'yup';
 
 import TextField from 'src/components/Form/TextField';
@@ -11,25 +11,36 @@ import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
-const AddOrg: React.FC<FormikProps<LoginFormValues>> = (props) => {
+const AddOrg: React.FC<FormikProps<OrganizationFormValues>> = (props) => {
   const [logo, setLogo] = useState('');
   const [banner, setBanner] = useState('');
-  const inputEl = useRef(null);
+
+  const logoMeta = props.getFieldMeta('logo');
+
+  console.log(logoMeta.error);
 
   const handleFileUpload = (event: any) => {
-    /* const reader = new FileReader();
-     * const file = event.target.files[0]; */
     const url = URL.createObjectURL(event.target.files[0]);
     if (event.target.name === 'logo') {
       setLogo(url);
-      return;
+    } else {
+      setBanner(url);
     }
-    setBanner(url);
-    /* reader.onloadend = () => {
-     *   setLogo(reader.result);
-     * };
-     * reader.readAsDataURL(file); */
+    const fieldProps = props.getFieldProps(event.target.name);
+    fieldProps.onChange(event);
   };
+
+  const orgLogo = logo.length ? (
+    <img className={c('preview-image')} src={logo} alt="org-logo" />
+  ) : (
+    ''
+  );
+
+  const orgBanner = banner.length ? (
+    <img className={c('preview-image')} src={banner} alt="org-banner" />
+  ) : (
+    ''
+  );
 
   return (
     <>
@@ -54,42 +65,42 @@ const AddOrg: React.FC<FormikProps<LoginFormValues>> = (props) => {
           <div className={c('org-container')}>
             <form className={c('org-form')} onSubmit={props.handleSubmit}>
               <h2 className={c('title')}> Create Oranization</h2>
-              <div className={c('name-wrapper')}>
+              <div className={c('name-wrapper', 'wrapper')}>
                 <span className={c('field-title')}>Name</span>
                 <TextField
-                  className={c('over-ride')}
+                  className={'reset-form'}
                   placeholder="> enter your work name"
                   type="name"
                   name="name"
                 />
               </div>
 
-              <div className={c('image-preview', 'org-logo')} onClick={() => inputEl.current}>
+              <div className={c('image-wrapper-logo', 'wrapper')}>
                 <span className={c('field-title')}>Logo</span>
-                <input
-                  className={c('input-file')}
-                  name="logo"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileUpload}
-                  ref={inputEl}
-                  style={{ display: 'none' }}
-                />
-                {logo.length && <img className={c('preview-image')} src={logo} alt="org-logo" />}
+                <div className={c('org-logo')}>
+                  <input
+                    className={c('input-file')}
+                    type="file"
+                    accept="image/*"
+                    {...props.getFieldProps('logo')}
+                    onChange={handleFileUpload}
+                  />
+                  {orgLogo}
+                </div>
               </div>
 
-              <div className={c('image-preview', 'banner')}>
+              <div className={c('image-wrapper-banner', 'wrapper')}>
                 <span className={c('field-title')}>Banner</span>
-                <input
-                  className={c('input-file')}
-                  name="banner"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileUpload}
-                />
-                {banner.length && (
-                  <img className={c('preview-image')} src={banner} alt="org-banner" />
-                )}
+                <div className={c('banner')}>
+                  <input
+                    className={c('input-file')}
+                    type="file"
+                    accept="image/*"
+                    {...props.getFieldProps('banner')}
+                    onChange={handleFileUpload}
+                  />
+                  {orgBanner}
+                </div>
               </div>
 
               <div className={c('button-wrapper')}>
@@ -97,7 +108,7 @@ const AddOrg: React.FC<FormikProps<LoginFormValues>> = (props) => {
                   Save
                 </button>
               </div>
-            </form>{' '}
+            </form>
           </div>
         </div>
       </FullPageLayout>
@@ -105,23 +116,39 @@ const AddOrg: React.FC<FormikProps<LoginFormValues>> = (props) => {
   );
 };
 
-interface LoginFormValues {
+interface OrganizationFormValues {
   name: string;
-  banner: string;
-  logo: string;
+  banner: File;
+  logo: File;
 }
 
-export default withFormik<{}, LoginFormValues>({
-  validationSchema: Yup.object({
-    name: Yup.string()
-      .min(5, 'Must be 5 characters or more')
-      .max(10, 'Must be 10 characters or less')
-      .required('Required'),
-    banner: Yup.string().required('Required'),
-    logo: Yup.string().required('Required'),
-  }),
+const FILE_SIZE = 160 * 1024;
+const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
 
+export default withFormik<{}, OrganizationFormValues>({
   handleSubmit: (values, bag) => {
     console.warn('SUBMITTING', values, bag);
   },
+  validationSchema: Yup.object().shape({
+    banner: Yup.mixed()
+      .required('A file is required')
+      .test('fileSize', 'File too large', (value) => value && value.size <= FILE_SIZE)
+      .test(
+        'fileFormat',
+        'Unsupported Format',
+        (value) => value && SUPPORTED_FORMATS.includes(value.type),
+      ),
+    logo: Yup.mixed()
+      .required('A file is required')
+      .test('fileSize', 'File too large', (value) => value && value.size <= FILE_SIZE)
+      .test(
+        'fileFormat',
+        'Unsupported Format',
+        (value) => value && SUPPORTED_FORMATS.includes(value.type),
+      ),
+    name: Yup.string()
+      .min(2, 'Must be 2 characters or more')
+      .max(16, 'Must be 16 characters or less')
+      .required('Required'),
+  }),
 })(AddOrg);
