@@ -34,12 +34,12 @@ const AddOrg: React.FC<FormikProps<OrganizationFormValues>> = (props) => {
         <div className={c('content')}>
           <div className={c('org-container')}>
             <form className={c('org-form')} onSubmit={props.handleSubmit}>
-              <h2 className={c('title')}> Create Oranization</h2>
+              <h2 className={c('title')}> Create Organization</h2>
               <div className={c('name-wrapper', 'wrapper')}>
                 <span className={c('field-title')}>Name</span>
                 <TextField
                   className={'reset-form'}
-                  placeholder="> enter your work name"
+                  placeholder="enter organization name"
                   type="name"
                   name="name"
                 />
@@ -52,7 +52,7 @@ const AddOrg: React.FC<FormikProps<OrganizationFormValues>> = (props) => {
 
               <div className={c('image-wrapper-banner', 'wrapper')}>
                 <span className={c('field-title')}>Banner</span>
-                <FileField className={'org-banner'} type="file" name="banner" />
+                <FileField className={'org-image-container'} type="file" name="banner" />
               </div>
 
               <div className={c('button-wrapper')}>

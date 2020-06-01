@@ -18,7 +18,7 @@ const FileField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> = 
 }) => {
   const isTouched = getIn(formik.touched, p.name);
   const error = isTouched && getIn(formik.errors, p.name) ? getIn(formik.errors, p.name) : null;
-  // console.log('-----------dd', isTouched, getIn(formik.errors, p.name), p.name);
+  //console.log('-----------dd', isTouched, getIn(formik.errors, p.name), p.name);
   const inputProps = formik.getFieldProps(p.name);
   const [previewImage, setPreviewImage] = useState('');
 
@@ -36,6 +36,16 @@ const FileField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> = 
 
   const handleFileUpload = (event: any) => {
     const url = URL.createObjectURL(event.target.files[0]);
+
+    /* let reader = new FileReader();
+     * let file = event.target.files[0];
+
+     * reader.onloadend = () => {
+     *   setPreviewImage(reader !== null ? reader.result : '')
+     * }
+       reader.readAsDataURL(file)
+     */
+
     setPreviewImage(url);
     inputProps.onChange(event);
   };
@@ -43,7 +53,10 @@ const FileField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> = 
   const preview = previewImage.length ? (
     <img className={c('preview-image')} src={previewImage} alt="org-image" />
   ) : (
-    ''
+    <div className={c('upload-container')}>
+      <span className={c('upload-icon')} title="Upload image" />{' '}
+      <span className={c('upload-text')}>browse files</span>
+    </div>
   );
 
   return (

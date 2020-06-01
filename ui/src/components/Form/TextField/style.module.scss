@@ -24,7 +24,9 @@
   flex-grow: 1;
   position: relative;
   width: 100%;
-
+  &.has-error {
+    background: $color-error-bg;
+  }
   input {
     @extend .input-reset;
   }
@@ -54,7 +56,7 @@
 .input-reset {
   background: none;
   border-radius: 4px;
-  border: 1px solid $color-text-dim3;
+  border: 1px solid $color-button-border;
   font-weight: 400;
   color: $color-input-text;
   transition: all 0.2s;
