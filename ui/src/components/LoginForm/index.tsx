@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { FormikProps, withFormik } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
 
@@ -98,17 +98,26 @@ interface LoginFormValues {
   password: string;
 }
 
-export default withFormik<{}, LoginFormValues>({
-  validationSchema: Yup.object({
-    email: Yup.string()
-      .email('Invalid email address')
-      .required('Required'),
-    password: Yup.string()
-      .max(15, 'Must be 15 characters or less')
-      .required('Required'),
-  }),
+const handleSubmit = (values: object, actions: object) => {
+  console.warn('SUBMITTING', values, actions);
+};
 
-  handleSubmit: (values, bag) => {
-    console.warn('SUBMITTING', values, bag);
-  },
-})(Login);
+const initialValues = {
+  email: '',
+  password: '',
+};
+
+const validationSchema = Yup.object({
+  email: Yup.string()
+    .email('Invalid email address')
+    .required('Required'),
+  password: Yup.string()
+    .max(15, 'Must be 15 characters or less')
+    .required('Required'),
+});
+
+export default () => (
+  <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+    {Login}
+  </Formik>
+);
