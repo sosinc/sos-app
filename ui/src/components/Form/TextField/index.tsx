@@ -28,25 +28,13 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
     return <span className={c('error-icon')} title={error} />;
   };
 
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    // tslint:disable-next-line:no-unused-expression
-    p.onBlur && p.onBlur(e);
-    inputProps.onBlur(e);
-  };
-
   const containerClass = c('input-field-container', p.className, {
     'has-error': error,
   });
 
   return (
     <div className={containerClass}>
-      <input
-        type={p.type || 'text'}
-        tabIndex={-1}
-        placeholder={p.placeholder}
-        {...inputProps}
-        onBlur={handleBlur}
-      />
+      <input type={p.type || 'text'} tabIndex={-1} placeholder={p.placeholder} {...inputProps} />
       <MaybeErrorMessage />
     </div>
   );

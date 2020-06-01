@@ -6,14 +6,14 @@
   display: flex;
   position: relative;
   padding: 46px;
-  min-height: 17em;
+  min-height: 18em;
 
   @media(max-width: $sm) {
     flex-direction: column;
   }
 
   &.step1 {
-    height: 17em;
+    height: 18em;
   }
 
   &.step2 {
@@ -33,6 +33,7 @@
 
   &.step1 {
     left: 0;
+    height: 4em;
   }
 
   &.step2 {
@@ -45,15 +46,6 @@
   width: 100%;
   margin: 0 16px;
   overflow: hidden;
-}
-
-.email {
-  width: 98%;
-
-  @extend %shadowBox;
-  &.has-error {
-    background: $color-error-bg;
-  }
 }
 
 .back-icon {

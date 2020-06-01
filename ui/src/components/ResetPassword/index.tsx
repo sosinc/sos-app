@@ -4,7 +4,6 @@ import { useState } from 'react';
 import * as Yup from 'yup';
 
 import TextField from 'src/components/Form/TextField';
-import hasFormError from 'src/lib/hasFormError';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -42,8 +41,6 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues>> = (props) => {
   const otpMessage =
     'We will send you a otp to verify your email account and fill the otp and your new password';
 
-  const formHasError = hasFormError(props);
-
   return (
     <>
       <form className={c('login-form', c(formStep))} onSubmit={props.handleSubmit}>
@@ -59,24 +56,19 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues>> = (props) => {
               type="email"
               name="email"
               onBlur={() => untouchStep2()}
-              className={c('email', { 'has-error': formHasError })}
+              className={'reset-form'}
             />
 
             <div className={c('password-container')}>
               <div className={c('back-icon')} onClick={gotoStep1} />
 
               <div className={c('password-fields')}>
-                <TextField
-                  placeholder="OTP"
-                  type="text"
-                  name="otp"
-                  className={c('email', { 'has-error': formHasError })}
-                />
+                <TextField placeholder="OTP" type="text" name="otp" className={'reset-form'} />
                 <TextField
                   placeholder="> enter new password"
                   type="password"
                   name="password"
-                  className={c('email', { 'has-error': formHasError })}
+                  className={'reset-form'}
                 />
               </div>
             </div>
