@@ -1,5 +1,9 @@
 @import 'src/scss/lib';
 
+.container {
+  margin-bottom: 10em;
+}
+
 .back-icon {
   background: url('/assets/images/leftArrow.svg') 0 0 no-repeat;
   background-size: contain;
@@ -84,9 +88,10 @@
   outline: none;
 }
 
-.forget-password-text{
+.reset-password-text{
   text-align: left;
   color: $color-text-dim2;
-  padding: 10px;
+  font-size: 0.8em;
+  margin: 10px 0;
   cursor: pointer;
 }

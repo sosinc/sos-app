@@ -1,3 +1,5 @@
+@import 'src/scss/lib';
+
 .backdrop {
   position: fixed;
   top: 0px;
@@ -27,8 +29,8 @@
 .modal{
   width: 480px;
   flex-direction: column;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 4px 78px;
-  background: rgb(31, 33, 41);
+  box-shadow: $color-shadowbox-shadow 0px 4px 78px;
+  background: $color-bg-dark;
   border-radius: 4px;
   position: relative;
 }
@@ -48,7 +50,7 @@
   z-index:1;
 
   &:hover {
-    background: rgb(42, 45, 56);
+    background: $color-bg-secondary;
   }
 }
 
