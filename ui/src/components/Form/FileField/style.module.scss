@@ -5,6 +5,8 @@
   height: 100%;
   opacity: 0;
   cursor: pointer;
+  position:relative;
+  z-index: 1;
 }
 
 .preview-image {
@@ -12,9 +14,10 @@
   height: 100%;
   left: 0;
   top: 0;
-  z-index: 1;
+  z-index: 0;
   position:absolute;
   cursor: pointer;
+  object-fit: cover;
 }
 
 .upload-container{
@@ -28,11 +31,13 @@
   display: grid;
   grid-row-gap: 1px;
   grid-template-columns: 1fr;
-  grid-template-rows: 35px 18px;
+  grid-template-rows: 2em 1.1em;
+  z-index: 0;
 }
 
 .upload-icon{
-  $width: 35px;
+  $width: 1.6em;
+
   grid-row: 1;
   grid-column: 1;
 
@@ -50,6 +55,7 @@
   grid-row: 2;
   grid-column: 1;
   color: $color-text-dim2;
+  font-size: 0.8em;
 }
 
 .org-logo{

@@ -12,13 +12,23 @@ interface FileFieldProps {
   type?: string;
 }
 
+const Placeholder = () => (
+  <div className={c('upload-container')}>
+    <span className={c('upload-icon')} title="Upload image" />
+    <span className={c('upload-text')}>Browse Files</span>
+  </div>
+);
+
+const Preview = ({ image }: { image: string }) => (
+  <img className={c('preview-image')} src={image} alt="org-image" />
+);
+
 const FileField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> = ({
   formik,
   ...p
 }) => {
   const isTouched = getIn(formik.touched, p.name);
   const error = isTouched && getIn(formik.errors, p.name) ? getIn(formik.errors, p.name) : null;
-  //console.log('-----------dd', isTouched, getIn(formik.errors, p.name), p.name);
   const inputProps = formik.getFieldProps(p.name);
   const [previewImage, setPreviewImage] = useState('');
 
@@ -37,27 +47,9 @@ const FileField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> = 
   const handleFileUpload = (event: any) => {
     const url = URL.createObjectURL(event.target.files[0]);
 
-    /* let reader = new FileReader();
-     * let file = event.target.files[0];
-
-     * reader.onloadend = () => {
-     *   setPreviewImage(reader !== null ? reader.result : '')
-     * }
-       reader.readAsDataURL(file)
-     */
-
     setPreviewImage(url);
     inputProps.onChange(event);
   };
-
-  const preview = previewImage.length ? (
-    <img className={c('preview-image')} src={previewImage} alt="org-image" />
-  ) : (
-    <div className={c('upload-container')}>
-      <span className={c('upload-icon')} title="Upload image" />{' '}
-      <span className={c('upload-text')}>browse files</span>
-    </div>
-  );
 
   return (
     <div className={containerClass}>
@@ -67,10 +59,10 @@ const FileField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> = 
         accept="image/*"
         {...inputProps}
         onChange={handleFileUpload}
-        value={inputProps.value === undefined ? '' : inputProps.value}
       />
       <MaybeErrorMessage />
-      {preview}
+
+      {previewImage ? <Preview image={previewImage} /> : <Placeholder />}
     </div>
   );
 };

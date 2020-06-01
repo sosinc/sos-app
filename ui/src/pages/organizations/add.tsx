@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { FormikProps, withFormik } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import Head from 'next/head';
 import Link from 'next/link';
 import * as Yup from 'yup';
@@ -70,33 +70,31 @@ const AddOrg: React.FC<FormikProps<OrganizationFormValues>> = (props) => {
 
 interface OrganizationFormValues {
   name: string;
-  banner: File;
-  logo: File;
+  banner: string;
+  logo: string;
 }
 
-//const FILE_SIZE = 160 * 1024;
-//const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
+const handleSubmit = (values: object, actions: object) => {
+  console.warn('SUBMITTING', values, actions);
+};
 
-export default withFormik<{}, OrganizationFormValues>({
-  handleSubmit: (values, bag) => {
-    bag.setFieldTouched('logo', true);
-    console.warn('SUBMITTING', values, bag);
-  },
-  validationSchema: Yup.object().shape({
-    /* banner: Yup.mixed()
-     *   .required('A file is required')
-     *   .test('fileSize', 'File too large', (value) => value && value.size <= FILE_SIZE)
-     *   .test(
-     *     'fileFormat',
-     *     'Unsupported Format',
-     *     (value) => value && SUPPORTED_FORMATS.includes(value.type),
-     *   ), */
+const initialValues = {
+  banner: '',
+  logo: '',
+  name: '',
+};
 
-    banner: Yup.string().required('Required'),
-    logo: Yup.string().required('Required'),
-    name: Yup.string()
-      .min(2, 'Must be 2 characters or more')
-      .max(16, 'Must be 16 characters or less')
-      .required('Required'),
-  }),
-})(AddOrg);
+const validationSchema = Yup.object().shape({
+  banner: Yup.string().required('Required'),
+  logo: Yup.string().required('Required'),
+  name: Yup.string()
+    .min(2, 'Must be 2 characters or more')
+    .max(16, 'Must be 16 characters or less')
+    .required('Required'),
+});
+
+export default () => (
+  <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+    {AddOrg}
+  </Formik>
+);
