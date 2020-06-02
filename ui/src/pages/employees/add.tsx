@@ -5,17 +5,30 @@ import Link from 'next/link';
 import * as Yup from 'yup';
 
 import FileField from 'src/components/Form/FileField';
+import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import FullPageLayout from 'src/components/FullPageLayout';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
+const designation = [
+  { id: '1', name: 'Sd', avtar: '' },
+  { id: '2', name: 'De', avtar: '' },
+  { id: '3', name: 'Bd', avtar: '' },
+];
+
+const organizations = [
+  { id: '1', name: 'Aaaaa', avtar: '' },
+  { id: '2', name: 'Baaaa', avtar: '' },
+  { id: '3', name: 'Caaaa', avtar: '' },
+];
+
 const AddOrg: React.FC<FormikProps<EmployeeFormValues>> = (props) => {
   return (
     <>
       <Head>
-        <title>Snake Oil Softwware - Organizations</title>
+        <title>Snake Oil Softwware - Employees</title>
       </Head>
 
       <FullPageLayout className={c('container')}>
@@ -64,21 +77,20 @@ const AddOrg: React.FC<FormikProps<EmployeeFormValues>> = (props) => {
 
                 <div className={c('designation-wrapper', 'wrapper')}>
                   <span className={c('field-title')}>Designation</span>
-
-                  <TextField
+                  <SelectField
                     className={'org-add-form'}
-                    placeholder="Enter e-code"
-                    type="text"
                     name="designation"
+                    options={designation}
+                    defaultSelectValue={false}
                   />
                 </div>
                 <div className={c('orgn-wrapper', 'wrapper')}>
                   <span className={c('field-title')}>Organization</span>
-                  <TextField
+                  <SelectField
                     className={'org-add-form'}
-                    placeholder="Enter e-code"
-                    type="text"
                     name="organization"
+                    options={organizations}
+                    defaultSelectValue={true}
                   />
                 </div>
               </div>
