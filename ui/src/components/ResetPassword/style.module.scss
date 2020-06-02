@@ -6,18 +6,18 @@
   display: flex;
   position: relative;
   padding: 46px;
-  min-height: 18em;
+  min-height: 17em;
 
   @media(max-width: $sm) {
     flex-direction: column;
   }
 
   &.step1 {
-    height: 18em;
+    height: 17em;
   }
 
   &.step2 {
-    height: 23em;
+    height: 20em;
   }
   &.has-error {
     background: $color-error-bg;
@@ -33,7 +33,7 @@
 
   &.step1 {
     left: 0;
-    height: 4em;
+    height: 2.6em;
   }
 
   &.step2 {

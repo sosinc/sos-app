@@ -27,15 +27,13 @@ const Index = () => {
         </header>
 
         <div className={c('content')}>
-          <div className={c('org-container')}>
-            <span className={c('org-icon')} />
-            <span>You didn't have any Organization</span>
-            <Link href="/organizations/add">
-              <a className={c('org-add')}>
-                <span>Add Organization</span>
-              </a>
-            </Link>
-          </div>
+          <span className={c('org-icon')} />
+          <span>You didn't have any Organization</span>
+          <Link href="/organizations/add">
+            <a className={c('org-add', 'org-container')}>
+              <span>Add Organization</span>
+            </a>
+          </Link>
         </div>
       </FullPageLayout>
     </>

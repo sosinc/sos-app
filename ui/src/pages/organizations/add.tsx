@@ -39,7 +39,7 @@ const AddOrg: React.FC<FormikProps<OrganizationFormValues>> = (props) => {
                 <span className={c('field-title')}>Name</span>
                 <TextField
                   className={'org-add-form'}
-                  placeholder="enter organization name"
+                  placeholder="Enter organization name"
                   type="name"
                   name="name"
                 />

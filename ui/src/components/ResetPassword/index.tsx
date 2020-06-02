@@ -52,23 +52,23 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues>> = (props) => {
 
           <div className={c('2-step-swiper', c(formStep))}>
             <TextField
-              placeholder="> enter your registered email"
+              placeholder="Enter your registered email"
               type="email"
               name="email"
               onBlur={() => untouchStep2()}
-              className={'reset-form'}
+              className={'org-add-form'}
             />
 
             <div className={c('password-container')}>
               <div className={c('back-icon')} onClick={gotoStep1} />
 
               <div className={c('password-fields')}>
-                <TextField placeholder="OTP" type="text" name="otp" className={'reset-form'} />
+                <TextField placeholder="OTP" type="text" name="otp" className={'org-add-form'} />
                 <TextField
-                  placeholder="> enter new password"
+                  placeholder="Enter new password"
                   type="password"
                   name="password"
-                  className={'reset-form'}
+                  className={'org-add-form'}
                 />
               </div>
             </div>
