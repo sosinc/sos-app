@@ -55,20 +55,27 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues>> = (props) => {
               placeholder="Enter your registered email"
               type="email"
               name="email"
-              onBlur={() => untouchStep2()}
               className={'org-add-form'}
+              isTabIndexEnable={true}
             />
 
             <div className={c('password-container')}>
               <div className={c('back-icon')} onClick={gotoStep1} />
 
               <div className={c('password-fields')}>
-                <TextField placeholder="OTP" type="text" name="otp" className={'org-add-form'} />
+                <TextField
+                  placeholder="OTP"
+                  type="text"
+                  name="otp"
+                  className={'org-add-form'}
+                  isTabIndexEnable={true}
+                />
                 <TextField
                   placeholder="Enter new password"
                   type="password"
                   name="password"
                   className={'org-add-form'}
+                  isTabIndexEnable={true}
                 />
               </div>
             </div>

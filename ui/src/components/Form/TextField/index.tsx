@@ -8,7 +8,7 @@ interface TextFieldProps {
   name: string;
   className?: string;
   placeholder?: string;
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  isTabIndexEnable?: boolean;
   type?: string;
 }
 
@@ -34,7 +34,12 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
 
   return (
     <div className={containerClass}>
-      <input type={p.type || 'text'} tabIndex={-1} placeholder={p.placeholder} {...inputProps} />
+      <input
+        type={p.type || 'text'}
+        tabIndex={p.isTabIndexEnable ? -1 : 1}
+        placeholder={p.placeholder}
+        {...inputProps}
+      />
       <MaybeErrorMessage />
     </div>
   );

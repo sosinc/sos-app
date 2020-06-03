@@ -19,7 +19,7 @@ const Placeholder = () => (
   </div>
 );
 
-const Preview = ({ image }: { image: string }) => (
+const ImageUploadField = ({ image }: { image: string }) => (
   <img className={c('preview-image')} src={image} alt="org-image" />
 );
 
@@ -62,7 +62,7 @@ const FileField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> = 
       />
       <MaybeErrorMessage />
 
-      {previewImage ? <Preview image={previewImage} /> : <Placeholder />}
+      {previewImage ? <ImageUploadField image={previewImage} /> : <Placeholder />}
     </div>
   );
 };
