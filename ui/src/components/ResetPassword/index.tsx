@@ -23,7 +23,6 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues>> = (props) => {
 
   const gotoNextStep = () => {
     // Cannot use validateField because of formik issue: https://github.com/jaredpalmer/formik/issues/2291
-    console.log('----------dd', props.values.email.length, !props.errors.email);
     if (formStep === 'step1' && props.values.email.length && !props.errors.email) {
       setFormStep('step2');
       untouchStep2();
