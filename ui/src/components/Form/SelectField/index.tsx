@@ -16,7 +16,7 @@ interface FileFieldProps {
   name: string;
   className?: string;
   options: SelectFieldItem[];
-  defaultSelectValue?: boolean;
+  autoSelectFirst?: boolean;
 }
 const noOptions = <li className={c('select-option')}>{'No data'}</li>;
 const SelectField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> = ({
@@ -31,6 +31,15 @@ const SelectField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> 
 
   const handleSelectItem = (id: string) => () => {
     formik.setFieldValue(p.name, id);
+  };
+
+  const handleOpen = () => {
+    setOpen(!isOpen);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    formik.setFieldTouched(inputProps.name, true);
   };
 
   const MaybeErrorMessage = () => {
@@ -55,21 +64,25 @@ const SelectField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> 
     </li>
   ));
 
+  const selectList = (
+    <>
+      <div className={c('select-backdrop')} onClick={handleClose} />
+      <ul className={c('select-options')}>{p.options.length ? selectOptions : noOptions}</ul>
+    </>
+  );
+
   const selectedItem = p.options.find((i) => i.id === inputProps.value);
-  const defautlValue =
-    p.options.length && p.defaultSelectValue ? p.options[0].name : 'Choose value';
+
+  if (p.autoSelectFirst && !inputProps.value && p.options.length) {
+    formik.setFieldValue(inputProps.name, p.options[0].id);
+  }
 
   return (
-    <div className={containerClass} onClick={() => setOpen(!isOpen)}>
+    <div className={containerClass} onClick={handleOpen}>
       <div className={c('select-container')} {...inputProps}>
-        {selectedItem ? selectedItem.name : defautlValue}
+        {selectedItem ? selectedItem.name : 'Select Value'}
       </div>
-      {isOpen && (
-        <>
-          <div className={c('select-backdrop')} onClick={() => setOpen(false)} />
-          <ul className={c('select-options')}>{p.options.length ? selectOptions : noOptions}</ul>
-        </>
-      )}
+      {isOpen ? selectList : null}
       <MaybeErrorMessage />
     </div>
   );

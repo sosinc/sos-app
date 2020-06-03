@@ -60,7 +60,7 @@ const AddOrg: React.FC<FormikProps<EmployeeFormValues>> = (props) => {
               </div>
 
               <div className={c('image-wrapper-logo', 'wrapper')}>
-                <span className={c('field-title')}>Head Short</span>
+                <span className={c('field-title')}>Head Shot</span>
                 <FileField className={'org-image-container'} type={'file'} name="headShot" />
               </div>
 
@@ -81,7 +81,6 @@ const AddOrg: React.FC<FormikProps<EmployeeFormValues>> = (props) => {
                     className={'org-add-form'}
                     name="designation"
                     options={designation}
-                    defaultSelectValue={false}
                   />
                 </div>
                 <div className={c('orgn-wrapper', 'wrapper')}>
@@ -90,7 +89,7 @@ const AddOrg: React.FC<FormikProps<EmployeeFormValues>> = (props) => {
                     className={'org-add-form'}
                     name="organization"
                     options={organizations}
-                    defaultSelectValue={true}
+                    autoSelectFirst={true}
                   />
                 </div>
               </div>
