@@ -28,7 +28,7 @@ const AddOrg: React.FC<FormikProps<EmployeeFormValues>> = (props) => {
   return (
     <>
       <Head>
-        <title>Snake Oil Softwware - Employees</title>
+        <title>Snake Oil Software - Employees</title>
       </Head>
 
       <FullPageLayout className={c('container')}>
