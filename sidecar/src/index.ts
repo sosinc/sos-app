@@ -73,7 +73,7 @@ const createApp = async () => {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 Week
         secure: config.isProduction,
-        sameSite: config.isProduction ? "strict" : "lax",
+        sameSite: config.isProduction ? "strict" : "none",
         domain: config.isProduction ? config.HOSTNAME : undefined,
       },
       name: "sos.cookie",
@@ -107,8 +107,8 @@ const createApp = async () => {
   }
 };
 
-const createGraphqlApp = async () => {
-  const app = await createApp();
+const createGraphqlApp = async (parentApp: Express) => {
+  const app = parentApp || (await createApp());
 
   const schema = await buildSchema({
     authChecker,
@@ -131,7 +131,7 @@ const createGraphqlApp = async () => {
       };
     },
     introspection: true,
-    playground: true,
+    playground: false,
     schema,
   });
 
@@ -145,8 +145,8 @@ const createGraphqlApp = async () => {
   return app;
 };
 
-const createRestApp = async () => {
-  const app = await createApp();
+const createRestApp = async (parentApp: Express) => {
+  const app = parentApp || (await createApp());
 
   app.use("/v1/api", ApiRoutes);
 
@@ -156,20 +156,19 @@ const createRestApp = async () => {
 const run = async () => {
   await createDbConnection();
 
-  const graphqlApp = await createGraphqlApp();
-  const restApp = await createRestApp();
+  const app = await createApp();
 
-  const graphqlPort = process.env.GRAPHQL_PORT || 4000;
-  const restPort = process.env.REST_PORT || 4040;
+  await createGraphqlApp(app);
+  const restApp = await createRestApp(app);
 
-  await seed();
-
-  graphqlApp.listen(graphqlPort, () => {
-    console.info(`🚀 Graphql Server ready at http://localhost:${graphqlPort}`);
+  seed().catch((err) => {
+    console.error('Failed to Seed', err);
   });
 
-  restApp.listen(restPort, () => {
-    console.info(`🚀 REST Server ready at http://localhost:${restPort}`);
+  const port = process.env.PORT || 4000;
+
+  restApp.listen(port, () => {
+    console.info(`🚀 Server ready at http://localhost:${port}`);
   });
 };
 
