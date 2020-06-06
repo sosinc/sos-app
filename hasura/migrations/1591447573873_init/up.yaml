@@ -1,0 +1,446 @@
+- args:
+    tables:
+    - is_enum: true
+      table:
+        name: designations
+        schema: public
+    - array_relationships:
+      - name: team_members
+        using:
+          manual_configuration:
+            column_mapping:
+              ecode: ecode
+              organization_id: organization_id
+            remote_table:
+              name: team_members
+              schema: public
+      delete_permissions:
+      - permission:
+          filter: {}
+        role: app_admin
+      event_triggers:
+      - definition:
+          enable_manual: false
+          insert:
+            columns: '*'
+        name: create_user_for_new_employee
+        retry_conf:
+          interval_sec: 10
+          num_retries: 0
+          timeout_sec: 60
+        webhook_from_env: NEW_EMPLOYEE_WEBHOOK
+      insert_permissions:
+      - permission:
+          backend_only: false
+          check: {}
+          columns:
+          - designation_id
+          - ecode
+          - email
+          - headshot
+          - joining_date
+          - name
+          - organization_id
+          - relieving_date
+        role: app_admin
+      object_relationships:
+      - name: designation
+        using:
+          foreign_key_constraint_on: designation_id
+      - name: organization
+        using:
+          foreign_key_constraint_on: organization_id
+      select_permissions:
+      - permission:
+          columns:
+          - joining_date
+          - relieving_date
+          - designation_id
+          - ecode
+          - email
+          - headshot
+          - name
+          - created_at
+          - updated_at
+          - organization_id
+          - user_id
+          filter: {}
+        role: app_admin
+      - permission:
+          columns:
+          - created_at
+          - designation_id
+          - ecode
+          - email
+          - headshot
+          - joining_date
+          - name
+          - organization_id
+          - relieving_date
+          - updated_at
+          - user_id
+          filter:
+            user_id:
+              _eq: X-Hasura-User-Id
+        role: user
+      table:
+        name: employees
+        schema: public
+      update_permissions:
+      - permission:
+          check: null
+          columns:
+          - designation_id
+          - ecode
+          - email
+          - headshot
+          - joining_date
+          - name
+          - organization_id
+          - relieving_date
+          filter: {}
+        role: app_admin
+    - array_relationships:
+      - name: employees
+        using:
+          foreign_key_constraint_on:
+            column: organization_id
+            table:
+              name: employees
+              schema: public
+      - name: projects
+        using:
+          foreign_key_constraint_on:
+            column: organization_id
+            table:
+              name: projects
+              schema: public
+      insert_permissions:
+      - permission:
+          backend_only: false
+          check: {}
+          columns:
+          - square_logo
+          - banner
+          - name
+        role: app_admin
+      select_permissions:
+      - permission:
+          columns:
+          - square_logo
+          - banner
+          - name
+          - id
+          filter: {}
+        role: app_admin
+      - permission:
+          columns:
+          - id
+          - name
+          - square_logo
+          - banner
+          filter:
+            employees:
+              user_id:
+                _eq: X-Hasura-User-Id
+        role: user
+      table:
+        name: organizations
+        schema: public
+      update_permissions:
+      - permission:
+          check: {}
+          columns:
+          - square_logo
+          - banner
+          - name
+          filter: {}
+        role: app_admin
+    - array_relationships:
+      - name: teams
+        using:
+          foreign_key_constraint_on:
+            column: project_id
+            table:
+              name: teams
+              schema: public
+      delete_permissions:
+      - permission:
+          filter: {}
+        role: app_admin
+      insert_permissions:
+      - permission:
+          backend_only: false
+          check: {}
+          columns:
+          - description
+          - issue_link_template
+          - logo
+          - logo_square
+          - name
+          - organization_id
+          - pr_link_template
+        role: app_admin
+      object_relationships:
+      - name: organization
+        using:
+          foreign_key_constraint_on: organization_id
+      select_permissions:
+      - permission:
+          columns:
+          - description
+          - issue_link_template
+          - logo
+          - logo_square
+          - name
+          - pr_link_template
+          - created_at
+          - updated_at
+          - id
+          - organization_id
+          filter: {}
+        role: app_admin
+      - permission:
+          columns:
+          - id
+          - name
+          - logo
+          - logo_square
+          - description
+          - organization_id
+          - issue_link_template
+          - pr_link_template
+          - created_at
+          - updated_at
+          filter:
+            teams:
+              members:
+                employee:
+                  user_id:
+                    _eq: X-Hasura-User-Id
+        role: user
+      table:
+        name: projects
+        schema: public
+      update_permissions:
+      - permission:
+          check: null
+          columns:
+          - description
+          - issue_link_template
+          - logo
+          - logo_square
+          - name
+          - organization_id
+          - pr_link_template
+          filter: {}
+        role: app_admin
+    - is_enum: true
+      select_permissions:
+      - permission:
+          columns:
+          - id
+          - name
+          filter: {}
+        role: app_admin
+      - permission:
+          columns:
+          - id
+          - name
+          filter: {}
+        role: user
+      table:
+        name: roles
+        schema: public
+    - delete_permissions:
+      - permission:
+          filter: {}
+        role: app_admin
+      insert_permissions:
+      - permission:
+          backend_only: false
+          check: {}
+          columns:
+          - ecode
+          - organization_id
+          - team_id
+        role: app_admin
+      object_relationships:
+      - name: employee
+        using:
+          manual_configuration:
+            column_mapping:
+              ecode: ecode
+              organization_id: organization_id
+            remote_table:
+              name: employees
+              schema: public
+      - name: team
+        using:
+          foreign_key_constraint_on: team_id
+      select_permissions:
+      - permission:
+          columns:
+          - ecode
+          - created_at
+          - updated_at
+          - organization_id
+          - team_id
+          filter: {}
+        role: app_admin
+      - permission:
+          columns:
+          - ecode
+          - team_id
+          - created_at
+          - updated_at
+          - organization_id
+          filter:
+            employee:
+              user_id:
+                _eq: X-Hasura-User-Id
+        role: user
+      table:
+        name: team_members
+        schema: public
+      update_permissions:
+      - permission:
+          check: null
+          columns:
+          - ecode
+          - organization_id
+          - team_id
+          filter: {}
+        role: app_admin
+    - array_relationships:
+      - name: members
+        using:
+          foreign_key_constraint_on:
+            column: team_id
+            table:
+              name: team_members
+              schema: public
+      delete_permissions:
+      - permission:
+          filter: {}
+        role: app_admin
+      insert_permissions:
+      - permission:
+          backend_only: false
+          check: {}
+          columns:
+          - issue_link_template
+          - logo
+          - logo_square
+          - name
+          - pr_link_template
+          - project_id
+        role: app_admin
+      object_relationships:
+      - name: project
+        using:
+          foreign_key_constraint_on: project_id
+      select_permissions:
+      - permission:
+          columns:
+          - issue_link_template
+          - logo
+          - logo_square
+          - name
+          - pr_link_template
+          - created_at
+          - updated_at
+          - id
+          - project_id
+          filter: {}
+        role: app_admin
+      - permission:
+          columns:
+          - id
+          - name
+          - logo
+          - logo_square
+          - issue_link_template
+          - pr_link_template
+          - project_id
+          - created_at
+          - updated_at
+          filter:
+            members:
+              employee:
+                user_id:
+                  _eq: X-Hasura-User-Id
+        role: user
+      table:
+        name: teams
+        schema: public
+      update_permissions:
+      - permission:
+          check: {}
+          columns:
+          - issue_link_template
+          - logo
+          - logo_square
+          - name
+          - pr_link_template
+          - project_id
+          filter: {}
+        role: app_admin
+    - table:
+        name: user_logins
+        schema: public
+    - array_relationships:
+      - name: as_employee
+        using:
+          foreign_key_constraint_on:
+            column: user_id
+            table:
+              name: employees
+              schema: public
+      event_triggers:
+      - definition:
+          enable_manual: false
+          insert:
+            columns: '*'
+        name: default_user_login
+        retry_conf:
+          interval_sec: 10
+          num_retries: 0
+          timeout_sec: 60
+        webhook_from_env: NEW_USER_WEBHOOK
+      object_relationships:
+      - name: role
+        using:
+          foreign_key_constraint_on: role_id
+      select_permissions:
+      - permission:
+          columns:
+          - id
+          - name
+          - avatar
+          - email
+          - created_by
+          - created_at
+          - updated_at
+          - role_id
+          filter: {}
+        role: app_admin
+      - permission:
+          columns:
+          - avatar
+          - created_at
+          - email
+          - id
+          - name
+          - role_id
+          - updated_at
+          filter:
+            id:
+              _eq: X-Hasura-User-Id
+          limit: 1
+        role: user
+      table:
+        name: users
+        schema: public
+    version: 2
+  type: replace_metadata

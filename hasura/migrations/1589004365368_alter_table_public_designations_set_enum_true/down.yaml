@@ -1,6 +1,0 @@
-- args:
-    is_enum: false
-    table:
-      name: designations
-      schema: public
-  type: set_table_is_enum
