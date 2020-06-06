@@ -1,5 +1,7 @@
 import classNames from 'classnames/bind';
 import { connect, FormikContextType, getIn } from 'formik';
+import { MutableRefObject } from 'react';
+
 import styles from './style.module.scss';
 
 const c = classNames.bind(styles);
@@ -9,6 +11,7 @@ interface TextFieldProps {
   className?: string;
   placeholder?: string;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  inputRef?: MutableRefObject<HTMLInputElement | null>;
   type?: string;
 }
 
@@ -34,7 +37,13 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
 
   return (
     <div className={containerClass}>
-      <input type={p.type || 'text'} tabIndex={-1} placeholder={p.placeholder} {...inputProps} />
+      <input
+        type={p.type || 'text'}
+        tabIndex={-1}
+        placeholder={p.placeholder}
+        {...inputProps}
+        ref={p.inputRef}
+      />
       <MaybeErrorMessage />
     </div>
   );

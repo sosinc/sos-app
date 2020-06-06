@@ -1,26 +1,20 @@
 interface Config {
   basename: string;
   urls: {
-    auth: string;
-    api: string;
+    graphql: string;
   };
 }
 
-if (!process.env.REACT_APP_AUTH_API_URL) {
-  throw new Error('REACT_APP_AUTH_API_URL environment variable must be set');
+if (!process.env.clientGraphqlUrl || !process.env.serverGraphqlUrl) {
+  throw new Error('clientGraphqlUrl && serverGraphqlUrl environment variable must be set');
 }
 
-if (!process.env.REACT_APP_API_URL) {
-  throw new Error('REACT_APP_API_URL environment variable must be set');
-}
-
-const basename = process.env.REACT_APP_BASE_PATH || '/';
+const basename = process.env.basePath || '/';
 
 const config: Config = {
   basename,
   urls: {
-    api: process.env.REACT_APP_API_URL,
-    auth: process.env.REACT_APP_AUTH_API_URL,
+    graphql: process.browser ? process.env.clientGraphqlUrl : process.env.serverGraphqlUrl,
   },
 };
 

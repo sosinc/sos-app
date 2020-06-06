@@ -1,12 +1,23 @@
 import Head from 'next/head';
+import { useDispatch } from 'react-redux';
+
 import Link from 'next/link';
 import FullPageLayout from 'src/components/FullPageLayout';
 import LoginForm from 'src/components/LoginForm';
+import WithUser from 'src/containers/WithUser';
+import { loginUser } from 'src/duck/auth';
+
 import c from './index.module.scss';
 
 const Index = () => {
+  const dispatch = useDispatch();
+
+  const handleLogin = (values: any) => {
+    dispatch(loginUser(values));
+  };
+
   return (
-    <>
+    <WithUser inverted={true} redirectPath="/organizations">
       <Head>
         <title>Snake Oil Softwware - App</title>
       </Head>
@@ -45,10 +56,10 @@ const Index = () => {
             </p>
           </span>
 
-          <LoginForm />
+          <LoginForm onSubmit={handleLogin} />
         </div>
       </FullPageLayout>
-    </>
+    </WithUser>
   );
 };
 
