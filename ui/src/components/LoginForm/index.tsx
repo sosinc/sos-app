@@ -62,7 +62,6 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
                 placeholder="> enter your work email"
                 type="email"
                 name="email"
-                isTabIndexEnable={true}
               />
               <div className={cx('password')}>
                 <span className={cx('back-icon')} onClick={gotoStep1} />
@@ -71,7 +70,7 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
                   placeholder="*******"
                   type="password"
                   name="password"
-                  isTabIndexEnable={true}
+                  tabIndex={1}
                 />
               </div>
             </div>
