@@ -1,0 +1,76 @@
+@import 'src/scss/lib';
+
+.container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.sidebar {
+  width: 220px;
+  position: relative;
+  border-right: 1px solid $color-button-bg;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .header {
+    margin: 9px 21px 0px 20px;
+    display: flex;
+    align-items: center;
+    width: 179px;
+
+    .logoImage {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+    }
+
+    .pic {
+      margin-left: auto;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+    }
+
+    .contextMenu {
+      width: 22px;
+      height: 22px;
+      background: url('/assets/images/vector.svg') 0 0 no-repeat;
+      margin-left: 12px;
+      margin-top: 18px;
+    }
+  }
+
+  .detail {
+    align-items: center;
+  }
+
+  .footer {
+    display: flex;
+    margin-bottom: 24px;
+    cursor: pointer;
+    margin-top: auto;
+
+    .feedbackIcon {
+      background: url('/assets/images/feedback-icon.svg') 0 0 no-repeat;
+      width: 12px;
+      height: 12px;
+      margin-right: 8px;
+    }
+
+    .feedbackText {
+      border: none;
+      background-color: transparent;
+      color: $color-text-primary;
+      justify-self: flex-end;
+      line-height: 10px;
+      font-size: 12px;
+    }
+
+    .feedbackText:hover {
+      color: $color-text-bright1;
+    }
+  }
+}
