@@ -8,7 +8,7 @@ const Index = () => {
   return (
     <>
       <Head>
-        <title>Snake Oil Softwware - App</title>
+        <title>Snake Oil Software - App</title>
       </Head>
 
       <FullPageLayout className={c.container}>
