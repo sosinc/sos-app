@@ -6,7 +6,7 @@ const Dashboard = () => {
   return (
     <>
       <HEAD>
-        <title>SOS - Dashboard</title>
+        <title>SoS - Dashboard</title>
       </HEAD>
       <div className={c.container}>
         <div className={c.sidebar}>
