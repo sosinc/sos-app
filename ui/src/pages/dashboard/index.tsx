@@ -14,7 +14,10 @@ const Dashboard = () => {
             <Link href="/">
               <img className={c.logoImage} src="/assets/images/sos-logo.svg" alt="o" />
             </Link>
-            <img className={c.pic} src="/assets/images/avatar.svg" alt="pic" />
+            <div className={c.picContainer}>
+              <img className={c.pic} src="/assets/images/avatar.svg" alt="pic" />
+              <span className={c.onlineStatus} />
+            </div>
             <span className={c.contextMenu} />
           </div>
           <div className={c.detail}>Top Bar</div>
