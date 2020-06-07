@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { FormikProps, withFormik } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
 
@@ -58,15 +58,20 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
           <div className={cx('fields-container')}>
             <div className={cx('2-step-swiper', cx(formStep))}>
               <TextField
-                className={cx('email')}
+                className={'login-form'}
                 placeholder="> enter your work email"
                 type="email"
                 name="email"
-                onBlur={() => untouchStep2()}
               />
               <div className={cx('password')}>
                 <span className={cx('back-icon')} onClick={gotoStep1} />
-                <TextField placeholder="*******" type="password" name="password" />
+                <TextField
+                  className={'login-form'}
+                  placeholder="*******"
+                  type="password"
+                  name="password"
+                  tabIndex={1}
+                />
               </div>
             </div>
           </div>
@@ -75,9 +80,11 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
             Login
           </button>
         </form>
-        <p className={cx('reset-password-text')} onClick={() => setModalOpen(true)}>
-          Reset password
-        </p>
+        <span>
+          <p className={cx('reset-password-text')} onClick={() => setModalOpen(true)}>
+            Reset password
+          </p>
+        </span>
       </div>
       <Modal onClose={handleModal} isOpen={isModalOpen}>
         <ResetPassword />
@@ -91,17 +98,26 @@ interface LoginFormValues {
   password: string;
 }
 
-export default withFormik<{}, LoginFormValues>({
-  validationSchema: Yup.object({
-    email: Yup.string()
-      .email('Invalid email address')
-      .required('Required'),
-    password: Yup.string()
-      .max(15, 'Must be 15 characters or less')
-      .required('Required'),
-  }),
+const handleSubmit = (values: object, actions: object) => {
+  console.warn('SUBMITTING', values, actions);
+};
 
-  handleSubmit: (values, bag) => {
-    console.warn('SUBMITTING', values, bag);
-  },
-})(Login);
+const initialValues = {
+  email: '',
+  password: '',
+};
+
+const validationSchema = Yup.object({
+  email: Yup.string()
+    .email('Invalid email address')
+    .required('Required'),
+  password: Yup.string()
+    .max(15, 'Must be 15 characters or less')
+    .required('Required'),
+});
+
+export default () => (
+  <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+    {Login}
+  </Formik>
+);
