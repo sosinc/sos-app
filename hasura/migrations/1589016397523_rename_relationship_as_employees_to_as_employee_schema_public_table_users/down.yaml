@@ -1,7 +1,0 @@
-- args:
-    name: as_employee
-    new_name: as_employees
-    table:
-      name: users
-      schema: public
-  type: rename_relationship

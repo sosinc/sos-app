@@ -1,8 +1,0 @@
-- args:
-    name: organization
-    table:
-      name: employees
-      schema: public
-    using:
-      foreign_key_constraint_on: organization_id
-  type: create_object_relationship

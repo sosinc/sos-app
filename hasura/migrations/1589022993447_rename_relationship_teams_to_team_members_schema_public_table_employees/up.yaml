@@ -1,7 +1,0 @@
-- args:
-    name: teams
-    new_name: team_members
-    table:
-      name: employees
-      schema: public
-  type: rename_relationship

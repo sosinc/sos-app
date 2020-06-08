@@ -102,6 +102,48 @@ tables:
     webhook_from_env: NEW_EMPLOYEE_WEBHOOK
 - table:
     schema: public
+    name: me
+  object_relationships:
+  - name: role
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: roles
+        column_mapping:
+          role_id: id
+  select_permissions:
+  - role: app_admin
+    permission:
+      columns:
+      - avatar
+      - email
+      - name
+      - role_id
+      - created_at
+      - updated_at
+      - created_by
+      - id
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+  - role: user
+    permission:
+      columns:
+      - avatar
+      - email
+      - name
+      - role_id
+      - created_at
+      - updated_at
+      - created_by
+      - id
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      limit: 1
+- table:
+    schema: public
     name: organizations
   array_relationships:
   - name: employees
@@ -239,14 +281,6 @@ tables:
     schema: public
     name: roles
   is_enum: true
-  array_relationships:
-  - name: users
-    using:
-      foreign_key_constraint_on:
-        column: role_id
-        table:
-          schema: public
-          name: users
   select_permissions:
   - role: app_admin
     permission:
@@ -450,3 +484,9 @@ tables:
       interval_sec: 10
       timeout_sec: 60
     webhook_from_env: NEW_USER_WEBHOOK
+remote_schemas:
+- name: sidecar
+  definition:
+    url_from_env: SIDECAR_GRAPHQL_URL
+    timeout_seconds: 60
+    forward_client_headers: true

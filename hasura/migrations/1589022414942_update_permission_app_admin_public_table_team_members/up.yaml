@@ -1,9 +1,0 @@
-- args:
-    permission:
-      backend_only: false
-      filter: {}
-    role: app_admin
-    table:
-      name: team_members
-      schema: public
-  type: create_delete_permission
