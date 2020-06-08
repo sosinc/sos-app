@@ -1,16 +1,16 @@
 %animate {
-  animation-duration: 1.5s;
   animation-delay: 0s;
-  transition-timing-function: ease-out;
+  animation-duration: 1.5s;
   animation-fill-mode: both;
+  transition-timing-function: ease-out;
 }
 
-%shadowBox {
+%shadow-box {
   background-color: $color-shadowbox-bg;
-  box-shadow: 11px 4px 24px $color-shadowbox-shadow;
   border: 1px solid $color-shadowbox-border;
-  padding: 6px;
   border-radius: 4px;
+  box-shadow: 11px 4px 24px $color-shadowbox-shadow;
+  padding: 6px;
   transition: all 0.3s;
 
   &:hover {

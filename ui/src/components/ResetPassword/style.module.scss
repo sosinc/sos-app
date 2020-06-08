@@ -1,12 +1,12 @@
 @import 'src/scss/lib';
 
 .login-form {
+  display: flex;
   font: inherit;
   max-width: 90vw;
-  display: flex;
-  position: relative;
-  padding: 46px;
   min-height: 17em;
+  padding: 46px;
+  position: relative;
 
   @media(max-width: $sm) {
     flex-direction: column;
@@ -19,21 +19,22 @@
   &.step2 {
     height: 20em;
   }
+
   &.has-error {
     background: $color-error-bg;
   }
 }
 
 .2-step-swiper {
-  position: absolute;
-  width: 200%;
-  left: 0;
   display: flex;
+  left: 0;
+  position: absolute;
   transition: all 100ms linear;
+  width: 200%;
 
   &.step1 {
-    left: 0;
     height: 2.6em;
+    left: 0;
   }
 
   &.step2 {
@@ -42,10 +43,10 @@
 }
 
 .fields-container {
-  position: relative;
-  width: 100%;
   margin: 0 16px;
   overflow: hidden;
+  position: relative;
+  width: 100%;
 }
 
 .back-icon {
@@ -56,51 +57,51 @@
 }
 
 .password-container {
-  width: 100%;
-  display: flex;
   align-items: center;
+  display: flex;
+  width: 100%;
 }
 
 .password-fields {
-  display: flex;
   align-items: center;
+  display: flex;
   flex-direction: column;
   flex-grow: 1;
 
   > * {
-    width: 100%;
     margin-bottom: 1em;
+    width: 100%;
   }
 }
 
-.loginButton {
-  background: $color-button_cta-bg;
+.login-button {
+  background: $color-button-cta-bg;
+  border: 0;
+  border-radius: 4px;
   color: $color-button-text;
   cursor: pointer;
-  transition: all 0.2s;
-  outline: none;
-  width: 300px;
-  height: 48px;
-  font-weight: 500;
   font-size: 14px;
-  margin-bottom: 32px;
-  border-radius: 4px;
-  border: none;
-}
-
-.form-title{
   font-weight: 500;
-  font-size: 20px;
-  line-height: 24px;
-  text-align: center;
-  margin-bottom: 6px;
-  color: $color-text-primary;
+  height: 48px;
+  margin-bottom: 32px;
+  outline: none;
+  transition: all 0.2s;
+  width: 300px;
 }
 
-.form-text{
+.form-title {
+  color: $color-text-primary;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 24px;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.form-text {
+  color: $color-text-dim1;
   font-size: 15px;
   line-height: 24px;
-  text-align: center;
-  color: $color-text-dim1;
   margin-bottom: 32px;
+  text-align: center;
 }

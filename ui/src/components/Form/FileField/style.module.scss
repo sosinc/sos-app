@@ -1,41 +1,41 @@
 @import 'src/scss/lib';
 
-.input-file{
-  width: 100%;
+.input-file {
+  cursor: pointer;
   height: 100%;
   opacity: 0;
-  cursor: pointer;
-  position:relative;
+  position: relative;
+  width: 100%;
   z-index: 1;
 }
 
 .preview-image {
-  width: 100%;
+  cursor: pointer;
   height: 100%;
   left: 0;
-  top: 0;
-  z-index: 0;
-  position:absolute;
-  cursor: pointer;
   object-fit: cover;
-}
-
-.upload-container{
-  height: 60px;
   position: absolute;
   top: 0;
+  width: 100%;
+  z-index: 0;
+}
+
+.upload-container {
   bottom: 0;
-  right: 0;
-  left: 0;
-  margin: auto;
   display: grid;
   grid-row-gap: 1px;
   grid-template-columns: 1fr;
   grid-template-rows: 2em 1.1em;
+  height: 60px;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
   z-index: 0;
 }
 
-.upload-icon{
+.upload-icon {
   $width: 1.6em;
   grid-row: 1;
   grid-column: 1;
@@ -45,26 +45,27 @@
   cursor: pointer;
   margin: auto;
   color: $color-text-dim2;
-  }
+  width: $width;
+}
 
-.upload-text{
-  grid-row: 2;
-  grid-column: 1;
+.upload-text {
   color: $color-text-dim2;
   font-size: 0.8em;
+  grid-column: 1;
+  grid-row: 2;
 }
 
-.org-logo{
-  width: 10em;
+.org-logo {
   @extend .org-image-container;
+  width: 10em;
 }
 
-.org-image-container{
-  position: relative;
+.org-image-container {
   background-color: $color-button-bg;
   border: 1px solid $color-button-border;
-  height: 10em;
   border-radius: 3px;
+  height: 10em;
+  position: relative;
 
   &.has-error {
     background: $color-error-bg;
@@ -77,8 +78,11 @@
   position: absolute;
   width: $width;
   height: $width;
-  top: 5%;
+
+  position: absolute;
   right: 8px;
+  top: 5%;
+  width: $width;
   z-index: 1;
   color: $color-error-border;
 }

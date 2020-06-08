@@ -1,12 +1,12 @@
 @import 'src/scss/lib';
 
 .content {
-  margin-top: 7em;
-  text-align: center;
-  padding: 0 2em;
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  margin-top: 7em;
+  padding: 0 2em;
+  text-align: center;
 
   @media(max-width: $md) {
     margin-top: 100px;
@@ -17,26 +17,26 @@
   }
 }
 
-.superLogo {
+.super-logo {
   animation: spin 20s linear infinite;
   animation-delay: 1.4s;
+  margin-bottom: 0.5em;
 
   width: 5em;
-  margin-bottom: 0.5em;
 }
 
-.brandName {
+.brand-name {
   @extend %animate;
   animation-name: come-together;
 
   h4 {
     color: $color-cta;
-    text-transform: uppercase;
-    margin-bottom: 22px;
-    line-height: 1.22em;
     font: inherit;
     font-size: 0.8rem;
     font-weight: normal;
+    line-height: 1.22em;
+    margin-bottom: 22px;
+    text-transform: uppercase;
   }
 }
 
@@ -47,11 +47,11 @@
   margin-bottom: 16px;
 
   h1 {
-    max-width: 900px;
     font-size: 4.13rem;
     font-weight: 800;
-    margin: 0 0 16px 0;
     line-height: 1.2;
+    margin: 0 0 16px;
+    max-width: 900px;
 
     @media(max-width: $sm) {
       font-size: 2.8em;
@@ -61,14 +61,14 @@
 
 .brief {
   @extend %animate;
-  animation-name: undim-sliding-down;
   animation-delay: 0.4s;
+  animation-name: undim-sliding-down;
 
   p {
-    max-width: 720px;
-    font-size: 1.3rem;
     color: $color-text-dim1;
+    font-size: 1.3rem;
     line-height: 1.5;
+    max-width: 720px;
 
     @media(max-width: $sm) {
       font-size: 1.2rem;

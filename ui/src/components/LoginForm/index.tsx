@@ -9,9 +9,9 @@ import Modal from 'src/components/Modal';
 import ResetPassword from 'src/components/ResetPassword';
 import hasFormError from 'src/lib/hasFormError';
 
-import c from './style.module.scss';
+import style from './style.module.scss';
 
-const cx = classNames.bind(c);
+const c = classNames.bind(style);
 
 const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
   const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
@@ -56,22 +56,22 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
   const formHasError = hasFormError(props);
 
   return (
-    <div className={cx('container')}>
-      <div className={cx('login-form-container')}>
+    <div className={c('container')}>
+      <div className={c('login-form-container')}>
         <form
-          className={cx('login-form', { 'has-error': formHasError })}
+          className={c('login-form', { 'has-error': formHasError })}
           onSubmit={props.handleSubmit}
         >
-          <div className={cx('fields-container')}>
-            <div className={cx('2-step-swiper', cx(formStep))}>
+          <div className={c('fields-container')}>
+            <div className={c('2-step-swiper', c(formStep))}>
               <TextField
                 className={'login-form'}
                 placeholder="> enter your work email"
                 type="email"
                 name="email"
               />
-              <div className={cx('password')}>
-                <FaAngleLeft title="Back" className={cx('back-icon')} onClick={gotoStep1} />
+              <div className={c('password')}>
+                <FaAngleLeft title="Back" className={c('back-icon')} onClick={gotoStep1} />
                 <TextField
                   className={'login-form'}
                   inputRef={passwordRef}
@@ -84,12 +84,12 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
             </div>
           </div>
 
-          <button className={c.loginButton} type="button" onClick={gotoNextStep}>
+          <button className={c('login-button')} type="button" onClick={gotoNextStep}>
             Login
           </button>
         </form>
         <span>
-          <p className={cx('reset-password-text')} onClick={() => setModalOpen(true)}>
+          <p className={c('reset-password-text')} onClick={() => setModalOpen(true)}>
             Reset password
           </p>
         </span>

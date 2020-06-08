@@ -36,7 +36,7 @@ const AddOrg: React.FC<FormikProps<OrganizationFormValues>> = (props) => {
           </div>
 
           <div className={c('button-wrapper')}>
-            <button className={c('saveButton')} type="submit">
+            <button className={c('save-button')} type="submit">
               Save
             </button>
           </div>
