@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import { Formik, FormikProps } from 'formik';
 import * as Yup from 'yup';
 
-import FileField from 'src/components/Form/FileField';
+import ImageUploadField from 'src/components/Form/ImageUploadField';
 import TextField from 'src/components/Form/TextField';
 import Layout from 'src/containers/Layout';
 import style from './style.module.scss';
@@ -18,7 +18,7 @@ const AddOrg: React.FC<FormikProps<OrganizationFormValues>> = (props) => {
           <div className={c('name-wrapper', 'wrapper')}>
             <span className={c('field-title')}>Name</span>
             <TextField
-              className={'org-add-form'}
+              className={'form-text-field'}
               placeholder="Enter organization name"
               type="name"
               name="name"
@@ -27,12 +27,12 @@ const AddOrg: React.FC<FormikProps<OrganizationFormValues>> = (props) => {
 
           <div className={c('image-wrapper-logo', 'wrapper')}>
             <span className={c('field-title')}>Logo</span>
-            <FileField className={'org-logo'} type={'file'} name="logo" />
+            <ImageUploadField className={c('org-logo')} type={'file'} name="logo" />
           </div>
 
           <div className={c('image-wrapper-banner', 'wrapper')}>
             <span className={c('field-title')}>Banner</span>
-            <FileField className={'org-image-container'} type="file" name="banner" />
+            <ImageUploadField className={c('org-image-container')} type="file" name="banner" />
           </div>
 
           <div className={c('button-wrapper')}>

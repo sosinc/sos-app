@@ -17,3 +17,14 @@
     background-color: $color-shadowbox-bg--hover;
   }
 }
+
+%error-icon-outer {
+  $size: 20px;
+  color: $color-error-border;
+  height: $size;
+
+  position: absolute;
+  right: 8px;
+  width: $size;
+  z-index: 1;
+}

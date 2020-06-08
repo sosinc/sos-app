@@ -41,7 +41,7 @@ const FileField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> = 
     return <AiFillExclamationCircle className={c('error-icon')} title={error} />;
   };
 
-  const containerClass = c(p.className, {
+  const containerClass = c('upload-logo-container', p.className, {
     'has-error': error,
   });
 

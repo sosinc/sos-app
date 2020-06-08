@@ -55,7 +55,7 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues>> = (props) => {
               placeholder="Enter your registered email"
               type="email"
               name="email"
-              className={'org-add-form'}
+              className={'form-text-field'}
             />
 
             <div className={c('password-container')}>
@@ -65,14 +65,14 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues>> = (props) => {
                   placeholder="OTP"
                   type="text"
                   name="otp"
-                  className={'org-add-form'}
+                  className={'form-text-field'}
                   tabIndex={1}
                 />
                 <TextField
                   placeholder="Enter new password"
                   type="password"
                   name="password"
-                  className={'org-add-form'}
+                  className={'form-text-field'}
                   tabIndex={2}
                 />
               </div>

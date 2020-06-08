@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import { Formik, FormikProps } from 'formik';
 import * as Yup from 'yup';
 
-import FileField from 'src/components/Form/FileField';
+import ImageUploadField from 'src/components/Form/ImageUploadField';
 import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import Layout from 'src/containers/Layout';
@@ -32,7 +32,7 @@ const AddOrg: React.FC<FormikProps<EmployeeFormValues>> = (props) => {
           <div className={c('name-wrapper', 'wrapper')}>
             <span className={c('field-title')}>Name</span>
             <TextField
-              className={'org-add-form'}
+              className={'form-text-field'}
               placeholder="Enter employee name"
               type="text"
               name="name"
@@ -41,14 +41,14 @@ const AddOrg: React.FC<FormikProps<EmployeeFormValues>> = (props) => {
 
           <div className={c('image-wrapper-logo', 'wrapper')}>
             <span className={c('field-title')}>Head Shot</span>
-            <FileField className={'org-image-container'} type={'file'} name="headShot" />
+            <ImageUploadField className={'org-image-container'} type={'file'} name="headShot" />
           </div>
 
           <div className={c('employee-fields-container')}>
             <div className={c('ecode-wrapper', 'wrapper')}>
               <span className={c('field-title')}>E-Code</span>
               <TextField
-                className={'org-add-form'}
+                className={'form-text-field'}
                 placeholder="Enter e-code"
                 type="text"
                 name="ecode"

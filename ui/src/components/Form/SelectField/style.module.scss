@@ -54,14 +54,7 @@
 }
 
 .error-icon {
-  $width: 20px;
 
-  position: absolute;
-  width: $width;
-  height: $width;
-
-  position: absolute;
-  right: 8px;
-  color: $color-error-border;
+  @extend %error-icon-outer;
   top: calc(50% - 10px);
 }

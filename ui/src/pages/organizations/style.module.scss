@@ -1,17 +1,17 @@
 @import 'src/scss/lib';
 
-.org-container{
+.org-container {
+  color: $color-text-dim2;
   display: flex;
   flex-direction: column;
-  color: $color-text-dim2;
 }
 
 .org-icon {
   background-size: contain;
+  color: $color-text-dim2;
   height: 45px;
   margin: 0 auto;
   margin-bottom: 1em;
-  color: $color-text-dim2;
   width: 45px;
 }
 
@@ -68,6 +68,10 @@
 .field-title {
   color: $color-text-dim2;
   text-align: left;
+}
+
+.org-logo {
+  width: 10em;
 }
 
 .image-wrapper-logo {
