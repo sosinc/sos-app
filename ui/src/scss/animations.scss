@@ -1,38 +1,41 @@
 @keyframes come-together {
   0% {
-    opacity: 0;
-    transform: translate(0px,0px);
     letter-spacing: 0.5vw;
+    opacity: 0;
+    transform: translate(0, 0);
   }
+
   100% {
-    opacity: 1;
-    transform: translate(0,0);
     letter-spacing: 0.3vw;
+    opacity: 1;
+    transform: translate(0, 0);
   }
+
   0% {
-    opacity: 0;
-    transform: translate(0px,0px);
     letter-spacing: 0.5vw;
+    opacity: 0;
+    transform: translate(0, 0);
   }
+
   100% {
-    opacity: 1;
-    transform: translate(0,0);
     letter-spacing: 0.3vw;
+    opacity: 1;
+    transform: translate(0, 0);
   }
 }
 
 @keyframes undim-sliding-down {
   0% {
     opacity: 0;
-    transform: translate(0px,-10px);
+    transform: translate(0, -10px);
   }
 
   100% {
     opacity: 1;
-    transform: translate(0,0);
+    transform: translate(0, 0);
   }
 }
 
 @keyframes spin {
-  0% { transform:rotate(360deg); }
+  0% { transform: rotate(360deg); }
 }

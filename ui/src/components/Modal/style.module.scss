@@ -1,53 +1,49 @@
 @import 'src/scss/lib';
 
 .backdrop {
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  z-index: 10;
   backdrop-filter: blur(3px) grayscale(0.8);
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 10;
 }
 
 .container {
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    z-index: 11;
-    overflow-y: auto;
-    display: flex;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    justify-content: center;
-    flex: 1 1 0%;
+  align-items: center;
+  bottom: 0;
+  display: flex;
+  flex: 1 1 0%;
+  justify-content: center;
+  left: 0;
+  overflow-y: auto;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 11;
 }
 
-.modal{
-  width: 480px;
-  flex-direction: column;
-  box-shadow: $color-shadowbox-shadow 0px 4px 78px;
+.modal {
   background: $color-bg-dark;
   border-radius: 4px;
+  box-shadow: $color-shadowbox-shadow 0 4px 78px;
+  flex-direction: column;
   position: relative;
+  width: 480px;
 }
 
-.back-icon-container{
-  display: flex;
-  -webkit-box-align: center;
+.back-icon-container {
   align-items: center;
-  -webkit-box-pack: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  position: absolute;
-  top: 22px;
-  right: 22px;
   cursor: pointer;
-  z-index:1;
+  display: flex;
+  height: 26px;
+  justify-content: center;
+  position: absolute;
+  right: 22px;
+  top: 22px;
+  width: 26px;
+  z-index: 1;
 
   &:hover {
     background-color: $color-bg-secondary;
@@ -57,6 +53,6 @@
 .back-icon {
   background: url('/assets/images/close.svg') 0 0 no-repeat;
   background-size: contain;
-  width: 16px;
   height: 16px;
+  width: 16px;
 }

@@ -7,27 +7,27 @@
 .back-icon {
   background: url('/assets/images/leftArrow.svg') 0 0 no-repeat;
   background-size: contain;
-  width: 22px;
-  height: 22px;
   cursor: pointer;
+  height: 22px;
+  width: 22px;
 }
 
 .login-form-container {
   @extend %animate;
+  animation-delay: 0.6s;
 
   animation-name: undim-sliding-down;
-  animation-delay: 0.6s;
   margin-top: 3em;
 }
 
 .login-form {
-  @extend %shadowBox;
+  @extend %shadow-box;
+  display: flex;
 
   font: inherit;
-  width: 500px;
   max-width: 90vw;
-  display: flex;
   position: relative;
+  width: 500px;
 
   @media(max-width: $sm) {
     flex-direction: column;
@@ -39,11 +39,11 @@
 }
 
 .2-step-swiper {
-  position: absolute;
-  width: 200%;
-  left: 0;
   display: flex;
+  left: 0;
+  position: absolute;
   transition: all 100ms linear;
+  width: 200%;
 
   &.step1 {
     left: 0;
@@ -55,10 +55,10 @@
 }
 
 .fields-container {
-  position: relative;
-  width: 100%;
   margin: 0 16px;
   overflow: hidden;
+  position: relative;
+  width: 100%;
 }
 
 .email {
@@ -66,30 +66,30 @@
 }
 
 .password {
-  display: flex;
   align-items: center;
+  display: flex;
   width: 100%;
 }
 
-.loginButton {
-  padding: 0 4em;
-  height: 48px;
-  background: $color-button_cta-bg;
-  border: none;
+.login-button {
+  background: $color-button-cta-bg;
+  border: 0;
   border-radius: 4px;
   color: $color-button-text;
-  font-weight: 600;
   cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s;
   flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 600;
+  height: 48px;
   outline: none;
+  padding: 0 4em;
+  transition: all 0.2s;
 }
 
-.reset-password-text{
-  text-align: left;
+.reset-password-text {
   color: $color-text-dim2;
+  cursor: pointer;
   font-size: 0.8em;
   margin: 10px 0;
-  cursor: pointer;
+  text-align: left;
 }

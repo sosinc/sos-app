@@ -18,7 +18,7 @@ const Modal: React.FC<ModalProps> = (p) => {
     <>
       <div className={c('backdrop')} />
       <div className={c('container')} onClick={p.onClose}>
-         <div className={c('modal')} onClick={(e) => e.stopPropagation()}>
+        <div className={c('modal')} onClick={(e) => e.stopPropagation()}>
           <div className={c('back-icon-container')}>
             <span title="close" className={c('back-icon')} onClick={p.onClose} />
           </div>
