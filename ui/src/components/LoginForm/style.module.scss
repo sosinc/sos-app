@@ -5,11 +5,10 @@
 }
 
 .back-icon {
-  background: url('/assets/images/leftArrow.svg') 0 0 no-repeat;
-  background-size: contain;
-  width: 22px;
-  height: 22px;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
+  color: $color-text-dim2;
 }
 
 .login-form-container {

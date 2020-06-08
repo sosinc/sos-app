@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind';
 import { Formik, FormikProps } from 'formik';
 import { useRef, useState } from 'react';
+import { FaAngleLeft } from 'react-icons/fa';
 import * as Yup from 'yup';
 
 import TextField from 'src/components/Form/TextField';
@@ -70,7 +71,7 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
                 name="email"
               />
               <div className={cx('password')}>
-                <span className={cx('back-icon')} onClick={gotoStep1} />
+                <FaAngleLeft title="Back" className={cx('back-icon')} onClick={gotoStep1} />
                 <TextField
                   className={'login-form'}
                   inputRef={passwordRef}

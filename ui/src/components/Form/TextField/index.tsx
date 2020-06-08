@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind';
 import { connect, FormikContextType, getIn } from 'formik';
 import { MutableRefObject } from 'react';
+import { AiFillExclamationCircle } from 'react-icons/ai';
 
 import styles from './style.module.scss';
 
@@ -28,7 +29,7 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
       return null;
     }
 
-    return <span className={c('error-icon')} title={error} />;
+    return <AiFillExclamationCircle className={c('error-icon')} title={error} />;
   };
 
   const containerClass = c('input-field-container', p.className, {

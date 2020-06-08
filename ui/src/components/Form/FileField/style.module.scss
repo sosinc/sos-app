@@ -37,18 +37,14 @@
 
 .upload-icon{
   $width: 1.6em;
-
   grid-row: 1;
   grid-column: 1;
 
   width:$width;
-  background: url('/assets/images/upload.svg');
   height: $width;
-  background-size: $width;
-  background-repeat: no-repeat;
   cursor: pointer;
-
   margin: auto;
+  color: $color-text-dim2;
   }
 
 .upload-text{
@@ -80,10 +76,9 @@
 
   position: absolute;
   width: $width;
-  background: url('/assets/images/info-error.svg');
-  background-size: $width;
   height: $width;
   top: 5%;
   right: 8px;
   z-index: 1;
+  color: $color-error-border;
 }

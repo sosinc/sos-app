@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind';
 import { Formik, FormikProps } from 'formik';
 import { useState } from 'react';
+import { FaAngleLeft } from 'react-icons/fa';
 import * as Yup from 'yup';
 
 import TextField from 'src/components/Form/TextField';
@@ -58,8 +59,7 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues>> = (props) => {
             />
 
             <div className={c('password-container')}>
-              <div className={c('back-icon')} onClick={gotoStep1} />
-
+              <FaAngleLeft title="Back" className={c('back-icon')} onClick={gotoStep1} />
               <div className={c('password-fields')}>
                 <TextField
                   placeholder="OTP"

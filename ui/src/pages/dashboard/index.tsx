@@ -1,3 +1,5 @@
+import { AiOutlineEllipsis } from 'react-icons/ai';
+
 import HEAD from 'next/head';
 import Link from 'next/link';
 import c from './index.module.scss';
@@ -18,7 +20,7 @@ const Dashboard = () => {
               <img className={c.pic} src="/assets/images/avatar.svg" alt="pic" />
               <span className={c.onlineStatus} />
             </div>
-            <span className={c.dotMenuIcon} />
+            <AiOutlineEllipsis title="more" className={c.dotMenuIcon} />
           </div>
           <div className={c.detail}>Top Bar</div>
           <div className={c.footer}>

@@ -87,9 +87,8 @@
 
   position: absolute;
   width: $width;
-  background: url('/assets/images/info-error.svg');
-  background-size: $width;
   height: $width;
   top: calc(50% - 10px);
   right: 8px;
+  color: $color-error-border;
 }

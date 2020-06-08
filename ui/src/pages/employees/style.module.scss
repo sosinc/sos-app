@@ -7,12 +7,11 @@
 }
 
 .org-icon {
-  background: url('/assets/images/employee.svg') 0 0 no-repeat;
-  background-size: contain;
   width: 45px;
   height: 45px;
   margin: 0 auto;
   margin-bottom: 1em;
+  color: $color-text-dim2;
 }
 
 .org-add{
