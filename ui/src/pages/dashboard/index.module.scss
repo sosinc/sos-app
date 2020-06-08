@@ -2,90 +2,90 @@
 
 .container {
   display: flex;
-  width: 100vw;
   height: 100vh;
   position: relative;
+  width: 100vw;
 }
 
 .sidebar {
-  width: 220px;
-  position: relative;
+  align-items: center;
   border-right: 1px solid $color-button-bg;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  position: relative;
+  width: 220px;
 }
 
 .header {
-  margin: 9px 21px 0px 20px;
-  display: flex;
   align-items: center;
+  display: flex;
+  margin: 9px 21px 0 20px;
   width: 179px;
 }
 
-.dotMenuIcon {
-  width: 22px;
-  height: 22px;
+.dot-menu-icon {
   background: url('/assets/images/dot-menu.svg') 0 0 no-repeat;
+  height: 22px;
   margin-left: 12px;
   margin-top: 18px;
+  width: 22px;
 }
 
 .detail {
   align-items: center;
 }
 
-.logoImage {
-  width: 20px;
-  height: 20px;
+.logo-image {
   border-radius: 50%;
+  height: 20px;
+  width: 20px;
 }
 
-.picContainer {
-  margin-left: auto;
-  width: 18px;
-  height: 18px;
+.pic-container {
   display: flex;
   flex-direction: row-reverse;
+  height: 18px;
+  margin-left: auto;
+  width: 18px;
 
   .pic {
     border-radius: 50%;
   }
 
-  .onlineStatus {
-    border-radius: 50%;
-    width: 8px;
-    height: 8px;
+  .online-status {
+    align-self: flex-end;
     background: $color-online;
     border: 1px solid $color-bg-dark;
-    position: absolute;
-    align-self: flex-end;
-    margin-top: 1px;
+    border-radius: 50%;
+    height: 8px;
     margin-left: 1px;
+    margin-top: 1px;
+    position: absolute;
+    width: 8px;
   }
 }
 
 .footer {
+  cursor: pointer;
   display: flex;
   margin-bottom: 24px;
-  cursor: pointer;
   margin-top: auto;
 }
 
-.feedbackIcon {
+.feedback-icon {
   background: url('/assets/images/feedback-icon.svg') 0 0 no-repeat;
-  width: 12px;
   height: 12px;
   margin-right: 8px;
+  width: 12px;
 }
 
-.feedbackText {
-  border: none;
+.feedback-text {
   background-color: transparent;
+  border: 0;
   color: $color-text-primary;
+  font-size: 12px;
   justify-self: flex-end;
   line-height: 10px;
-  font-size: 12px;
 
   &:hover {
     color: $color-text-bright1;

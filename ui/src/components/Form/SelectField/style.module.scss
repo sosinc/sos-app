@@ -1,50 +1,51 @@
 @import 'src/scss/lib';
 
-.input-field-container{
-  position: relative;
+.input-field-container {
   background: none;
-  border-radius: 4px;
   border: 1px solid $color-button-border;
-  font-weight: 400;
+  border-radius: 4px;
+  box-shadow: none;
   color: $color-text-dim2;
-  transition: all 0.2s;
+  font-weight: 400;
+  height: 40px;
   outline: none;
   padding: 10px;
+  position: relative;
+  transition: all 0.2s;
   width: 100%;
-  box-shadow: none;
-  height: 40px;
 
   &.has-error {
     background: $color-error-bg;
   }
 }
 
-.select-container{
+.select-container {
   cursor: pointer;
 }
 
 .select-backdrop {
-  position: fixed;
+  background: transparent;
+  bottom: 0;
   left: 0;
+  position: fixed;
   right: 0;
   top: 0;
-  bottom: 0;
-  background: transparent;
 }
 
 .select-options {
   position: absolute;
-  width: 100%;right: 0;
+  right: 0;
   top: 2.9em;
+  width: 100%;
 }
 
 .select-option {
-  list-style-type: none;
-  padding: 12px 20px;
   background: $color-boundary;
   // border-bottom: 1px solid $color-button-border;
   cursor: pointer;
   font-size: 1em;
+  list-style-type: none;
+  padding: 12px 20px;
 
   &:hover {
     background-color: $color-select-active;
@@ -54,12 +55,12 @@
 
 .error-icon {
   $width: 20px;
-
-  position: absolute;
-  width: $width;
   background: url('/assets/images/info-error.svg');
   background-size: $width;
   height: $width;
-  top: calc(50% - 10px);
+
+  position: absolute;
   right: 8px;
+  top: calc(50% - 10px);
+  width: $width;
 }

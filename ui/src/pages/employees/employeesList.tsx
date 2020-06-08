@@ -27,7 +27,7 @@ const EmployeeList: React.FC<FieldProps> = ({ ...p }) => {
   const employee = p.list.map((e) => (
     <div className={c('employee-content')} key={e.id}>
       <div className={c('list-section1')}>
-        <img className={c('employee-headShot-wrapper')} src={e.headShot} />
+        <img className={c('employee-headshot-wrapper')} src={e.headShot} />
         <span className={c('employee-name-wrapper')}>{e.name}</span>
         <span className={c('employee-designation-wrapper')}>{e.designation}</span>
       </div>

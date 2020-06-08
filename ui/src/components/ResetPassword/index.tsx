@@ -80,7 +80,7 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues>> = (props) => {
           </div>
         </div>
       </form>
-      <button className={c('loginButton')} type="button" onClick={gotoNextStep}>
+      <button className={c('login-button')} type="button" onClick={gotoNextStep}>
         {formStep === 'step2' ? 'Reset' : 'Send OTP'}
       </button>
     </>

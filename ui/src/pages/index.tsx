@@ -1,10 +1,12 @@
+import classNames from 'classnames/bind';
 import { useDispatch } from 'react-redux';
 
 import LoginForm from 'src/components/LoginForm';
 import Layout from 'src/containers/Layout';
 import { loginUser } from 'src/duck/auth';
 
-import c from './index.module.scss';
+import style from './index.module.scss';
+const c = classNames.bind(style);
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -19,12 +21,12 @@ const Index = () => {
       redirectPath={'/organizations'}
       inverted={true}
     >
-      <span className={c.brandName}>
-        <img className={c.superLogo} src="/assets/images/sos-logo.svg" alt="O" />
+      <span className={c('brand-name')}>
+        <img className={c('super-logo')} src="/assets/images/sos-logo.svg" alt="O" />
         <h4>Snake Oil Software</h4>
       </span>
 
-      <span className={c.hero}>
+      <span className={c('hero')}>
         <h1>
           Transparent teams
           <br />
@@ -32,7 +34,7 @@ const Index = () => {
         </h1>
       </span>
 
-      <span className={c.brief}>
+      <span className={c('brief')}>
         <p>
           Missing piece between Jira and Slack, SoS keeps entire team on same page with daily
           commitments, challenges and more.
