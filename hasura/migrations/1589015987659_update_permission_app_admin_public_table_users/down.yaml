@@ -1,6 +1,0 @@
-- args:
-    role: app_admin
-    table:
-      name: users
-      schema: public
-  type: drop_select_permission

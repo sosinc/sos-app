@@ -1,52 +1,5 @@
 @import 'src/scss/lib';
 
-.container {
-  max-width: 1024px;
-  padding-top: 66px;
-  margin: 0 auto;
-  align-items: center;
-  position: relative;
-}
-
-.header {
-  display: flex;
-  background-color: transparent;
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  align-items: center;
-  border-bottom: 1px solid transparent;
-  z-index: 2;
-  transition: border-bottom 150ms ease 0s, top 250ms ease 0s, background-color 300ms ease 0s;
-  padding: 0 2em;
-
-  nav {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 14px;
-    flex-shrink: 0;
-    height: 66px;
-    max-width: 1024px;
-    margin: 0 auto;
-  }
-
-  .brand {
-    font: inherit;
-    color: $color-text-bright1;
-    font-weight: bold;
-    font-size: 1.4em;
-    text-decoration: none;
-  }
-
-  .logo {
-    width: 0.8em;
-    margin: 0 4px;
-  }
-}
-
 .content {
   margin-top: 7em;
   text-align: center;

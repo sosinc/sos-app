@@ -7,8 +7,8 @@ api.get("/authenticate", (req, res) => {
   const user = req.session?.user as User;
 
   if (!user) {
-    return res.status(403).json({
-      status: "I've never seen this man in my life",
+    return res.json({
+      "x-hasura-role": "anonymous",
     });
   }
 

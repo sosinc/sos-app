@@ -1,5 +1,7 @@
 import classNames from 'classnames/bind';
 import { connect, FormikContextType, getIn } from 'formik';
+import { MutableRefObject } from 'react';
+
 import styles from './style.module.scss';
 
 const c = classNames.bind(styles);
@@ -8,7 +10,8 @@ interface TextFieldProps {
   name: string;
   className?: string;
   placeholder?: string;
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  inputRef?: MutableRefObject<HTMLInputElement | null>;
+  tabIndex?: number;
   type?: string;
 }
 
@@ -28,12 +31,6 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
     return <span className={c('error-icon')} title={error} />;
   };
 
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    // tslint:disable-next-line:no-unused-expression
-    p.onBlur && p.onBlur(e);
-    inputProps.onBlur(e);
-  };
-
   const containerClass = c('input-field-container', p.className, {
     'has-error': error,
   });
@@ -42,12 +39,11 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
     <div className={containerClass}>
       <input
         type={p.type || 'text'}
-        tabIndex={-1}
+        tabIndex={p.tabIndex}
         placeholder={p.placeholder}
         {...inputProps}
-        onBlur={handleBlur}
+        ref={p.inputRef}
       />
-
       <MaybeErrorMessage />
     </div>
   );

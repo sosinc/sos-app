@@ -1,3 +1,0 @@
-- args:
-    name: create_user_for_new_employee
-  type: delete_event_trigger

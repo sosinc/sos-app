@@ -1,8 +1,0 @@
-- args:
-    name: project
-    table:
-      name: teams
-      schema: public
-    using:
-      foreign_key_constraint_on: project_id
-  type: create_object_relationship

@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
-import { FormikProps, withFormik } from 'formik';
-import { useState } from 'react';
+import { Formik, FormikProps } from 'formik';
+import { useRef, useState } from 'react';
 import * as Yup from 'yup';
 
 import TextField from 'src/components/Form/TextField';
@@ -15,6 +15,7 @@ const cx = classNames.bind(c);
 const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
   const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
   const [isModalOpen, setModalOpen] = useState(false);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   /*
    * Field in step2 need to be marked untouch by hand for some reason.
@@ -31,6 +32,10 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
     if (formStep === 'step1' && props.values.email && !props.errors.email) {
       setFormStep('step2');
       untouchStep2();
+
+      if (passwordRef.current) {
+        passwordRef.current.focus();
+      }
 
       return;
     }
@@ -54,19 +59,26 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
       <div className={cx('login-form-container')}>
         <form
           className={cx('login-form', { 'has-error': formHasError })}
-          onSubmit={props.handleSubmit}>
+          onSubmit={props.handleSubmit}
+        >
           <div className={cx('fields-container')}>
             <div className={cx('2-step-swiper', cx(formStep))}>
               <TextField
-                className={cx('email')}
+                className={'login-form'}
                 placeholder="> enter your work email"
                 type="email"
                 name="email"
-                onBlur={() => untouchStep2()}
               />
               <div className={cx('password')}>
                 <span className={cx('back-icon')} onClick={gotoStep1} />
-                <TextField placeholder="*******" type="password" name="password" />
+                <TextField
+                  className={'login-form'}
+                  inputRef={passwordRef}
+                  placeholder="*******"
+                  type="password"
+                  name="password"
+                  tabIndex={1}
+                />
               </div>
             </div>
           </div>
@@ -75,9 +87,11 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
             Login
           </button>
         </form>
-        <p className={cx('reset-password-text')} onClick={() => setModalOpen(true)}>
-          Reset password
-        </p>
+        <span>
+          <p className={cx('reset-password-text')} onClick={() => setModalOpen(true)}>
+            Reset password
+          </p>
+        </span>
       </div>
       <Modal onClose={handleModal} isOpen={isModalOpen}>
         <ResetPassword />
@@ -91,17 +105,26 @@ interface LoginFormValues {
   password: string;
 }
 
-export default withFormik<{}, LoginFormValues>({
-  validationSchema: Yup.object({
-    email: Yup.string()
-      .email('Invalid email address')
-      .required('Required'),
-    password: Yup.string()
-      .max(15, 'Must be 15 characters or less')
-      .required('Required'),
-  }),
+const validationSchema = Yup.object({
+  email: Yup.string()
+    .email('Invalid email address')
+    .required('Required'),
+  password: Yup.string()
+    .max(15, 'Must be 15 characters or less')
+    .required('Required'),
+});
 
-  handleSubmit: (values, bag) => {
-    console.warn('SUBMITTING', values, bag);
-  },
-})(Login);
+const initialValues = {
+  email: '',
+  password: '',
+};
+
+const OuterForm: React.FC<{ onSubmit: (values: LoginFormValues) => void }> = (p) => {
+  return (
+    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={p.onSubmit}>
+      {Login}
+    </Formik>
+  );
+};
+
+export default OuterForm;

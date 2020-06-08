@@ -1,0 +1,69 @@
+- args:
+    is_enum: false
+    name: me
+    schema: public
+  type: track_table
+- args:
+    definition:
+      forward_client_headers: true
+      headers: []
+      timeout_seconds: 60
+      url_from_env: SIDECAR_GRAPHQL_URL
+    name: sidecar
+  type: add_remote_schema
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - avatar
+      - email
+      - name
+      - role_id
+      - created_at
+      - updated_at
+      - created_by
+      - id
+      computed_fields: []
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+    role: app_admin
+    table:
+      name: me
+      schema: public
+  type: create_select_permission
+- args:
+    name: role
+    table:
+      name: me
+      schema: public
+    using:
+      manual_configuration:
+        column_mapping:
+          role_id: id
+        remote_table:
+          name: roles
+          schema: public
+  type: create_object_relationship
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - avatar
+      - email
+      - name
+      - role_id
+      - created_at
+      - updated_at
+      - created_by
+      - id
+      computed_fields: []
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      limit: 1
+    role: user
+    table:
+      name: me
+      schema: public
+  type: create_select_permission

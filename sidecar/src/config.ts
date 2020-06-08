@@ -16,7 +16,7 @@ export const isProduction = NODE_ENV === "production";
 // WEB URL
 export const whitelist = isProduction
   ? ["https://lab.channikhabra.com"]
-  : ["http://localhost:3000", "http://localhost:3001", "http://localhost:4000"];
+  : ["http://localhost:3000"];
 
 export const apolloCors = {
   credentials: true,

@@ -1,6 +1,0 @@
-- args:
-    relationship: designation
-    table:
-      name: employees
-      schema: public
-  type: drop_relationship
