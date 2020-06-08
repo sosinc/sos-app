@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind';
 import { connect, FormikContextType, getIn } from 'formik';
 import { useState } from 'react';
+import { AiFillExclamationCircle as ErrorIcon } from 'react-icons/ai';
 
 import styles from './style.module.scss';
 
@@ -47,7 +48,7 @@ const SelectField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> 
       return null;
     }
 
-    return <span className={c('error-icon')} title={error} />;
+    return <ErrorIcon className={c('error-icon')} title={error} />;
   };
 
   const containerClass = c('input-field-container', p.className, {

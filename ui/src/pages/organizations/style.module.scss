@@ -1,19 +1,14 @@
 @import 'src/scss/lib';
 
 .org-container {
-
-  @extend %animate;
-  animation-delay: 0.6s;
-  animation-name: undim-sliding-down;
   color: $color-text-dim2;
   display: flex;
   flex-direction: column;
-
 }
 
 .org-icon {
-  background: url('/assets/images/org.svg') 0 0 no-repeat;
   background-size: contain;
+  color: $color-text-dim2;
   height: 45px;
   margin: 0 auto;
   margin-bottom: 1em;
@@ -73,6 +68,10 @@
 .field-title {
   color: $color-text-dim2;
   text-align: left;
+}
+
+.org-logo {
+  width: 10em;
 }
 
 .image-wrapper-logo {

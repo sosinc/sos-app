@@ -51,8 +51,7 @@
 }
 
 .back-icon {
-  background: url('/assets/images/close.svg') 0 0 no-repeat;
-  background-size: contain;
-  height: 16px;
-  width: 16px;
+  color: $color-text-dim2;
+  height: 23px;
+  width: 23px;
 }

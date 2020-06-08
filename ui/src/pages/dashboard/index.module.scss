@@ -24,10 +24,10 @@
 }
 
 .dot-menu-icon {
-  background: url('/assets/images/dot-menu.svg') 0 0 no-repeat;
+  color: $color-text-dim2;
+  cursor: pointer;
   height: 22px;
   margin-left: 12px;
-  margin-top: 18px;
   width: 22px;
 }
 

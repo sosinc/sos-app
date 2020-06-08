@@ -50,11 +50,10 @@
 }
 
 .back-icon {
-  background: url('/assets/images/leftArrow.svg') 0 0 no-repeat;
-  background-size: contain;
+  color: $color-text-dim2;
   cursor: pointer;
-  height: 22px;
-  width: 22px;
+  height: 30px;
+  width: 30px;
 }
 
 .password-container {

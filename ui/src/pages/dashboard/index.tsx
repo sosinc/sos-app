@@ -1,3 +1,4 @@
+import { AiOutlineEllipsis } from 'react-icons/ai';
 import classNames from 'classnames/bind';
 
 import HEAD from 'next/head';
@@ -22,7 +23,7 @@ const Dashboard = () => {
               <img className={c('pic')} src="/assets/images/avatar.svg" alt="pic" />
               <span className={c('online-status')} />
             </div>
-            <span className={c('dot-menu-icon')} />
+            <AiOutlineEllipsis title="more" className={c('dot-menu-icon')} />
           </div>
           <div className={c('detail')}>Top Bar</div>
           <div className={c('footer')}>

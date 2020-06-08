@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+import { AiOutlineClose } from 'react-icons/ai';
 
 import style from './style.module.scss';
 const c = classNames.bind(style);
@@ -20,7 +21,7 @@ const Modal: React.FC<ModalProps> = (p) => {
       <div className={c('container')} onClick={p.onClose}>
         <div className={c('modal')} onClick={(e) => e.stopPropagation()}>
           <div className={c('back-icon-container')}>
-            <span title="close" className={c('back-icon')} onClick={p.onClose} />
+            <AiOutlineClose title="Close" className={c('back-icon')} onClick={p.onClose} />
           </div>
           {p.children}
         </div>

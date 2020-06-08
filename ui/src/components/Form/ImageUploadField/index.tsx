@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind';
 import { connect, FormikContextType, getIn } from 'formik';
 import { useState } from 'react';
+import { AiFillExclamationCircle, AiOutlineDownload } from 'react-icons/ai';
 
 import styles from './style.module.scss';
 
@@ -14,7 +15,7 @@ interface FileFieldProps {
 
 const Placeholder = () => (
   <div className={c('upload-container')}>
-    <span className={c('upload-icon')} title="Upload image" />
+    <AiOutlineDownload title="Upload image" className={c('upload-icon')} />
     <span className={c('upload-text')}>Browse Files</span>
   </div>
 );
@@ -37,10 +38,10 @@ const FileField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> = 
       return null;
     }
 
-    return <span className={c('error-icon')} title={error} />;
+    return <AiFillExclamationCircle className={c('error-icon')} title={error} />;
   };
 
-  const containerClass = c(p.className, {
+  const containerClass = c('upload-logo-container', p.className, {
     'has-error': error,
   });
 

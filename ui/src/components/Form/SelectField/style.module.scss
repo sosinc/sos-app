@@ -54,13 +54,7 @@
 }
 
 .error-icon {
-  $width: 20px;
-  background: url('/assets/images/info-error.svg');
-  background-size: $width;
-  height: $width;
 
-  position: absolute;
-  right: 8px;
+  @extend %error-icon-outer;
   top: calc(50% - 10px);
-  width: $width;
 }

@@ -1,9 +1,10 @@
 import classNames from 'classnames/bind';
 import Link from 'next/link';
-import Layout from 'src/containers/Layout';
-import style from './style.module.scss';
+import { FaUsers } from 'react-icons/fa';
 
+import Layout from 'src/containers/Layout';
 import EmployeesList from 'src/pages/employees/employeesList';
+import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
@@ -22,7 +23,7 @@ const employees = [
 const NoEmployees = () => {
   return (
     <>
-      <span className={c('org-icon')} />
+      <FaUsers title="Employees" className={c('org-icon')} />
       <span>You didn't have any Employees</span>
       <Link href="/employees/add">
         <a className={c('org-add', 'org-container')}>
@@ -36,7 +37,7 @@ const NoEmployees = () => {
 const Index = () => {
   return (
     <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
-      {!employees.length ? <NoEmployees /> : <EmployeesList list={employees} />}
+      {employees.length ? <NoEmployees /> : <EmployeesList list={employees} />}
     </Layout>
   );
 };
