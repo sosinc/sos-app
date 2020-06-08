@@ -6,7 +6,7 @@
   width: 100%;
 
   input {
-    @extend .input;
+    @extend %input;
   }
 }
 
@@ -16,7 +16,7 @@
   width: 100%;
 
   input {
-    @extend .input;
+    @extend %input;
   }
 }
 
@@ -30,11 +30,11 @@
   }
 
   input {
-    @extend .input-org-form;
+    @extend %input-org-form;
   }
 }
 
-.input {
+%input {
   background: none;
   border: 0;
   border-radius: 4px;
@@ -55,7 +55,7 @@
   }
 }
 
-.input-org-form {
+%input-org-form {
   background: none;
   border: 1px solid $color-button-border;
   border-radius: 4px;
@@ -76,7 +76,7 @@
 }
 
 .reset-form {
-  @extend %shadowBox;
+  @extend %shadow-box;
   box-shadow: 0 0 0 #00000040;
   width: 98%;
 

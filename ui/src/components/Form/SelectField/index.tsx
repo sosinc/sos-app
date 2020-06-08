@@ -59,7 +59,8 @@ const SelectField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> 
       className={c('select-option')}
       data-name={item.name}
       key={item.id}
-      onClick={handleSelectItem(item.id)}>
+      onClick={handleSelectItem(item.id)}
+    >
       {item.name}
     </li>
   ));

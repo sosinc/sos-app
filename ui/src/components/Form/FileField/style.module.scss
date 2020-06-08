@@ -59,11 +59,11 @@
 }
 
 .org-logo {
-  @extend .org-image-container;
+  @extend %org-image-container;
   width: 10em;
 }
 
-.org-image-container {
+%org-image-container {
   background-color: $color-button-bg;
   border: 1px solid $color-button-border;
   border-radius: 3px;

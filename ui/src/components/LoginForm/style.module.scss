@@ -21,7 +21,7 @@
 }
 
 .login-form {
-  @extend %shadowBox;
+  @extend %shadow-box;
   display: flex;
 
   font: inherit;
