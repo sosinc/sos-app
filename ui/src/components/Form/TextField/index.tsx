@@ -10,8 +10,8 @@ interface TextFieldProps {
   name: string;
   className?: string;
   placeholder?: string;
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   inputRef?: MutableRefObject<HTMLInputElement | null>;
+  tabIndex?: number;
   type?: string;
 }
 
@@ -39,7 +39,7 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
     <div className={containerClass}>
       <input
         type={p.type || 'text'}
-        tabIndex={-1}
+        tabIndex={p.tabIndex}
         placeholder={p.placeholder}
         {...inputProps}
         ref={p.inputRef}

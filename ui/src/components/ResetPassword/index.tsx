@@ -23,7 +23,6 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues>> = (props) => {
 
   const gotoNextStep = () => {
     // Cannot use validateField because of formik issue: https://github.com/jaredpalmer/formik/issues/2291
-    console.log('----------dd', props.values.email.length, !props.errors.email);
     if (formStep === 'step1' && props.values.email.length && !props.errors.email) {
       setFormStep('step2');
       untouchStep2();
@@ -55,7 +54,6 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues>> = (props) => {
               placeholder="Enter your registered email"
               type="email"
               name="email"
-              onBlur={() => untouchStep2()}
               className={'org-add-form'}
             />
 
@@ -63,12 +61,19 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues>> = (props) => {
               <div className={c('back-icon')} onClick={gotoStep1} />
 
               <div className={c('password-fields')}>
-                <TextField placeholder="OTP" type="text" name="otp" className={'org-add-form'} />
+                <TextField
+                  placeholder="OTP"
+                  type="text"
+                  name="otp"
+                  className={'org-add-form'}
+                  tabIndex={1}
+                />
                 <TextField
                   placeholder="Enter new password"
                   type="password"
                   name="password"
                   className={'org-add-form'}
+                  tabIndex={2}
                 />
               </div>
             </div>

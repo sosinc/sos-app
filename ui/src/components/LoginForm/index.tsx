@@ -68,7 +68,6 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
                 placeholder="> enter your work email"
                 type="email"
                 name="email"
-                onBlur={() => untouchStep2()}
               />
               <div className={cx('password')}>
                 <span className={cx('back-icon')} onClick={gotoStep1} />
@@ -78,6 +77,7 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
                   placeholder="*******"
                   type="password"
                   name="password"
+                  tabIndex={1}
                 />
               </div>
             </div>
