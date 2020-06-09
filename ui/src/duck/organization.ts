@@ -6,7 +6,6 @@ export interface OrganizationState {
   organizations: Organization[];
   error?: string;
   isFetching: boolean;
-  isLoading: boolean;
 }
 
 export const fetchOrganization = createAsyncThunk<
@@ -19,27 +18,16 @@ export const createOrganization = createAsyncThunk<
   Organization,
   CreatePayload,
 {rejectValue: Error; state: OrganizationState}
-  >('organization/add', create);
+  >('organizations/create', create);
 
 const initialState: OrganizationState = {
   isFetching: false,
-  isLoading: false,
   organizations: [],
 };
 
 export default createSlice({
   extraReducers: (builder) => {
-    builder.addCase(createOrganization.pending, (state) => {
-      state.isLoading = true;
-    });
-
-    builder.addCase(createOrganization.rejected, (state, { payload }) => {
-      state.isLoading = false;
-      state.error = payload?.message;
-    });
-
     builder.addCase(createOrganization.fulfilled, (state, { payload }) => {
-      state.isLoading = false;
       state.organizations.push(payload);
     });
 

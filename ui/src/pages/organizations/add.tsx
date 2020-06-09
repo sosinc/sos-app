@@ -1,23 +1,23 @@
+import { unwrapResult } from '@reduxjs/toolkit';
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import TextField from 'src/components/Form/TextField';
 import Layout from 'src/containers/Layout';
-import { RootState } from 'src/duck';
-import { createOrganization, OrganizationState } from 'src/duck/organization';
+import { createOrganization } from 'src/duck/organization';
 
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
-const AddOrg: React.FC<FormikProps<FormValues>> = (props) => {
+const AddOrg: React.FC<FormikProps<FormValues>> = (p) => {
   return (
     <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
       <div className={c('org-container')}>
-        <form className={c('org-form')} onSubmit={props.handleSubmit}>
+        <form className={c('org-form')} onSubmit={p.handleSubmit}>
           <h2 className={c('title')}> Create Organization</h2>
           <div className={c('name-wrapper', 'wrapper')}>
             <span className={c('field-title')}>Name</span>
@@ -40,8 +40,8 @@ const AddOrg: React.FC<FormikProps<FormValues>> = (props) => {
           </div>
 
           <div className={c('button-wrapper')}>
-            <button className={c('save-button')} type="submit">
-              Save
+            <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+              {p.isSubmitting ? 'Saving...' : 'Save'}
             </button>
           </div>
         </form>
@@ -73,24 +73,22 @@ const validationSchema = Yup.object().shape({
 
 export default () => {
   const dispatch = useDispatch();
-  const { isLoading } = useSelector<RootState, OrganizationState>((state) => state.organization);
 
-  const handleAddOrganization = (values: FormValues) => {
-    dispatch(createOrganization(values));
+  const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
+    actions.setSubmitting(true);
+    const resp = await dispatch(createOrganization(values));
+
+    actions.setSubmitting(false);
+
+    try {
+      unwrapResult(resp as any);
+    } catch (err) {
+      if (/uniqueness violation/i.test(err.message)) {
+        actions.setFieldError('name', 'An organization with same name already exists');
+      }
+      console.error('Something went wrong');
+    }
   };
-
-  const handleSubmit = (values: FormValues, actions: FormikHelpers<FormValues>) => {
-    console.warn('SUBMITTING', values, actions);
-    handleAddOrganization(values);
-  };
-
-  if (isLoading) {
-    return (
-      <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
-        <p>Loading....</p>
-      </Layout>
-    );
-  }
 
   return (
     <Formik

@@ -37,19 +37,19 @@ const Index = () => {
     dispatch(fetchOrganization());
   }, []);
 
-  console.log('------d', isFetching, organizations);
+  if (isFetching) {
+    return <span>loading...</span>;
+  }
 
-  return (
-    <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
-      {!organizations.length ? (
-        <NoOrganizations />
-      ) : isFetching ? (
-        'loading'
-      ) : (
-        <OrganizationList list={organizations} />
-      )}
-    </Layout>
-  );
+  if (!organizations.length) {
+    return <NoOrganizations />;
+  }
+
+  return <OrganizationList list={organizations} />;
 };
 
-export default Index;
+export default () => (
+  <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
+    <Index />
+  </Layout>
+);
