@@ -1,9 +1,12 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import FullPageLayout from 'src/components/FullPageLayout';
+import classNames from 'classnames/bind';
+import { AiOutlineEllipsis } from 'react-icons/ai';
+
 import WithUser from 'src/containers/WithUser';
 
-import c from './style.module.scss';
+import style from './style.module.scss';
+const c = classNames.bind(style);
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -20,21 +23,26 @@ const Index: React.FC<LayoutProps> = (p) => {
         <title>{p.headerTitle}</title>
       </Head>
 
-      <FullPageLayout className={c.container}>
-        <header className={c.header}>
-          <nav>
+      <div className={c('container')}>
+        <div className={c('sidebar')}>
+          <div className={c('header')}>
             <Link href="/">
-              <a className={c.brand}>
-                <span>S</span>
-                <img className={c.logo} src="/assets/images/sos-logo.svg" alt="o" />
-                <span>S</span>
-              </a>
+              <img className={c('logo-image')} src="/assets/images/sos-logo.svg" alt="o" />
             </Link>
-          </nav>
-        </header>
-
-        <div className={c.content}>{p.children}</div>
-      </FullPageLayout>
+            <div className={c('pic-container')}>
+              <img className={c('pic')} src="/assets/images/avatar.svg" alt="pic" />
+              <span className={c('online-status')} />
+            </div>
+            <AiOutlineEllipsis title="more" className={c('dot-menu-icon')} />
+          </div>
+          <div className={c('detail')}>Top Bar</div>
+          <div className={c('footer')}>
+            <span className={c('feedback-icon')} />
+            <a className={c('feedback-text')}>Send Feedback</a>
+          </div>
+        </div>
+        <div className={c('content')}>{p.children}</div>
+      </div>
     </WithUser>
   );
 };

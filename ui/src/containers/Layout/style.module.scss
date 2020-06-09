@@ -1,49 +1,97 @@
 @import 'src/scss/lib';
 
+@import 'src/scss/lib';
+
 .container {
-  align-items: center;
-  margin: 0 auto;
-  max-width: 1024px;
-  padding-top: 66px;
+  display: flex;
+  height: 100vh;
   position: relative;
+  width: 100vw;
+}
+
+.sidebar {
+  align-items: center;
+  border-right: 1px solid $color-button-bg;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 220px;
 }
 
 .header {
   align-items: center;
-  background-color: transparent;
-  border-bottom: 1px solid transparent;
   display: flex;
-  left: 0;
-  padding: 0 2em;
-  position: fixed;
-  right: 0;
-  top: 0;
-  transition: border-bottom 150ms ease 0s, top 250ms ease 0s, background-color 300ms ease 0s;
-  z-index: 2;
+  margin: 9px 21px 0 20px;
+  width: 179px;
+}
 
-  nav {
-    align-items: center;
-    display: flex;
-    flex-grow: 1;
-    flex-shrink: 0;
-    font-size: 14px;
-    height: 66px;
-    justify-content: space-between;
-    margin: 0 auto;
-    max-width: 1024px;
+.dot-menu-icon {
+  color: $color-text-dim2;
+  cursor: pointer;
+  height: 22px;
+  margin-left: 12px;
+  width: 22px;
+}
+
+.detail {
+  align-items: center;
+}
+
+.logo-image {
+  border-radius: 50%;
+  cursor: pointer;
+  height: 20px;
+  width: 20px;
+}
+
+.pic-container {
+  display: flex;
+  flex-direction: row-reverse;
+  height: 18px;
+  margin-left: auto;
+  width: 18px;
+
+  .pic {
+    border-radius: 50%;
   }
 
-  .brand {
+  .online-status {
+    align-self: flex-end;
+    background: $color-online;
+    border: 1px solid $color-bg-dark;
+    border-radius: 50%;
+    height: 8px;
+    margin-left: 1px;
+    margin-top: 1px;
+    position: absolute;
+    width: 8px;
+  }
+}
+
+.footer {
+  cursor: pointer;
+  display: flex;
+  margin-bottom: 24px;
+  margin-top: auto;
+}
+
+.feedback-icon {
+  background: url('/assets/images/feedback-icon.svg') 0 0 no-repeat;
+  height: 12px;
+  margin-right: 8px;
+  width: 12px;
+}
+
+.feedback-text {
+  background-color: transparent;
+  border: 0;
+  color: $color-text-primary;
+  font-size: 12px;
+  justify-self: flex-end;
+  line-height: 10px;
+
+  &:hover {
     color: $color-text-bright1;
-    font: inherit;
-    font-size: 1.4em;
-    font-weight: bold;
-    text-decoration: none;
-  }
-
-  .logo {
-    margin: 0 4px;
-    width: 0.8em;
   }
 }
 
@@ -54,6 +102,7 @@
   margin-top: 7em;
   padding: 0 2em;
   text-align: center;
+  width: 100%;
 
   @media(max-width: $md) {
     margin-top: 100px;
