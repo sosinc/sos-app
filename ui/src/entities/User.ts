@@ -1,6 +1,6 @@
 import 'cross-fetch/polyfill';
-import { GraphQLClient } from 'graphql-request';
-import config from 'src/config';
+
+import client from 'src/lib/client';
 
 export interface Role {
   id: string;
@@ -16,10 +16,6 @@ export interface LoginPayload {
   email: string;
   password: string;
 }
-
-const client = new GraphQLClient(config.urls.graphql, {
-  credentials: 'include',
-});
 
 export const login = async (payload: LoginPayload): Promise<User> => {
   const query = `

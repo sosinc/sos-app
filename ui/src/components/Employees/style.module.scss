@@ -2,9 +2,9 @@
 
 .employee-list-container {
   color: $color-text-dim2;
-  margin-top: 7em;
   padding: 20px;
-  width: 90%;
+  text-align: left;
+  width: 55%;
 
   @media(max-width: $md) {
     margin-top: 100px;
