@@ -2,8 +2,8 @@ import classNames from 'classnames/bind';
 import Link from 'next/link';
 import { FaUsers } from 'react-icons/fa';
 
+import EmployeesList from 'src/components/Employees/List';
 import Layout from 'src/containers/Layout';
-import EmployeesList from 'src/pages/employees/employeesList';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -37,7 +37,7 @@ const NoEmployees = () => {
 const Index = () => {
   return (
     <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
-      {employees.length ? <NoEmployees /> : <EmployeesList list={employees} />}
+      {!employees.length ? <NoEmployees /> : <EmployeesList list={employees} />}
     </Layout>
   );
 };

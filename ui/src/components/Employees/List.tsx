@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import style from 'src/pages/employees/style.module.scss';
+import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
@@ -23,7 +23,7 @@ const organization = (org: any) => {
   );
 };
 
-const EmployeeList: React.FC<FieldProps> = ({ ...p }) => {
+const List: React.FC<FieldProps> = ({ ...p }) => {
   const employee = p.list.map((e) => (
     <div className={c('employee-content')} key={e.id}>
       <div className={c('list-section1')}>
@@ -48,4 +48,4 @@ const EmployeeList: React.FC<FieldProps> = ({ ...p }) => {
   );
 };
 
-export default EmployeeList;
+export default List;
