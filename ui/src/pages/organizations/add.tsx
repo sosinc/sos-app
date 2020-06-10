@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import TextField from 'src/components/Form/TextField';
 import Layout from 'src/containers/Layout';
+import Header from 'src/containers/Layout/Header';
 import { createOrganization } from 'src/duck/organization';
 
 import style from './style.module.scss';
@@ -16,10 +17,11 @@ const c = classNames.bind(style);
 const AddOrg: React.FC<FormikProps<FormValues>> = (p) => {
   return (
     <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
+      <Header title={'Create Organization'} redirectPath={'/organizations'} toolTip={'Back'} />
       <div className={c('org-container')}>
         <form className={c('org-form')} onSubmit={p.handleSubmit}>
           <h2 className={c('title')}> Create Organization</h2>
-          <div className={c('name-wrapper', 'wrapper')}>
+          <div className={c('name-container', 'field-container')}>
             <span className={c('field-title')}>Name</span>
             <TextField
               className={'form-text-field'}
@@ -29,17 +31,17 @@ const AddOrg: React.FC<FormikProps<FormValues>> = (p) => {
             />
           </div>
 
-          <div className={c('image-wrapper-logo', 'wrapper')}>
+          <div className={c('image-container-logo', 'field-container')}>
             <span className={c('field-title')}>Logo</span>
             <ImageUploadField className={c('org-logo')} type={'file'} name="square_logo" />
           </div>
 
-          <div className={c('image-wrapper-banner', 'wrapper')}>
+          <div className={c('image-container-banner', 'field-container')}>
             <span className={c('field-title')}>Banner</span>
-            <ImageUploadField className={c('org-image-container')} type="file" name="banner" />
+            <ImageUploadField className={c('org-banner')} type="file" name="banner" />
           </div>
 
-          <div className={c('button-wrapper')}>
+          <div className={c('button-container')}>
             <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
               {p.isSubmitting ? 'Saving...' : 'Save'}
             </button>

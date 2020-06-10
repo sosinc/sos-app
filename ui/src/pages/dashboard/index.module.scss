@@ -1,8 +1,30 @@
 @import 'src/scss/lib';
 
-.container {
-  display: flex;
-  height: 100vh;
-  position: relative;
-  width: 100vw;
+.header-container {
+  border-bottom: 1px solid $color-button-border;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  height: 3em;
+  margin-bottom: 7em;
+  padding: 1em;
+  width: 100%;
+}
+
+.header-title {
+  color: $color-text-primary;
+  font-size: 0.8em;
+  line-height: 1em;
+  text-align: left;
+}
+
+.plus-icon {
+  border: 1px solid $color-cta;
+  border-radius: 4px;
+  box-shadow: 1px 2px 0 rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+  color: $color-cta;
+  cursor: pointer;
+  height: 1.5em;
+  margin-right: 2em;
+  width: 1.5em;
 }

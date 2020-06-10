@@ -6,6 +6,7 @@ import ImageUploadField from 'src/components/Form/ImageUploadField';
 import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import Layout from 'src/containers/Layout';
+import Header from 'src/containers/Layout/Header';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -25,11 +26,12 @@ const organizations = [
 const AddOrg: React.FC<FormikProps<EmployeeFormValues>> = (props) => {
   return (
     <Layout headerTitle={'Snake Oil Software - Employees'} redirectPath="/">
-      <div className={c('org-container')}>
-        <form className={c('org-form')} onSubmit={props.handleSubmit}>
+      <Header title={'Create Employee'} redirectPath={'/employees'} toolTip={'Back'} />
+      <div className={c('container')}>
+        <form className={c('form')} onSubmit={props.handleSubmit}>
           <h2 className={c('title')}> Create Employee</h2>
 
-          <div className={c('name-wrapper', 'wrapper')}>
+          <div className={c('name-container', 'field-container')}>
             <span className={c('field-title')}>Name</span>
             <TextField
               className={'form-text-field'}
@@ -39,13 +41,13 @@ const AddOrg: React.FC<FormikProps<EmployeeFormValues>> = (props) => {
             />
           </div>
 
-          <div className={c('image-wrapper-logo', 'wrapper')}>
+          <div className={c('logo', 'field-container')}>
             <span className={c('field-title')}>Head Shot</span>
-            <ImageUploadField className={'org-image-container'} type={'file'} name="headShot" />
+            <ImageUploadField className={'image-container'} type={'file'} name="headShot" />
           </div>
 
-          <div className={c('employee-fields-container')}>
-            <div className={c('ecode-wrapper', 'wrapper')}>
+          <div className={c('right-container')}>
+            <div className={c('ecode-container', 'field-container')}>
               <span className={c('field-title')}>E-Code</span>
               <TextField
                 className={'form-text-field'}
@@ -55,11 +57,11 @@ const AddOrg: React.FC<FormikProps<EmployeeFormValues>> = (props) => {
               />
             </div>
 
-            <div className={c('designation-wrapper', 'wrapper')}>
+            <div className={c('designation-container', 'field-container')}>
               <span className={c('field-title')}>Designation</span>
               <SelectField className={'org-add-form'} name="designation" options={designation} />
             </div>
-            <div className={c('orgn-wrapper', 'wrapper')}>
+            <div className={c('org-container', 'field-container')}>
               <span className={c('field-title')}>Organization</span>
               <SelectField
                 className={'org-add-form'}
@@ -70,7 +72,7 @@ const AddOrg: React.FC<FormikProps<EmployeeFormValues>> = (props) => {
             </div>
           </div>
 
-          <div className={c('button-wrapper')}>
+          <div className={c('button-container')}>
             <button className={c('save-button')} type="submit">
               Save
             </button>

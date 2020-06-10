@@ -4,6 +4,7 @@ import { FaUsers } from 'react-icons/fa';
 
 import EmployeesList from 'src/components/Employees/List';
 import Layout from 'src/containers/Layout';
+import Header from 'src/containers/Layout/Header';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -23,10 +24,10 @@ const employees = [
 const NoEmployees = () => {
   return (
     <>
-      <FaUsers title="Employees" className={c('org-icon')} />
+      <FaUsers title="Employees" className={c('add-icon')} />
       <span>You didn't have any Employees</span>
       <Link href="/employees/add">
-        <a className={c('org-add', 'org-container')}>
+        <a className={c('add', 'container')}>
           <span>Add Employee</span>
         </a>
       </Link>
@@ -37,6 +38,7 @@ const NoEmployees = () => {
 const Index = () => {
   return (
     <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
+      <Header title={'Employees'} redirectPath={'/employees/add'} toolTip={'Create Employee'} />
       {!employees.length ? <NoEmployees /> : <EmployeesList list={employees} />}
     </Layout>
   );

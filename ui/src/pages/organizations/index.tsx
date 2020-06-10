@@ -1,16 +1,14 @@
 import classNames from 'classnames/bind';
 import Link from 'next/link';
-import Router from 'next/router';
 import { useEffect } from 'react';
-import { AiFillPlusSquare } from 'react-icons/ai';
 import { FaRegBuilding } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 
 import OrganizationList from 'src/components/Organization/List';
+import Layout from 'src/containers/Layout';
+import Header from 'src/containers/Layout/Header';
 import { RootState } from 'src/duck';
 import { fetchOrganization, OrganizationState } from 'src/duck/organization';
-
-import Layout from 'src/containers/Layout';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -52,14 +50,11 @@ const Index = () => {
 
 export default () => (
   <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
-    <div className={c('header-container')}>
-      <span className={c('header-title')}> Organizations </span>
-      <AiFillPlusSquare
-        title="Open"
-        className={c('plus-icon')}
-        onClick={() => Router.push('/organizations/add')}
-      />
-    </div>
+    <Header
+      title={'Organizations'}
+      redirectPath={'/organizations/add'}
+      toolTip={'Create Organization'}
+    />
     <Index />
   </Layout>
 );

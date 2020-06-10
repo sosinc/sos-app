@@ -1,6 +1,6 @@
+import classNames from 'classnames/bind';
 import Head from 'next/head';
 import Link from 'next/link';
-import classNames from 'classnames/bind';
 import { AiOutlineEllipsis } from 'react-icons/ai';
 
 import WithUser from 'src/containers/WithUser';
