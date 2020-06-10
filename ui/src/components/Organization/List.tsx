@@ -1,12 +1,12 @@
 import classNames from 'classnames/bind';
 import style from 'src/components/Organization/style.module.scss';
 
-import { Organization } from 'src/entities/Organizations';
+import { Employee } from 'src/entities/Organizations';
 
 const c = classNames.bind(style);
 
 interface OrganizationProps {
-  list: Organization[];
+  list: Employee[];
 }
 
 const List: React.FC<OrganizationProps> = ({ ...p }) => {

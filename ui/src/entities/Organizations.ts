@@ -2,7 +2,7 @@ import 'cross-fetch/polyfill';
 
 import client from 'src/lib/client';
 
-export interface Organization {
+export interface Employee {
   id: string;
   name: string;
   banner: string;
@@ -15,7 +15,7 @@ export interface CreatePayload {
   square_logo?: string;
 }
 
-export const create = async (payload: CreatePayload): Promise<Organization> => {
+export const create = async (payload: CreatePayload): Promise<Employee> => {
   const query = `
     mutation ($name: String!, $banner: String, $square_logo: String){
        insert_organizations_one(
@@ -37,7 +37,7 @@ export const create = async (payload: CreatePayload): Promise<Organization> => {
   return data.insert_organizations_one;
 };
 
-export const fetch = async (): Promise<Organization[]> => {
+export const fetch = async (): Promise<Employee[]> => {
   const query = `{
     organizations {
       id

@@ -1,25 +1,18 @@
 import classNames from 'classnames/bind';
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { FaUsers } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
 
 import EmployeesList from 'src/components/Employees/List';
 import Layout from 'src/containers/Layout';
 import Header from 'src/containers/Layout/Header';
+import { RootState } from 'src/duck';
+import { EmployeeState, fetchEmployees } from 'src/duck/employee';
+
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
-
-const employees = [
-  {
-    designation: 'Software Eng',
-    headShot: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Pierre-Person.jpg',
-    id: '1',
-    name: 'Max',
-    organization: ['Apple', 'Ciro'],
-  },
-  { id: '2', name: 'Tom', headShot: '', organization: ['Orange'], designation: 'MG' },
-  { id: '3', name: 'Jack', headShot: '', organization: ['Meteor'], designation: 'CE' },
-];
 
 const NoEmployees = () => {
   return (
@@ -36,12 +29,29 @@ const NoEmployees = () => {
 };
 
 const Index = () => {
-  return (
-    <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
-      <Header title={'Employees'} redirectPath={'/employees/add'} toolTip={'Create Employee'} />
-      {!employees.length ? <NoEmployees /> : <EmployeesList list={employees} />}
-    </Layout>
+  const dispatch = useDispatch();
+  const { employees, isFetching } = useSelector<RootState, EmployeeState>(
+    (state) => state.employees,
   );
+
+  useEffect(() => {
+    dispatch(fetchEmployees());
+  }, []);
+
+  if (isFetching) {
+    return <span>loading...</span>;
+  }
+
+  if (!employees.length) {
+    return <NoEmployees />;
+  }
+
+  return <EmployeesList list={employees} />;
 };
 
-export default Index;
+export default () => (
+  <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
+    <Header title={'Employees'} redirectPath={'/employees/add'} toolTip={'Create Employee'} />
+    <Index />
+  </Layout>
+);
