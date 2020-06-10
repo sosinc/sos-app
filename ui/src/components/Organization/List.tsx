@@ -24,12 +24,7 @@ const List: React.FC<FieldProps> = ({ ...p }) => {
     </div>
   ));
 
-  return (
-    <div className={c('list-container')}>
-      <h2>Organizations</h2>
-      {organizations}
-    </div>
-  );
+  return <div className={c('list-container')}>{organizations}</div>;
 };
 
 export default List;

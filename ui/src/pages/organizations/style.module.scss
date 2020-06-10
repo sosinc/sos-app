@@ -1,5 +1,34 @@
 @import 'src/scss/lib';
 
+.header-container {
+  border-bottom: 1px solid $color-button-border;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  margin-bottom: 7em;
+  padding: 1em;
+  width: 100%;
+  height: 3em;
+}
+
+.header-title {
+  text-align: left;
+  font-size: 0.8em;
+  line-height: 1em;
+  color: $color-text-primary;
+}
+
+.plus-icon {
+  width: 1.5em;
+  border-radius: 4px;
+  box-shadow: 1px 2px 0px rgba(0, 0, 0, 0.4);
+  border: 1px solid $color-cta;
+  box-sizing: border-box;
+  height: 1.5em;
+  margin-right: 2em;
+  color: $color-cta;
+  cursor: pointer;
+}
+
 .org-container {
   color: $color-text-dim2;
   display: flex;
