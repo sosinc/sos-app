@@ -148,6 +148,7 @@
   display: grid;
   grid-auto-rows: minmax(1em, auto);
   grid-template-columns: 1fr auto;
+  height: 40px;
   margin-bottom: 7em;
   padding: 0.5em;
   width: 100%;
@@ -156,8 +157,10 @@
 .title-container {
   color: $color-text-primary;
   font-size: 0.8em;
+  grid-column: 1;
   line-height: 1em;
-  margin-left: 1em;
+  margin-left: 1.5em;
+  padding-top: 5px;
   text-align: left;
 }
 
@@ -173,8 +176,9 @@
   box-sizing: border-box;
   color: $color-button-bg;
   cursor: pointer;
+  grid-column: 2;
   height: 1.5em;
-  margin-right: 1em;
+  margin-right: 1.5em;
   position: relative;
   width: 1.5em;
 }

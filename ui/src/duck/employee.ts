@@ -12,7 +12,7 @@ export const fetchEmployees = createAsyncThunk<
   Employee[],
   undefined,
   { rejectValue: Error; state: EmployeeState }
->('employees/fetch/many', fetchMany);
+>('employees/fetchMany', fetchMany);
 
 export const createEmployee = createAsyncThunk<
   Employee,

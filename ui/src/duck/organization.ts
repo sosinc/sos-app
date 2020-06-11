@@ -12,7 +12,7 @@ export const fetchOrganization = createAsyncThunk<
   Organization[],
   undefined,
   { rejectValue: Error; state: OrganizationState }
->('organizations/fetch/many', fetchMany);
+>('organizations/fetchMany', fetchMany);
 
 export const createOrganization = createAsyncThunk<
   Organization,

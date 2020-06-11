@@ -11,7 +11,7 @@ export const fetchDesignation = createAsyncThunk<
   Designation[],
 undefined,
 { rejectValue: Error; state: DesignationState }
-  >('designations/fetch/many', fetchMany);
+  >('designations/fetchMany', fetchMany);
 
 const initialState: DesignationState = {
   designation: [],
