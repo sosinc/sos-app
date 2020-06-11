@@ -26,7 +26,7 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
     OrganizationState
   >((state) => state.organization);
 
-  const { designation, isLoading: isFetchingDesignations } = useSelector<
+  const { designation, isFetching: isFetchingDesignations } = useSelector<
     RootState,
     DesignationState
   >((state) => state.designations);

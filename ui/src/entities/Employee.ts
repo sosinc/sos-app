@@ -9,6 +9,7 @@ export interface Employee {
   headshot: string;
   joining_date: string;
   designation_id: string;
+  organiztion_id: string;
 }
 
 export interface CreatePayload {
@@ -22,42 +23,37 @@ export interface CreatePayload {
 
 export const create = async (payload: CreatePayload): Promise<Employee> => {
   const query = `
-mutation ($ecode: String!, $email: String, $name: String!, $headshot: String, $designation_id: designations_enum!, $organization_id: uuid!){
-      insert_employees_one(
-        object:{
-                ecode: $ecode,
-                email: $email,
-                name: $name,
-                headshot: $headshot,
-                designation_id: $designation_id,
-                organization_id: $organization_id
-               })
-               {
-                ecode
-                name
-                email
-                headshot
-                joining_date
-                designation_id
-            }
-          }`;
+  mutation ($ecode: String!, $email: String, $name: String!, $headshot: String, $designation_id: designations_enum!, $organization_id: uuid!){
+    insert_employees_one(
+      object:{
+         ecode: $ecode,
+         email: $email,
+         name: $name,
+         headshot: $headshot,
+         designation_id: $designation_id,
+         organization_id: $organization_id
+      })
+       {
+        ecode
+      }
+  }`;
 
   const data = await client.request(query, payload);
 
-  return data.insert_employees_one;
+  return data.payload;
 };
 
-export const fetch = async (): Promise<Employee[]> => {
+export const fetchMany = async (): Promise<Employee[]> => {
   const query = `{
-        employees {
-                  ecode
-                  name
-                  email
-                  headshot
-                  joining_date
-                  designation_id
-                  }
-               }`;
+  employees {
+    ecode
+    name
+    email
+    headshot
+    joining_date
+    designation_id
+    }
+  }`;
 
   const data = await client.request(query);
 

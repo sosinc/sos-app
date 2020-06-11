@@ -1,10 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { Designation, fetch } from 'src/entities/Designation';
+import { Designation, fetchMany } from 'src/entities/Designation';
 
 export interface DesignationState {
-  error?: string;
-  isLoading: boolean;
+  isFetching: boolean;
   designation: Designation[];
 }
 
@@ -12,26 +11,21 @@ export const fetchDesignation = createAsyncThunk<
   Designation[],
 undefined,
 { rejectValue: Error; state: DesignationState }
-  >('designations/fetch', fetch);
+  >('designations/fetch/many', fetchMany);
 
 const initialState: DesignationState = {
   designation: [],
-  isLoading: false,
+  isFetching: false,
 };
 
 export default createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchDesignation.pending, (state) => {
-      state.isLoading = true;
-    });
-
-    builder.addCase(fetchDesignation.rejected, (state, { error }) => {
-      state.isLoading = false;
-      state.error = error.message;
+      state.isFetching = true;
     });
 
     builder.addCase(fetchDesignation.fulfilled, (state, { payload }) => {
-      state.isLoading = false;
+      state.isFetching = false;
       state.designation = payload;
     });
 

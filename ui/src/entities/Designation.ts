@@ -7,13 +7,14 @@ export interface Designation {
   name: string;
 }
 
-export const fetch = async (): Promise<Designation[]> => {
-  const query = `{
-                 designations {
-                 id
-                 name
-                 }
-               }`;
+export const fetchMany = async (): Promise<Designation[]> => {
+  const query = `
+   {
+    designations {
+      id
+      name
+    }
+  }`;
 
   const data = await client.request(query);
 

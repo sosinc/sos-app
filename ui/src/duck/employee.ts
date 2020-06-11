@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { create, CreatePayload, Employee, fetch } from 'src/entities/Employee';
+import { create, CreatePayload, Employee, fetchMany } from 'src/entities/Employee';
 
 export interface EmployeeState {
   employees: Employee[];
@@ -12,7 +12,7 @@ export const fetchEmployees = createAsyncThunk<
   Employee[],
   undefined,
   { rejectValue: Error; state: EmployeeState }
->('employees/fetch', fetch);
+>('employees/fetch/many', fetchMany);
 
 export const createEmployee = createAsyncThunk<
   Employee,

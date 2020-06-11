@@ -1,21 +1,21 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { create, CreatePayload, fetch, Employee } from 'src/entities/Organizations';
+import { create, CreatePayload, fetchMany, Organization } from 'src/entities/Organizations';
 
 export interface OrganizationState {
-  organizations: Employee[];
+  organizations: Organization[];
   error?: string;
   isFetching: boolean;
 }
 
 export const fetchOrganization = createAsyncThunk<
-  Employee[],
+  Organization[],
   undefined,
   { rejectValue: Error; state: OrganizationState }
->('organizations/fetch', fetch);
+>('organizations/fetch/many', fetchMany);
 
 export const createOrganization = createAsyncThunk<
-  Employee,
+  Organization,
   CreatePayload,
 {rejectValue: Error; state: OrganizationState}
   >('organizations/create', create);
