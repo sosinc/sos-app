@@ -45,7 +45,7 @@ const Index = () => {
     return <NoOrganizations />;
   }
 
-  return <OrganizationList list={organizations} />;
+  return <OrganizationList organizations={organizations} />;
 };
 
 export default () => (
@@ -54,6 +54,7 @@ export default () => (
       title={'Organizations'}
       redirectPath={'/organizations/add'}
       toolTip={'Create Organization'}
+      isButtonShown={true}
     />
     <Index />
   </Layout>

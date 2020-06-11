@@ -2,7 +2,8 @@
 
 .container {
   display: flex;
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
   position: relative;
   width: 100vw;
 }
@@ -66,6 +67,37 @@
   }
 }
 
+.admin-section {
+  color: $color-text-dim2;
+  display: grid;
+  font-size: 12px;
+  grid-auto-rows: minmax(1.5em, auto);
+  grid-row-gap: 8px;
+  grid-template-columns: 1fr;
+  line-height: 15px;
+  margin-top: 2em;
+  width: 81%;
+}
+
+.organization-container {
+  cursor: pointer;
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.admin-section-title {
+  color: $color-text-primary;
+  font-size: 13px;
+  line-height: 16px;
+  margin-left: 10px;
+}
+
+.employee-container {
+  cursor: pointer;
+  grid-column: 1;
+  grid-row: 3;
+}
+
 .footer {
   cursor: pointer;
   display: flex;
@@ -114,21 +146,29 @@
 .header-container {
   border-bottom: 1px solid $color-button-border;
   display: grid;
+  grid-auto-rows: minmax(1em, auto);
   grid-template-columns: 1fr auto;
-  height: 3em;
+  height: 40px;
   margin-bottom: 7em;
-  padding: 1em;
+  padding: 0.5em;
   width: 100%;
 }
 
-.header-title {
+.title-container {
   color: $color-text-primary;
   font-size: 0.8em;
+  grid-column: 1;
   line-height: 1em;
+  margin-left: 1.5em;
+  padding-top: 5px;
   text-align: left;
 }
 
-.plus-icon {
+.header-title {
+  cursor: pointer;
+}
+
+.plus-container {
   background: $color-cta;
   border: 1px solid $color-cta;
   border-radius: 4px;
@@ -136,7 +176,19 @@
   box-sizing: border-box;
   color: $color-button-bg;
   cursor: pointer;
+  grid-column: 2;
   height: 1.5em;
-  margin-right: 2em;
+  margin-right: 1.5em;
+  position: relative;
   width: 1.5em;
+}
+
+.plus-icon {
+  color: $color-bg-dark;
+  height: 1em;
+  left: 3px;
+  margin: 0 auto;
+  position: absolute;
+  top: 3px;
+  width: 1em;
 }

@@ -33,6 +33,8 @@
 }
 
 .select-options {
+  height: 12em;
+  overflow-y: auto;
   position: absolute;
   right: 0;
   top: 2.9em;
@@ -46,6 +48,7 @@
   font-size: 1em;
   list-style-type: none;
   padding: 12px 20px;
+  text-align: left;
 
   &:hover {
     background-color: $color-select-active;

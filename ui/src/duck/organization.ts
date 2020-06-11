@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { create, CreatePayload, fetch, Organization } from 'src/entities/Organizations';
+import { create, CreatePayload, fetchMany, Organization } from 'src/entities/Organizations';
 
 export interface OrganizationState {
   organizations: Organization[];
@@ -12,7 +12,7 @@ export const fetchOrganization = createAsyncThunk<
   Organization[],
   undefined,
   { rejectValue: Error; state: OrganizationState }
->('organizations/fetch', fetch);
+>('organizations/fetchMany', fetchMany);
 
 export const createOrganization = createAsyncThunk<
   Organization,

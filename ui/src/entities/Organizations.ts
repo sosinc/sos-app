@@ -17,35 +17,30 @@ export interface CreatePayload {
 
 export const create = async (payload: CreatePayload): Promise<Organization> => {
   const query = `
-    mutation ($name: String!, $banner: String, $square_logo: String){
-       insert_organizations_one(
-        object:{
-                  name: $name,
-                  banner: $banner,
-                  square_logo: $square_logo
-               })
-               {
-               id
-               name
-               banner
-               square_logo
-            }
-          }`;
+  mutation ($name: String!, $banner: String, $square_logo: String){
+    insert_organizations_one(
+      object:{
+        name: $name,
+        banner: $banner,
+        square_logo: $square_logo
+      })
+      {id}
+  }`;
 
   const data = await client.request(query, payload);
 
-  return data.insert_organizations_one;
+  return data.payload;
 };
 
-export const fetch = async (): Promise<Organization[]> => {
+export const fetchMany = async (): Promise<Organization[]> => {
   const query = `{
-    organizations {
-      id
-      name
-      square_logo
-      banner
-    }
-  }`;
+  organizations {
+    id
+    name
+    square_logo
+    banner
+   }
+ }`;
 
   const data = await client.request(query);
 

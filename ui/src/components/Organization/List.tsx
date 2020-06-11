@@ -6,11 +6,11 @@ import { Organization } from 'src/entities/Organizations';
 const c = classNames.bind(style);
 
 interface OrganizationProps {
-  list: Organization[];
+  organizations: Organization[];
 }
 
 const List: React.FC<OrganizationProps> = ({ ...p }) => {
-  const organizations = p.list.map((e) => (
+  const organizations = p.organizations.map((e) => (
     <div className={c('content')} key={e.id}>
       <div className={c('section1')}>
         <img className={c('logo')} src={e.square_logo} />

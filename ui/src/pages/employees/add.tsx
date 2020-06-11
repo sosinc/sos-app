@@ -1,5 +1,8 @@
+import { unwrapResult } from '@reduxjs/toolkit';
 import classNames from 'classnames/bind';
-import { Formik, FormikProps } from 'formik';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
@@ -7,35 +10,57 @@ import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import Layout from 'src/containers/Layout';
 import Header from 'src/containers/Layout/Header';
+import { RootState } from 'src/duck';
+import { DesignationState, fetchDesignation } from 'src/duck/designation';
+import { createEmployee } from 'src/duck/employee';
+import { fetchOrganization, OrganizationState } from 'src/duck/organization';
+
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
-const designation = [
-  { id: '1', name: 'Sd', avtar: '' },
-  { id: '2', name: 'De', avtar: '' },
-  { id: '3', name: 'Bd', avtar: '' },
-];
+const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
+  const dispatch = useDispatch();
+  const { organizations, isFetching: isFetchingOrganizations } = useSelector<
+    RootState,
+    OrganizationState
+  >((state) => state.organization);
 
-const organizations = [
-  { id: '1', name: 'Aaaaa', avtar: '' },
-  { id: '2', name: 'Baaaa', avtar: '' },
-  { id: '3', name: 'Caaaa', avtar: '' },
-];
+  const { designation, isFetching: isFetchingDesignations } = useSelector<
+    RootState,
+    DesignationState
+  >((state) => state.designations);
 
-const AddOrg: React.FC<FormikProps<EmployeeFormValues>> = (props) => {
+  useEffect(() => {
+    dispatch(fetchOrganization());
+    dispatch(fetchDesignation());
+  }, []);
+
+  if (isFetchingOrganizations && isFetchingDesignations) {
+    return <span>loading...</span>;
+  }
+
   return (
     <Layout headerTitle={'Snake Oil Software - Employees'} redirectPath="/">
-      <Header title={'Create Employee'} redirectPath={'/employees'} toolTip={'Back'} />
+      <Header title={'Employee > '} subTitle={'Create'} redirectPath={'/employees'} />
       <div className={c('container')}>
-        <form className={c('form')} onSubmit={props.handleSubmit}>
+        <form className={c('form')} onSubmit={p.handleSubmit}>
           <h2 className={c('title')}> Create Employee</h2>
 
+          <div className={c('email-container', 'field-container')}>
+            <span className={c('field-title')}>Email</span>
+            <TextField
+              className={'form-text-field'}
+              placeholder="Enter email"
+              type="email"
+              name="email"
+            />
+          </div>
           <div className={c('name-container', 'field-container')}>
             <span className={c('field-title')}>Name</span>
             <TextField
               className={'form-text-field'}
-              placeholder="Enter employee name"
+              placeholder="Enter name"
               type="text"
               name="name"
             />
@@ -59,13 +84,13 @@ const AddOrg: React.FC<FormikProps<EmployeeFormValues>> = (props) => {
 
             <div className={c('designation-container', 'field-container')}>
               <span className={c('field-title')}>Designation</span>
-              <SelectField className={'org-add-form'} name="designation" options={designation} />
+              <SelectField className={'org-add-form'} name="designation_id" options={designation} />
             </div>
             <div className={c('org-container', 'field-container')}>
               <span className={c('field-title')}>Organization</span>
               <SelectField
                 className={'org-add-form'}
-                name="organization"
+                name="organization_id"
                 options={organizations}
                 autoSelectFirst={true}
               />
@@ -73,8 +98,8 @@ const AddOrg: React.FC<FormikProps<EmployeeFormValues>> = (props) => {
           </div>
 
           <div className={c('button-container')}>
-            <button className={c('save-button')} type="submit">
-              Save
+            <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+              {p.isSubmitting ? 'Saving...' : 'Save'}
             </button>
           </div>
         </form>
@@ -83,39 +108,64 @@ const AddOrg: React.FC<FormikProps<EmployeeFormValues>> = (props) => {
   );
 };
 
-interface EmployeeFormValues {
+interface FormValues {
+  email: string;
   name: string;
   ecode: string;
-  headShot: string;
-  designation: string;
-  organization: string;
+  headshot: string;
+  designation_id: string;
+  organization_id: string;
 }
 
-const handleSubmit = (values: object, actions: object) => {
-  console.warn('SUBMITTING', values, actions);
-};
-
 const initialValues = {
-  designation: '',
+  designation_id: '',
   ecode: '',
-  headShot: '',
+  email: '',
+  headshot: '',
   name: '',
-  organization: '',
+  organization_id: '',
 };
 
 const validationSchema = Yup.object().shape({
-  designation: Yup.string().required('Required'),
+  designation_id: Yup.string().required('Required'),
   ecode: Yup.string().required('Required'),
-  headShot: Yup.string().required('Required'),
+  email: Yup.string()
+    .email()
+    .required('Required'),
+  headshot: Yup.string(),
   name: Yup.string()
     .min(2, 'Must be 2 characters or more')
     .max(16, 'Must be 16 characters or less')
     .required('Required'),
-  organization: Yup.string().required('Required'),
+  organization_id: Yup.string().required('Required'),
 });
 
-export default () => (
-  <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-    {AddOrg}
-  </Formik>
-);
+export default () => {
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
+    actions.setSubmitting(true);
+    const resp = await dispatch(createEmployee(values));
+
+    actions.setSubmitting(false);
+
+    try {
+      unwrapResult(resp as any);
+    } catch (err) {
+      if (/uniqueness violation/i.test(err.message)) {
+        actions.setFieldError('email', 'An organization with same name already exists');
+      }
+      console.error('Something went wrong', err.message);
+    }
+  };
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {AddEmployee}
+    </Formik>
+  );
+};
