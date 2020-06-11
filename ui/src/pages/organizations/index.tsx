@@ -54,6 +54,7 @@ export default () => (
       title={'Organizations'}
       redirectPath={'/organizations/add'}
       toolTip={'Create Organization'}
+      isButtonShown={true}
     />
     <Index />
   </Layout>

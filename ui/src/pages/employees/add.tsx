@@ -21,31 +21,39 @@ const c = classNames.bind(style);
 
 const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
   const dispatch = useDispatch();
-  const { organizations, isFetching } = useSelector<RootState, OrganizationState>(
-    (state) => state.organization,
-  );
+  const { organizations, isFetching: isFetchingOrganizations } = useSelector<
+    RootState,
+    OrganizationState
+  >((state) => state.organization);
 
-  const { designation, isLoading } = useSelector<RootState, DesignationState>(
-    (state) => state.designations,
-  );
+  const { designation, isLoading: isFetchingDesignations } = useSelector<
+    RootState,
+    DesignationState
+  >((state) => state.designations);
 
   useEffect(() => {
     dispatch(fetchOrganization());
     dispatch(fetchDesignation());
   }, []);
 
-  if (isFetching && isLoading) {
+  if (isFetchingOrganizations && isFetchingDesignations) {
     return <span>loading...</span>;
   }
 
   return (
     <Layout headerTitle={'Snake Oil Software - Employees'} redirectPath="/">
-      <Header title={'Create Employee'} redirectPath={'/employees'} toolTip={'Back'} />
+      <Header
+        title={'Employee > '}
+        subTitle={'Create'}
+        redirectPath={'/employees'}
+        toolTip={'Back'}
+        isButtonShown={true}
+      />
       <div className={c('container')}>
         <form className={c('form')} onSubmit={p.handleSubmit}>
           <h2 className={c('title')}> Create Employee</h2>
 
-          <div className={c('Email-container', 'field-container')}>
+          <div className={c('email-container', 'field-container')}>
             <span className={c('field-title')}>Email</span>
             <TextField
               className={'form-text-field'}

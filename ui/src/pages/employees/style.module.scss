@@ -58,15 +58,15 @@
   grid-row-gap: 7px;
 }
 
-.name-container {
-  grid-column: 1;
+.email-container {
+  grid-column: 1/3;
   grid-row: 2;
   position: relative;
 }
 
-.email-container {
-  grid-column: 2;
-  grid-row: 2;
+.name-container {
+  grid-column: 1/3;
+  grid-row: 3;
   position: relative;
 }
 
@@ -75,7 +75,7 @@
   grid-auto-rows: minmax(2em, auto);
   grid-column: 2;
   grid-column-gap: 15px;
-  grid-row: 3;
+  grid-row: 4;
   grid-row-gap: 2em;
   grid-template-columns: 1fr 1fr;
   height: 11em;
@@ -117,7 +117,7 @@
 .button-container {
   display: grid;
   grid-column: 1;
-  grid-row: 4;
+  grid-row: 5;
   justify-content: flex-start;
 }
 

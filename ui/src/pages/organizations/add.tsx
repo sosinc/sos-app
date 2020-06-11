@@ -17,7 +17,12 @@ const c = classNames.bind(style);
 const AddOrg: React.FC<FormikProps<FormValues>> = (p) => {
   return (
     <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
-      <Header title={'Create Organization'} redirectPath={'/organizations'} toolTip={'Back'} />
+      <Header
+        title={'Organizations > '}
+        subTitle={'Create'}
+        redirectPath={'/organizations'}
+        toolTip={'Back'}
+      />
       <div className={c('org-container')}>
         <form className={c('org-form')} onSubmit={p.handleSubmit}>
           <h2 className={c('title')}> Create Organization</h2>

@@ -51,7 +51,12 @@ const Index = () => {
 
 export default () => (
   <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
-    <Header title={'Employees'} redirectPath={'/employees/add'} toolTip={'Create Employee'} />
+    <Header
+      title={'Employees'}
+      redirectPath={'/employees/add'}
+      toolTip={'Create Employee'}
+      isButtonShown={true}
+    />
     <Index />
   </Layout>
 );
