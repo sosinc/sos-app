@@ -42,13 +42,7 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
 
   return (
     <Layout headerTitle={'Snake Oil Software - Employees'} redirectPath="/">
-      <Header
-        title={'Employee > '}
-        subTitle={'Create'}
-        redirectPath={'/employees'}
-        toolTip={'Back'}
-        isButtonShown={true}
-      />
+      <Header title={'Employee > '} subTitle={'Create'} redirectPath={'/employees'} />
       <div className={c('container')}>
         <form className={c('form')} onSubmit={p.handleSubmit}>
           <h2 className={c('title')}> Create Employee</h2>

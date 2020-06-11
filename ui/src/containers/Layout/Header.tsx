@@ -16,7 +16,9 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = (p) => {
   const addButton = (
     <Link href={p.redirectPath}>
-      <AiOutlinePlus title={p.toolTip} className={c('plus-icon')} />
+      <span className={c('plus-container')}>
+        <AiOutlinePlus title={p.toolTip} className={c('plus-icon')} />
+      </span>
     </Link>
   );
 
