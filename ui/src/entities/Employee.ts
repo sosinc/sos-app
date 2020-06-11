@@ -9,7 +9,7 @@ export interface Employee {
   headshot: string;
   joining_date: string;
   designation_id: string;
-  organiztion_id: string;
+  organization_id: string;
 }
 
 export interface CreatePayload {
@@ -52,6 +52,7 @@ export const fetchMany = async (): Promise<Employee[]> => {
     headshot
     joining_date
     designation_id
+    organization_id
     }
   }`;
 

@@ -6,7 +6,7 @@ import { Organization } from 'src/entities/Organizations';
 const c = classNames.bind(style);
 
 interface OrganizationProps {
-  list: Organization[];
+  organizations: Organization[];
 }
 
 const List: React.FC<OrganizationProps> = ({ ...p }) => {

@@ -158,9 +158,9 @@ export default () => {
     try {
       unwrapResult(resp as any);
     } catch (err) {
-      /* if (/uniqueness violation/i.test(err.message)) {
-       *   actions.setFieldError('email', 'An organization with same name already exists');
-       * } */
+      if (/uniqueness violation/i.test(err.message)) {
+        actions.setFieldError('email', 'An organization with same name already exists');
+      }
       console.error('Something went wrong', err.message);
     }
   };

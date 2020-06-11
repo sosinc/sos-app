@@ -45,7 +45,7 @@ const Index = () => {
     return <NoOrganizations />;
   }
 
-  return <OrganizationList list={organizations} />;
+  return <OrganizationList organizations={organizations} />;
 };
 
 export default () => (

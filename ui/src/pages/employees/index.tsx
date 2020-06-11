@@ -46,7 +46,7 @@ const Index = () => {
     return <NoEmployees />;
   }
 
-  return <EmployeesList list={employees} />;
+  return <EmployeesList employees={employees} />;
 };
 
 export default () => (
