@@ -9,10 +9,23 @@ interface Props {
   organizations: Organization[];
 }
 
+const defaultBand = (brand: string, name: string) => {
+  if (brand && brand.length) {
+    return <img className={c('brand')} src={brand} />;
+  } else {
+    const firstLetter = name.split('')[0];
+    return (
+      <div className={c('default-brand')}>
+        <span className={c('default-icon')}>{firstLetter}</span>
+      </div>
+    );
+  }
+};
+
 const OrgItem: React.FC<Organization> = (p) => (
   <div className={c('container')}>
     <div className={c('content')} key={p.id}>
-      <img className={c('brand')} src={p.square_logo} />
+      {defaultBand(p.square_logo, p.name)}
       <div className={c('employee-container')}>
         <span className={c('name')}>{p.name}</span>
         <span className={c('count')}>{p.employees_aggregate.aggregate.count} Employees</span>
