@@ -1,24 +1,62 @@
 import classNames from 'classnames/bind';
 import Link from 'next/link';
-import { FaRegBuilding } from 'react-icons/fa';
+import { useEffect } from 'react';
+import { MdAdd, MdBusiness } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
 
-import Layout from 'src/containers/Layout';
+import NoItemsFound from 'src/components/NoItemsFound';
+import OrganizationsList from 'src/components/Organization/List';
+import DashboardLayout from 'src/containers/DashboardLayout';
+import { RootState } from 'src/duck';
+import { fetchOrganization, OrganizationState } from 'src/duck/organization';
+
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
+const Header: React.FC = () => (
+  <div className={c('header')}>
+    Organizations
+    <Link href="/organizations/add">
+      <a className={c('add-button')} title="Add organization">
+        <MdAdd className={c('icon')} />
+      </a>
+    </Link>
+  </div>
+);
+
 const Index = () => {
-  return (
-    <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
-      <FaRegBuilding title="Organizations" className={c('org-icon')} />
-      <span>You didn't have any Organization</span>
-      <Link href="/organizations/add">
-        <a className={c('org-add', 'org-container')}>
-          <span>Add Organization</span>
-        </a>
-      </Link>
-    </Layout>
+  const dispatch = useDispatch();
+  const { organizations, isFetching } = useSelector<RootState, OrganizationState>(
+    (state) => state.organization,
   );
+
+  useEffect(() => {
+    dispatch(fetchOrganization());
+  }, []);
+
+  if (isFetching) {
+    return <span>loading...</span>;
+  }
+
+  if (!organizations.length) {
+    return (
+      <div className={c('not-found-container')}>
+        <NoItemsFound
+          Icon={MdBusiness}
+          message="No Organizations found"
+          addItemText="Add an Organization"
+          addItemUrl="/organizations/add"
+        />
+      </div>
+    );
+  }
+
+  return <OrganizationsList organizations={organizations} />;
 };
 
-export default Index;
+export default () => (
+  <DashboardLayout title={'Snake Oil Software - Organizations'} Header={Header}>
+    <Index />
+  </DashboardLayout>
+);

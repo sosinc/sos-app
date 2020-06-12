@@ -1,0 +1,60 @@
+@import 'src/scss/lib';
+
+.container {
+  color: $color-text-dim2;
+  padding: 2em;
+  text-align: left;
+  width: 55%;
+
+  @media(max-width: $md) {
+    margin-top: 100px;
+  }
+
+  @media(max-width: $sm) {
+    margin-top: 60px;
+  }
+}
+
+.content {
+  background: $color-select-active;
+  border-radius: 5px;
+  display: grid;
+  grid-auto-rows: minmax(2em, auto);
+  grid-column-gap: 1em;
+  grid-row-gap: 0;
+  grid-template-columns: 25% 25% 1fr;
+  height: 6em;
+  margin-top: 1em;
+  padding: 1em;
+}
+
+.section1 {
+  display: grid;
+  grid-auto-rows: minmax(1em, auto);
+  grid-column: 1;
+  grid-column-gap: 1em;
+  grid-row: 1;
+  grid-row-gap: 8px;
+  grid-template-columns: 30% 1fr;
+  grid-template-rows: 26px 26px;
+}
+
+.logo {
+  border: 1px solid $color-text-dim3;
+  border-radius: 50%;
+  grid-column: 1;
+  grid-row: 1/3;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.name {
+  color: $color-text-primary;
+  font-size: 1em;
+  grid-column: 2;
+  grid-row: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

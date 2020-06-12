@@ -1,45 +1,63 @@
 import classNames from 'classnames/bind';
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { FaUsers } from 'react-icons/fa';
+import { MdAdd } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
 
-import Layout from 'src/containers/Layout';
-import EmployeesList from 'src/pages/employees/employeesList';
+import EmployeesList from 'src/components/Employees/List';
+import NoItemsFound from 'src/components/NoItemsFound';
+import DashboardLayout from 'src/containers/DashboardLayout';
+import { RootState } from 'src/duck';
+import { EmployeeState, fetchEmployees } from 'src/duck/employee';
+
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
-const employees = [
-  {
-    designation: 'Software Eng',
-    headShot: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Pierre-Person.jpg',
-    id: '1',
-    name: 'Max',
-    organization: ['Apple', 'Ciro'],
-  },
-  { id: '2', name: 'Tom', headShot: '', organization: ['Orange'], designation: 'MG' },
-  { id: '3', name: 'Jack', headShot: '', organization: ['Meteor'], designation: 'CE' },
-];
-
-const NoEmployees = () => {
-  return (
-    <>
-      <FaUsers title="Employees" className={c('org-icon')} />
-      <span>You didn't have any Employees</span>
-      <Link href="/employees/add">
-        <a className={c('org-add', 'org-container')}>
-          <span>Add Employee</span>
-        </a>
-      </Link>
-    </>
-  );
-};
+const Header: React.FC = () => (
+  <div className={c('header')}>
+    Employees
+    <Link href="/employees/add">
+      <a className={c('add-button')} title="Add employee">
+        <MdAdd className={c('icon')} />
+      </a>
+    </Link>
+  </div>
+);
 
 const Index = () => {
-  return (
-    <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
-      {employees.length ? <NoEmployees /> : <EmployeesList list={employees} />}
-    </Layout>
+  const dispatch = useDispatch();
+  const { employees, isFetching } = useSelector<RootState, EmployeeState>(
+    (state) => state.employees,
   );
+
+  useEffect(() => {
+    dispatch(fetchEmployees());
+  }, []);
+
+  if (isFetching) {
+    return <span>loading...</span>;
+  }
+
+  if (!employees.length) {
+    return (
+      <div className={c('not-found-container')}>
+        <NoItemsFound
+          Icon={FaUsers}
+          message="No Employees Found"
+          addItemText="Add new Employee"
+          addItemUrl="/employees/add"
+        />
+      </div>
+    );
+  }
+
+  return <EmployeesList employees={employees} />;
 };
 
-export default Index;
+export default () => (
+  <DashboardLayout title={'Snake Oil Software - Organizations'} Header={Header}>
+    <Index />
+  </DashboardLayout>
+);

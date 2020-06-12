@@ -44,6 +44,7 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
         placeholder={p.placeholder}
         {...inputProps}
         ref={p.inputRef}
+        disabled={formik.isSubmitting}
       />
       <MaybeErrorMessage />
     </div>

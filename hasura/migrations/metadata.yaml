@@ -4,6 +4,13 @@ tables:
     schema: public
     name: designations
   is_enum: true
+  select_permissions:
+  - role: app_admin
+    permission:
+      columns:
+      - id
+      - name
+      filter: {}
 - table:
     schema: public
     name: employees

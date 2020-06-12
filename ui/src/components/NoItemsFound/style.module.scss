@@ -1,0 +1,25 @@
+@import 'src/scss/lib';
+
+.icon {
+  $size: 56px;
+
+  background-size: contain;
+  color: $color-text-dim2;
+  height: $size;
+  width: $size;
+}
+
+.message {
+  color: $color-text-dim2;
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+
+.add-item {
+  color: $color-cta;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

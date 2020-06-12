@@ -1,21 +1,37 @@
+import { unwrapResult } from '@reduxjs/toolkit';
 import classNames from 'classnames/bind';
-import { Formik, FormikProps } from 'formik';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
+import Link from 'next/link';
+import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import TextField from 'src/components/Form/TextField';
-import Layout from 'src/containers/Layout';
+import DashboardLayout from 'src/containers/DashboardLayout';
+import { createOrganization } from 'src/duck/organization';
+
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
-const AddOrg: React.FC<FormikProps<OrganizationFormValues>> = (props) => {
+const Header: React.FC = () => (
+  <div className={c('header')}>
+    <span>
+      <Link href="/organizations">
+        <a>Organizations > </a>
+      </Link>
+      Create
+    </span>
+  </div>
+);
+
+const AddOrg: React.FC<FormikProps<FormValues>> = (p) => {
   return (
-    <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
+    <DashboardLayout title={'Snake Oil Software - Organizations'} Header={Header}>
       <div className={c('org-container')}>
-        <form className={c('org-form')} onSubmit={props.handleSubmit}>
+        <form className={c('org-form')} onSubmit={p.handleSubmit}>
           <h2 className={c('title')}> Create Organization</h2>
-          <div className={c('name-wrapper', 'wrapper')}>
+          <div className={c('name-container', 'field-container')}>
             <span className={c('field-title')}>Name</span>
             <TextField
               className={'form-text-field'}
@@ -25,54 +41,75 @@ const AddOrg: React.FC<FormikProps<OrganizationFormValues>> = (props) => {
             />
           </div>
 
-          <div className={c('image-wrapper-logo', 'wrapper')}>
+          <div className={c('image-container-logo', 'field-container')}>
             <span className={c('field-title')}>Logo</span>
-            <ImageUploadField className={c('org-logo')} type={'file'} name="logo" />
+            <ImageUploadField className={c('org-logo')} type={'file'} name="square_logo" />
           </div>
 
-          <div className={c('image-wrapper-banner', 'wrapper')}>
+          <div className={c('image-container-banner', 'field-container')}>
             <span className={c('field-title')}>Banner</span>
-            <ImageUploadField className={c('org-image-container')} type="file" name="banner" />
+            <ImageUploadField className={c('org-banner')} type="file" name="banner" />
           </div>
 
-          <div className={c('button-wrapper')}>
-            <button className={c('save-button')} type="submit">
-              Save
+          <div className={c('button-container')}>
+            <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+              {p.isSubmitting ? 'Saving...' : 'Save'}
             </button>
           </div>
         </form>
       </div>
-    </Layout>
+    </DashboardLayout>
   );
 };
 
-interface OrganizationFormValues {
+interface FormValues {
   name: string;
   banner: string;
-  logo: string;
+  square_logo: string;
 }
-
-const handleSubmit = (values: object, actions: object) => {
-  console.warn('SUBMITTING', values, actions);
-};
 
 const initialValues = {
   banner: '',
-  logo: '',
   name: '',
+  square_logo: '',
 };
 
 const validationSchema = Yup.object().shape({
-  banner: Yup.string().required('Required'),
-  logo: Yup.string().required('Required'),
+  banner: Yup.string(),
   name: Yup.string()
     .min(2, 'Must be 2 characters or more')
     .max(16, 'Must be 16 characters or less')
     .required('Required'),
+  square_logo: Yup.string(),
 });
 
-export default () => (
-  <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-    {AddOrg}
-  </Formik>
-);
+export default () => {
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
+    actions.setSubmitting(true);
+    const resp = await dispatch(createOrganization(values));
+
+    actions.setSubmitting(false);
+
+    try {
+      unwrapResult(resp as any);
+      actions.resetForm();
+    } catch (err) {
+      if (/uniqueness violation/i.test(err.message)) {
+        actions.setFieldError('name', 'An organization with same name already exists');
+      }
+      console.error('Something went wrong');
+    }
+  };
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {AddOrg}
+    </Formik>
+  );
+};

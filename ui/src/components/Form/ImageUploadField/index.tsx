@@ -60,6 +60,7 @@ const FileField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> = 
         accept="image/*"
         {...inputProps}
         onChange={handleFileUpload}
+        disabled={formik.isSubmitting}
       />
       <MaybeErrorMessage />
 

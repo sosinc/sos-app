@@ -35,6 +35,9 @@ const SelectField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> 
   };
 
   const handleOpen = () => {
+    if (formik.isSubmitting) {
+      return;
+    }
     setOpen(!isOpen);
   };
 

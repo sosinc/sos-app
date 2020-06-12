@@ -1,28 +1,40 @@
 @import 'src/scss/lib';
 
+.header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.not-found-container {
+  padding-top: 7em;
+}
+
+.add-button {
+  $size: 28px;
+  @extend %button-primary;
+
+  align-items: center;
+  display: flex;
+  height: $size;
+  justify-content: center;
+  padding: 0;
+  width: $size;
+
+  .icon {
+    height: 1.2em;
+    width: 1.2em;
+  }
+}
+
+// ---
+
 .org-container {
   color: $color-text-dim2;
   display: flex;
   flex-direction: column;
-}
-
-.org-icon {
-  background-size: contain;
-  color: $color-text-dim2;
-  height: 45px;
-  margin: 0 auto;
-  margin-bottom: 1em;
-  width: 45px;
-}
-
-.org-add {
-  color: $color-cta;
-  margin-top: 1em;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
+  margin-top: 7em;
 }
 
 .org-form {
@@ -54,12 +66,12 @@
   text-align: left;
 }
 
-.wrapper {
+.field-container {
   display: grid;
   grid-row-gap: 7px;
 }
 
-.name-wrapper {
+.name-container {
   grid-column: 1/3;
   grid-row: 2;
   position: relative;
@@ -74,12 +86,12 @@
   width: 10em;
 }
 
-.image-wrapper-logo {
+.image-container-logo {
   grid-column: 1;
   grid-row: 3;
 }
 
-.image-wrapper-banner {
+.image-container-banner {
   grid-column: 2;
   grid-row: 3;
 }
@@ -91,7 +103,7 @@
   width: 100%;
 }
 
-.button-wrapper {
+.button-container {
   display: grid;
   grid-column: 1;
   grid-row: 4;
