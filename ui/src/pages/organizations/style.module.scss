@@ -6,32 +6,6 @@
   flex-direction: column;
 }
 
-.no-orgs-container {
-  .no-orgs-icon {
-    $size: 56px;
-
-    background-size: contain;
-    color: $color-text-dim2;
-    height: $size;
-    width: $size;
-  }
-
-  .no-orgs-message {
-    color: $color-text-dim2;
-    margin-top: 8px;
-  }
-
-  .add-org {
-    color: $color-cta;
-    margin-top: 12px;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
-
 .org-form {
   display: grid;
   font: inherit;
