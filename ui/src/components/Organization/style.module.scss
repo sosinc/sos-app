@@ -1,7 +1,7 @@
 @import 'src/scss/lib';
 
 .employee {
-  margin-top: 6em;
+  margin-top: 48px;
   width: 100%;
 
   @media(max-width: $md) {
@@ -38,11 +38,27 @@
 
 .brand {
   $size: 24px;
-
   border: 1px solid $color-text-dim3;
   border-radius: 50%;
   height: $size;
   width: $size;
+}
+
+.default-brand {
+  $size: 24px;
+  @extend %button-primary;
+
+  align-items: center;
+  border-radius: 50%;
+  display: flex;
+  height: $size;
+  justify-content: center;
+  padding: 0;
+  width: $size;
+
+  .default-icon {
+    font-size: 10px;
+  }
 }
 
 .employee-container {
