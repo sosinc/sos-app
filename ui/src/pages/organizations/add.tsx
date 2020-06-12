@@ -1,28 +1,33 @@
 import { unwrapResult } from '@reduxjs/toolkit';
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
+import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import TextField from 'src/components/Form/TextField';
-import Layout from 'src/containers/Layout';
-import Header from 'src/containers/Layout/Header';
+import DashboardLayout from 'src/containers/DashboardLayout';
 import { createOrganization } from 'src/duck/organization';
 
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
+const Header: React.FC = () => (
+  <div className={c('header')}>
+    <span>
+      <Link href="/organizations">
+        <a>Organizations > </a>
+      </Link>
+      Create
+    </span>
+  </div>
+);
+
 const AddOrg: React.FC<FormikProps<FormValues>> = (p) => {
   return (
-    <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
-      <Header
-        title={'Organizations > '}
-        subTitle={'Create'}
-        redirectPath={'/organizations'}
-        toolTip={'Back'}
-      />
+    <DashboardLayout title={'Snake Oil Software - Organizations'} Header={Header}>
       <div className={c('org-container')}>
         <form className={c('org-form')} onSubmit={p.handleSubmit}>
           <h2 className={c('title')}> Create Organization</h2>
@@ -53,7 +58,7 @@ const AddOrg: React.FC<FormikProps<FormValues>> = (p) => {
           </div>
         </form>
       </div>
-    </Layout>
+    </DashboardLayout>
   );
 };
 

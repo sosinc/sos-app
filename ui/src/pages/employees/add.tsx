@@ -1,5 +1,6 @@
 import { unwrapResult } from '@reduxjs/toolkit';
 import classNames from 'classnames/bind';
+import Link from 'next/link';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,8 +9,7 @@ import * as Yup from 'yup';
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
-import Layout from 'src/containers/Layout';
-import Header from 'src/containers/Layout/Header';
+import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
 import { DesignationState, fetchDesignation } from 'src/duck/designation';
 import { createEmployee } from 'src/duck/employee';
@@ -18,6 +18,17 @@ import { fetchOrganization, OrganizationState } from 'src/duck/organization';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
+
+const Header: React.FC = () => (
+  <div className={c('header')}>
+    <span>
+      <Link href="/employees">
+        <a>Employees > </a>
+      </Link>
+      Create
+    </span>
+  </div>
+);
 
 const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
   const dispatch = useDispatch();
@@ -41,8 +52,7 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
   }
 
   return (
-    <Layout headerTitle={'Snake Oil Software - Employees'} redirectPath="/">
-      <Header title={'Employee > '} subTitle={'Create'} redirectPath={'/employees'} />
+    <DashboardLayout title={'Snake Oil Software - Employees'} Header={Header}>
       <div className={c('container')}>
         <form className={c('form')} onSubmit={p.handleSubmit}>
           <h2 className={c('title')}> Create Employee</h2>
@@ -104,7 +114,7 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
           </div>
         </form>
       </div>
-    </Layout>
+    </DashboardLayout>
   );
 };
 

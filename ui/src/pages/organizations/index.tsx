@@ -14,6 +14,17 @@ import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
+const Header: React.FC = () => (
+  <div className={c('header')}>
+    Organizations
+    <Link href="/organizations/add">
+      <a className={c('add-button')} title="Add organization">
+        <MdAdd className={c('icon')} />
+      </a>
+    </Link>
+  </div>
+);
+
 const Index = () => {
   const dispatch = useDispatch();
   const { organizations, isFetching } = useSelector<RootState, OrganizationState>(
@@ -43,17 +54,6 @@ const Index = () => {
 
   return <OrganizationsList organizations={organizations} />;
 };
-
-const Header: React.FC = () => (
-  <div className={c('header')}>
-    Organizations
-    <Link href="/organizations/add">
-      <a className={c('add-button')}>
-        <MdAdd className={c('icon')} />
-      </a>
-    </Link>
-  </div>
-);
 
 export default () => (
   <DashboardLayout title={'Snake Oil Software - Organizations'} Header={Header}>

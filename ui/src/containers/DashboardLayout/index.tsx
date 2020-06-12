@@ -2,7 +2,8 @@ import classNames from 'classnames/bind';
 import Head from 'next/head';
 import Link from 'next/link';
 import { AiOutlineEllipsis } from 'react-icons/ai';
-import { FaRegBuilding, FaUsers } from 'react-icons/fa';
+import { FaUsers } from 'react-icons/fa';
+import { MdBusiness } from 'react-icons/md';
 
 import WithUser from 'src/containers/WithUser';
 
@@ -36,7 +37,7 @@ const Index: React.FC<LayoutProps> = (p) => {
           <div className={c('admin-section')}>
             <span>Admin</span>
             <div className={c('organization-container')}>
-              <FaRegBuilding />
+              <MdBusiness />
               <Link href="/organizations">
                 <span className={c('admin-section-title')}>Organizations</span>
               </Link>

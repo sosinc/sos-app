@@ -1,13 +1,30 @@
+import classNames from 'classnames/bind';
+import Link from 'next/link';
 import { useEffect } from 'react';
 import { FaUsers } from 'react-icons/fa';
+import { MdAdd } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 
 import EmployeesList from 'src/components/Employees/List';
 import NoItemsFound from 'src/components/NoItemsFound';
-import Layout from 'src/containers/Layout';
-import Header from 'src/containers/Layout/Header';
+import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
 import { EmployeeState, fetchEmployees } from 'src/duck/employee';
+
+import style from './style.module.scss';
+
+const c = classNames.bind(style);
+
+const Header: React.FC = () => (
+  <div className={c('header')}>
+    Employees
+    <Link href="/employees/add">
+      <a className={c('add-button')} title="Add employee">
+        <MdAdd className={c('icon')} />
+      </a>
+    </Link>
+  </div>
+);
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -25,12 +42,14 @@ const Index = () => {
 
   if (!employees.length) {
     return (
-      <NoItemsFound
-        Icon={FaUsers}
-        message="No Employees Found"
-        addItemText="Add new Employee"
-        addItemUrl="/employees/add"
-      />
+      <div className={c('not-found-container')}>
+        <NoItemsFound
+          Icon={FaUsers}
+          message="No Employees Found"
+          addItemText="Add new Employee"
+          addItemUrl="/employees/add"
+        />
+      </div>
     );
   }
 
@@ -38,13 +57,7 @@ const Index = () => {
 };
 
 export default () => (
-  <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
-    <Header
-      title={'Employees'}
-      redirectPath={'/employees/add'}
-      toolTip={'Create Employee'}
-      isButtonShown={true}
-    />
+  <DashboardLayout title={'Snake Oil Software - Organizations'} Header={Header}>
     <Index />
-  </Layout>
+  </DashboardLayout>
 );

@@ -12,11 +12,11 @@
 .message {
   color: $color-text-dim2;
   margin-top: 8px;
+  margin-bottom: 12px;
 }
 
 .add-item {
   color: $color-cta;
-  margin-top: 12px;
   text-decoration: none;
 
   &:hover {

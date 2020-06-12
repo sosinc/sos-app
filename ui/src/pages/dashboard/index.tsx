@@ -1,11 +1,16 @@
-import Layout from 'src/containers/Layout';
-import Header from 'src/containers/Layout/Header';
+import classNames from 'classnames/bind';
+import DashboardLayout from 'src/containers/DashboardLayout';
+
+import style from './index.module.scss';
+const c = classNames.bind(style);
+
+const Header: React.FC = () => <div className={c('header')}>Dashboard</div>;
 
 const Dashboard = () => {
   return (
-    <Layout headerTitle={'Snake Oil Software - Dashboard'} redirectPath="/">
-      <Header title={'Dashboard'} redirectPath={'/'} />
-    </Layout>
+    <DashboardLayout title={'Snake Oil Software - Dashboard'} Header={Header}>
+      <span>dashboard</span>
+    </DashboardLayout>
   );
 };
 
