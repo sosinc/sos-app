@@ -94,6 +94,7 @@ export default () => {
 
     try {
       unwrapResult(resp as any);
+      actions.resetForm();
     } catch (err) {
       if (/uniqueness violation/i.test(err.message)) {
         actions.setFieldError('name', 'An organization with same name already exists');
