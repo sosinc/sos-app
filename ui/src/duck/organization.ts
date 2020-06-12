@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { create, CreatePayload, fetchMany, Organization } from 'src/entities/Organizations';
+import { create, CreatePayload, fetchMany, fetchOne, GetOnePayload, Organization } from 'src/entities/Organizations';
 
 export interface OrganizationState {
   organizations: Organization[];
@@ -8,11 +8,17 @@ export interface OrganizationState {
   isFetching: boolean;
 }
 
-export const fetchOrganization = createAsyncThunk<
+export const fetchOrganizations = createAsyncThunk<
   Organization[],
   undefined,
   { rejectValue: Error; state: OrganizationState }
 >('organizations/fetchMany', fetchMany);
+
+export const fetchOrganization = createAsyncThunk<
+  Organization,
+  GetOnePayload,
+{ rejectValue: Error; state: OrganizationState }
+  >('organizations/fetchOne', fetchOne);
 
 export const createOrganization = createAsyncThunk<
   Organization,
@@ -31,18 +37,32 @@ export default createSlice({
       state.organizations.push(payload);
     });
 
-    builder.addCase(fetchOrganization.pending, (state) => {
+    builder.addCase(fetchOrganizations.pending, (state) => {
       state.isFetching = true;
     });
 
-    builder.addCase(fetchOrganization.rejected, (state, { payload }) => {
+    builder.addCase(fetchOrganizations.rejected, (state, { payload }) => {
       state.isFetching = false;
       state.error = payload?.message;
     });
 
-    builder.addCase(fetchOrganization.fulfilled, (state, { payload }) => {
+    builder.addCase(fetchOrganizations.fulfilled, (state, { payload }) => {
       state.isFetching = false;
       state.organizations = payload;
+    });
+
+    builder.addCase(fetchOrganization.pending, (state) => {
+      state.isFetching = true;
+    });
+
+    builder.addCase(fetchOrganization.rejected, (state, { error }) => {
+      state.isFetching = false;
+      state.error = error?.message;
+    });
+
+    builder.addCase(fetchOrganization.fulfilled, (state, { payload }) => {
+      state.isFetching = false;
+      state.organizations = [ ...state.organizations , payload];
     });
   },
   initialState,

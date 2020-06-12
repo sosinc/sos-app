@@ -18,6 +18,7 @@
 .content {
   background: $color-select-active;
   border-radius: 5px;
+  cursor: pointer;
   display: grid;
   grid-auto-rows: minmax(2em, auto);
   grid-column-gap: 1em;

@@ -1,5 +1,6 @@
 import 'cross-fetch/polyfill';
 
+import { Employee } from 'src/entities/Employee';
 import client from 'src/lib/client';
 
 export interface Organization {
@@ -7,12 +8,17 @@ export interface Organization {
   name: string;
   banner: string;
   square_logo: string;
+  employees: Employee;
 }
 
 export interface CreatePayload {
   name: string;
   banner?: string;
   square_logo?: string;
+}
+
+export interface GetOnePayload {
+  id: string;
 }
 
 export const create = async (payload: CreatePayload): Promise<Organization> => {
@@ -45,4 +51,26 @@ export const fetchMany = async (): Promise<Organization[]> => {
   const data = await client.request(query);
 
   return data?.organizations.length ? data.organizations : [];
+};
+
+export const fetchOne = async (payload: GetOnePayload): Promise<Organization> => {
+  const query = `query ($id: uuid!){
+  organizations_by_pk(id: $id) {
+    id
+    name
+    square_logo
+    banner
+    employees {
+      name
+      headshot
+      joining_date
+      relieving_date
+      user_id
+      }
+    }
+}`;
+
+  const data = await client.request(query, payload);
+
+  return data?.organizations_by_pk ? data.organizations_by_pk : {};
 };

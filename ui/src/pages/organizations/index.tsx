@@ -8,7 +8,7 @@ import OrganizationList from 'src/components/Organization/List';
 import Layout from 'src/containers/Layout';
 import Header from 'src/containers/Layout/Header';
 import { RootState } from 'src/duck';
-import { fetchOrganization, OrganizationState } from 'src/duck/organization';
+import { fetchOrganizations, OrganizationState } from 'src/duck/organization';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -34,7 +34,7 @@ const Index = () => {
   );
 
   useEffect(() => {
-    dispatch(fetchOrganization());
+    dispatch(fetchOrganizations());
   }, []);
 
   if (isFetching) {

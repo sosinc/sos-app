@@ -13,7 +13,7 @@ import Header from 'src/containers/Layout/Header';
 import { RootState } from 'src/duck';
 import { DesignationState, fetchDesignation } from 'src/duck/designation';
 import { createEmployee } from 'src/duck/employee';
-import { fetchOrganization, OrganizationState } from 'src/duck/organization';
+import { fetchOrganizations, OrganizationState } from 'src/duck/organization';
 
 import style from './style.module.scss';
 
@@ -32,7 +32,7 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
   >((state) => state.designations);
 
   useEffect(() => {
-    dispatch(fetchOrganization());
+    dispatch(fetchOrganizations());
     dispatch(fetchDesignation());
   }, []);
 
