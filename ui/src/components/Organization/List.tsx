@@ -10,16 +10,19 @@ interface Props {
 }
 
 const OrgItem: React.FC<Organization> = (p) => (
-  <div className={c('content')} key={p.id}>
-    <div className={c('section1')}>
-      <img className={c('logo')} src={p.square_logo} />
-      <span className={c('name')}>{p.name}</span>
+  <div className={c('container')}>
+    <div className={c('content')} key={p.id}>
+      <img className={c('brand')} src={p.square_logo} />
+      <div className={c('employee-container')}>
+        <span className={c('name')}>{p.name}</span>
+        <span className={c('count')}>{p.employees_aggregate.aggregate.count} Employees</span>
+      </div>
     </div>
   </div>
 );
 
 const List: React.FC<Props> = (p) => {
-  return <div className={c('container')}>{p.organizations.map(OrgItem)}</div>;
+  return <div className={c('employee')}>{p.organizations.map(OrgItem)}</div>;
 };
 
 export default List;

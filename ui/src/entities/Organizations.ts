@@ -7,6 +7,7 @@ export interface Organization {
   name: string;
   banner: string;
   square_logo: string;
+  employees_aggregate: any;
 }
 
 export interface CreatePayload {
@@ -39,6 +40,11 @@ export const fetchMany = async (): Promise<Organization[]> => {
     name
     square_logo
     banner
+    employees_aggregate {
+      aggregate {
+      count
+      }
+    }
    }
  }`;
 
