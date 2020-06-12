@@ -15,15 +15,15 @@ const c = classNames.bind(style);
 
 const NoOrganizations = () => {
   return (
-    <>
-      <FaRegBuilding title="Organizations" className={c('org-icon')} />
-      <span>You didn't have any Organization</span>
+    <div className={c('no-orgs-container')}>
+      <FaRegBuilding title="Organizations" className={c('no-orgs-icon')} />
+      <div className={c('no-orgs-message')}>No Organizations found</div>
       <Link href="/organizations/add">
-        <a className={c('org-add', 'org-container')}>
-          <span>Add Organization</span>
+        <a className={c('add-org', 'org-container')}>
+          <span>Add an Organization</span>
         </a>
       </Link>
-    </>
+    </div>
   );
 };
 

@@ -6,22 +6,29 @@
   flex-direction: column;
 }
 
-.org-icon {
-  background-size: contain;
-  color: $color-text-dim2;
-  height: 45px;
-  margin: 0 auto;
-  margin-bottom: 1em;
-  width: 45px;
-}
+.no-orgs-container {
+  .no-orgs-icon {
+    $size: 56px;
 
-.org-add {
-  color: $color-cta;
-  margin-top: 1em;
-  text-decoration: none;
+    background-size: contain;
+    color: $color-text-dim2;
+    height: $size;
+    width: $size;
+  }
 
-  &:hover {
-    text-decoration: underline;
+  .no-orgs-message {
+    color: $color-text-dim2;
+    margin-top: 8px;
+  }
+
+  .add-org {
+    color: $color-cta;
+    margin-top: 12px;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
