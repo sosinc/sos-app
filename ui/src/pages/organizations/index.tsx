@@ -1,13 +1,18 @@
+import classNames from 'classnames/bind';
+import Link from 'next/link';
 import { useEffect } from 'react';
-import { FaRegBuilding } from 'react-icons/fa';
+import { MdAdd, MdBusiness } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 
-import OrganizationsList from 'src/components/Organization/List';
 import NoItemsFound from 'src/components/NoItemsFound';
-import Layout from 'src/containers/Layout';
-import Header from 'src/containers/Layout/Header';
+import OrganizationsList from 'src/components/Organization/List';
+import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
 import { fetchOrganization, OrganizationState } from 'src/duck/organization';
+
+import style from './style.module.scss';
+
+const c = classNames.bind(style);
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -25,26 +30,33 @@ const Index = () => {
 
   if (!organizations.length) {
     return (
-      <NoItemsFound
-        Icon={FaRegBuilding}
-        message="No Organizations found"
-        addItemText="Add an Organization"
-        addItemUrl="/organizations/add"
-      />
+      <div className={c('not-found-container')}>
+        <NoItemsFound
+          Icon={MdBusiness}
+          message="No Organizations found"
+          addItemText="Add an Organization"
+          addItemUrl="/organizations/add"
+        />
+      </div>
     );
   }
 
   return <OrganizationsList organizations={organizations} />;
 };
 
+const Header: React.FC = () => (
+  <div className={c('header')}>
+    Organizations
+    <Link href="/organizations/add">
+      <a className={c('add-button')}>
+        <MdAdd className={c('icon')} />
+      </a>
+    </Link>
+  </div>
+);
+
 export default () => (
-  <Layout headerTitle={'Snake Oil Software - Organizations'} redirectPath="/">
-    <Header
-      title={'Organizations'}
-      redirectPath={'/organizations/add'}
-      toolTip={'Create Organization'}
-      isButtonShown={true}
-    />
+  <DashboardLayout title={'Snake Oil Software - Organizations'} Header={Header}>
     <Index />
-  </Layout>
+  </DashboardLayout>
 );
