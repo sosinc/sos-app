@@ -3,23 +3,22 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { AiOutlineEllipsis } from 'react-icons/ai';
 import { FaRegBuilding, FaUsers } from 'react-icons/fa';
+
 import WithUser from 'src/containers/WithUser';
 
 import style from './style.module.scss';
 const c = classNames.bind(style);
 
 interface LayoutProps {
-  children: React.ReactNode;
-  headerTitle: string;
-  inverted?: boolean;
-  redirectPath: string;
+  title: string;
+  Header: React.FC;
 }
 
 const Index: React.FC<LayoutProps> = (p) => {
   return (
-    <WithUser inverted={p.inverted} redirectPath={p.redirectPath}>
+    <WithUser inverted={false} redirectPath="/">
       <Head>
-        <title>{p.headerTitle}</title>
+        <title>{p.title}</title>
       </Head>
 
       <div className={c('container')}>
@@ -54,7 +53,14 @@ const Index: React.FC<LayoutProps> = (p) => {
             <a className={c('feedback-text')}>Send Feedback</a>
           </div>
         </div>
-        <div className={c('content')}>{p.children}</div>
+
+        <div className={c('content')}>
+          <div className={c('header-container')}>
+            <p.Header />
+          </div>
+
+          {p.children}
+        </div>
       </div>
     </WithUser>
   );
