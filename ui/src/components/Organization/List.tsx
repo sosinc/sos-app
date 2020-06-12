@@ -5,21 +5,21 @@ import { Organization } from 'src/entities/Organizations';
 
 const c = classNames.bind(style);
 
-interface OrganizationProps {
+interface Props {
   organizations: Organization[];
 }
 
-const List: React.FC<OrganizationProps> = ({ ...p }) => {
-  const organizations = p.organizations.map((e) => (
-    <div className={c('content')} key={e.id}>
-      <div className={c('section1')}>
-        <img className={c('logo')} src={e.square_logo} />
-        <span className={c('name')}>{e.name}</span>
-      </div>
+const OrgItem: React.FC<Organization> = (p) => (
+  <div className={c('content')} key={p.id}>
+    <div className={c('section1')}>
+      <img className={c('logo')} src={p.square_logo} />
+      <span className={c('name')}>{p.name}</span>
     </div>
-  ));
+  </div>
+);
 
-  return <div className={c('container')}>{organizations}</div>;
+const List: React.FC<Props> = (p) => {
+  return <div className={c('container')}>{p.organizations.map(OrgItem)}</div>;
 };
 
 export default List;

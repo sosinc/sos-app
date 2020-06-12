@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import Head from 'next/head';
 import Link from 'next/link';
 import { AiOutlineEllipsis } from 'react-icons/ai';
-import { FaUsers, FaRegBuilding } from 'react-icons/fa';
+import { FaRegBuilding, FaUsers } from 'react-icons/fa';
 import WithUser from 'src/containers/WithUser';
 
 import style from './style.module.scss';
