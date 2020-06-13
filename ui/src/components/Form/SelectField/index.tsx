@@ -1,8 +1,8 @@
 import classNames from 'classnames/bind';
 import { connect, FormikContextType, getIn } from 'formik';
 import { useState } from 'react';
-import { AiFillExclamationCircle as ErrorIcon } from 'react-icons/ai';
 
+import ErrorMessage from 'src/components/Form/ErrorMessage';
 import styles from './style.module.scss';
 
 const c = classNames.bind(styles);
@@ -46,14 +46,6 @@ const SelectField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> 
     formik.setFieldTouched(inputProps.name, true);
   };
 
-  const MaybeErrorMessage = () => {
-    if (!error) {
-      return null;
-    }
-
-    return <ErrorIcon className={c('error-icon')} title={error} />;
-  };
-
   const containerClass = c('input-field-container', p.className, {
     'has-error': error,
   });
@@ -88,7 +80,7 @@ const SelectField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> 
         {selectedItem ? selectedItem.name : 'Select Value'}
       </div>
       {isOpen ? selectList : null}
-      <MaybeErrorMessage />
+      <ErrorMessage error={error} />
     </div>
   );
 };
