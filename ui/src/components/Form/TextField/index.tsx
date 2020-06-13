@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import { connect, FormikContextType, getIn } from 'formik';
 import { MutableRefObject } from 'react';
-import { AiFillExclamationCircle } from 'react-icons/ai';
+import ErrorMessage from 'src/components/Form/ErrorMessage';
 
 import styles from './style.module.scss';
 
@@ -24,14 +24,6 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
   const error = isTouched ? getIn(formik.errors, p.name) : null;
   const inputProps = formik.getFieldProps(p.name);
 
-  const MaybeErrorMessage = () => {
-    if (!error) {
-      return null;
-    }
-
-    return <AiFillExclamationCircle className={c('error-icon')} title={error} />;
-  };
-
   const containerClass = c('input-field-container', p.className, {
     'has-error': error,
   });
@@ -46,7 +38,7 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
         ref={p.inputRef}
         disabled={formik.isSubmitting}
       />
-      <MaybeErrorMessage />
+      <ErrorMessage error={error} />
     </div>
   );
 };
