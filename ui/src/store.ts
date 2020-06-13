@@ -1,12 +1,13 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { createWrapper } from 'next-redux-wrapper';
 import { createEpicMiddleware } from 'redux-observable';
-import reducer from 'src/duck';
 
+import reducer from 'src/duck';
 import rootEpic from 'src/epic';
 
 const epicMiddleware = createEpicMiddleware();
 
-export default () => {
+const initStore = () => {
   const store = configureStore({
     middleware: [epicMiddleware, ...getDefaultMiddleware()],
     reducer,
@@ -14,5 +15,7 @@ export default () => {
 
   epicMiddleware.run(rootEpic);
 
-  return { store };
+  return store;
 };
+
+export const wrapper = createWrapper(initStore);

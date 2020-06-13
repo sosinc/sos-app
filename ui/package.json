@@ -44,7 +44,7 @@
     "yup": "^0.28.5"
   },
   "devDependencies": {
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.5",
     "prettier-tslint": "^0.4.2",
     "stylelint": "^13.6.0",
     "stylelint-config-sass-guidelines": "^7.0.0",
