@@ -88,11 +88,9 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
             Login
           </button>
         </form>
-        <span>
-          <p className={c('reset-password-text')} onClick={() => setModalOpen(true)}>
-            Reset password
-          </p>
-        </span>
+        <div className={c('reset-password-text')}>
+          <span onClick={() => setModalOpen(true)}>Reset password</span>
+        </div>
       </div>
       <Modal onClose={handleModal} isOpen={isModalOpen}>
         <ResetPassword />
@@ -107,12 +105,8 @@ interface LoginFormValues {
 }
 
 const validationSchema = Yup.object({
-  email: Yup.string()
-    .email('Invalid email address')
-    .required('Required'),
-  password: Yup.string()
-    .max(15, 'Must be 15 characters or less')
-    .required('Required'),
+  email: Yup.string().email('Invalid email address').required('Required'),
+  password: Yup.string().max(15, 'Must be 15 characters or less').required('Required'),
 });
 
 const initialValues = {
