@@ -8,8 +8,8 @@
     "dev": "tsnd --inspect --respawn --transpileOnly --no-notify --ignore-watch node_modules src/index.ts",
     "build": "rimraf dist && tsc --build",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint --fix --cache --ext .ts,.tsx src",
-    "prettify": "prettier --write './src/**/*.ts'",
+    "lint": "eslint --cache --ext .ts,.tsx src",
+    "fmt": "prettier --write './src/**/*.ts'",
     "test": "NODE_ENV=development jest"
   },
   "dependencies": {
