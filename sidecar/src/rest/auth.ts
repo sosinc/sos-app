@@ -12,8 +12,6 @@ api.get("/authenticate", (req, res) => {
     });
   }
 
-  console.log("USER", user);
-
   return res.json({
     "x-hasura-role": user.role_id.toLowerCase(),
     "x-hasura-user-id": user.id,
