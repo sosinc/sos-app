@@ -4,8 +4,8 @@ import {
   fetchCurrentUser as apiFetchCurrentUser,
   login,
   LoginPayload,
-  sendPasswordResetOTP as apiPasswordResetOTP,
   SendOTPPayload,
+  sendPasswordResetOTP as apiPasswordResetOTP,
   User,
 } from 'src/entities/User';
 

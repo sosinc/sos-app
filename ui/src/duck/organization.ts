@@ -17,8 +17,8 @@ export const fetchOrganization = createAsyncThunk<
 export const createOrganization = createAsyncThunk<
   Organization,
   CreatePayload,
-{rejectValue: Error; state: OrganizationState}
-  >('organizations/create', create);
+  { rejectValue: Error; state: OrganizationState }
+>('organizations/create', create);
 
 const initialState: OrganizationState = {
   isFetching: false,

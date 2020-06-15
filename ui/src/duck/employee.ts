@@ -17,8 +17,8 @@ export const fetchEmployees = createAsyncThunk<
 export const createEmployee = createAsyncThunk<
   Employee,
   CreatePayload,
-{rejectValue: Error; state: EmployeeState}
-  >('employees/create', create);
+  { rejectValue: Error; state: EmployeeState }
+>('employees/create', create);
 
 const initialState: EmployeeState = {
   employees: [],
