@@ -1,17 +1,10 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 
-import configureStore from 'src/configureStore';
 import 'src/scss/global.scss';
-
-const { store } = configureStore();
+import { wrapper } from 'src/store';
 
 const App: React.FC<any> = ({ Component, pageProps }) => {
-  return (
-    <Provider store={store}>
-      <Component {...pageProps} />
-    </Provider>
-  );
+  return <Component {...pageProps} />;
 };
 
-export default App;
+export default wrapper.withRedux(App);

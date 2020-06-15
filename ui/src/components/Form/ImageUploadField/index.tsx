@@ -1,8 +1,9 @@
 import classNames from 'classnames/bind';
 import { connect, FormikContextType, getIn } from 'formik';
 import { useState } from 'react';
-import { AiFillExclamationCircle, AiOutlineDownload } from 'react-icons/ai';
+import { AiOutlineDownload } from 'react-icons/ai';
 
+import ErrorMessage from 'src/components/Form/ErrorMessage';
 import styles from './style.module.scss';
 
 const c = classNames.bind(styles);
@@ -33,14 +34,6 @@ const FileField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> = 
   const inputProps = formik.getFieldProps(p.name);
   const [previewImage, setPreviewImage] = useState('');
 
-  const MaybeErrorMessage = () => {
-    if (!error) {
-      return null;
-    }
-
-    return <AiFillExclamationCircle className={c('error-icon')} title={error} />;
-  };
-
   const containerClass = c('upload-logo-container', p.className, {
     'has-error': error,
   });
@@ -62,7 +55,7 @@ const FileField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> = 
         onChange={handleFileUpload}
         disabled={formik.isSubmitting}
       />
-      <MaybeErrorMessage />
+      <ErrorMessage error={error} />
 
       {previewImage ? <ImageUploadField image={previewImage} /> : <Placeholder />}
     </div>

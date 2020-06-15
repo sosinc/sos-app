@@ -139,9 +139,7 @@ const initialValues = {
 const validationSchema = Yup.object().shape({
   designation_id: Yup.string().required('Required'),
   ecode: Yup.string().required('Required'),
-  email: Yup.string()
-    .email()
-    .required('Required'),
+  email: Yup.string().email().required('Required'),
   headshot: Yup.string(),
   name: Yup.string()
     .min(2, 'Must be 2 characters or more')
@@ -166,6 +164,8 @@ export default () => {
       if (/uniqueness violation/i.test(err.message)) {
         actions.setFieldError('email', 'An organization with same name already exists');
       }
+
+      // tslint:disable-next-line:no-console
       console.error('Something went wrong', err.message);
     }
   };

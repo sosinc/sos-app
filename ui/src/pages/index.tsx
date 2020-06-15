@@ -1,8 +1,8 @@
 import classNames from 'classnames/bind';
-import { useDispatch } from 'react-redux';
-
 import Head from 'next/head';
 import Link from 'next/link';
+import { useDispatch } from 'react-redux';
+
 import FullPageLayout from 'src/components/FullPageLayout';
 import LoginForm from 'src/components/LoginForm';
 import WithUser from 'src/containers/WithUser';

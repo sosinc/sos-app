@@ -1,0 +1,7 @@
+@import 'src/scss/lib';
+
+.error-icon {
+  @extend %error-icon-outer;
+
+  top: calc(50% - 10px);
+}

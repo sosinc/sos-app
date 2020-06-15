@@ -1,10 +1,9 @@
 @import 'src/scss/lib';
 
-.container {
-  color: $color-text-dim2;
-  padding: 2em;
-  text-align: left;
-  width: 55%;
+.organization {
+  margin-top: 48px;
+  width: 100%;
+
 
   @media(max-width: $md) {
     margin-top: 100px;
@@ -15,46 +14,66 @@
   }
 }
 
-.content {
-  background: $color-select-active;
-  border-radius: 5px;
-  display: grid;
-  grid-auto-rows: minmax(2em, auto);
-  grid-column-gap: 1em;
-  grid-row-gap: 0;
-  grid-template-columns: 25% 25% 1fr;
-  height: 6em;
-  margin-top: 1em;
-  padding: 1em;
+
+.container {
+  align-items: center;
+  color: $color-text-bright1;
+  cursor: pointer;
+  display: flex;
+  margin: 0.5em auto;
+  max-width: 680px;
+  padding: 5px;
+
+  text-align: left;
+
+  &:hover {
+    background: $color-select-active;
+    border: 0;
+    border-radius: 5px;
+  }
 }
 
-.section1 {
-  display: grid;
-  grid-auto-rows: minmax(1em, auto);
-  grid-column: 1;
-  grid-column-gap: 1em;
-  grid-row: 1;
-  grid-row-gap: 8px;
-  grid-template-columns: 30% 1fr;
-  grid-template-rows: 26px 26px;
-}
-
-.logo {
+.brand {
+  $size: 24px;
   border: 1px solid $color-text-dim3;
   border-radius: 50%;
-  grid-column: 1;
-  grid-row: 1/3;
-  height: 100%;
-  object-fit: cover;
-  width: 100%;
+  height: $size;
+  width: $size;
+}
+
+.fallback-brand {
+  $size: 24px;
+  @extend %button-primary;
+
+  align-items: center;
+  border-radius: 50%;
+  display: flex;
+  height: $size;
+  justify-content: center;
+  padding: 0;
+  width: $size;
+
+  .fallback-icon {
+    font-size: 10px;
+  }
+}
+
+.organization-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
 }
 
 .name {
   color: $color-text-primary;
-  font-size: 1em;
-  grid-column: 2;
-  grid-row: 1;
+  font-size: 1.1em;
   overflow: hidden;
+  padding-bottom: 3px;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.count {
+  color: $color-text-dim2;
+  font-size: 10px;
 }

@@ -29,9 +29,3 @@
     @extend %input-form;
   }
 }
-
-.error-icon {
-
-  @extend %error-icon-outer;
-  top: calc(50% - 10px);
-}

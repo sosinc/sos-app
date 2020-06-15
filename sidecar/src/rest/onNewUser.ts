@@ -25,7 +25,7 @@ api.post("/on-new-user", async (req, res) => {
   userLogin.user_id = user.new.id;
   await userLoginRepo.save(userLogin);
 
-  res.status(201).send();
+  return res.status(201).send();
 });
 
 export default api;

@@ -9,17 +9,31 @@ interface Props {
   organizations: Organization[];
 }
 
-const OrgItem: React.FC<Organization> = (p) => (
-  <div className={c('content')} key={p.id}>
-    <div className={c('section1')}>
-      <img className={c('logo')} src={p.square_logo} />
-      <span className={c('name')}>{p.name}</span>
+const OrgLogo: React.FC<{ organization: Organization }> = ({ organization: o }) => {
+  const firstLetter = o.name[0].toUpperCase();
+  if (o.square_logo) {
+    return <img className={c('brand')} src={o.square_logo} />;
+  }
+
+  return (
+    <div className={c('fallback-brand')}>
+      <span className={c('fallback-icon')}>{firstLetter}</span>
+    </div>
+  );
+};
+
+const OrgItem: React.FC<Organization> = (o) => (
+  <div className={c('container')} key={o.id}>
+    <OrgLogo organization={o} />
+    <div className={c('organization-container')}>
+      <span className={c('name')}>{o.name}</span>
+      <span className={c('count')}>{o.employees_count} Employees</span>
     </div>
   </div>
 );
 
 const List: React.FC<Props> = (p) => {
-  return <div className={c('container')}>{p.organizations.map(OrgItem)}</div>;
+  return <div className={c('organization')}>{p.organizations.map(OrgItem)}</div>;
 };
 
 export default List;
