@@ -17,6 +17,10 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface SendOTPPayload {
+  email: string;
+}
+
 export const login = async (payload: LoginPayload): Promise<User> => {
   const query = `
     mutation($email: String!, $password: String!) {
@@ -40,4 +44,15 @@ export const fetchCurrentUser = async (): Promise<User> => {
   const data = await client.request(query);
 
   return data.me?.length ? data.me[0] : undefined;
+};
+
+export const sendPasswordResetOTP = async (payload: SendOTPPayload): Promise<undefined> => {
+  const query = `
+    mutation($email: String!) {
+      sendPasswordResetOtp(email: $email)
+    }
+  `;
+  const data = await client.request(query, payload);
+
+  return data ? data.sendPasswordResetOtp : undefined;
 };

@@ -2,9 +2,11 @@ import classNames from 'classnames/bind';
 import { Formik, FormikProps } from 'formik';
 import { useState } from 'react';
 import { FaAngleLeft } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 
 import TextField from 'src/components/Form/TextField';
+import { sendPasswordResetOTP } from 'src/duck/auth';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -12,6 +14,7 @@ const c = classNames.bind(style);
 const ResetPassword: React.FC<FormikProps<ResetFormValues>> = (props) => {
   const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
 
+  const dispatch = useDispatch();
   /*
    * Field in step2 need to be marked untouch by hand for some reason.
    * Otherwise formik says step2 is invalid even when the user hasn't even
@@ -25,6 +28,7 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues>> = (props) => {
   const gotoNextStep = () => {
     // Cannot use validateField because of formik issue: https://github.com/jaredpalmer/formik/issues/2291
     if (formStep === 'step1' && props.values.email.length && !props.errors.email) {
+      dispatch(sendPasswordResetOTP({ email: props.values.email }));
       setFormStep('step2');
       untouchStep2();
       return;
