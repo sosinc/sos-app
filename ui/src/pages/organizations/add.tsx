@@ -99,6 +99,7 @@ export default () => {
       if (/uniqueness violation/i.test(err.message)) {
         actions.setFieldError('name', 'An organization with same name already exists');
       }
+      // tslint:disable-next-line:no-console
       console.error('Something went wrong');
     }
   };
