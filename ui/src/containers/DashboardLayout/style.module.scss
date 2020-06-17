@@ -95,6 +95,27 @@
   .row-text {
     color: $color-text-primary;
     margin-left: 7px;
+    margin-right: 7px;
+  }
+
+  .row-icon {
+    margin-right: 5px;
+  }
+
+  .sub-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sub-option {
+    cursor: pointer;
+    margin-left: 15px;
+    padding: 5px;
+    width: 100%;
+
+    &:hover {
+      background: $color-select-active;
+    }
   }
 
   .footer {
