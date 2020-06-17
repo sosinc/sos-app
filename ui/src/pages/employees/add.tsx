@@ -139,7 +139,9 @@ const initialValues = {
 const validationSchema = Yup.object().shape({
   designation_id: Yup.string().required('Required'),
   ecode: Yup.string().required('Required'),
-  email: Yup.string().email().required('Required'),
+  email: Yup.string()
+    .email()
+    .required('Required'),
   headshot: Yup.string(),
   name: Yup.string()
     .min(2, 'Must be 2 characters or more')

@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 
 import TextField from 'src/components/Form/TextField';
-import { fetchCurrentUser, sendPasswordResetOTP, resetPassword } from 'src/duck/auth';
+import { fetchCurrentUser, resetPassword, sendPasswordResetOTP } from 'src/duck/auth';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -111,9 +111,15 @@ const initialValues = {
 };
 
 const validationSchema = Yup.object({
-  email: Yup.string().email('Invalid email address').required('Required'),
-  otp: Yup.string().min(4, 'Must be 4 or more').required('Required'),
-  password: Yup.string().max(15, 'Must be 15 characters or less').required('Required'),
+  email: Yup.string()
+    .email('Invalid email address')
+    .required('Required'),
+  otp: Yup.string()
+    .min(4, 'Must be 4 or more')
+    .required('Required'),
+  password: Yup.string()
+    .max(15, 'Must be 15 characters or less')
+    .required('Required'),
 });
 
 export default () => (
