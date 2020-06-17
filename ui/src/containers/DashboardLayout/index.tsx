@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import Head from 'next/head';
 import Link from 'next/link';
 import { FaUsers } from 'react-icons/fa';
-import { MdBusiness, MdMoreHoriz, MdFolder } from 'react-icons/md';
+import { MdBusiness, MdFolder, MdMoreHoriz } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
 import WithUser from 'src/containers/WithUser';
