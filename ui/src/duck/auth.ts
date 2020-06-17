@@ -4,8 +4,9 @@ import {
   fetchCurrentUser as apiFetchCurrentUser,
   login,
   LoginPayload,
-  SendOTPPayload,
-  sendPasswordResetOTP as apiPasswordResetOTP,
+  resetPassword as apiResetPassword,
+  ResetPasswordPayload,
+  sendPasswordResetOTP as apiResetPasswordOTP,
   User,
 } from 'src/entities/User';
 
@@ -14,12 +15,6 @@ export interface AuthState {
   error?: string;
   isLoggingIn: boolean;
   isFetchingUser: boolean;
-}
-
-export interface PasswordResetOTP {
-  email: string;
-  error?: string;
-  isOTPSent: boolean;
 }
 
 export const loginUser = createAsyncThunk<
@@ -36,11 +31,15 @@ export const fetchCurrentUser = createAsyncThunk<
   { rejectValue: Error; state: AuthState }
 >('auth/fetchCurrentUser', apiFetchCurrentUser);
 
-export const sendPasswordResetOTP = createAsyncThunk<
-  undefined,
-  SendOTPPayload,
-  { rejectValue: Error; state: PasswordResetOTP }
->('auth/sendPasswordResetOTP', apiPasswordResetOTP);
+export const sendPasswordResetOTP = createAsyncThunk<undefined, string>(
+  'auth/sendPasswordResetOTP',
+  apiResetPasswordOTP,
+);
+
+export const resetPassword = createAsyncThunk<undefined, ResetPasswordPayload>(
+  'auth/resetPassword',
+  apiResetPassword,
+);
 
 const initialState: AuthState = {
   isFetchingUser: true,

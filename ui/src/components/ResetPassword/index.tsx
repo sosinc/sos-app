@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 
 import TextField from 'src/components/Form/TextField';
-import { sendPasswordResetOTP } from 'src/duck/auth';
+import { fetchCurrentUser, sendPasswordResetOTP, resetPassword } from 'src/duck/auth';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -28,12 +28,14 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues>> = (props) => {
   const gotoNextStep = () => {
     // Cannot use validateField because of formik issue: https://github.com/jaredpalmer/formik/issues/2291
     if (formStep === 'step1' && props.values.email.length && !props.errors.email) {
-      dispatch(sendPasswordResetOTP({ email: props.values.email }));
+      dispatch(sendPasswordResetOTP(props.values.email));
       setFormStep('step2');
       untouchStep2();
       return;
     }
 
+    dispatch(resetPassword({ newPassword: props.values?.password, otp: props.values?.otp }));
+    dispatch(fetchCurrentUser());
     props.handleSubmit();
   };
 

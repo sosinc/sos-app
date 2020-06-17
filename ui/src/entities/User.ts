@@ -17,8 +17,9 @@ export interface LoginPayload {
   password: string;
 }
 
-export interface SendOTPPayload {
-  email: string;
+export interface ResetPasswordPayload {
+  newPassword: string;
+  otp: string;
 }
 
 export const login = async (payload: LoginPayload): Promise<User> => {
@@ -46,13 +47,26 @@ export const fetchCurrentUser = async (): Promise<User> => {
   return data.me?.length ? data.me[0] : undefined;
 };
 
-export const sendPasswordResetOTP = async (payload: SendOTPPayload): Promise<undefined> => {
+export const sendPasswordResetOTP = async (email: string): Promise<undefined> => {
   const query = `
     mutation($email: String!) {
       sendPasswordResetOtp(email: $email)
     }
   `;
+  const data = await client.request(query, { email });
+
+  return data?.sendPasswordResetOtp;
+};
+
+export const resetPassword = async (payload: ResetPasswordPayload): Promise<undefined> => {
+  const query = `
+    mutation($newPassword: String!, $otp: String!) {
+      resetPassword(newPassword: $newPassword, otp: $otp) {
+        id
+      }
+    }
+  `;
   const data = await client.request(query, payload);
 
-  return data ? data.sendPasswordResetOtp : undefined;
+  return data?.resetPassword?.id;
 };
