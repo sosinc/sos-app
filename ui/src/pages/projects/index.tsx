@@ -12,7 +12,7 @@ const c = classNames.bind(style);
 const Header: React.FC = () => (
   <div className={c('header')}>
     Projects
-    <Link href="/projects">
+    <Link href="/projects/add">
       <a className={c('add-button')} title="Add project">
         <MdAdd className={c('icon')} />
       </a>
@@ -30,7 +30,7 @@ const Index = () => {
           Icon={MdFolder}
           message="No Projects found"
           addItemText="Add a project"
-          addItemUrl="/projects"
+          addItemUrl="/projects/add"
         />
       </div>
     );
