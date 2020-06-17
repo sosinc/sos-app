@@ -61,6 +61,7 @@ tables:
       - organization_id
       - user_id
       filter: {}
+      allow_aggregations: true
   - role: user
     permission:
       columns:

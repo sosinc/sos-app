@@ -8,14 +8,14 @@
 
 import { User } from "./entity/User.entity";
 
-const createAdminUsers = async () => {
+const createAdminUsers = async (): Promise<any> => {
   const adminEmails = (process.env.SOS_ADMIN_EMAILS || "")
     .split(",")
     .map(e => e.trim().toLowerCase())
     .filter(Boolean);
 
   if (!adminEmails.length) {
-    return;
+    return null;
   }
 
   const userRepo = User.getRepository();

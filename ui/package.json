@@ -7,6 +7,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
+    "typecheck": "tsc --noEmit",
     "lint-styles": "stylelint 'src/**/*.scss'",
     "fmt-styles": "yarn lint-styles --fix",
     "lint": "yarn tslint --project . && yarn lint-styles",
@@ -44,7 +45,7 @@
     "yup": "^0.28.5"
   },
   "devDependencies": {
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.5",
     "prettier-tslint": "^0.4.2",
     "stylelint": "^13.6.0",
     "stylelint-config-sass-guidelines": "^7.0.0",

@@ -8,9 +8,7 @@ import bodyParser from "body-parser";
 import connectRedis from "connect-redis";
 import session from "express-session";
 import cors from "cors";
-import Tokens from "csrf";
 import cookieParser from "cookie-parser";
-import csrf from "csurf";
 import useragent from "express-useragent";
 import redis from "redis";
 import express, { Request, Response, Express } from "express";
@@ -25,6 +23,8 @@ import * as config from "./config";
 import { ResolverContext } from "./lib/types";
 import ApiRoutes from "./rest";
 import seed from "./seed";
+import StorageRoutes from "./storage";
+import { init as initStorage } from "./storage/client";
 
 // Set timezone of server to UTC
 // BE CAREFUL, THIS IS NOT ENOUGH. ALWAYS RUN YOUR SCRIPTS WITH TZ=UTC
@@ -33,16 +33,6 @@ process.env.TZ = "UTC";
 const createApp = async () => {
   const RedisStore = connectRedis(session);
   const redisClient = redis.createClient(config.REDISCLOUD_SESSION_URL);
-
-  // Handle CSRF on DEV
-  let enableCSRF = true;
-  if (config.NODE_ENV === "development") {
-    // Disable CSRF on development
-    enableCSRF = false;
-  } else if (config.isProduction) {
-    // Enable CSRF on production
-    enableCSRF = false;
-  }
 
   try {
     // Set Up Express
@@ -83,21 +73,6 @@ const createApp = async () => {
       unset: "destroy",
     });
     app.use(sessionHandler);
-
-    // CSRF
-    let csrfHandler: express.RequestHandler | null = null;
-    let csrfTokens: Tokens | null = null;
-
-    // Set up CSRF
-    if (enableCSRF) {
-      // Initialize CSRF middleware handler
-      csrfHandler = csrf();
-
-      // Initialize custom token checking
-      csrfTokens = new Tokens();
-
-      app.use(csrfHandler);
-    }
 
     return app;
   } catch (err) {
@@ -153,22 +128,40 @@ const createRestApp = async (parentApp: Express) => {
   return app;
 };
 
+const createStorageApp = async (parentApp?: Express) => {
+  const app = parentApp || (await createApp());
+
+  app.use("/v1/storage", StorageRoutes);
+
+  return app;
+};
+
 const run = async () => {
   await createDbConnection();
 
-  const app = await createApp();
+  const internalApp = await createApp();
 
-  await createGraphqlApp(app);
-  const restApp = await createRestApp(app);
+  await createGraphqlApp(internalApp);
+  await createRestApp(internalApp);
 
-  seed().catch((err) => {
-    console.error('Failed to Seed', err);
+  seed().catch(err => {
+    console.error("Failed to Seed", err);
   });
 
   const port = process.env.PORT || 4000;
 
-  restApp.listen(port, () => {
+  internalApp.listen(port, () => {
     console.info(`🚀 Server ready at http://localhost:${port}`);
+  });
+
+  // Storage app exposed externally as well
+  const storageApp = await createStorageApp();
+  const storagePort = process.env.STORAGE_PORT || 9000;
+  console.info("Initializing storage");
+  await initStorage();
+
+  storageApp.listen(storagePort, () => {
+    console.info(`Storage API ready at http://localhost:${storagePort}`);
   });
 };
 

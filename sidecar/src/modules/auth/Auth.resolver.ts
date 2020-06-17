@@ -2,12 +2,10 @@ import { Resolver, Mutation, Arg, Query, Ctx, Authorized } from "type-graphql";
 import { InjectRepository } from "typeorm-typedi-extensions";
 import { compare, hash } from "bcrypt";
 import { Repository } from "typeorm";
-import { AuthenticationError } from "apollo-server-errors";
+import mail from "../../lib/mail";
 import { User } from "../../entity/User.entity";
 import { ResolverContext } from "../../lib/types";
 import ServerError from "../../lib/ServerError";
-import { CurrentUser } from "../../lib/middleware/currentUser";
-import mail from "../../lib/mail";
 import makeRandom from "../../lib/makeRandom";
 import { UserLogin } from "../../entity/UserLogin.entity";
 
@@ -62,7 +60,10 @@ export class AuthResolver {
         });
       }
 
-      if (user && session) session.user = user;
+      if (user && session) {
+        // eslint-disable-next-line no-param-reassign
+        session.user = user;
+      }
 
       return user;
     } catch (error) {

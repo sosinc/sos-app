@@ -66,9 +66,3 @@
     background: $color-error-bg;
   }
 }
-
-.error-icon {
-  @extend %error-icon-outer;
-
-  top: 5%;
-}

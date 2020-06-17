@@ -74,3 +74,22 @@ Following must be installed:
   #+begin_src sh
     hasura console
   #+end_src
+
+5. Add =minio= to your hosts
+
+  Open =/etc/hosts= file, and at the end, add this entry:
+
+  #+begin_src sh
+  127.0.0.1   minio
+  #+end_src
+
+  #+begin_quote
+  *Why tho?*
+
+  We are using [[https://docs.minio.io/][minio]] to mimic S3 locally (and will use it in production as
+  well). File-upload flow return signed URLs from minio to which client can
+  directly upload. These URLs include minio hostname in the signature. Because
+  of this requirement, I couldn't replace =minio= with =localhost=. This was the
+  quickest solution. We should find a better solution for this. If you have an
+  idea, please feel free to take a shot.
+  #+end_quote
