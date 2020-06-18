@@ -154,13 +154,11 @@ const validationSchema = Yup.object().shape({
 });
 
 export default () => {
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
     actions.setSubmitting(true);
-    console.warn('---', values);
-    //const resp = await dispatch(createEmployee(values));
-    const resp = null;
+    const resp = await dispatch(values);
 
     actions.setSubmitting(false);
 
