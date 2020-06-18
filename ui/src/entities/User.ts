@@ -43,8 +43,8 @@ export const fetchCurrentUser = async (): Promise<User> => {
 
   return data.me?.length
     ? {
-      ...data.me[0],
-      avatar: resolveStorageFile(data.me[0].avatar),
-    }
+        ...data.me[0],
+        avatar: resolveStorageFile(data.me[0].avatar),
+      }
     : undefined;
 };

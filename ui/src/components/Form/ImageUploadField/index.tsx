@@ -4,10 +4,10 @@ import { ChangeEvent, useState } from 'react';
 import { MdFileUpload } from 'react-icons/md';
 
 import ErrorMessage from 'src/components/Form/ErrorMessage';
+import resolveStorageFile from 'src/utils/resolveStorageFile';
 import uploadFile from 'src/utils/uploadFile';
 
 import styles from './style.module.scss';
-import resolveStorageFile from 'src/utils/resolveStorageFile';
 
 const c = classNames.bind(styles);
 
@@ -69,8 +69,8 @@ const ImageUploadField: React.FC<Props & { formik: FormikContextType<{}> }> = ({
     inputProps.value ? (
       <ImagePreviewField image={resolveStorageFile(inputProps.value)} />
     ) : (
-        <Placeholder isUploading={isUploading} />
-      );
+      <Placeholder isUploading={isUploading} />
+    );
 
   return (
     <div className={containerClass}>

@@ -61,8 +61,8 @@ export const fetchMany = async (): Promise<Employee[]> => {
 
   return data?.employees.length
     ? data.employees.map((e: any) => ({
-      ...e,
-      headshot: resolveStorageFile(e.headshot),
-    }))
+        ...e,
+        headshot: resolveStorageFile(e.headshot),
+      }))
     : [];
 };
