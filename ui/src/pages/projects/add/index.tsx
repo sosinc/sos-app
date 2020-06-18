@@ -12,6 +12,7 @@ import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
 import { fetchOrganization, OrganizationState } from 'src/duck/organization';
+import { createProject } from 'src/duck/project';
 
 import style from './style.module.scss';
 
@@ -149,8 +150,8 @@ const validationSchema = Yup.object().shape({
     .min(2, 'Must be 2 characters or more')
     .max(16, 'Must be 16 characters or less')
     .required('Required'),
-  organization_id: Yup.string(),
-  pr_link_template: Yup.string().required('Required'),
+  organization_id: Yup.string().required('Required'),
+  pr_link_template: Yup.string(),
 });
 
 export default () => {
@@ -158,7 +159,7 @@ export default () => {
 
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
     actions.setSubmitting(true);
-    const resp = await dispatch(values);
+    const resp = await dispatch(createProject(values));
 
     actions.setSubmitting(false);
 

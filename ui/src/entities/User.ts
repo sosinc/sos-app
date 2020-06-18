@@ -4,6 +4,7 @@ import client from 'src/lib/client';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
 import { Employee } from './Employee';
 import { Organization } from './Organizations';
+import { Project } from './Project';
 
 export interface Role {
   id: string;
@@ -38,7 +39,7 @@ export interface CurrentUserResponse {
   user: User;
   employees: Employee[];
   organizations: Organization[];
-  projects: any[];
+  projects: Project[];
 }
 
 /**
@@ -64,6 +65,7 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
             id
             name
             logo
+            organization_id
           }
         }
       }
