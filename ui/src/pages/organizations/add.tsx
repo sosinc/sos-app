@@ -87,6 +87,7 @@ export default () => {
   const dispatch = useDispatch();
 
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
+    console.warn('VALUES', values);
     actions.setSubmitting(true);
     const resp = await dispatch(createOrganization(values));
 
