@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux';
 import WithUser from 'src/containers/WithUser';
 import { RootState } from 'src/duck';
 import { AuthState } from 'src/duck/auth';
+import { EmployeeState } from 'src/duck/employee';
+import { ProjectState } from 'src/duck/project';
 
 import style from './style.module.scss';
 const c = classNames.bind(style);
@@ -16,12 +18,6 @@ interface LayoutProps {
   title: string;
   Header: React.FC;
 }
-
-const projects = [
-  { id: '1', name: 'Project1' },
-  { id: '2', name: 'Project2' },
-  { id: '3', name: 'Project3' },
-];
 
 const adminSection = (
   <>
@@ -42,29 +38,36 @@ const adminSection = (
   </>
 );
 
-const dropdownOptions = (item: any) => {
+const project = (item: any) => {
   return (
-    <span className={c('sub-option')} data-name={item.name} key={item.id}>
-      {item.name}
-    </span>
+    <Link href="/projects" key={item.id}>
+      <div className={c('row')}>
+        <MdFolder />
+        <span className={c('row-text')}>{item.name}</span>
+      </div>
+    </Link>
   );
 };
 
-const userSection = (
-  <>
-    <div className={c('header-row')}>
-      <MdFolder className={c('row-icon')} />
-      Projects
-    </div>
-    <Link href="/projects">
-      <div className={c('sub-container')}>{projects.map((p) => dropdownOptions(p))}</div>
-    </Link>
-  </>
-);
-
 const Index: React.FC<LayoutProps> = (p) => {
-  const { user } = useSelector<RootState, AuthState>((state) => state.auth);
+  const { user, activeEmployeeId } = useSelector<RootState, AuthState>((state) => state.auth);
   const role = user?.role.id;
+
+  const { projects } = useSelector<RootState, ProjectState>((state) => state.projects);
+  const { employees } = useSelector<RootState, EmployeeState>((state) => state.employees);
+  const orgId = activeEmployeeId?.length
+    ? employees.find((e) => e.ecode === activeEmployeeId)
+    : null;
+  const userProjects = projects.length
+    ? projects.filter((pro) => pro.organization_id === orgId?.organization_id)
+    : [];
+
+  const userSection = (
+    <>
+      <div className={c('header-row')}> Projects</div>
+      {userProjects.map((pro) => project(pro))}
+    </>
+  );
 
   return (
     <WithUser inverted={false} redirectPath="/">
@@ -79,7 +82,12 @@ const Index: React.FC<LayoutProps> = (p) => {
               <img className={c('logo-image')} src="/assets/images/sos-logo.svg" alt="o" />
             </Link>
             <div className={c('avatar-container')}>
-              <img className={c('pic')} src="/assets/images/avatar.svg" alt="pic" />
+              <img
+                className={c('pic')}
+                src="/assets/images/avatar.svg"
+                alt="pic"
+                title={user?.name}
+              />
               <span className={c('online-status')} />
             </div>
 
