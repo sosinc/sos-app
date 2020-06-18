@@ -1,6 +1,7 @@
 import 'cross-fetch/polyfill';
 
 import client from 'src/lib/client';
+import resolveStorageFile from 'src/utils/resolveStorageFile';
 
 export interface Role {
   id: string;
@@ -10,6 +11,7 @@ export interface Role {
 export interface User {
   email: string;
   role: Role;
+  avatar?: string;
 }
 
 export interface LoginPayload {
@@ -39,5 +41,10 @@ export const fetchCurrentUser = async (): Promise<User> => {
 
   const data = await client.request(query);
 
-  return data.me?.length ? data.me[0] : undefined;
+  return data.me?.length
+    ? {
+      ...data.me[0],
+      avatar: resolveStorageFile(data.me[0].avatar),
+    }
+    : undefined;
 };

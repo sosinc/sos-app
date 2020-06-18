@@ -1,6 +1,7 @@
 import 'cross-fetch/polyfill';
 
 import client from 'src/lib/client';
+import resolveStorageFile from 'src/utils/resolveStorageFile';
 
 export interface Employee {
   ecode: string;
@@ -58,5 +59,10 @@ export const fetchMany = async (): Promise<Employee[]> => {
 
   const data = await client.request(query);
 
-  return data?.employees.length ? data.employees : [];
+  return data?.employees.length
+    ? data.employees.map((e: any) => ({
+      ...e,
+      headshot: resolveStorageFile(e.headshot),
+    }))
+    : [];
 };

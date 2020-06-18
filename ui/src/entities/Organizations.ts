@@ -1,6 +1,7 @@
 import 'cross-fetch/polyfill';
 
 import client from 'src/lib/client';
+import resolveStorageFile from 'src/utils/resolveStorageFile';
 
 export interface Organization {
   id: string;
@@ -50,10 +51,12 @@ export const fetchMany = async (): Promise<Organization[]> => {
 
   const data = await client.request(query);
 
-  const organizations = data?.organizations.map((org: any) => {
+  const organizations: Organization[] = data?.organizations.map((org: any) => {
     return {
       ...org,
+      banner: resolveStorageFile(org.banner),
       employees_count: org?.employees_agregate?.aggregate?.count || 0,
+      square_logo: resolveStorageFile(org.square_logo),
     };
   });
 

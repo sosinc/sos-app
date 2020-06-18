@@ -3,8 +3,8 @@ import { connect, FormikContextType, getIn } from 'formik';
 import { ChangeEvent, useState } from 'react';
 import { MdFileUpload } from 'react-icons/md';
 
-import uploadFile from 'src/utils/uploadFile';
 import ErrorMessage from 'src/components/Form/ErrorMessage';
+import uploadFile from 'src/utils/uploadFile';
 
 import styles from './style.module.scss';
 
