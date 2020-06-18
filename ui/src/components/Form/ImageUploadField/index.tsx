@@ -7,6 +7,7 @@ import ErrorMessage from 'src/components/Form/ErrorMessage';
 import uploadFile from 'src/utils/uploadFile';
 
 import styles from './style.module.scss';
+import resolveStorageFile from 'src/utils/resolveStorageFile';
 
 const c = classNames.bind(styles);
 
@@ -24,7 +25,7 @@ const Placeholder: React.FC<{ isUploading: boolean }> = (p) => (
   </div>
 );
 
-const ImagePreviewField = ({ image }: { image: string }) => (
+const ImagePreviewField = ({ image }: { image?: string }) => (
   <img className={c('preview-image')} src={image} alt="org-image" />
 );
 
@@ -37,7 +38,6 @@ const ImageUploadField: React.FC<Props & { formik: FormikContextType<{}> }> = ({
   const inputProps = formik.getFieldProps(p.name);
 
   const [isUploading, setIsUploading] = useState<boolean>(false);
-  const [previewImage, setPreviewImage] = useState<string>('');
   const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   const containerClass = c('upload-logo-container', p.className, {
@@ -57,9 +57,6 @@ const ImageUploadField: React.FC<Props & { formik: FormikContextType<{}> }> = ({
         setUploadProgress(progress);
       });
 
-      const url = URL.createObjectURL(file);
-      setPreviewImage(url);
-
       formik.setFieldValue(p.name, uploadedFilePath);
     } catch (err) {
       formik.setFieldError(p.name, err?.message || 'Upload Failed');
@@ -69,8 +66,8 @@ const ImageUploadField: React.FC<Props & { formik: FormikContextType<{}> }> = ({
   };
 
   const Content = () =>
-    previewImage ? (
-      <ImagePreviewField image={previewImage} />
+    inputProps.value ? (
+      <ImagePreviewField image={resolveStorageFile(inputProps.value)} />
     ) : (
         <Placeholder isUploading={isUploading} />
       );
