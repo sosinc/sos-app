@@ -78,7 +78,7 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
 
           <div className={c('logo', 'field-container')}>
             <span className={c('field-title')}>Head Shot</span>
-            <ImageUploadField className={'image-container'} type={'file'} name="headShot" />
+            <ImageUploadField className={'image-container'} type={'file'} name="headshot" />
           </div>
 
           <div className={c('right-container')}>

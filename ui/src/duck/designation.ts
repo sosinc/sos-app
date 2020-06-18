@@ -9,9 +9,9 @@ export interface DesignationState {
 
 export const fetchDesignation = createAsyncThunk<
   Designation[],
-undefined,
-{ rejectValue: Error; state: DesignationState }
-  >('designations/fetchMany', fetchMany);
+  undefined,
+  { rejectValue: Error; state: DesignationState }
+>('designations/fetchMany', fetchMany);
 
 const initialState: DesignationState = {
   designation: [],
@@ -28,7 +28,6 @@ export default createSlice({
       state.isFetching = false;
       state.designation = payload;
     });
-
   },
   initialState,
   name: 'designations',

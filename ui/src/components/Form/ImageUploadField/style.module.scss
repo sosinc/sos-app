@@ -66,3 +66,15 @@
     background: $color-error-bg;
   }
 }
+
+.progress-bar {
+  animation: progress 2s ease infinite;
+  background: $color-cta;
+
+  display: none;
+  height: 2px;
+
+  &.is-active {
+    display: block;
+  }
+}
