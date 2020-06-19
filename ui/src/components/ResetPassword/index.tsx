@@ -6,15 +6,13 @@ import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 
 import TextField from 'src/components/Form/TextField';
-import { fetchCurrentUser, resetPassword, sendPasswordResetOTP } from 'src/duck/auth';
+import { fetchCurrentUser, resetPassword } from 'src/duck/auth';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
-const ResetPassword: React.FC<FormikProps<ResetFormValues>> = (props) => {
+const ResetPassword: React.FC<FormikProps<ResetFormValues> & Props> = (props) => {
   const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
-
-  const dispatch = useDispatch();
   /*
    * Field in step2 need to be marked untouch by hand for some reason.
    * Otherwise formik says step2 is invalid even when the user hasn't even
@@ -28,15 +26,11 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues>> = (props) => {
   const gotoNextStep = () => {
     // Cannot use validateField because of formik issue: https://github.com/jaredpalmer/formik/issues/2291
     if (formStep === 'step1' && props.values.email.length && !props.errors.email) {
-      dispatch(sendPasswordResetOTP(props.values.email));
+      props.onSendOtp(props.values.email);
       setFormStep('step2');
       untouchStep2();
       return;
     }
-
-    dispatch(resetPassword({ newPassword: props.values?.password, otp: props.values?.otp }));
-    dispatch(fetchCurrentUser());
-    props.handleSubmit();
   };
 
   const gotoStep1 = () => {
@@ -99,11 +93,6 @@ interface ResetFormValues {
   otp: string;
 }
 
-const handleSubmit = (values: object, actions: object) => {
-  // tslint:disable-next-line:no-console
-  console.warn('SUBMITTING', values, actions);
-};
-
 const initialValues = {
   email: '',
   otp: '',
@@ -122,8 +111,27 @@ const validationSchema = Yup.object({
     .required('Required'),
 });
 
-export default () => (
-  <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-    {ResetPassword}
-  </Formik>
-);
+interface Props {
+  onSendOtp: (email: string) => void;
+}
+
+const ResetPasswordForm: React.FC<Props> = (p) => {
+  const dispatch = useDispatch();
+
+  const handleSubmit = (values: ResetFormValues) => {
+    dispatch(resetPassword({ newPassword: values.password, otp: values.otp }));
+    dispatch(fetchCurrentUser());
+  };
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {(formikProps) => ResetPassword({ ...formikProps, onSendOtp: p.onSendOtp })}
+    </Formik>
+  );
+};
+
+export default ResetPasswordForm;

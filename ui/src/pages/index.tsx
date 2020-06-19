@@ -1,21 +1,30 @@
 import classNames from 'classnames/bind';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import ResetPassword from 'src/components/ResetPassword';
 import FullPageLayout from 'src/components/FullPageLayout';
 import LoginForm from 'src/components/LoginForm';
 import WithUser from 'src/containers/WithUser';
-import { loginUser } from 'src/duck/auth';
+import { loginUser, sendPasswordResetOTP } from 'src/duck/auth';
 
+import Modal from 'src/components/Modal';
 import style from './index.module.scss';
+
 const c = classNames.bind(style);
 
 const Index = () => {
   const dispatch = useDispatch();
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const handleLogin = (values: any) => {
     dispatch(loginUser(values));
+  };
+
+  const handleSendOtp = (email: string) => {
+    dispatch(sendPasswordResetOTP(email));
   };
 
   return (
@@ -58,8 +67,11 @@ const Index = () => {
             </p>
           </span>
 
-          <LoginForm onSubmit={handleLogin} />
+          <LoginForm onSubmit={handleLogin} onResetPassword={() => setModalOpen(true)} />
         </div>
+        <Modal onClose={() => setModalOpen(false)} isOpen={isModalOpen}>
+          <ResetPassword onSendOtp={handleSendOtp} />
+        </Modal>
       </FullPageLayout>
     </WithUser>
   );
