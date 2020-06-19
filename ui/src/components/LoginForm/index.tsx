@@ -5,17 +5,14 @@ import { FaAngleLeft } from 'react-icons/fa';
 import * as Yup from 'yup';
 
 import TextField from 'src/components/Form/TextField';
-import Modal from 'src/components/Modal';
-import ResetPassword from 'src/components/ResetPassword';
 import hasFormError from 'src/lib/hasFormError';
 
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
-const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
+const Login: React.FC<FormikProps<LoginFormValues> & { onResetPassword: () => void }> = (props) => {
   const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
-  const [isModalOpen, setModalOpen] = useState(false);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   /*
@@ -47,10 +44,6 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
   const gotoStep1 = () => {
     setFormStep('step1');
     untouchStep2();
-  };
-
-  const handleModal = () => {
-    setModalOpen(false);
   };
 
   const formHasError = hasFormError(props);
@@ -89,12 +82,9 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
           </button>
         </form>
         <div className={c('reset-password-text')}>
-          <span onClick={() => setModalOpen(true)}>Reset password</span>
+          <span onClick={props.onResetPassword}>Reset password</span>
         </div>
       </div>
-      <Modal onClose={handleModal} isOpen={isModalOpen}>
-        <ResetPassword />
-      </Modal>
     </div>
   );
 };
@@ -118,10 +108,15 @@ const initialValues = {
   password: '',
 };
 
-const OuterForm: React.FC<{ onSubmit: (values: LoginFormValues) => void }> = (p) => {
+interface LoginProps {
+  onSubmit: (values: LoginFormValues) => void;
+  onResetPassword: () => void;
+}
+
+const OuterForm: React.FC<LoginProps> = (p) => {
   return (
     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={p.onSubmit}>
-      {Login}
+      {(formikProps) => Login({ ...formikProps, onResetPassword: p.onResetPassword })}
     </Formik>
   );
 };
