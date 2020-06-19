@@ -2,9 +2,9 @@ import 'cross-fetch/polyfill';
 
 import client from 'src/lib/client';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
-import { Employee } from './Employee';
-import { Organization } from './Organizations';
-import { Project } from './Project';
+import { Employee } from '../Employee';
+import { Organization } from '../Organizations';
+import { Project } from '../Project';
 
 export interface Role {
   id: string;

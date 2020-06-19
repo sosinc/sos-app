@@ -16,6 +16,10 @@ import { createProject } from 'src/duck/project';
 
 import style from './style.module.scss';
 
+import { AuthState } from 'src/duck/auth';
+
+import { getUsersOrganizationId } from 'src/entities/User/selectors';
+
 const c = classNames.bind(style);
 
 const Header: React.FC = () => (
@@ -31,6 +35,11 @@ const Header: React.FC = () => (
 
 const AddProject: React.FC<FormikProps<FormValues>> = (p) => {
   const dispatch = useDispatch();
+
+  let userOrganizations = [];
+  const { user } = useSelector<RootState, AuthState>((state) => state.auth);
+  const orgId = getUsersOrganizationId();
+
   const { organizations, isFetching: isFetchingOrganizations } = useSelector<
     RootState,
     OrganizationState
@@ -43,6 +52,12 @@ const AddProject: React.FC<FormikProps<FormValues>> = (p) => {
   if (isFetchingOrganizations) {
     return <span>loading...</span>;
   }
+
+  if (user?.role.id === 'USER' && orgId) {
+    const org = organizations.find((o) => o.id === orgId);
+    userOrganizations = [org];
+  }
+  userOrganizations = organizations;
 
   return (
     <DashboardLayout title={'Projects - Snake Oil Software'} Header={Header}>
@@ -75,11 +90,6 @@ const AddProject: React.FC<FormikProps<FormValues>> = (p) => {
           </div>
 
           <div className={c('right-container')}>
-            <div className={c('logo-container', 'field-container')}>
-              <span className={c('field-title')}>Logo</span>
-              <ImageUploadField className={'image-container'} type={'file'} name="logo" />
-            </div>
-
             <div className={c('issue-link-container', 'field-container')}>
               <span className={c('field-title')}>Issue-Link-Template</span>
               <TextField
@@ -94,7 +104,7 @@ const AddProject: React.FC<FormikProps<FormValues>> = (p) => {
               <SelectField
                 className={'org-add-form'}
                 name="organization_id"
-                options={organizations}
+                options={userOrganizations}
                 autoSelectFirst={true}
               />
             </div>
@@ -124,7 +134,6 @@ const AddProject: React.FC<FormikProps<FormValues>> = (p) => {
 interface FormValues {
   description: string;
   issue_link_template: string;
-  logo: string;
   name: string;
   organization_id: string;
   pr_link_template: string;
@@ -134,7 +143,6 @@ interface FormValues {
 const initialValues = {
   description: '',
   issue_link_template: '',
-  logo: '',
   logo_square: '',
   name: '',
   organization_id: '',
@@ -144,7 +152,6 @@ const initialValues = {
 const validationSchema = Yup.object().shape({
   description: Yup.string(),
   issue_link_template: Yup.string(),
-  logo: Yup.string(),
   logo_square: Yup.string(),
   name: Yup.string()
     .min(2, 'Must be 2 characters or more')
