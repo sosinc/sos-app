@@ -1,3 +1,4 @@
+import 'cross-fetch/polyfill';
 import React from 'react';
 
 import 'src/scss/global.scss';

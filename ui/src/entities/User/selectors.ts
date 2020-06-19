@@ -1,22 +1,40 @@
 import { useSelector } from 'react-redux';
 
 import { RootState } from 'src/duck';
-import { AuthState } from 'src/duck/auth';
-import { EmployeeState } from 'src/duck/employee';
-import { ProjectState } from 'src/duck/project';
+import { Employee } from 'src/entities/Employee';
+import { Organization } from 'src/entities/Organizations';
+import { Project } from 'src/entities/Project';
+import { User } from '.';
 
-export const getUsersOrganizationId = () => {
-  const { activeEmployeeId } = useSelector<RootState, AuthState>((state) => state.auth);
-  const { employees } = useSelector<RootState, EmployeeState>((state) => state.employees);
+export interface CurrentUser extends User {
+  employee?: Employee;
+  projects?: Project[];
+  organization?: Organization;
+}
 
-  const emp = activeEmployeeId?.length ? employees.find((e) => e.ecode === activeEmployeeId) : null;
-  return emp?.organization_id ? emp.organization_id : null;
-};
+/**
+ * This function forcefully typecasts user to be non-nullable. It is developer's
+ * responsibility to use this only in such situations, where it is guaranteed
+ * that User exists e.g inside <WithUser>
+ */
+export const currentUser = (): CurrentUser => {
+  const {
+    auth: { activeEmployeeId, user },
+    employees: { employees },
+    organization: { organizations },
+    project: { projects: allProjects },
+  } = useSelector((state: RootState) => ({
+    auth: state.auth,
+    employees: state.employees,
+    organization: state.organization,
+    project: state.projects,
+  }));
 
-export const getUsersProjects = () => {
-  const orgId = getUsersOrganizationId();
-  const { projects } = useSelector<RootState, ProjectState>((state) => state.projects);
-  return projects.length && orgId
-    ? projects.filter((pro) => pro.organization_id === orgId)
+  const employee = employees.find((e) => e.ecode === activeEmployeeId);
+  const organization = organizations.find((o) => o.id === employee?.organization_id);
+  const projects = allProjects.length
+    ? allProjects.filter((p) => p.organization_id === organization?.id)
     : [];
+
+  return { ...(user as User), employee, organization, projects };
 };

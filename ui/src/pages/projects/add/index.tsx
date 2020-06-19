@@ -11,14 +11,12 @@ import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
-import { fetchOrganization, OrganizationState } from 'src/duck/organization';
+import { fetchOrganization } from 'src/duck/organization';
 import { createProject } from 'src/duck/project';
 
 import style from './style.module.scss';
 
-import { AuthState } from 'src/duck/auth';
-
-import { getUsersOrganizationId } from 'src/entities/User/selectors';
+import { currentUser } from 'src/entities/User/selectors';
 
 const c = classNames.bind(style);
 
@@ -34,16 +32,13 @@ const Header: React.FC = () => (
 );
 
 const AddProject: React.FC<FormikProps<FormValues>> = (p) => {
-  const dispatch = useDispatch();
-
+  const userData = currentUser();
   let userOrganizations = [];
-  const { user } = useSelector<RootState, AuthState>((state) => state.auth);
-  const orgId = getUsersOrganizationId();
 
-  const { organizations, isFetching: isFetchingOrganizations } = useSelector<
-    RootState,
-    OrganizationState
-  >((state) => state.organization);
+  const dispatch = useDispatch();
+  const {
+    organiztion: { organizations, isFetching: isFetchingOrganizations },
+  } = useSelector((state: RootState) => ({ organiztion: state.organization }));
 
   useEffect(() => {
     dispatch(fetchOrganization());
@@ -53,11 +48,11 @@ const AddProject: React.FC<FormikProps<FormValues>> = (p) => {
     return <span>loading...</span>;
   }
 
-  if (user?.role.id === 'USER' && orgId) {
-    const org = organizations.find((o) => o.id === orgId);
-    userOrganizations = [org];
-  }
   userOrganizations = organizations;
+
+  if (userData.role?.id === 'USER' && userData.organization) {
+    userOrganizations = userData.organization ? [userData.organization] : [];
+  }
 
   return (
     <DashboardLayout title={'Projects - Snake Oil Software'} Header={Header}>

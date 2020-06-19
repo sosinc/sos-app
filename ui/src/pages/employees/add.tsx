@@ -11,9 +11,9 @@ import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
-import { DesignationState, fetchDesignation } from 'src/duck/designation';
+import { fetchDesignation } from 'src/duck/designation';
 import { createEmployee } from 'src/duck/employee';
-import { fetchOrganization, OrganizationState } from 'src/duck/organization';
+import { fetchOrganization } from 'src/duck/organization';
 
 import style from './style.module.scss';
 
@@ -32,15 +32,13 @@ const Header: React.FC = () => (
 
 const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
   const dispatch = useDispatch();
-  const { organizations, isFetching: isFetchingOrganizations } = useSelector<
-    RootState,
-    OrganizationState
-  >((state) => state.organization);
-
-  const { designation, isFetching: isFetchingDesignations } = useSelector<
-    RootState,
-    DesignationState
-  >((state) => state.designations);
+  const {
+    organization: { organizations, isFetching: isFetchingOrganizations },
+    designation: { designation, isFetching: isFetchingDesignations },
+  } = useSelector((state: RootState) => ({
+    designation: state.designations,
+    organization: state.organization,
+  }));
 
   useEffect(() => {
     dispatch(fetchOrganization());

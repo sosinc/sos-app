@@ -3,12 +3,9 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { FaUsers } from 'react-icons/fa';
 import { MdBusiness, MdMoreHoriz } from 'react-icons/md';
-import { useSelector } from 'react-redux';
 
 import WithUser from 'src/containers/WithUser';
-import { RootState } from 'src/duck';
-import { AuthState } from 'src/duck/auth';
-import { getUsersProjects } from 'src/entities/User/selectors';
+import { currentUser } from 'src/entities/User/selectors';
 
 import FallbackIcon from 'src/containers/FallbackIcon';
 
@@ -53,15 +50,14 @@ const project = (item: any) => {
 };
 
 const Index: React.FC<LayoutProps> = (p) => {
-  const { user } = useSelector<RootState, AuthState>((state) => state.auth);
-  const role = user?.role.id;
-
-  const userProjects = getUsersProjects();
+  const user = currentUser();
+  const role = user.role?.id;
+  const projects = user.projects ? user.projects : [];
 
   const userSection = (
     <>
       <div className={c('header-row')}> Projects</div>
-      {userProjects.map((pro) => project(pro))}
+      {projects.map((pro) => project(pro))}
     </>
   );
 

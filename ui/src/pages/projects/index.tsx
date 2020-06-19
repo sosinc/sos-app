@@ -5,7 +5,7 @@ import { MdAdd, MdFolder } from 'react-icons/md';
 import NoItemsFound from 'src/components/NoItemsFound';
 import ProjectList from 'src/components/Projects/List';
 import DashboardLayout from 'src/containers/DashboardLayout';
-import { getUsersProjects } from 'src/entities/User/selectors';
+import { currentUser } from 'src/entities/User/selectors';
 
 import style from './style.module.scss';
 
@@ -23,7 +23,8 @@ const Header: React.FC = () => (
 );
 
 const Index = () => {
-  const projects = getUsersProjects();
+  const user = currentUser();
+  const projects = user.projects ? user.projects : [];
 
   if (!projects.length) {
     return (
