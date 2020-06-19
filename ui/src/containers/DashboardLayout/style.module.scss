@@ -93,6 +93,16 @@
     }
   }
 
+  .fallback-icon {
+    $size: 20px;
+    background: $color-text-dim3;
+    border-radius: 50%;
+    color: $color-input-text;
+    font-size: 9px;
+    height: $size;
+    width: $size;
+  }
+
   .header-row {
     @extend %row;
 

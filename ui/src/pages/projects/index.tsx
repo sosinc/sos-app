@@ -3,7 +3,9 @@ import Link from 'next/link';
 import { MdAdd, MdFolder } from 'react-icons/md';
 
 import NoItemsFound from 'src/components/NoItemsFound';
+import ProjectList from 'src/components/Projects/List';
 import DashboardLayout from 'src/containers/DashboardLayout';
+import { getUsersProjects } from 'src/entities/User/selectors';
 
 import style from './style.module.scss';
 
@@ -20,9 +22,9 @@ const Header: React.FC = () => (
   </div>
 );
 
-const projects = [];
-
 const Index = () => {
+  const projects = getUsersProjects();
+
   if (!projects.length) {
     return (
       <div className={c('not-found-container')}>
@@ -36,7 +38,7 @@ const Index = () => {
     );
   }
 
-  return null;
+  return <ProjectList projects={projects} />;
 };
 
 export default () => (

@@ -2,14 +2,15 @@ import classNames from 'classnames/bind';
 import Head from 'next/head';
 import Link from 'next/link';
 import { FaUsers } from 'react-icons/fa';
-import { MdBusiness, MdFolder, MdMoreHoriz } from 'react-icons/md';
+import { MdBusiness, MdMoreHoriz } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
 import WithUser from 'src/containers/WithUser';
 import { RootState } from 'src/duck';
 import { AuthState } from 'src/duck/auth';
-import { EmployeeState } from 'src/duck/employee';
-import { ProjectState } from 'src/duck/project';
+import { getUsersProjects } from 'src/entities/User/selectors';
+
+import FallbackIcon from 'src/containers/FallbackIcon';
 
 import style from './style.module.scss';
 const c = classNames.bind(style);
@@ -42,7 +43,9 @@ const project = (item: any) => {
   return (
     <Link href="/projects" key={item.id}>
       <div className={c('row')}>
-        <MdFolder />
+        <div className={c('fallback-icon')}>
+          <FallbackIcon logo={item.logo} name={item.name} />
+        </div>
         <span className={c('row-text')}>{item.name}</span>
       </div>
     </Link>
@@ -50,17 +53,10 @@ const project = (item: any) => {
 };
 
 const Index: React.FC<LayoutProps> = (p) => {
-  const { user, activeEmployeeId } = useSelector<RootState, AuthState>((state) => state.auth);
+  const { user } = useSelector<RootState, AuthState>((state) => state.auth);
   const role = user?.role.id;
 
-  const { projects } = useSelector<RootState, ProjectState>((state) => state.projects);
-  const { employees } = useSelector<RootState, EmployeeState>((state) => state.employees);
-  const orgId = activeEmployeeId?.length
-    ? employees.find((e) => e.ecode === activeEmployeeId)
-    : null;
-  const userProjects = projects.length
-    ? projects.filter((pro) => pro.organization_id === orgId?.organization_id)
-    : [];
+  const userProjects = getUsersProjects();
 
   const userSection = (
     <>
