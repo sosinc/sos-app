@@ -24,7 +24,7 @@ const Index = () => {
   };
 
   const handleSendOtp = (email: string) => {
-    dispatch(sendPasswordResetOTP(email));
+    return dispatch(sendPasswordResetOTP(email));
   };
 
   const handleResetPassword = async (values: any) => {
