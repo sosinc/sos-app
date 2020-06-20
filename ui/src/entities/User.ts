@@ -18,7 +18,7 @@ export interface LoginPayload {
 }
 
 export interface ResetPasswordPayload {
-  newPassword: string;
+  password: string;
   otp: string;
 }
 
@@ -60,8 +60,8 @@ export const sendPasswordResetOTP = async (email: string): Promise<undefined> =>
 
 export const resetPassword = async (payload: ResetPasswordPayload): Promise<undefined> => {
   const query = `
-    mutation($newPassword: String!, $otp: String!) {
-      resetPassword(newPassword: $newPassword, otp: $otp) {
+    mutation($password: String!, $otp: String!) {
+      resetPassword(newPassword: $password, otp: $otp) {
         id
       }
     }

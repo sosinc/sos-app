@@ -8,7 +8,7 @@ import ResetPassword from 'src/components/ResetPassword';
 import FullPageLayout from 'src/components/FullPageLayout';
 import LoginForm from 'src/components/LoginForm';
 import WithUser from 'src/containers/WithUser';
-import { loginUser, sendPasswordResetOTP } from 'src/duck/auth';
+import { loginUser, sendPasswordResetOTP, resetPassword } from 'src/duck/auth';
 
 import Modal from 'src/components/Modal';
 import style from './index.module.scss';
@@ -25,6 +25,11 @@ const Index = () => {
 
   const handleSendOtp = (email: string) => {
     dispatch(sendPasswordResetOTP(email));
+  };
+
+  const handleResetPassword = async (values: any) => {
+    await dispatch(resetPassword(values));
+    setModalOpen(false);
   };
 
   return (
@@ -70,7 +75,7 @@ const Index = () => {
           <LoginForm onSubmit={handleLogin} onResetPassword={() => setModalOpen(true)} />
         </div>
         <Modal onClose={() => setModalOpen(false)} isOpen={isModalOpen}>
-          <ResetPassword onSendOtp={handleSendOtp} />
+          <ResetPassword onSendOtp={handleSendOtp} onSubmit={handleResetPassword} />
         </Modal>
       </FullPageLayout>
     </WithUser>

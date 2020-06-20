@@ -2,90 +2,92 @@ import classNames from 'classnames/bind';
 import { Formik, FormikProps } from 'formik';
 import { useState } from 'react';
 import { FaAngleLeft } from 'react-icons/fa';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 
 import TextField from 'src/components/Form/TextField';
-import { fetchCurrentUser, resetPassword } from 'src/duck/auth';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
-const ResetPassword: React.FC<FormikProps<ResetFormValues> & Props> = (props) => {
-  const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
-  /*
-   * Field in step2 need to be marked untouch by hand for some reason.
-   * Otherwise formik says step2 is invalid even when the user hasn't even
-   * seen that field yet. Use this function mark fields in  step2 as valid
-   * when it makes sense.
-   */
-  const untouchStep2 = () => {
-    props.setTouched({ password: false });
-  };
+const ResetPassword: React.FC<FormikProps<ResetFormValues> &
+  Pick<Props, 'onSendOtp' | 'onSubmit'>> = (props) => {
+    const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
+    /*
+     * Field in step2 need to be marked untouch by hand for some reason.
+     * Otherwise formik says step2 is invalid even when the user hasn't even
+     * seen that field yet. Use this function mark fields in  step2 as valid
+     * when it makes sense.
+     */
+    const untouchStep2 = () => {
+      props.setTouched({ password: false });
+    };
 
-  const gotoNextStep = () => {
-    // Cannot use validateField because of formik issue: https://github.com/jaredpalmer/formik/issues/2291
-    if (formStep === 'step1' && props.values.email.length && !props.errors.email) {
-      props.onSendOtp(props.values.email);
-      setFormStep('step2');
+    const gotoNextStep = () => {
+      // Cannot use validateField because of formik issue: https://github.com/jaredpalmer/formik/issues/2291
+      if (formStep === 'step1' && props.values.email.length && !props.errors.email) {
+        props.onSendOtp(props.values.email);
+        setFormStep('step2');
+        untouchStep2();
+        return;
+      }
+
+      props.onSubmit(props.values);
+    };
+
+    const gotoStep1 = () => {
+      setFormStep('step1');
       untouchStep2();
-      return;
-    }
-  };
+    };
 
-  const gotoStep1 = () => {
-    setFormStep('step1');
-    untouchStep2();
-  };
+    const otpMessage =
+      'We will send you a otp to verify your email account and fill the otp and your new password';
 
-  const otpMessage =
-    'We will send you a otp to verify your email account and fill the otp and your new password';
+    return (
+      <>
+        <form className={c('login-form', c(formStep))} onSubmit={props.handleSubmit}>
+          <div className={c('fields-container')}>
+            <div>
+              <h2 className={c('form-title')}>Reset Password</h2>
+              <p className={c('form-text')}> {otpMessage} </p>
+            </div>
 
-  return (
-    <>
-      <form className={c('login-form', c(formStep))} onSubmit={props.handleSubmit}>
-        <div className={c('fields-container')}>
-          <div>
-            <h2 className={c('form-title')}>Reset Password</h2>
-            <p className={c('form-text')}> {otpMessage} </p>
-          </div>
+            <div className={c('2-step-swiper', c(formStep))}>
+              <TextField
+                placeholder="Enter your registered email"
+                type="email"
+                name="email"
+                className={'form-text-field'}
+              />
 
-          <div className={c('2-step-swiper', c(formStep))}>
-            <TextField
-              placeholder="Enter your registered email"
-              type="email"
-              name="email"
-              className={'form-text-field'}
-            />
-
-            <div className={c('password-container')}>
-              <FaAngleLeft title="Back" className={c('back-icon')} onClick={gotoStep1} />
-              <div className={c('password-fields')}>
-                <TextField
-                  placeholder="OTP"
-                  type="text"
-                  name="otp"
-                  className={'form-text-field'}
-                  tabIndex={1}
-                />
-                <TextField
-                  placeholder="Enter new password"
-                  type="password"
-                  name="password"
-                  className={'form-text-field'}
-                  tabIndex={2}
-                />
+              <div className={c('password-container')}>
+                <FaAngleLeft title="Back" className={c('back-icon')} onClick={gotoStep1} />
+                <div className={c('password-fields')}>
+                  <TextField
+                    placeholder="OTP"
+                    type="text"
+                    name="otp"
+                    className={'form-text-field'}
+                    tabIndex={1}
+                  />
+                  <TextField
+                    placeholder="Enter new password"
+                    type="password"
+                    name="password"
+                    className={'form-text-field'}
+                    tabIndex={2}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </form>
-      <button className={c('login-button')} type="button" onClick={gotoNextStep}>
-        {formStep === 'step2' ? 'Reset' : 'Send OTP'}
-      </button>
-    </>
-  );
-};
+        </form>
+        <button className={c('login-button')} type="button" onClick={gotoNextStep}>
+          {formStep === 'step2' ? 'Reset' : 'Send OTP'}
+        </button>
+      </>
+    );
+  };
 
 interface ResetFormValues {
   email: string;
@@ -112,24 +114,16 @@ const validationSchema = Yup.object({
 });
 
 interface Props {
+  onSubmit: (values: ResetFormValues) => void;
   onSendOtp: (email: string) => void;
 }
 
 const ResetPasswordForm: React.FC<Props> = (p) => {
-  const dispatch = useDispatch();
-
-  const handleSubmit = (values: ResetFormValues) => {
-    dispatch(resetPassword({ newPassword: values.password, otp: values.otp }));
-    dispatch(fetchCurrentUser());
-  };
-
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      {(formikProps) => ResetPassword({ ...formikProps, onSendOtp: p.onSendOtp })}
+    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={p.onSubmit}>
+      {(formikProps) =>
+        ResetPassword({ ...formikProps, onSendOtp: p.onSendOtp, onSubmit: p.onSubmit })
+      }
     </Formik>
   );
 };
