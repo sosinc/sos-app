@@ -17,7 +17,6 @@ interface FileFieldProps {
   name: string;
   className?: string;
   options: SelectFieldItem[];
-  autoSelectFirst?: boolean;
 }
 const noOptions = <li className={c('select-option')}>{'No data'}</li>;
 const SelectField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> = ({
@@ -69,10 +68,6 @@ const SelectField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> 
   );
 
   const selectedItem = p.options.find((i) => i.id === inputProps.value);
-
-  if (p.autoSelectFirst && !inputProps.value && p.options.length) {
-    formik.setFieldValue(inputProps.name, p.options[0].id);
-  }
 
   return (
     <div className={containerClass} onClick={handleOpen}>

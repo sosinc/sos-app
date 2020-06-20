@@ -33,8 +33,8 @@ const Header: React.FC = () => (
 const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
   const dispatch = useDispatch();
   const {
-    organization: { organizations, isFetching: isFetchingOrganizations },
-    designation: { designation, isFetching: isFetchingDesignations },
+    organization: { organizations },
+    designation: { designation },
   } = useSelector((state: RootState) => ({
     designation: state.designations,
     organization: state.organization,
@@ -45,8 +45,8 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
     dispatch(fetchDesignation());
   }, []);
 
-  if (isFetchingOrganizations && isFetchingDesignations) {
-    return <span>loading...</span>;
+  if (!p.values.organization_id && organizations.length) {
+    p.setFieldValue('organization_id', organizations[0].id);
   }
 
   return (
@@ -100,7 +100,6 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
                 className={'org-add-form'}
                 name="organization_id"
                 options={organizations}
-                autoSelectFirst={true}
               />
             </div>
           </div>

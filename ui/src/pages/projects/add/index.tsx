@@ -32,28 +32,26 @@ const Header: React.FC = () => (
 );
 
 const AddProject: React.FC<FormikProps<FormValues>> = (p) => {
-  const userData = currentUser();
-  let userOrganizations = [];
+  const user = currentUser();
+  let selectableOrganizations = [];
 
   const dispatch = useDispatch();
-  const {
-    organiztion: { organizations, isFetching: isFetchingOrganizations },
-  } = useSelector((state: RootState) => ({ organiztion: state.organization }));
+  const organizations = useSelector((state: RootState) => state.organization.organizations);
 
   useEffect(() => {
-    if (userData.role?.id === 'APP_ADMIN' && userData.organization) {
+    if (user.role?.id === 'APP_ADMIN') {
       dispatch(fetchOrganization());
     }
-  }, []);
+  }, [user.role?.id]);
 
-  if (isFetchingOrganizations) {
-    return <span>loading...</span>;
+  selectableOrganizations = organizations;
+
+  if (user.role?.id === 'USER' && user.organization) {
+    selectableOrganizations = user.organization ? [user.organization] : [];
   }
 
-  userOrganizations = organizations;
-
-  if (userData.role?.id === 'USER' && userData.organization) {
-    userOrganizations = userData.organization ? [userData.organization] : [];
+  if (!p.values.organization_id && selectableOrganizations.length) {
+    p.setFieldValue('organization_id', selectableOrganizations[0].id);
   }
 
   return (
@@ -101,8 +99,7 @@ const AddProject: React.FC<FormikProps<FormValues>> = (p) => {
               <SelectField
                 className={'org-add-form'}
                 name="organization_id"
-                options={userOrganizations}
-                autoSelectFirst={true}
+                options={selectableOrganizations}
               />
             </div>
           </div>
