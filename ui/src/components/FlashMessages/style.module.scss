@@ -25,6 +25,10 @@
   height: 16px;
   margin-right: 6px;
   width: 16px;
+
+  &.error {
+    color: $color-error-border;
+  }
 }
 
 .title {

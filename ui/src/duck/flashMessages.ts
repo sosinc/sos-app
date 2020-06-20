@@ -7,11 +7,16 @@ export interface FlashMessage {
   id: string;
   title: string;
   body?: string;
-  type?: 'success' | 'error' | 'info';
+  type: 'success' | 'error' | 'info';
   duration?: number;
 }
 
-type ShowFlashPayload = Omit<FlashMessage, 'id'>;
+interface ShowFlashPayload {
+  title: string;
+  body?: string;
+  type?: 'success' | 'error' | 'info';
+  duration?: number;
+}
 
 export const showFlashMessage = createAsyncThunk<void, ShowFlashPayload>(
   'flashMessage/show',

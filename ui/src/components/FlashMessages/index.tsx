@@ -1,3 +1,4 @@
+import c from 'classnames';
 import { MdClose, MdError } from 'react-icons/md';
 import { FlashMessage } from 'src/duck/flashMessages';
 
@@ -10,7 +11,7 @@ interface Props {
 
 const Message: React.FC<{ message: FlashMessage } & Pick<Props, 'onClose'>> = (p) => (
   <div className={s['message-container']}>
-    <div className={s['status-icon']}>
+    <div className={c(s['status-icon'], s[p.message.type])}>
       <MdError />
     </div>
 
