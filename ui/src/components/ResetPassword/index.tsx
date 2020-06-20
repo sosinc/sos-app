@@ -12,82 +12,82 @@ const c = classNames.bind(style);
 
 const ResetPassword: React.FC<FormikProps<ResetFormValues> &
   Pick<Props, 'onSendOtp' | 'onSubmit'>> = (props) => {
-    const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
-    /*
-     * Field in step2 need to be marked untouch by hand for some reason.
-     * Otherwise formik says step2 is invalid even when the user hasn't even
-     * seen that field yet. Use this function mark fields in  step2 as valid
-     * when it makes sense.
-     */
-    const untouchStep2 = () => {
-      props.setTouched({ password: false });
-    };
+  const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
+  /*
+   * Field in step2 need to be marked untouch by hand for some reason.
+   * Otherwise formik says step2 is invalid even when the user hasn't even
+   * seen that field yet. Use this function mark fields in  step2 as valid
+   * when it makes sense.
+   */
+  const untouchStep2 = () => {
+    props.setTouched({ password: false });
+  };
 
-    const gotoNextStep = () => {
-      // Cannot use validateField because of formik issue: https://github.com/jaredpalmer/formik/issues/2291
-      if (formStep === 'step1' && props.values.email.length && !props.errors.email) {
-        props.onSendOtp(props.values.email);
-        setFormStep('step2');
-        untouchStep2();
-        return;
-      }
-
-      props.onSubmit(props.values);
-    };
-
-    const gotoStep1 = () => {
-      setFormStep('step1');
+  const gotoNextStep = () => {
+    // Cannot use validateField because of formik issue: https://github.com/jaredpalmer/formik/issues/2291
+    if (formStep === 'step1' && props.values.email.length && !props.errors.email) {
+      props.onSendOtp(props.values.email);
+      setFormStep('step2');
       untouchStep2();
-    };
+      return;
+    }
 
-    const otpMessage =
-      'We will send you a otp to verify your email account and fill the otp and your new password';
+    props.onSubmit(props.values);
+  };
 
-    return (
-      <>
-        <form className={c('login-form', c(formStep))} onSubmit={props.handleSubmit}>
-          <div className={c('fields-container')}>
-            <div>
-              <h2 className={c('form-title')}>Reset Password</h2>
-              <p className={c('form-text')}> {otpMessage} </p>
-            </div>
+  const gotoStep1 = () => {
+    setFormStep('step1');
+    untouchStep2();
+  };
 
-            <div className={c('2-step-swiper', c(formStep))}>
-              <TextField
-                placeholder="Enter your registered email"
-                type="email"
-                name="email"
-                className={'form-text-field'}
-              />
+  const otpMessage =
+    'We will send you a otp to verify your email account and fill the otp and your new password';
 
-              <div className={c('password-container')}>
-                <FaAngleLeft title="Back" className={c('back-icon')} onClick={gotoStep1} />
-                <div className={c('password-fields')}>
-                  <TextField
-                    placeholder="OTP"
-                    type="text"
-                    name="otp"
-                    className={'form-text-field'}
-                    tabIndex={1}
-                  />
-                  <TextField
-                    placeholder="Enter new password"
-                    type="password"
-                    name="password"
-                    className={'form-text-field'}
-                    tabIndex={2}
-                  />
-                </div>
+  return (
+    <>
+      <form className={c('login-form', c(formStep))} onSubmit={props.handleSubmit}>
+        <div className={c('fields-container')}>
+          <div>
+            <h2 className={c('form-title')}>Reset Password</h2>
+            <p className={c('form-text')}> {otpMessage} </p>
+          </div>
+
+          <div className={c('2-step-swiper', c(formStep))}>
+            <TextField
+              placeholder="Enter your registered email"
+              type="email"
+              name="email"
+              className={'form-text-field'}
+            />
+
+            <div className={c('password-container')}>
+              <FaAngleLeft title="Back" className={c('back-icon')} onClick={gotoStep1} />
+              <div className={c('password-fields')}>
+                <TextField
+                  placeholder="OTP"
+                  type="text"
+                  name="otp"
+                  className={'form-text-field'}
+                  tabIndex={1}
+                />
+                <TextField
+                  placeholder="Enter new password"
+                  type="password"
+                  name="password"
+                  className={'form-text-field'}
+                  tabIndex={2}
+                />
               </div>
             </div>
           </div>
-        </form>
-        <button className={c('login-button')} type="button" onClick={gotoNextStep}>
-          {formStep === 'step2' ? 'Reset' : 'Send OTP'}
-        </button>
-      </>
-    );
-  };
+        </div>
+      </form>
+      <button className={c('login-button')} type="button" onClick={gotoNextStep}>
+        {formStep === 'step2' ? 'Reset' : 'Send OTP'}
+      </button>
+    </>
+  );
+};
 
 interface ResetFormValues {
   email: string;

@@ -4,11 +4,11 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import ResetPassword from 'src/components/ResetPassword';
 import FullPageLayout from 'src/components/FullPageLayout';
 import LoginForm from 'src/components/LoginForm';
+import ResetPassword from 'src/components/ResetPassword';
 import WithUser from 'src/containers/WithUser';
-import { loginUser, sendPasswordResetOTP, resetPassword } from 'src/duck/auth';
+import { loginUser, resetPassword, sendPasswordResetOTP } from 'src/duck/auth';
 
 import Modal from 'src/components/Modal';
 import style from './index.module.scss';
