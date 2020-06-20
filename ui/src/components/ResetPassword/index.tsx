@@ -1,4 +1,3 @@
-import { AsyncThunkAction, unwrapResult } from '@reduxjs/toolkit';
 import classNames from 'classnames/bind';
 import { Formik, FormikProps } from 'formik';
 import { useState } from 'react';
@@ -15,7 +14,6 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
   props,
 ) => {
   const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
-  const [formError, setFormError] = useState<string>('');
   /*
    * Field in step2 need to be marked untouch by hand for some reason.
    * Otherwise formik says step2 is invalid even when the user hasn't even
@@ -31,20 +29,20 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
     if (formStep === 'step1' && props.values.email.length && !props.errors.email) {
       props.setSubmitting(true);
       try {
-        const response = await props.onSendOtp(props.values.email);
-        await unwrapResult(response as any);
+        await props.onSendOtp(props.values.email);
 
         setFormStep('step2');
         untouchStep2();
       } catch (err) {
-        setFormError(err?.message || err);
-        return;
+        // pass
       } finally {
         props.setSubmitting(false);
       }
     }
 
-    props.submitForm();
+    if (formStep === 'step2') {
+      props.submitForm();
+    }
   };
 
   const gotoStep1 = () => {
@@ -95,7 +93,6 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
       <button className={c('button')} type="button" onClick={gotoNextStep}>
         {buttonText}
       </button>
-      {formError && <div className={'form-error'}>{formError}</div>}
     </>
   );
 };
@@ -120,7 +117,7 @@ const validationSchema = Yup.object({
 
 interface Props {
   onSubmit: (values: ResetFormValues) => void;
-  onSendOtp: (email: string) => AsyncThunkAction<any, any, any>;
+  onSendOtp: (email: string) => Promise<void>;
 }
 
 const ResetPasswordForm: React.FC<Props> = (p) => {

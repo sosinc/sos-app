@@ -1,3 +1,4 @@
+import { unwrapResult } from '@reduxjs/toolkit';
 import classNames from 'classnames/bind';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -6,11 +7,12 @@ import { useDispatch } from 'react-redux';
 
 import FullPageLayout from 'src/components/FullPageLayout';
 import LoginForm from 'src/components/LoginForm';
+import Modal from 'src/components/Modal';
 import ResetPassword from 'src/components/ResetPassword';
 import WithUser from 'src/containers/WithUser';
 import { loginUser, resetPassword, sendPasswordResetOTP } from 'src/duck/auth';
+import { showFlashMessage } from 'src/duck/flashMessages';
 
-import Modal from 'src/components/Modal';
 import style from './index.module.scss';
 
 const c = classNames.bind(style);
@@ -23,8 +25,21 @@ const Index = () => {
     dispatch(loginUser(values));
   };
 
-  const handleSendOtp = (email: string) => {
-    return dispatch(sendPasswordResetOTP(email));
+  const handleSendOtp = async (email: string) => {
+    try {
+      const resp = await dispatch(sendPasswordResetOTP(email));
+      await unwrapResult(resp as any);
+    } catch (err) {
+      dispatch(
+        showFlashMessage({
+          body: err?.message || err,
+          title: 'Failed to send OTP',
+          type: 'error',
+        }),
+      );
+
+      throw err;
+    }
   };
 
   const handleResetPassword = async (values: any) => {
