@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import {
+  CurrentUserResponse,
   fetchCurrentUser as apiFetchCurrentUser,
   login,
   LoginPayload,
@@ -12,6 +13,7 @@ import {
 
 export interface AuthState {
   user?: User;
+  activeEmployeeId?: string;
   error?: string;
   isLoggingIn: boolean;
   isFetchingUser: boolean;
@@ -26,7 +28,7 @@ export const loginUser = createAsyncThunk<
 });
 
 export const fetchCurrentUser = createAsyncThunk<
-  User,
+  CurrentUserResponse,
   undefined,
   { rejectValue: Error; state: AuthState }
 >('auth/fetchCurrentUser', apiFetchCurrentUser);
@@ -73,7 +75,8 @@ export default createSlice({
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
       state.isFetchingUser = false;
-      state.user = payload;
+      state.user = payload.user;
+      state.activeEmployeeId = payload.employees.length ? payload.employees[0].ecode : undefined;
     });
   },
   initialState,

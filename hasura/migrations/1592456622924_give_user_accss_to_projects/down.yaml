@@ -1,0 +1,102 @@
+- args:
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: drop_insert_permission
+- args:
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: drop_select_permission
+- args:
+    relationship: as_employee
+    table:
+      name: me
+      schema: public
+  type: drop_relationship
+- args:
+    role: user
+    table:
+      name: organizations
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - id
+      - name
+      - square_logo
+      - banner
+      computed_fields: []
+      filter:
+        employees:
+          user_id:
+            _eq: X-Hasura-User-Id
+    role: user
+    table:
+      name: organizations
+      schema: public
+  type: create_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - id
+      - name
+      - logo
+      - logo_square
+      - description
+      - organization_id
+      - issue_link_template
+      - pr_link_template
+      - created_at
+      - updated_at
+      computed_fields: []
+      filter:
+        teams:
+          members:
+            employee:
+              user_id:
+                _eq: X-Hasura-User-Id
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: create_select_permission
+- args:
+    role: app_admin
+    table:
+      name: employees
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - joining_date
+      - relieving_date
+      - designation_id
+      - ecode
+      - email
+      - headshot
+      - name
+      - created_at
+      - updated_at
+      - organization_id
+      - user_id
+      computed_fields: []
+      filter: {}
+    role: app_admin
+    table:
+      name: employees
+      schema: public
+  type: create_select_permission
+- args:
+    role: app_admin
+    table:
+      name: designations
+      schema: public
+  type: drop_select_permission

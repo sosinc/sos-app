@@ -1,5 +1,3 @@
-import 'cross-fetch/polyfill';
-
 import client from 'src/lib/client';
 
 export interface Designation {

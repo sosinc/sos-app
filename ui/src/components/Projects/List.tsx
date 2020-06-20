@@ -1,29 +1,28 @@
 import classNames from 'classnames/bind';
-import style from 'src/components/Organization/style.module.scss';
+import style from 'src/components/Projects/style.module.scss';
 import FallbackIcon from 'src/containers/FallbackIcon';
-
-import { Organization } from 'src/entities/Organizations';
+import { Project } from 'src/entities/Project';
 
 const c = classNames.bind(style);
 
 interface Props {
-  organizations: Organization[];
+  projects: Project[];
 }
 
-const OrgItem: React.FC<Organization> = (o) => (
+const ProjectItem: React.FC<Project> = (o) => (
   <div className={c('container')} key={o.id}>
     <div className={c('fallback-icon')}>
-      <FallbackIcon logo={o.square_logo} name={o.name} />
+      <FallbackIcon logo={o.logo_square} name={o.name} />
     </div>
     <div className={c('organization-container')}>
       <span className={c('name')}>{o.name}</span>
-      <span className={c('count')}>{o.employees_count} Employees</span>
+      <span className={c('count')}> Team</span>
     </div>
   </div>
 );
 
 const List: React.FC<Props> = (p) => {
-  return <div className={c('organization')}>{p.organizations.map(OrgItem)}</div>;
+  return <div className={c('organization')}>{p.projects.map(ProjectItem)}</div>;
 };
 
 export default List;
