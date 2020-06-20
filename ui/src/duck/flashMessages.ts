@@ -1,24 +1,25 @@
 import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
 import setTimeoutP from 'src/lib/setTimeoutP';
 
 export interface FlashMessage {
   id: string;
   title: string;
   body?: string;
-  type: 'success' | 'error' | 'info';
+  type?: 'success' | 'error' | 'info';
   duration?: number;
 }
 
-export const showFlashMessage = createAsyncThunk<void, FlashMessage>(
+export const showFlashMessage = createAsyncThunk<void, Omit<FlashMessage, 'id'>>(
   'flashMessage/show',
-  async (m, { dispatch }) => {
-    await setTimeoutP(m.duration || 3000);
+  async (m, { dispatch, requestId }) => {
+    await setTimeoutP(m.duration || 5000);
 
-    dispatch(hideFlashMessage(m.id));
+    dispatch(hideFlashMessage(requestId));
   },
 );
 
-export const hideFlashMessage = createAction<string>('flashMessages/hide');
+export const hideFlashMessage = createAction<string | undefined>('flashMessages/hide');
 
 interface FlashMessagesState {
   messages: FlashMessage[];
@@ -28,8 +29,8 @@ const initialState: FlashMessagesState = { messages: [] };
 
 export default createSlice({
   extraReducers: (builder) => {
-    builder.addCase(showFlashMessage.pending, (state, { meta: { arg } }) => {
-      state.messages.push(arg);
+    builder.addCase(showFlashMessage.pending, (state, { meta: { arg, requestId } }) => {
+      state.messages.push({ id: requestId, type: 'info', ...arg });
     });
 
     builder.addCase(hideFlashMessage, (state, { payload: id }) => {

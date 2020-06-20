@@ -23,7 +23,6 @@
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.7",
     "@types/react-redux": "^7.1.5",
-    "@types/uuid": "^8.0.0",
     "@types/yup": "^0.26.26",
     "classnames": "^2.2.6",
     "common-tags": "^1.8.0",
@@ -43,7 +42,6 @@
     "redux-persist": "^6.0.0",
     "rxjs": "6",
     "typescript": "^3.8.3",
-    "uuid": "^8.1.0",
     "yup": "^0.28.5"
   },
   "devDependencies": {
