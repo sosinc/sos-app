@@ -54,28 +54,16 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
           </div>
 
           <div className={c('2-step-swiper', c(formStep))}>
-            <TextField
-              placeholder="Enter your registered email"
-              type="email"
-              name="email"
-              className={'form-text-field'}
-            />
+            <TextField placeholder="Enter your registered email" type="email" name="email" />
 
             <div className={c('password-container')}>
               <FaAngleLeft title="Back" className={c('back-icon')} onClick={gotoStep1} />
               <div className={c('password-fields')}>
-                <TextField
-                  placeholder="OTP"
-                  type="text"
-                  name="otp"
-                  className={'form-text-field'}
-                  tabIndex={1}
-                />
+                <TextField placeholder="OTP" type="text" name="otp" tabIndex={1} />
                 <TextField
                   placeholder="Enter new password"
                   type="password"
                   name="password"
-                  className={'form-text-field'}
                   tabIndex={2}
                 />
               </div>
@@ -103,15 +91,9 @@ const initialValues = {
 };
 
 const validationSchema = Yup.object({
-  email: Yup.string()
-    .email('Invalid email address')
-    .required('Required'),
-  otp: Yup.string()
-    .min(4, 'Must be 4 or more')
-    .required('Required'),
-  password: Yup.string()
-    .max(15, 'Must be 15 characters or less')
-    .required('Required'),
+  email: Yup.string().email('Invalid email address').required('Required'),
+  otp: Yup.string().min(4, 'Must be 4 or more').required('Required'),
+  password: Yup.string().max(15, 'Must be 15 characters or less').required('Required'),
 });
 
 interface Props {

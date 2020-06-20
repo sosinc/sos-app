@@ -91,3 +91,13 @@
   margin: 10px 0;
   text-align: right;
 }
+
+.login-form-field {
+  flex-grow: 1;
+  position: relative;
+  width: 100%;
+
+  input {
+    @extend %input-login-form ;
+  }
+}

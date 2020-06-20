@@ -58,7 +58,7 @@ const Login: React.FC<FormikProps<LoginFormValues> & { onResetPassword: () => vo
           <div className={c('fields-container')}>
             <div className={c('2-step-swiper', c(formStep))}>
               <TextField
-                className={'login-form-field'}
+                className={c('login-form-field')}
                 placeholder="> enter your work email"
                 type="email"
                 name="email"
@@ -66,7 +66,7 @@ const Login: React.FC<FormikProps<LoginFormValues> & { onResetPassword: () => vo
               <div className={c('password')}>
                 <FaAngleLeft title="Back" className={c('back-icon')} onClick={gotoStep1} />
                 <TextField
-                  className={'login-form-field'}
+                  className={c('login-form-field')}
                   inputRef={passwordRef}
                   placeholder="*******"
                   type="password"
@@ -95,12 +95,8 @@ interface LoginFormValues {
 }
 
 const validationSchema = Yup.object({
-  email: Yup.string()
-    .email('Invalid email address')
-    .required('Required'),
-  password: Yup.string()
-    .max(15, 'Must be 15 characters or less')
-    .required('Required'),
+  email: Yup.string().email('Invalid email address').required('Required'),
+  password: Yup.string().max(15, 'Must be 15 characters or less').required('Required'),
 });
 
 const initialValues = {

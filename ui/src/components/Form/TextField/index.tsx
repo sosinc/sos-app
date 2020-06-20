@@ -1,11 +1,9 @@
-import classNames from 'classnames/bind';
+import c from 'classnames';
 import { connect, FormikContextType, getIn } from 'formik';
 import { MutableRefObject } from 'react';
 import ErrorMessage from 'src/components/Form/ErrorMessage';
 
-import styles from './style.module.scss';
-
-const c = classNames.bind(styles);
+import s from './style.module.scss';
 
 interface TextFieldProps {
   name: string;
@@ -24,8 +22,9 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
   const error = isTouched ? getIn(formik.errors, p.name) : null;
   const inputProps = formik.getFieldProps(p.name);
 
-  const containerClass = c('input-field-container', p.className, {
-    'has-error': error,
+  const containerClass = c(s['input-field-container'], p.className, {
+    [s['has-error']]: error,
+    [s.field]: !p.className,
   });
 
   return (
