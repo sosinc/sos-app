@@ -10,9 +10,7 @@ import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
-const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSendOtp'>> = (
-  props,
-) => {
+const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSendOtp'>> = (p) => {
   const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
   /*
    * Field in step2 need to be marked untouch by hand for some reason.
@@ -21,27 +19,27 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
    * when it makes sense.
    */
   const untouchStep2 = () => {
-    props.setTouched({ password: false });
+    p.setTouched({ password: false });
   };
 
   const gotoNextStep = async () => {
     // Cannot use validateField because of formik issue: https://github.com/jaredpalmer/formik/issues/2291
-    if (formStep === 'step1' && props.values.email.length && !props.errors.email) {
-      props.setSubmitting(true);
+    if (formStep === 'step1' && p.values.email.length && !p.errors.email) {
+      p.setSubmitting(true);
       try {
-        await props.onSendOtp(props.values.email);
+        await p.onSendOtp(p.values.email);
 
         setFormStep('step2');
         untouchStep2();
       } catch (err) {
         // pass
       } finally {
-        props.setSubmitting(false);
+        p.setSubmitting(false);
       }
     }
 
     if (formStep === 'step2') {
-      props.submitForm();
+      p.submitForm();
     }
   };
 
@@ -55,16 +53,16 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
 
   const buttonText =
     formStep === 'step2'
-      ? props.isSubmitting
-        ? 'Resetting Password...'
+      ? p.isSubmitting
+        ? 'Resetting Password'
         : 'Reset Password'
-      : props.isSubmitting
-        ? 'Sending OTP...'
+      : p.isSubmitting
+        ? 'Sending OTP'
         : 'Send OTP';
 
   return (
     <>
-      <form className={c('form', c(formStep))} onSubmit={props.handleSubmit}>
+      <form className={c('form', c(formStep))} onSubmit={p.handleSubmit}>
         <div className={c('fields-container')}>
           <div>
             <h2 className={c('form-title')}>Reset Password</h2>
@@ -90,8 +88,14 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
 
         <FaAngleLeft title="Back" className={c('back-icon', formStep)} onClick={gotoStep1} />
       </form>
-      <button className={c('button')} type="button" onClick={gotoNextStep}>
+      <button
+        className={c('button', { working: p.isSubmitting })}
+        type="button"
+        onClick={gotoNextStep}
+        disabled={p.isSubmitting}
+      >
         {buttonText}
+        <span />
       </button>
     </>
   );

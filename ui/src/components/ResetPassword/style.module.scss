@@ -112,3 +112,10 @@
   margin-bottom: 32px;
   text-align: center;
 }
+
+.working {
+  span {
+    @extend %working;
+    position: absolute;
+  }
+}
