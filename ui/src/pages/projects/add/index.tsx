@@ -41,7 +41,9 @@ const AddProject: React.FC<FormikProps<FormValues>> = (p) => {
   } = useSelector((state: RootState) => ({ organiztion: state.organization }));
 
   useEffect(() => {
-    dispatch(fetchOrganization());
+    if (userData.role?.id === 'APP_ADMIN' && userData.organization) {
+      dispatch(fetchOrganization());
+    }
   }, []);
 
   if (isFetchingOrganizations) {

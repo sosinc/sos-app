@@ -4,12 +4,12 @@ import Link from 'next/link';
 import { FaUsers } from 'react-icons/fa';
 import { MdBusiness, MdMoreHoriz } from 'react-icons/md';
 
-import WithUser from 'src/containers/WithUser';
-import { currentUser } from 'src/entities/User/selectors';
-
 import FallbackIcon from 'src/containers/FallbackIcon';
-
+import WithUser from 'src/containers/WithUser';
+import { Project } from 'src/entities/Project';
+import { currentUser } from 'src/entities/User/selectors';
 import style from './style.module.scss';
+
 const c = classNames.bind(style);
 
 interface LayoutProps {
@@ -36,12 +36,12 @@ const adminSection = (
   </>
 );
 
-const project = (item: any) => {
+const project = (item: Project) => {
   return (
     <Link href="/projects" key={item.id}>
       <div className={c('row')}>
         <div className={c('fallback-icon')}>
-          <FallbackIcon logo={item.logo} name={item.name} />
+          <FallbackIcon logo={item.logo_square} name={item.name} />
         </div>
         <span className={c('row-text')}>{item.name}</span>
       </div>
@@ -57,7 +57,7 @@ const Index: React.FC<LayoutProps> = (p) => {
   const userSection = (
     <>
       <div className={c('header-row')}> Projects</div>
-      {projects.map((pro) => project(pro))}
+      {projects.map(project)}
     </>
   );
 
