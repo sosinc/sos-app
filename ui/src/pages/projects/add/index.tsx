@@ -11,98 +11,110 @@ import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
-import { fetchDesignation } from 'src/duck/designation';
-import { createEmployee } from 'src/duck/employee';
 import { fetchOrganization } from 'src/duck/organization';
+import { createProject } from 'src/duck/project';
 
 import style from './style.module.scss';
+
+import { currentUser } from 'src/entities/User/selectors';
 
 const c = classNames.bind(style);
 
 const Header: React.FC = () => (
   <div className={c('header')}>
     <span>
-      <Link href="/employees">
-        <a>Employees > </a>
+      <Link href="/projects">
+        <a>Projects > </a>
       </Link>
       Create
     </span>
   </div>
 );
 
-const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
+const AddProject: React.FC<FormikProps<FormValues>> = (p) => {
+  const userData = currentUser();
+  let userOrganizations = [];
+
   const dispatch = useDispatch();
   const {
-    organization: { organizations, isFetching: isFetchingOrganizations },
-    designation: { designation, isFetching: isFetchingDesignations },
-  } = useSelector((state: RootState) => ({
-    designation: state.designations,
-    organization: state.organization,
-  }));
+    organiztion: { organizations, isFetching: isFetchingOrganizations },
+  } = useSelector((state: RootState) => ({ organiztion: state.organization }));
 
   useEffect(() => {
-    dispatch(fetchOrganization());
-    dispatch(fetchDesignation());
+    if (userData.role?.id === 'APP_ADMIN' && userData.organization) {
+      dispatch(fetchOrganization());
+    }
   }, []);
 
-  if (isFetchingOrganizations && isFetchingDesignations) {
+  if (isFetchingOrganizations) {
     return <span>loading...</span>;
   }
 
+  userOrganizations = organizations;
+
+  if (userData.role?.id === 'USER' && userData.organization) {
+    userOrganizations = userData.organization ? [userData.organization] : [];
+  }
+
   return (
-    <DashboardLayout title={'Snake Oil Software - Employees'} Header={Header}>
+    <DashboardLayout title={'Projects - Snake Oil Software'} Header={Header}>
       <div className={c('container')}>
         <form className={c('form')} onSubmit={p.handleSubmit}>
-          <h2 className={c('title')}> Create Employee</h2>
+          <h2 className={c('title')}> Create Project</h2>
 
-          <div className={c('email-container', 'field-container')}>
-            <span className={c('field-title')}>Email</span>
-            <TextField
-              className={'form-text-field'}
-              placeholder="Enter email"
-              type="email"
-              name="email"
-            />
-          </div>
           <div className={c('name-container', 'field-container')}>
             <span className={c('field-title')}>Name</span>
             <TextField
               className={'form-text-field'}
-              placeholder="Enter name"
+              placeholder="Enter Name"
               type="text"
               name="name"
             />
           </div>
+          <div className={c('description-container', 'field-container')}>
+            <span className={c('field-title')}>Description</span>
+            <TextField
+              className={'form-text-field'}
+              placeholder="Enter Description"
+              type="text"
+              name="description"
+            />
+          </div>
 
-          <div className={c('logo', 'field-container')}>
-            <span className={c('field-title')}>Head Shot</span>
-            <ImageUploadField className={'image-container'} type={'file'} name="headshot" />
+          <div className={c('square-logo', 'field-container')}>
+            <span className={c('field-title')}>Square Logo</span>
+            <ImageUploadField className={'image-container'} type={'file'} name="logo_square" />
           </div>
 
           <div className={c('right-container')}>
-            <div className={c('ecode-container', 'field-container')}>
-              <span className={c('field-title')}>E-Code</span>
+            <div className={c('issue-link-container', 'field-container')}>
+              <span className={c('field-title')}>Issue-Link-Template</span>
               <TextField
                 className={'form-text-field'}
-                placeholder="Enter e-code"
+                placeholder="Enter issue-Link-Template"
                 type="text"
-                name="ecode"
+                name="issue_link_template"
               />
-            </div>
-
-            <div className={c('designation-container', 'field-container')}>
-              <span className={c('field-title')}>Designation</span>
-              <SelectField className={'org-add-form'} name="designation_id" options={designation} />
             </div>
             <div className={c('org-container', 'field-container')}>
               <span className={c('field-title')}>Organization</span>
               <SelectField
                 className={'org-add-form'}
                 name="organization_id"
-                options={organizations}
+                options={userOrganizations}
                 autoSelectFirst={true}
               />
             </div>
+          </div>
+
+          <div className={c('pr-link-container', 'field-container')}>
+            <span className={c('field-title')}>Pr-Link-Template</span>
+            <TextField
+              className={'form-text-field'}
+              placeholder="Enter pr-link-template"
+              type="text"
+              name="pr_link_template"
+            />
           </div>
 
           <div className={c('button-container')}>
@@ -117,33 +129,33 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
 };
 
 interface FormValues {
-  email: string;
+  description: string;
+  issue_link_template: string;
   name: string;
-  ecode: string;
-  headshot: string;
-  designation_id: string;
   organization_id: string;
+  pr_link_template: string;
+  logo_square: string;
 }
 
 const initialValues = {
-  designation_id: '',
-  ecode: '',
-  email: '',
-  headshot: '',
+  description: '',
+  issue_link_template: '',
+  logo_square: '',
   name: '',
   organization_id: '',
+  pr_link_template: '',
 };
 
 const validationSchema = Yup.object().shape({
-  designation_id: Yup.string().required('Required'),
-  ecode: Yup.string().required('Required'),
-  email: Yup.string().email().required('Required'),
-  headshot: Yup.string(),
+  description: Yup.string(),
+  issue_link_template: Yup.string(),
+  logo_square: Yup.string(),
   name: Yup.string()
     .min(2, 'Must be 2 characters or more')
     .max(16, 'Must be 16 characters or less')
     .required('Required'),
   organization_id: Yup.string().required('Required'),
+  pr_link_template: Yup.string(),
 });
 
 export default () => {
@@ -151,7 +163,7 @@ export default () => {
 
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
     actions.setSubmitting(true);
-    const resp = await dispatch(createEmployee(values));
+    const resp = await dispatch(createProject(values));
 
     actions.setSubmitting(false);
 
@@ -160,7 +172,7 @@ export default () => {
       actions.resetForm();
     } catch (err) {
       if (/uniqueness violation/i.test(err.message)) {
-        actions.setFieldError('email', 'An organization with same name already exists');
+        actions.setFieldError('name', 'A project with same name already exists');
       }
 
       // tslint:disable-next-line:no-console
@@ -174,7 +186,7 @@ export default () => {
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      {AddEmployee}
+      {AddProject}
     </Formik>
   );
 };

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
+import { fetchCurrentUser } from 'src/duck/auth';
 import { create, CreatePayload, fetchMany, Organization } from 'src/entities/Organizations';
 
 export interface OrganizationState {
@@ -43,6 +44,10 @@ export default createSlice({
     builder.addCase(fetchOrganization.fulfilled, (state, { payload }) => {
       state.isFetching = false;
       state.organizations = payload;
+    });
+
+    builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
+      state.organizations = payload.organizations;
     });
   },
   initialState,

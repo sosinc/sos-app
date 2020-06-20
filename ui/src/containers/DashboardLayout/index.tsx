@@ -4,9 +4,12 @@ import Link from 'next/link';
 import { FaUsers } from 'react-icons/fa';
 import { MdBusiness, MdMoreHoriz } from 'react-icons/md';
 
+import FallbackIcon from 'src/containers/FallbackIcon';
 import WithUser from 'src/containers/WithUser';
-
+import { Project } from 'src/entities/Project';
+import { currentUser } from 'src/entities/User/selectors';
 import style from './style.module.scss';
+
 const c = classNames.bind(style);
 
 interface LayoutProps {
@@ -14,7 +17,50 @@ interface LayoutProps {
   Header: React.FC;
 }
 
+const adminSection = (
+  <>
+    <div className={c('header-row')}>Admin</div>
+    <Link href="/organizations">
+      <div className={c('row')}>
+        <MdBusiness />
+        <span className={c('row-text')}>Organizations</span>
+      </div>
+    </Link>
+
+    <Link href="/employees">
+      <div className={c('row')}>
+        <FaUsers />
+        <span className={c('row-text')}>Employees</span>
+      </div>
+    </Link>
+  </>
+);
+
+const project = (item: Project) => {
+  return (
+    <Link href="/projects" key={item.id}>
+      <div className={c('row')}>
+        <div className={c('fallback-icon')}>
+          <FallbackIcon logo={item.logo_square} name={item.name} />
+        </div>
+        <span className={c('row-text')}>{item.name}</span>
+      </div>
+    </Link>
+  );
+};
+
 const Index: React.FC<LayoutProps> = (p) => {
+  const user = currentUser();
+  const role = user.role?.id;
+  const projects = user.projects ? user.projects : [];
+
+  const userSection = (
+    <>
+      <div className={c('header-row')}> Projects</div>
+      {projects.map(project)}
+    </>
+  );
+
   return (
     <WithUser inverted={false} redirectPath="/">
       <Head>
@@ -28,30 +74,19 @@ const Index: React.FC<LayoutProps> = (p) => {
               <img className={c('logo-image')} src="/assets/images/sos-logo.svg" alt="o" />
             </Link>
             <div className={c('avatar-container')}>
-              <img className={c('pic')} src="/assets/images/avatar.svg" alt="pic" />
+              <img
+                className={c('pic')}
+                src="/assets/images/avatar.svg"
+                alt="pic"
+                title={user?.name}
+              />
               <span className={c('online-status')} />
             </div>
 
             <MdMoreHoriz title="more" className={c('dot-menu-icon')} />
           </div>
 
-          <div className={c('section')}>
-            <div className={c('header-row')}>Admin</div>
-
-            <Link href="/organizations">
-              <div className={c('row')}>
-                <MdBusiness />
-                <span className={c('row-text')}>Organizations</span>
-              </div>
-            </Link>
-
-            <Link href="/employees">
-              <div className={c('row')}>
-                <FaUsers />
-                <span className={c('row-text')}>Employees</span>
-              </div>
-            </Link>
-          </div>
+          <div className={c('section')}>{role !== 'USER' ? adminSection : userSection}</div>
 
           <div className={c('footer')}>
             <span className={c('feedback-icon')} />

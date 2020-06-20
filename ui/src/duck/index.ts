@@ -5,12 +5,14 @@ import auth from './auth';
 import designation from './designation';
 import employee from './employee';
 import organization from './organization';
+import project from './project';
 
 const reducer = combineReducers({
   [auth.name]: auth.reducer,
   [designation.name]: designation.reducer,
   [organization.name]: organization.reducer,
   [employee.name]: employee.reducer,
+  [project.name]: project.reducer,
 });
 
 const rootReducer: Reducer<RootState> = (state, action): RootState => {

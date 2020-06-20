@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
+import { fetchCurrentUser } from 'src/duck/auth';
 import { create, CreatePayload, Employee, fetchMany } from 'src/entities/Employee';
 
 export interface EmployeeState {
@@ -44,7 +45,10 @@ export default createSlice({
       state.isFetching = false;
       state.employees = payload;
     });
-  },
+
+    builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
+      state.employees = payload.employees;
+    });  },
   initialState,
   name: 'employees',
   reducers: {},
