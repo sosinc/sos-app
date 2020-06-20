@@ -11,7 +11,9 @@ export interface FlashMessage {
   duration?: number;
 }
 
-export const showFlashMessage = createAsyncThunk<void, Omit<FlashMessage, 'id'>>(
+type ShowFlashPayload = Omit<FlashMessage, 'id'>;
+
+export const showFlashMessage = createAsyncThunk<void, ShowFlashPayload>(
   'flashMessage/show',
   async (m, { dispatch, requestId }) => {
     await setTimeoutP(m.duration || 5000);
@@ -25,8 +27,19 @@ export const hideFlashMessage = createAction<string | undefined>('flashMessages/
 export const useFlash = () => {
   const dispatch = useDispatch();
 
-  const show = (m: Omit<FlashMessage, 'id'>) => {
-    dispatch(showFlashMessage(m));
+  const show = (m: ShowFlashPayload | string) => {
+    let message: ShowFlashPayload;
+
+    if (typeof m === 'string') {
+      message = {
+        title: m,
+        type: 'info',
+      };
+    } else {
+      message = m;
+    }
+
+    dispatch(showFlashMessage(message));
   };
 
   const hide = (id: string) => {

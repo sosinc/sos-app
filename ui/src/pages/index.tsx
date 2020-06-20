@@ -30,7 +30,7 @@ const Index = () => {
     try {
       const resp = await dispatch(sendPasswordResetOTP(email));
       await unwrapResult(resp as any);
-      flash({ title: 'OTP sent successfully!' });
+      flash('OTP sent successfully!');
     } catch (err) {
       flash({
         body: err?.message || err,
