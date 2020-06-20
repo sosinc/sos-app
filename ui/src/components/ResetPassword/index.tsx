@@ -10,8 +10,9 @@ import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
-const ResetPassword: React.FC<FormikProps<ResetFormValues> &
-  Pick<Props, 'onSendOtp' | 'onSubmit'>> = (props) => {
+const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSendOtp'>> = (
+  props,
+) => {
   const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
   /*
    * Field in step2 need to be marked untouch by hand for some reason.
@@ -32,7 +33,7 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> &
       return;
     }
 
-    props.onSubmit(props.values);
+    props.submitForm();
   };
 
   const gotoStep1 = () => {
@@ -121,9 +122,7 @@ interface Props {
 const ResetPasswordForm: React.FC<Props> = (p) => {
   return (
     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={p.onSubmit}>
-      {(formikProps) =>
-        ResetPassword({ ...formikProps, onSendOtp: p.onSendOtp, onSubmit: p.onSubmit })
-      }
+      {(formikProps) => ResetPassword({ ...formikProps, onSendOtp: p.onSendOtp })}
     </Formik>
   );
 };

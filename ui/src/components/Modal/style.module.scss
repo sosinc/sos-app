@@ -28,7 +28,9 @@
   background: $color-bg-dark;
   border-radius: 4px;
   box-shadow: $color-shadowbox-shadow 0 4px 78px;
+  display: flex;
   flex-direction: column;
+  align-items: center;
   position: relative;
   width: 480px;
 }
