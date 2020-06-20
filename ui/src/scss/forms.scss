@@ -1,32 +1,11 @@
-%input-form {
-  background: none;
-  border: 1px solid $color-button-border;
+%form-input {
+  background: $color-input-bg;
+  border: 1px solid $color-input-border;
   border-radius: 4px;
   box-shadow: none;
   color: $color-input-text;
   font-weight: 400;
   height: 40px;
-  outline: none;
-  padding: 10px;
-  transition: all 0.2s;
-  width: 100%;
-
-  @media(max-width: $sm) {
-    border: 1px solid $color-boundary;
-    margin: 0 0 8px;
-    padding: 6px;
-  }
-}
-
-%input-login-form {
-  background: none;
-  border: 0;
-  border-radius: 4px;
-  box-shadow: none;
-  color: $color-input-text;
-  font-weight: 400;
-
-  height: 48px;
   outline: none;
   padding: 10px;
   transition: all 0.2s;

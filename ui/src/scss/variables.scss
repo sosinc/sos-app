@@ -20,8 +20,9 @@ $color-button-cta-bg: linear-gradient(102deg, #b55145 9.16%, #cc4356 32.02%, #d7
 
 $color-cta: #d26a5e;
 
-$color-input-bg: #3438444a;
 $color-input-text: #fff;
+$color-input-border: $color-button-border;
+$color-input-bg: $color-bg-dark;
 
 $color-shadowbox-bg: #3438444a;
 $color-shadowbox-bg--hover: #34384496;
@@ -29,7 +30,7 @@ $color-shadowbox-shadow: #00000040;
 $color-shadowbox-border: #ffffff08;
 
 $color-error-border: #dc3925;
-$color-error-bg: #b1363652;
+$color-error-bg: #b1363615;
 
 $color-select-active: #37373c;
 

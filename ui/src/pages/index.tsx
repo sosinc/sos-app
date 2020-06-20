@@ -35,7 +35,7 @@ const Index = () => {
   return (
     <WithUser inverted={true} redirectPath={'/dashboard'}>
       <Head>
-        <title>'snake oil software - app'</title>
+        <title>SoS App</title>
       </Head>
 
       <FullPageLayout className={c('container')}>

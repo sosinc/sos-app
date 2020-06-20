@@ -13,9 +13,13 @@
 
   &.has-error {
     background: $color-error-bg;
+
+    input {
+      background: $color-error-bg;
+    }
   }
 
   input {
-    @extend %input-form;
+    @extend %form-input;
   }
 }

@@ -114,10 +114,9 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
 
 export const sendPasswordResetOTP = async (email: string): Promise<undefined> => {
   const query = `
-mutation($email: String!) {
-sendPasswordResetOtp(email: $email)
-}
-`;
+    mutation($email: String!) {
+      sendPasswordResetOtp(email: $email)
+    }`;
   const data = await client.request(query, { email });
 
   return data?.sendPasswordResetOtp;
@@ -125,12 +124,9 @@ sendPasswordResetOtp(email: $email)
 
 export const resetPassword = async (payload: ResetPasswordPayload): Promise<undefined> => {
   const query = `
-mutation($password: String!, $otp: String!) {
-resetPassword(newPassword: $password, otp: $otp) {
-id
-}
-}
-`;
+    mutation($password: String!, $otp: String!) {
+      resetPassword(newPassword: $password, otp: $otp) { id }
+    }`;
   const data = await client.request(query, payload);
 
   return data?.resetPassword?.id;

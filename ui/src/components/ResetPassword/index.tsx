@@ -46,7 +46,7 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
 
   return (
     <>
-      <form className={c('login-form', c(formStep))} onSubmit={props.handleSubmit}>
+      <form className={c('form', c(formStep))} onSubmit={props.handleSubmit}>
         <div className={c('fields-container')}>
           <div>
             <h2 className={c('form-title')}>Reset Password</h2>
@@ -57,7 +57,6 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
             <TextField placeholder="Enter your registered email" type="email" name="email" />
 
             <div className={c('password-container')}>
-              <FaAngleLeft title="Back" className={c('back-icon')} onClick={gotoStep1} />
               <div className={c('password-fields')}>
                 <TextField placeholder="OTP" type="text" name="otp" tabIndex={1} />
                 <TextField
@@ -70,9 +69,11 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
             </div>
           </div>
         </div>
+
+        <FaAngleLeft title="Back" className={c('back-icon', formStep)} onClick={gotoStep1} />
       </form>
-      <button className={c('login-button')} type="button" onClick={gotoNextStep}>
-        {formStep === 'step2' ? 'Reset' : 'Send OTP'}
+      <button className={c('button')} type="button" onClick={gotoNextStep}>
+        {formStep === 'step2' ? 'Reset Password' : 'Send OTP'}
       </button>
     </>
   );
