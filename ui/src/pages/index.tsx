@@ -43,8 +43,18 @@ const Index = () => {
   };
 
   const handleResetPassword = async (values: any) => {
-    await dispatch(resetPassword(values));
-    setModalOpen(false);
+    try {
+      await unwrapResult((await dispatch(resetPassword(values))) as any);
+
+      flash({ body: 'Please login with your new password', title: 'Password reset successfully!' });
+      setModalOpen(false);
+    } catch (err) {
+      flash({
+        body: err?.message || err,
+        title: 'Failed to send OTP',
+        type: 'error',
+      });
+    }
   };
 
   return (

@@ -120,7 +120,7 @@ const validationSchema = Yup.object({
 });
 
 interface Props {
-  onSubmit: (values: ResetFormValues) => void;
+  onSubmit: (values: ResetFormValues) => Promise<void>;
   onSendOtp: (email: string) => Promise<void>;
 }
 
