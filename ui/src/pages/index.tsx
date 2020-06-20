@@ -11,7 +11,7 @@ import Modal from 'src/components/Modal';
 import ResetPassword from 'src/components/ResetPassword';
 import WithUser from 'src/containers/WithUser';
 import { loginUser, resetPassword, sendPasswordResetOTP } from 'src/duck/auth';
-import { showFlashMessage } from 'src/duck/flashMessages';
+import { useFlash } from 'src/duck/flashMessages';
 
 import style from './index.module.scss';
 
@@ -20,6 +20,7 @@ const c = classNames.bind(style);
 const Index = () => {
   const dispatch = useDispatch();
   const [isModalOpen, setModalOpen] = useState(false);
+  const [flash] = useFlash();
 
   const handleLogin = (values: any) => {
     dispatch(loginUser(values));
@@ -29,14 +30,13 @@ const Index = () => {
     try {
       const resp = await dispatch(sendPasswordResetOTP(email));
       await unwrapResult(resp as any);
+      flash({ title: 'OTP sent successfully!' });
     } catch (err) {
-      dispatch(
-        showFlashMessage({
-          body: err?.message || err,
-          title: 'Failed to send OTP',
-          type: 'error',
-        }),
-      );
+      flash({
+        body: err?.message || err,
+        title: 'Failed to send OTP',
+        type: 'error',
+      });
 
       throw err;
     }

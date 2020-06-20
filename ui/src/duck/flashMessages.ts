@@ -1,4 +1,5 @@
 import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
 
 import setTimeoutP from 'src/lib/setTimeoutP';
 
@@ -20,6 +21,21 @@ export const showFlashMessage = createAsyncThunk<void, Omit<FlashMessage, 'id'>>
 );
 
 export const hideFlashMessage = createAction<string | undefined>('flashMessages/hide');
+
+export const useFlash = () => {
+  const dispatch = useDispatch();
+
+  const show = (m: Omit<FlashMessage, 'id'>) => {
+    dispatch(showFlashMessage(m));
+  };
+
+  const hide = (id: string) => {
+    dispatch(hideFlashMessage(id));
+  };
+
+  // without explicit cast, typescript kept treating the return value as unition of both functions
+  return [show, hide] as [typeof show, typeof hide];
+};
 
 interface FlashMessagesState {
   messages: FlashMessage[];
