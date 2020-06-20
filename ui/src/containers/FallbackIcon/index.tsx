@@ -5,7 +5,7 @@ const c = classNames.bind(style);
 
 interface Props {
   className?: string;
-  logo: string;
+  logo?: string;
   name: string;
 }
 
