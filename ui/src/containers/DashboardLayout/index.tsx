@@ -53,6 +53,7 @@ const Index: React.FC<LayoutProps> = (p) => {
   const user = currentUser();
   const role = user.role?.id;
   const projects = user.projects ? user.projects : [];
+  const organization = user.organization;
 
   const userSection = (
     <>
@@ -71,7 +72,9 @@ const Index: React.FC<LayoutProps> = (p) => {
         <div className={c('sidebar')}>
           <div className={c('header')}>
             <Link href="/">
-              <img className={c('logo-image')} src="/assets/images/sos-logo.svg" alt="o" />
+              <div className={c('logo-image', 'fallback-icon')} title={organization?.name}>
+                <FallbackIcon logo={organization?.square_logo} name={organization?.name} />
+              </div>
             </Link>
             <div className={c('avatar-container')}>
               <img
