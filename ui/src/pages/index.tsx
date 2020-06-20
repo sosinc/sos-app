@@ -22,18 +22,26 @@ const Index = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [flash] = useFlash();
 
-  const handleLogin = (values: any) => {
-    dispatch(loginUser(values));
+  const handleLogin = async (values: any) => {
+    try {
+      await unwrapResult((await dispatch(loginUser(values))) as any);
+      flash('Logged in successfully!');
+    } catch (err) {
+      flash({
+        body: err.message,
+        title: 'Login Failed!',
+        type: 'error',
+      });
+    }
   };
 
   const handleSendOtp = async (email: string) => {
     try {
-      const resp = await dispatch(sendPasswordResetOTP(email));
-      await unwrapResult(resp as any);
+      await unwrapResult((await dispatch(sendPasswordResetOTP(email))) as any);
       flash('OTP sent successfully!');
     } catch (err) {
       flash({
-        body: err?.message || err,
+        body: err.message,
         title: 'Failed to send OTP',
         type: 'error',
       });
@@ -50,7 +58,7 @@ const Index = () => {
       setModalOpen(false);
     } catch (err) {
       flash({
-        body: err?.message || err,
+        body: err.message,
         title: 'Failed to send OTP',
         type: 'error',
       });

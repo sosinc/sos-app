@@ -11,7 +11,7 @@ import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
-const Login: React.FC<FormikProps<LoginFormValues> & { onResetPassword: () => void }> = (props) => {
+const Login: React.FC<FormikProps<LoginFormValues> & { onResetPassword: () => void }> = (p) => {
   const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
   const passwordRef = useRef<HTMLInputElement>(null);
 
@@ -22,12 +22,12 @@ const Login: React.FC<FormikProps<LoginFormValues> & { onResetPassword: () => vo
    * when it makes sense.
    */
   const untouchStep2 = () => {
-    props.setTouched({ password: false });
+    p.setTouched({ password: false });
   };
 
   const gotoNextStep = () => {
     // Cannot use validateField because of formik issue: https://github.com/jaredpalmer/formik/issues/2291
-    if (formStep === 'step1' && props.values.email && !props.errors.email) {
+    if (formStep === 'step1' && p.values.email && !p.errors.email) {
       setFormStep('step2');
       untouchStep2();
 
@@ -38,7 +38,7 @@ const Login: React.FC<FormikProps<LoginFormValues> & { onResetPassword: () => vo
       return;
     }
 
-    props.submitForm();
+    p.submitForm();
   };
 
   const gotoStep1 = () => {
@@ -46,15 +46,21 @@ const Login: React.FC<FormikProps<LoginFormValues> & { onResetPassword: () => vo
     untouchStep2();
   };
 
-  const formHasError = hasFormError(props);
+  const formHasError = hasFormError(p);
+
+  const buttonText = p.isSubmitting ? (
+    <div className={c({ 'logging-in': p.isSubmitting })}>
+      Logging in
+      <span />
+    </div>
+  ) : (
+      'Login'
+    );
 
   return (
     <div className={c('container')}>
       <div className={c('login-form-container')}>
-        <form
-          className={c('login-form', { 'has-error': formHasError })}
-          onSubmit={props.handleSubmit}
-        >
+        <form className={c('login-form', { 'has-error': formHasError })} onSubmit={p.handleSubmit}>
           <div className={c('fields-container')}>
             <div className={c('2-step-swiper', c(formStep))}>
               <TextField
@@ -77,12 +83,17 @@ const Login: React.FC<FormikProps<LoginFormValues> & { onResetPassword: () => vo
             </div>
           </div>
 
-          <button className={c('login-button')} type="button" onClick={gotoNextStep}>
-            Login
+          <button
+            className={c('login-button')}
+            type="button"
+            onClick={gotoNextStep}
+            disabled={p.isSubmitting}
+          >
+            {buttonText}
           </button>
         </form>
         <div className={c('reset-password-text')}>
-          <span onClick={props.onResetPassword}>Reset password</span>
+          <span onClick={p.onResetPassword}>Reset password</span>
         </div>
       </div>
     </div>

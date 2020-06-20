@@ -35,7 +35,17 @@ export const login = async (payload: LoginPayload): Promise<User> => {
     }
   `;
 
-  return client.request(query, payload).then((data) => data.login);
+  try {
+    const data = await client.request(query, payload);
+
+    return data.login;
+  } catch (err) {
+    if (err.response?.errors && err.response.errors.length) {
+      throw new Error(err.response.errors[0].message);
+    }
+
+    throw new Error('Something went wrong :-(');
+  }
 };
 
 export interface CurrentUserResponse {
