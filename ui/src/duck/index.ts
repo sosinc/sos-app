@@ -4,14 +4,16 @@ import { combineReducers, Reducer } from 'redux';
 import auth from './auth';
 import designation from './designation';
 import employee from './employee';
+import flashMessages from './flashMessages';
 import organization from './organization';
 import project from './project';
 
 const reducer = combineReducers({
   [auth.name]: auth.reducer,
   [designation.name]: designation.reducer,
-  [organization.name]: organization.reducer,
+  [flashMessages.name]: flashMessages.reducer,
   [employee.name]: employee.reducer,
+  [organization.name]: organization.reducer,
   [project.name]: project.reducer,
 });
 
