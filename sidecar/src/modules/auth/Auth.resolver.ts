@@ -115,13 +115,13 @@ export class AuthResolver {
     const email = req.session.passwordReset?.email;
 
     if (!otp || !email) {
-      throw new ServerError("Please request for a password-reset-otp first", { status: 403 });
+      throw new ServerError("Incorrect OTP!", { status: 401 });
     }
 
     const userLogin = await this.userLoginRepo.findOne({ public_key: email, provider: "EMAIL" });
 
     if (!userLogin || !otp || otp !== inputOtp) {
-      throw new ServerError("Invalid credentials.", { status: 401 });
+      throw new ServerError("Incorrect OTP!", { status: 401 });
     }
 
     userLogin.private_key = await hash(newPassword, 10);

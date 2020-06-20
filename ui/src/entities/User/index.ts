@@ -117,9 +117,14 @@ export const sendPasswordResetOTP = async (email: string): Promise<undefined> =>
     mutation($email: String!) {
       sendPasswordResetOtp(email: $email)
     }`;
-  const data = await client.request(query, { email });
 
-  return data?.sendPasswordResetOtp;
+  try {
+    const data = await client.request(query, { email });
+
+    return data?.sendPasswordResetOtp;
+  } catch (err) {
+    throw new Error('Something went wrong :-(');
+  }
 };
 
 export const resetPassword = async (payload: ResetPasswordPayload): Promise<undefined> => {
@@ -127,7 +132,16 @@ export const resetPassword = async (payload: ResetPasswordPayload): Promise<unde
     mutation($password: String!, $otp: String!) {
       resetPassword(newPassword: $password, otp: $otp) { id }
     }`;
-  const data = await client.request(query, payload);
 
-  return data?.resetPassword?.id;
+  try {
+    const data = await client.request(query, payload);
+
+    return data?.resetPassword?.id;
+  } catch (err) {
+    if (Array.isArray(err.response?.errors) && err.response.errors.length) {
+      throw new Error(err.response.errors[0].message);
+    }
+
+    throw new Error('Something went wrong :-(');
+  }
 };
