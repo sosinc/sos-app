@@ -73,10 +73,7 @@ const Index: React.FC<LayoutProps> = (p) => {
           <div className={c('header')}>
             <Link href="/">
               <div className={c('logo-image', 'fallback-icon')} title={organization?.name}>
-                <FallbackIcon
-                  logo={organization?.square_logo}
-                  name={organization?.name ? organization.name : 'o'}
-                />
+                <FallbackIcon logo={organization?.square_logo} name={organization?.name} />
               </div>
             </Link>
             <div className={c('avatar-container')}>

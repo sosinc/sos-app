@@ -6,20 +6,24 @@ const c = classNames.bind(style);
 interface Props {
   className?: string;
   logo?: string;
-  name: string;
+  name?: string;
 }
 
 const index: React.FC<Props> = (p) => {
   const containerClass = c('fallback-brand', p.className);
 
-  const firstLetter = p.name[0].toUpperCase();
   if (p.logo) {
     return <img className={c('brand')} src={p.logo} />;
+  } else if (p.name) {
+    return (
+      <div className={containerClass}>
+        <span>{p.name[0].toUpperCase()}</span>
+      </div>
+    );
   }
-
   return (
-    <div className={containerClass}>
-      <span className={c('fallback-icon')}>{firstLetter}</span>
+    <div className={c('defautl-fallback-icon')}>
+      <span>?</span>
     </div>
   );
 };

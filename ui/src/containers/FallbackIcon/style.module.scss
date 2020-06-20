@@ -7,7 +7,7 @@
   width: 100%;
 }
 
-.fallback-brand {
+%fallback-brand {
   align-items: center;
   border-radius: 50%;
   box-shadow: 1px 2px 0 $color-shadowbox-shadow;
@@ -17,4 +17,14 @@
   justify-content: center;
   user-select: none;
   width: 100%;
+}
+
+.fallback-brand {
+  @extend %fallback-brand;
+}
+
+.defautl-fallback-icon {
+  @extend %fallback-brand;
+
+  background: $color-text-dim2;
 }
