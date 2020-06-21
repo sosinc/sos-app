@@ -1,0 +1,93 @@
+@import 'src/scss/lib';
+
+.header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.not-found-container {
+  padding-bottom: 7em;
+  padding-top: 7em;
+}
+
+.add-button {
+  $size: 28px;
+  @extend %button-primary;
+
+  align-items: center;
+  display: flex;
+  height: $size;
+  justify-content: center;
+  padding: 0;
+  width: $size;
+
+  .icon {
+    height: 1.2em;
+    width: 1.2em;
+  }
+}
+
+.container {
+  width: 100%;
+}
+
+.todays-commitments {
+  border-bottom: 1px solid $color-boundary;
+  min-height: 185px;
+}
+
+.commitments-body {
+  border: 1px solid $color-boundary;
+  color: $color-text-bright1;
+  font-size: 13px;
+  padding: 0 24px;
+  width: 100%;
+}
+
+.status-row {
+  align-items: center;
+  display: flex;
+  height: 36px;
+  justify-content: space-between;
+}
+
+.status-row-left {
+  display: flex;
+  justify-content: space-between;
+  width: 12em;
+}
+
+.row-item {
+  color: $color-text-dim2;
+}
+
+.status-row-right {
+  color: $color-cta;
+}
+
+.team-activity {
+  color: $color-text-bright1;
+  font-size: 13px;
+  margin-top: 10px;
+  padding: 0 24px;
+  width: 100%;
+}
+
+.activity-header {
+  align-items: center;
+  display: flex;
+  height: 56px;
+}
+
+.activity-filter {
+  border: 1px dashed $color-text-dim2;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: $color-text-dim3;
+  height: 24px;
+  margin-left: 10px;
+  padding: 3px;
+  width: 58px;
+}

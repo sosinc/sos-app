@@ -68,6 +68,7 @@ const Index = () => {
   return (
     <WithUser inverted={true} redirectPath={'/dashboard'}>
       <Head>
+        <link rel="shortcut icon" href="/assets/images/sos-logo.svg" />
         <title>SoS App</title>
       </Head>
 
