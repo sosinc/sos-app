@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
-import { createOrganization } from 'src/duck/organization';
+import { createOrganization } from 'src/duck/organizations';
 
 import style from './style.module.scss';
 
@@ -33,12 +33,7 @@ const AddOrg: React.FC<FormikProps<FormValues>> = (p) => {
           <h2 className={c('title')}> Create Organization</h2>
           <div className={c('name-container', 'field-container')}>
             <span className={c('field-title')}>Name</span>
-            <TextField
-              className={'form-text-field'}
-              placeholder="Enter organization name"
-              type="name"
-              name="name"
-            />
+            <TextField placeholder="Enter organization name" type="name" name="name" />
           </div>
 
           <div className={c('image-container-logo', 'field-container')}>

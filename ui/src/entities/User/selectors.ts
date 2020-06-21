@@ -21,17 +21,17 @@ export const currentUser = (): CurrentUser => {
   const {
     auth: { activeEmployeeId, user },
     employees: { employees },
-    organization: { organizations },
+    organizations,
     project: { projects: allProjects },
   } = useSelector((state: RootState) => ({
     auth: state.auth,
     employees: state.employees,
-    organization: state.organization,
+    organizations: state.organizations,
     project: state.projects,
   }));
 
   const employee = employees.find((e) => e.ecode === activeEmployeeId);
-  const organization = organizations.find((o) => o.id === employee?.organization_id);
+  const organization = employee && organizations.entities[employee?.organization_id];
   const projects = allProjects.length
     ? allProjects.filter((p) => p.organization_id === organization?.id)
     : [];

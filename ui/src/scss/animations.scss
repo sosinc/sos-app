@@ -56,3 +56,9 @@
     width: 20px;
   }
 }
+
+@keyframes shiny-bones {
+  100% {
+    transform: translateX(100%);
+  }
+}

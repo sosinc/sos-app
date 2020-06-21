@@ -11,7 +11,7 @@ import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
-import { fetchOrganization } from 'src/duck/organization';
+import { fetchOrganizations } from 'src/duck/organizations';
 import { createProject } from 'src/duck/project';
 
 import style from './style.module.scss';
@@ -42,7 +42,7 @@ const AddProject: React.FC<FormikProps<FormValues>> = (p) => {
 
   useEffect(() => {
     if (userData.role?.id === 'APP_ADMIN' && userData.organization) {
-      dispatch(fetchOrganization());
+      dispatch(fetchOrganizations());
     }
   }, []);
 

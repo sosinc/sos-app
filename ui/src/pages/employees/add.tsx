@@ -13,7 +13,7 @@ import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
 import { fetchDesignation } from 'src/duck/designation';
 import { createEmployee } from 'src/duck/employee';
-import { fetchOrganization } from 'src/duck/organization';
+import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
 
 import style from './style.module.scss';
 
@@ -33,19 +33,19 @@ const Header: React.FC = () => (
 const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
   const dispatch = useDispatch();
   const {
-    organization: { organizations, isFetching: isFetchingOrganizations },
+    organizations,
     designation: { designation, isFetching: isFetchingDesignations },
   } = useSelector((state: RootState) => ({
     designation: state.designations,
-    organization: state.organization,
+    organizations: orgSelector.selectAll(state),
   }));
 
   useEffect(() => {
-    dispatch(fetchOrganization());
+    dispatch(fetchOrganizations());
     dispatch(fetchDesignation());
   }, []);
 
-  if (isFetchingOrganizations && isFetchingDesignations) {
+  if (isFetchingDesignations) {
     return <span>loading...</span>;
   }
 
@@ -137,9 +137,7 @@ const initialValues = {
 const validationSchema = Yup.object().shape({
   designation_id: Yup.string().required('Required'),
   ecode: Yup.string().required('Required'),
-  email: Yup.string()
-    .email()
-    .required('Required'),
+  email: Yup.string().email().required('Required'),
   headshot: Yup.string(),
   name: Yup.string()
     .min(2, 'Must be 2 characters or more')

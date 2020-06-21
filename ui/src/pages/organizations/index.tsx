@@ -1,16 +1,17 @@
 import classNames from 'classnames/bind';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { MdAdd, MdBusiness } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 
 import NoItemsFound from 'src/components/NoItemsFound';
 import OrganizationsList from 'src/components/Organization/List';
 import DashboardLayout from 'src/containers/DashboardLayout';
-import { RootState } from 'src/duck';
-import { fetchOrganization, OrganizationState } from 'src/duck/organization';
+import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
 
 import style from './style.module.scss';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { useFlash } from 'src/duck/flashMessages';
 
 const c = classNames.bind(style);
 
@@ -27,19 +28,29 @@ const Header: React.FC = () => (
 
 const Index = () => {
   const dispatch = useDispatch();
-  const { organizations, isFetching } = useSelector<RootState, OrganizationState>(
-    (state) => state.organization,
-  );
+  const organizations = useSelector(orgSelector.selectAll);
+  const [flash] = useFlash();
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  useEffect(() => {
-    dispatch(fetchOrganization());
+  const fetchOrgs = useCallback(async () => {
+    try {
+      setIsFetching(true);
+      await unwrapResult((await dispatch(fetchOrganizations())) as any);
+      setIsFetching(false);
+    } catch (err) {
+      flash({
+        body: err.message,
+        title: 'Failed to fetch some organizations',
+        type: 'error',
+      });
+    }
   }, []);
 
-  if (isFetching) {
-    return <span>loading...</span>;
-  }
+  useEffect(() => {
+    fetchOrgs();
+  }, [fetchOrgs]);
 
-  if (!organizations.length) {
+  if (!organizations.length && !isFetching) {
     return (
       <div className={c('not-found-container')}>
         <NoItemsFound
@@ -52,7 +63,7 @@ const Index = () => {
     );
   }
 
-  return <OrganizationsList organizations={organizations} />;
+  return <OrganizationsList organizations={organizations} isFetching={isFetching} />;
 };
 
 export default () => (
