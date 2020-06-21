@@ -57,21 +57,11 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
 
           <div className={c('email-container', 'field-container')}>
             <span className={c('field-title')}>Email</span>
-            <TextField
-              className={'form-text-field'}
-              placeholder="Enter email"
-              type="email"
-              name="email"
-            />
+            <TextField placeholder="Enter email" type="email" name="email" />
           </div>
           <div className={c('name-container', 'field-container')}>
             <span className={c('field-title')}>Name</span>
-            <TextField
-              className={'form-text-field'}
-              placeholder="Enter name"
-              type="text"
-              name="name"
-            />
+            <TextField placeholder="Enter name" type="text" name="name" />
           </div>
 
           <div className={c('logo', 'field-container')}>
@@ -82,12 +72,7 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
           <div className={c('right-container')}>
             <div className={c('ecode-container', 'field-container')}>
               <span className={c('field-title')}>E-Code</span>
-              <TextField
-                className={'form-text-field'}
-                placeholder="Enter e-code"
-                type="text"
-                name="ecode"
-              />
+              <TextField placeholder="Enter e-code" type="text" name="ecode" />
             </div>
 
             <div className={c('designation-container', 'field-container')}>
