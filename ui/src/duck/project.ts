@@ -48,7 +48,11 @@ export default createSlice({
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
       state.projects = payload.projects;
-    });  },
+      state.projects =  [...state.projects, ...payload.projects].filter((item, index, arr) => {
+        return arr.indexOf(item) === index;
+      });
+    });
+  },
   initialState,
   name: 'projects',
   reducers: {},

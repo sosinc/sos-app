@@ -47,9 +47,8 @@ export default createSlice({
     });
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
-      const allEmployee = [...state.employees, ...payload.employees];
-      state.employees =  allEmployee.filter((item, pos) => {
-        return allEmployee.indexOf(item) === pos;
+      state.employees =  [...state.employees, ...payload.employees].filter((item, index, arr) => {
+        return arr.indexOf(item) === index;
       });
     });
   },

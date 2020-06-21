@@ -47,11 +47,9 @@ export default createSlice({
     });
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
-      const allOrganizations = [...state.organizations, ...payload.organizations];
-      state.organizations =  allOrganizations.filter((item, pos) => {
-        return allOrganizations.indexOf(item) === pos;
+      state.organizations =  [...state.organizations, ...payload.organizations].filter((item, index, arr) => {
+        return arr.indexOf(item) === index;
       });
-
     });
   },
   initialState,

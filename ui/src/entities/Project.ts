@@ -50,11 +50,10 @@ export const fetchMany = async (): Promise<Project[]> => {
   }`;
 
   const data = await client.request(query);
-
   return data?.projects.length
     ? data.projects.map((e: any) => ({
         ...e,
-        logo: resolveStorageFile(e.logo),
+        logo_square: resolveStorageFile(e.logo_square),
       }))
     : [];
 };
