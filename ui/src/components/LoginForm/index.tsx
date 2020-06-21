@@ -5,17 +5,14 @@ import { FaAngleLeft } from 'react-icons/fa';
 import * as Yup from 'yup';
 
 import TextField from 'src/components/Form/TextField';
-import Modal from 'src/components/Modal';
-import ResetPassword from 'src/components/ResetPassword';
 import hasFormError from 'src/lib/hasFormError';
 
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
-const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
+const Login: React.FC<FormikProps<LoginFormValues> & { onResetPassword: () => void }> = (p) => {
   const [formStep, setFormStep] = useState<'step1' | 'step2'>('step1');
-  const [isModalOpen, setModalOpen] = useState(false);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   /*
@@ -25,12 +22,12 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
    * when it makes sense.
    */
   const untouchStep2 = () => {
-    props.setTouched({ password: false });
+    p.setTouched({ password: false });
   };
 
   const gotoNextStep = () => {
     // Cannot use validateField because of formik issue: https://github.com/jaredpalmer/formik/issues/2291
-    if (formStep === 'step1' && props.values.email && !props.errors.email) {
+    if (formStep === 'step1' && p.values.email && !p.errors.email) {
       setFormStep('step2');
       untouchStep2();
 
@@ -41,7 +38,7 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
       return;
     }
 
-    props.submitForm();
+    p.submitForm();
   };
 
   const gotoStep1 = () => {
@@ -49,23 +46,25 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
     untouchStep2();
   };
 
-  const handleModal = () => {
-    setModalOpen(false);
-  };
+  const formHasError = hasFormError(p);
 
-  const formHasError = hasFormError(props);
+  const buttonText = p.isSubmitting ? (
+    <div className={c({ 'logging-in': p.isSubmitting })}>
+      Logging in
+      <span />
+    </div>
+  ) : (
+      'Login'
+    );
 
   return (
     <div className={c('container')}>
       <div className={c('login-form-container')}>
-        <form
-          className={c('login-form', { 'has-error': formHasError })}
-          onSubmit={props.handleSubmit}
-        >
+        <form className={c('login-form', { 'has-error': formHasError })} onSubmit={p.handleSubmit}>
           <div className={c('fields-container')}>
             <div className={c('2-step-swiper', c(formStep))}>
               <TextField
-                className={'login-form-field'}
+                className={c('login-form-field')}
                 placeholder="> enter your work email"
                 type="email"
                 name="email"
@@ -73,7 +72,7 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
               <div className={c('password')}>
                 <FaAngleLeft title="Back" className={c('back-icon')} onClick={gotoStep1} />
                 <TextField
-                  className={'login-form-field'}
+                  className={c('login-form-field')}
                   inputRef={passwordRef}
                   placeholder="*******"
                   type="password"
@@ -84,17 +83,19 @@ const Login: React.FC<FormikProps<LoginFormValues>> = (props) => {
             </div>
           </div>
 
-          <button className={c('login-button')} type="button" onClick={gotoNextStep}>
-            Login
+          <button
+            className={c('login-button')}
+            type="button"
+            onClick={gotoNextStep}
+            disabled={p.isSubmitting}
+          >
+            {buttonText}
           </button>
         </form>
         <div className={c('reset-password-text')}>
-          <span onClick={() => setModalOpen(true)}>Reset password</span>
+          <span onClick={p.onResetPassword}>Reset password</span>
         </div>
       </div>
-      <Modal onClose={handleModal} isOpen={isModalOpen}>
-        <ResetPassword />
-      </Modal>
     </div>
   );
 };
@@ -114,10 +115,15 @@ const initialValues = {
   password: '',
 };
 
-const OuterForm: React.FC<{ onSubmit: (values: LoginFormValues) => void }> = (p) => {
+interface LoginProps {
+  onSubmit: (values: LoginFormValues) => void;
+  onResetPassword: () => void;
+}
+
+const OuterForm: React.FC<LoginProps> = (p) => {
   return (
     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={p.onSubmit}>
-      {Login}
+      {(formikProps) => Login({ ...formikProps, onResetPassword: p.onResetPassword })}
     </Formik>
   );
 };

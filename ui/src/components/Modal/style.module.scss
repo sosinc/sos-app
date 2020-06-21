@@ -25,9 +25,11 @@
 }
 
 .modal {
-  background: $color-bg-dark;
+  align-items: center;
+  background: $color-bg-secondary;
   border-radius: 4px;
   box-shadow: $color-shadowbox-shadow 0 4px 78px;
+  display: flex;
   flex-direction: column;
   position: relative;
   width: 480px;

@@ -6,26 +6,20 @@
   width: 100%;
 }
 
-.login-form-field {
-  flex-grow: 1;
-  position: relative;
-  width: 100%;
-
-  input {
-    @extend %input-login-form ;
-  }
-}
-
-.form-text-field {
+.field {
   flex-grow: 1;
   position: relative;
   width: 100%;
 
   &.has-error {
     background: $color-error-bg;
+
+    input {
+      background: $color-error-bg;
+    }
   }
 
   input {
-    @extend %input-form;
+    @extend %form-input;
   }
 }

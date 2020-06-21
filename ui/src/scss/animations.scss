@@ -39,3 +39,20 @@
 @keyframes spin {
   0% { transform: rotate(360deg); }
 }
+
+%working {
+  &::after {
+    animation: ellipsis steps(4, end) 900ms infinite;
+    content: '\2026'; /* ascii code for the ellipsis character */
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    width: 0;
+  }
+}
+
+@keyframes ellipsis {
+  to {
+    width: 20px;
+  }
+}

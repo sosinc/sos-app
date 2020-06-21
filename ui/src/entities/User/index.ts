@@ -21,6 +21,11 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface ResetPasswordPayload {
+  password: string;
+  otp: string;
+}
+
 export const login = async (payload: LoginPayload): Promise<User> => {
   const query = `
     mutation($email: String!, $password: String!) {
@@ -30,7 +35,17 @@ export const login = async (payload: LoginPayload): Promise<User> => {
     }
   `;
 
-  return client.request(query, payload).then((data) => data.login);
+  try {
+    const data = await client.request(query, payload);
+
+    return data.login;
+  } catch (err) {
+    if (err.response?.errors && err.response.errors.length) {
+      throw new Error(err.response.errors[0].message);
+    }
+
+    throw new Error('Something went wrong :-(');
+  }
 };
 
 export interface CurrentUserResponse {
@@ -105,4 +120,38 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
       role: me.role,
     },
   };
+};
+
+export const sendPasswordResetOTP = async (email: string): Promise<undefined> => {
+  const query = `
+    mutation($email: String!) {
+      sendPasswordResetOtp(email: $email)
+    }`;
+
+  try {
+    const data = await client.request(query, { email });
+
+    return data?.sendPasswordResetOtp;
+  } catch (err) {
+    throw new Error('Something went wrong :-(');
+  }
+};
+
+export const resetPassword = async (payload: ResetPasswordPayload): Promise<undefined> => {
+  const query = `
+    mutation($password: String!, $otp: String!) {
+      resetPassword(newPassword: $password, otp: $otp) { id }
+    }`;
+
+  try {
+    const data = await client.request(query, payload);
+
+    return data?.resetPassword?.id;
+  } catch (err) {
+    if (Array.isArray(err.response?.errors) && err.response.errors.length) {
+      throw new Error(err.response.errors[0].message);
+    }
+
+    throw new Error('Something went wrong :-(');
+  }
 };

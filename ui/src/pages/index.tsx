@@ -1,27 +1,74 @@
+import { unwrapResult } from '@reduxjs/toolkit';
 import classNames from 'classnames/bind';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import FullPageLayout from 'src/components/FullPageLayout';
 import LoginForm from 'src/components/LoginForm';
+import Modal from 'src/components/Modal';
+import ResetPassword from 'src/components/ResetPassword';
 import WithUser from 'src/containers/WithUser';
-import { loginUser } from 'src/duck/auth';
+import { loginUser, resetPassword, sendPasswordResetOTP } from 'src/duck/auth';
+import { useFlash } from 'src/duck/flashMessages';
 
 import style from './index.module.scss';
+
 const c = classNames.bind(style);
 
 const Index = () => {
   const dispatch = useDispatch();
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [flash] = useFlash();
 
-  const handleLogin = (values: any) => {
-    dispatch(loginUser(values));
+  const handleLogin = async (values: any) => {
+    try {
+      await unwrapResult((await dispatch(loginUser(values))) as any);
+      flash('Logged in successfully!');
+    } catch (err) {
+      flash({
+        body: err.message,
+        title: 'Login Failed!',
+        type: 'error',
+      });
+    }
+  };
+
+  const handleSendOtp = async (email: string) => {
+    try {
+      await unwrapResult((await dispatch(sendPasswordResetOTP(email))) as any);
+      flash('OTP sent successfully!');
+    } catch (err) {
+      flash({
+        body: err.message,
+        title: 'Failed to send OTP',
+        type: 'error',
+      });
+
+      throw err;
+    }
+  };
+
+  const handleResetPassword = async (values: any) => {
+    try {
+      await unwrapResult((await dispatch(resetPassword(values))) as any);
+
+      flash({ body: 'Please login with your new password', title: 'Password reset successfully!' });
+      setModalOpen(false);
+    } catch (err) {
+      flash({
+        body: err.message,
+        title: 'Failed to send OTP',
+        type: 'error',
+      });
+    }
   };
 
   return (
     <WithUser inverted={true} redirectPath={'/dashboard'}>
       <Head>
-        <title>'snake oil software - app'</title>
+        <title>SoS App</title>
       </Head>
 
       <FullPageLayout className={c('container')}>
@@ -58,8 +105,11 @@ const Index = () => {
             </p>
           </span>
 
-          <LoginForm onSubmit={handleLogin} />
+          <LoginForm onSubmit={handleLogin} onResetPassword={() => setModalOpen(true)} />
         </div>
+        <Modal onClose={() => setModalOpen(false)} isOpen={isModalOpen}>
+          <ResetPassword onSendOtp={handleSendOtp} onSubmit={handleResetPassword} />
+        </Modal>
       </FullPageLayout>
     </WithUser>
   );
