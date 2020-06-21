@@ -48,6 +48,7 @@ export const fetchMany = async (): Promise<Organization[]> => {
  }`;
 
   const data = await client.request(query);
+
   const organizations: Organization[] = data?.organizations.map((org: any) => {
     return {
       ...org,
