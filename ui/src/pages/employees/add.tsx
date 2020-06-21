@@ -2,7 +2,6 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import Link from 'next/link';
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
@@ -11,12 +10,12 @@ import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
-import { fetchDesignation } from 'src/duck/designation';
+import { fetchDesignations, designationSelector } from 'src/duck/designation';
 import { createEmployee } from 'src/duck/employee';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
+import { useAsyncThunk } from 'src/lib/useAsyncThunk';
 
 import style from './style.module.scss';
-import { useAsyncThunk } from 'src/lib/useAsyncThunk';
 
 const c = classNames.bind(style);
 
@@ -32,26 +31,18 @@ const Header: React.FC = () => (
 );
 
 const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
-  const dispatch = useDispatch();
-  const {
-    organizations,
-    designation: { designation, isFetching: isFetchingDesignations },
-  } = useSelector((state: RootState) => ({
-    designation: state.designations,
+  const { organizations, designations } = useSelector((state: RootState) => ({
+    designations: designationSelector.selectAll(state),
     organizations: orgSelector.selectAll(state),
   }));
   const [isFetchingOrgs] = useAsyncThunk(
     fetchOrganizations,
     'Failed to fetch organizations. Please refresh the page',
   );
-
-  useEffect(() => {
-    dispatch(fetchDesignation());
-  }, []);
-
-  if (isFetchingDesignations) {
-    return <span>loading...</span>;
-  }
+  const [isFetchingDesignations] = useAsyncThunk(
+    fetchDesignations,
+    'Failed to fetch designations. Please refresh the page',
+  );
 
   if (organizations.length && !p.values.organization_id) {
     p.setFieldValue('organization_id', organizations[0].id);
@@ -85,7 +76,12 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
 
             <div className={c('designation-container', 'field-container')}>
               <span className={c('field-title')}>Designation</span>
-              <SelectField className={'org-add-form'} name="designation_id" options={designation} />
+              <SelectField
+                className={'org-add-form'}
+                name="designation_id"
+                options={designations}
+                isLoading={isFetchingDesignations}
+              />
             </div>
             <div className={c('org-container', 'field-container')}>
               <span className={c('field-title')}>Organization</span>
