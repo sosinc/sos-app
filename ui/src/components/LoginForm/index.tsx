@@ -54,8 +54,8 @@ const Login: React.FC<FormikProps<LoginFormValues> & { onResetPassword: () => vo
       <span />
     </div>
   ) : (
-      'Login'
-    );
+    'Login'
+  );
 
   return (
     <div className={c('container')}>

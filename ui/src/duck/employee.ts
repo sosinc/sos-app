@@ -1,13 +1,17 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from '@reduxjs/toolkit';
 
 import { fetchCurrentUser } from 'src/duck/auth';
 import { create, CreatePayload, Employee, fetchMany } from 'src/entities/Employee';
+import { RootState } from '.';
 
-export interface EmployeeState {
-  employees: Employee[];
-  error?: string;
-  isFetching: boolean;
-}
+const employeeAdapter = createEntityAdapter<Employee>({
+  // Employees get their unique ID from combination of Ecode and organization ID
+  selectId: (e) => `${e.ecode}-${e.organization_id}`,
+  sortComparer: (a, b) => a.name.localeCompare(b.name),
+});
+export const employeeSelector = employeeAdapter.getSelectors<RootState>((state) => state.employees);
+
+export type EmployeeState = EntityState<Employee>;
 
 export const fetchEmployees = createAsyncThunk<
   Employee[],
@@ -21,35 +25,17 @@ export const createEmployee = createAsyncThunk<
   { rejectValue: Error; state: EmployeeState }
 >('employees/create', create);
 
-const initialState: EmployeeState = {
-  employees: [],
-  isFetching: false,
-};
-
 export default createSlice({
   extraReducers: (builder) => {
-    builder.addCase(createEmployee.fulfilled, (state, { payload }) => {
-      state.employees.push(payload);
-    });
+    builder.addCase(createEmployee.fulfilled, employeeAdapter.addOne);
 
-    builder.addCase(fetchEmployees.pending, (state) => {
-      state.isFetching = true;
-    });
-
-    builder.addCase(fetchEmployees.rejected, (state, { error }) => {
-      state.isFetching = false;
-      state.error = error.message;
-    });
-
-    builder.addCase(fetchEmployees.fulfilled, (state, { payload }) => {
-      state.isFetching = false;
-      state.employees = payload;
-    });
+    builder.addCase(fetchEmployees.fulfilled, employeeAdapter.upsertMany);
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
-      state.employees = payload.employees;
-    });  },
-  initialState,
+      employeeAdapter.upsertMany(state, payload.employees);
+    });
+  },
+  initialState: employeeAdapter.getInitialState(),
   name: 'employees',
   reducers: {},
 });

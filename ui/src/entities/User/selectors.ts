@@ -1,9 +1,12 @@
 import { useSelector } from 'react-redux';
 
 import { RootState } from 'src/duck';
+import { employeeSelector } from 'src/duck/employee';
+import { orgSelector } from 'src/duck/organizations';
 import { Employee } from 'src/entities/Employee';
 import { Organization } from 'src/entities/Organizations';
 import { Project } from 'src/entities/Project';
+
 import { User } from '.';
 
 export interface CurrentUser extends User {
@@ -19,19 +22,26 @@ export interface CurrentUser extends User {
  */
 export const currentUser = (): CurrentUser => {
   const {
-    auth: { activeEmployeeId, user },
-    employees: { employees },
-    organizations,
+    user,
+    employee,
+    organization,
     project: { projects: allProjects },
-  } = useSelector((state: RootState) => ({
-    auth: state.auth,
-    employees: state.employees,
-    organizations: state.organizations,
-    project: state.projects,
-  }));
+  } = useSelector((state: RootState) => {
+    const { activeEmployeeId } = state.auth;
+    const activeEmployee = activeEmployeeId
+      ? employeeSelector.selectById(state, activeEmployeeId)
+      : undefined;
+    const activeOrg =
+      activeEmployee && orgSelector.selectById(state, activeEmployee.organization_id);
 
-  const employee = employees.find((e) => e.ecode === activeEmployeeId);
-  const organization = employee && organizations.entities[employee?.organization_id];
+    return {
+      employee: activeEmployee,
+      organization: activeOrg,
+      project: state.projects,
+      user: state.auth.user,
+    };
+  });
+
   const projects = allProjects.length
     ? allProjects.filter((p) => p.organization_id === organization?.id)
     : [];

@@ -10,7 +10,7 @@ import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
-import { fetchDesignations, designationSelector } from 'src/duck/designation';
+import { designationSelector, fetchDesignations } from 'src/duck/designation';
 import { createEmployee } from 'src/duck/employee';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
 import { useAsyncThunk } from 'src/lib/useAsyncThunk';
