@@ -29,7 +29,7 @@ const Index = () => {
   const employees = useSelector(employeeSelector.selectAll);
   const [isFetching] = useAsyncThunk(fetchEmployees, 'Failed to fetch some Employees :-(');
 
-  if (!employees.length) {
+  if (!employees.length && !isFetching) {
     return (
       <div className={c('not-found-container')}>
         <NoItemsFound

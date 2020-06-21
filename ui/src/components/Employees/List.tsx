@@ -25,12 +25,12 @@ const EmployeeItem = (e: Employee) => (
 const Skeleton = () => (
   <div className={c('skeleton')}>
     <EmployeeItem
-      designation_id=""
+      designation_id="AB"
       ecode=""
       email=""
       headshot=""
       joining_date=""
-      name=""
+      name="ABC"
       organization_id=""
     />
   </div>
