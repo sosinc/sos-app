@@ -53,7 +53,7 @@ export const fetchMany = async (): Promise<Organization[]> => {
     return {
       ...org,
       banner: resolveStorageFile(org.banner),
-      employees_count: org?.employees_agregate?.aggregate?.count || 0,
+      employees_count: org?.employees_aggregate?.aggregate?.count || 0,
       square_logo: resolveStorageFile(org.square_logo),
     };
   });
