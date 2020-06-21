@@ -37,7 +37,7 @@
   position: relative;
 
   &::after {
-    animation: shiny-bones 1.5s infinite;
+    animation: conveyer-belt 1.5s infinite;
     background: linear-gradient(90deg, transparent, $color-text-dim2, transparent);
     bottom: 0;
     content: '';

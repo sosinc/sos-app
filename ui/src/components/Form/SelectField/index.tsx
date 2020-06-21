@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind';
 import { connect, FormikContextType, getIn } from 'formik';
 import { useState } from 'react';
+import { MdExpandMore } from 'react-icons/md';
 
 import ErrorMessage from 'src/components/Form/ErrorMessage';
 import styles from './style.module.scss';
@@ -17,7 +18,7 @@ interface FileFieldProps {
   name: string;
   className?: string;
   options: SelectFieldItem[];
-  autoSelectFirst?: boolean;
+  isLoading?: boolean;
 }
 const noOptions = <li className={c('select-option')}>{'No data'}</li>;
 const SelectField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> = ({
@@ -48,6 +49,7 @@ const SelectField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> 
 
   const containerClass = c('input-field-container', p.className, {
     'has-error': error,
+    'is-loading': p.isLoading,
   });
 
   const selectOptions = p.options.map((item) => (
@@ -70,14 +72,13 @@ const SelectField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> 
 
   const selectedItem = p.options.find((i) => i.id === inputProps.value);
 
-  if (p.autoSelectFirst && !inputProps.value && p.options.length) {
-    formik.setFieldValue(inputProps.name, p.options[0].id);
-  }
+  const Icon = () => (isOpen || error ? null : <MdExpandMore className={c('icon')} />);
 
   return (
     <div className={containerClass} onClick={handleOpen}>
       <div className={c('select-container')} {...inputProps}>
         {selectedItem ? selectedItem.name : 'Select Value'}
+        <Icon />
       </div>
       {isOpen ? selectList : null}
       <ErrorMessage error={error} />

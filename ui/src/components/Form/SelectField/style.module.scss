@@ -17,6 +17,23 @@
   &.has-error {
     background: $color-error-bg;
   }
+
+  &.is-loading {
+    overflow: hidden;
+    pointer-events: none;
+
+    &::after {
+      animation: conveyer-belt 1.5s infinite;
+      background: $color-cta;
+      bottom: 0;
+      content: '';
+      height: 2px;
+      left: 0;
+      position: absolute;
+      transform: translateX(-100%);
+      width: 100%;
+    }
+  }
 }
 
 .select-container {
@@ -55,4 +72,14 @@
     background-color: $color-select-active;
     color: $color-button-text;
   }
+}
+
+.icon {
+  $size: 36px;
+
+  height: $size;
+  position: absolute;
+  right: 4px;
+  top: 0;
+  width: $size;
 }

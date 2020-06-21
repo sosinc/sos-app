@@ -16,6 +16,7 @@ import { createEmployee } from 'src/duck/employee';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
 
 import style from './style.module.scss';
+import { useAsyncThunk } from 'src/lib/useAsyncThunk';
 
 const c = classNames.bind(style);
 
@@ -39,14 +40,21 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
     designation: state.designations,
     organizations: orgSelector.selectAll(state),
   }));
+  const [isFetchingOrgs] = useAsyncThunk(
+    fetchOrganizations,
+    'Failed to fetch organizations. Please refresh the page',
+  );
 
   useEffect(() => {
-    dispatch(fetchOrganizations());
     dispatch(fetchDesignation());
   }, []);
 
   if (isFetchingDesignations) {
     return <span>loading...</span>;
+  }
+
+  if (organizations.length && !p.values.organization_id) {
+    p.setFieldValue('organization_id', organizations[0].id);
   }
 
   return (
@@ -85,7 +93,7 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
                 className={'org-add-form'}
                 name="organization_id"
                 options={organizations}
-                autoSelectFirst={true}
+                isLoading={isFetchingOrgs}
               />
             </div>
           </div>

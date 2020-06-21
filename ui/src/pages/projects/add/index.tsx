@@ -102,7 +102,6 @@ const AddProject: React.FC<FormikProps<FormValues>> = (p) => {
                 className={'org-add-form'}
                 name="organization_id"
                 options={userOrganizations}
-                autoSelectFirst={true}
               />
             </div>
           </div>
