@@ -1,14 +1,13 @@
-import { unwrapResult } from '@reduxjs/toolkit';
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import Link from 'next/link';
-import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { createOrganization } from 'src/duck/organizations';
+import { useAsyncThunk } from 'src/lib/useAsyncThunk';
 
 import style from './style.module.scss';
 
@@ -77,24 +76,21 @@ const validationSchema = Yup.object().shape({
 });
 
 export default () => {
-  const dispatch = useDispatch();
+  const [createOrg] = useAsyncThunk(createOrganization, {
+    errorTitle: 'Failed to create Organization',
+    rethrowError: true,
+  });
 
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
-    actions.setSubmitting(true);
-    const resp = await dispatch(createOrganization(values));
-
-    actions.setSubmitting(false);
-
     try {
-      unwrapResult(resp as any);
-      actions.resetForm();
+      actions.setSubmitting(true);
+      await createOrg(values);
     } catch (err) {
-      if (/uniqueness violation/i.test(err.message)) {
+      if (/duplicate organization name/i.test(err.message)) {
         actions.setFieldError('name', 'An organization with same name already exists');
       }
-      // tslint:disable-next-line:no-console
-      console.error('Something went wrong');
     }
+    actions.setSubmitting(false);
   };
 
   return (
