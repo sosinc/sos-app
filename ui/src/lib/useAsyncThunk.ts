@@ -1,43 +1,48 @@
 import { AsyncThunkAction, unwrapResult } from '@reduxjs/toolkit';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useFlash } from 'src/duck/flashMessages';
 
+interface Options {
+  rethrowError?: boolean;
+  errorTitle?: string;
+}
+
 export const useAsyncThunk = (
-  asyncThunk: () => AsyncThunkAction<any, any, any>,
-  onError: ((err: Error) => any) | string,
+  asyncThunk: (args?: any) => AsyncThunkAction<any, any, any>,
+  options: Options = {},
 ) => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [flash] = useFlash();
   const dispatch = useDispatch();
 
-  const fetchEntities = useCallback(async () => {
+  const runAsyncThunk = useCallback(async (args?: any) => {
     try {
       setIsFetching(true);
-      await unwrapResult((await dispatch(asyncThunk())) as any);
+      const result = await unwrapResult((await dispatch(asyncThunk(args))) as any);
+
+      return result;
     } catch (err) {
-      if (typeof onError === 'string') {
+      if (options.errorTitle) {
         flash({
           body: err.message,
-          title: onError,
+          title: options.errorTitle,
           type: 'error',
         });
       }
 
-      // Need to wrap this in this check; otherwise typescript couldn't decide
-      // that onError is a function
-      if (typeof onError === 'function') {
-        onError(err);
+      if (options.rethrowError || !options.errorTitle) {
+        throw err;
       }
     } finally {
       setIsFetching(false);
     }
   }, []);
 
-  useEffect(() => {
-    fetchEntities();
-  }, [fetchEntities]);
+  const execute = (arg?: any) => {
+    return runAsyncThunk(arg);
+  };
 
-  return [isFetching];
+  return [execute, isFetching] as [(arg?: any) => void, boolean];
 };
