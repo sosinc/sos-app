@@ -1,5 +1,5 @@
 import { AsyncThunkAction, unwrapResult } from '@reduxjs/toolkit';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useFlash } from 'src/duck/flashMessages';
@@ -21,7 +21,7 @@ export const useAsyncThunk = (
   const runAsyncThunk = useCallback(async (args?: any) => {
     try {
       setIsFetching(true);
-      const result = await unwrapResult((await dispatch(asyncThunk(args))) as any);
+      const result = await unwrapResult(dispatch(asyncThunk(args)) as any);
 
       if (options.successTitle) {
         flash({
@@ -48,9 +48,22 @@ export const useAsyncThunk = (
     }
   }, []);
 
-  const execute = (arg?: any) => {
-    return runAsyncThunk(arg);
-  };
+  const execute = useCallback(async (arg?: any) => {
+    runAsyncThunk(arg);
+  }, []);
 
-  return [execute, isFetching] as [(arg?: any) => void, boolean];
+  return [execute, isFetching] as [(arg?: any) => Promise<void>, boolean];
+};
+
+export const useQuery = (
+  asyncThunk: (args?: any) => AsyncThunkAction<any, any, any>,
+  options: Options = {},
+) => {
+  const [executeFetch, isFetching] = useAsyncThunk(asyncThunk, options);
+
+  useEffect(() => {
+    executeFetch();
+  }, [executeFetch]);
+
+  return [isFetching, executeFetch] as [boolean, (arg?: any) => Promise<void>];
 };
