@@ -1,6 +1,5 @@
 import client from 'src/lib/client';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
-import setTimeoutP from 'src/lib/setTimeoutP';
 
 export interface Employee {
   ecode: string;
