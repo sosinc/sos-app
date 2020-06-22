@@ -79,12 +79,14 @@ export default () => {
   const [createOrg] = useAsyncThunk(createOrganization, {
     errorTitle: 'Failed to create Organization',
     rethrowError: true,
+    successTitle: 'Organization created successfully',
   });
 
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
     try {
       actions.setSubmitting(true);
       await createOrg(values);
+      actions.resetForm();
     } catch (err) {
       if (/duplicate organization name/i.test(err.message)) {
         actions.setFieldError('name', 'An organization with same name already exists');

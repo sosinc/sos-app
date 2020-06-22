@@ -7,6 +7,7 @@ import { useFlash } from 'src/duck/flashMessages';
 interface Options {
   rethrowError?: boolean;
   errorTitle?: string;
+  successTitle?: string;
 }
 
 export const useAsyncThunk = (
@@ -21,6 +22,13 @@ export const useAsyncThunk = (
     try {
       setIsFetching(true);
       const result = await unwrapResult((await dispatch(asyncThunk(args))) as any);
+
+      if (options.successTitle) {
+        flash({
+          title: options.successTitle,
+          type: 'success',
+        });
+      }
 
       return result;
     } catch (err) {
