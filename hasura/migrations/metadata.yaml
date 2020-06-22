@@ -431,6 +431,7 @@ tables:
       - id
       - project_id
       filter: {}
+      allow_aggregations: true
   - role: user
     permission:
       columns:
@@ -448,6 +449,7 @@ tables:
           employee:
             user_id:
               _eq: X-Hasura-User-Id
+      allow_aggregations: true
   update_permissions:
   - role: app_admin
     permission:
