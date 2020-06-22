@@ -9,6 +9,7 @@ export interface Project {
   issue_link_template?: string;
   pr_link_template?: string;
   organization_id: string;
+  teams_count: number;
 }
 
 export interface CreatePayload {
@@ -46,6 +47,11 @@ export const fetchMany = async (): Promise<Project[]> => {
       logo_square
       description
       organization_id
+      teams_aggregate {
+        aggregate {
+          count
+        }
+      }
     }
   }`;
 
@@ -54,7 +60,8 @@ export const fetchMany = async (): Promise<Project[]> => {
   return data?.projects.length
     ? data.projects.map((e: any) => ({
         ...e,
-        logo: resolveStorageFile(e.logo),
+        logo_square: resolveStorageFile(e.logo_square),
+      teams_count: data?.teams_aggregate?.aggregate?.count || 0,
       }))
     : [];
 };

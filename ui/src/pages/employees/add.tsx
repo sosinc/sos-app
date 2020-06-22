@@ -49,59 +49,57 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
   }
 
   return (
-    <DashboardLayout title={'Snake Oil Software - Employees'} Header={Header}>
-      <div className={c('container')}>
-        <form className={c('form')} onSubmit={p.handleSubmit}>
-          <h2 className={c('title')}> Create Employee</h2>
+    <div className={c('container')}>
+      <form className={c('form')} onSubmit={p.handleSubmit}>
+        <h2 className={c('title')}> Create Employee</h2>
 
-          <div className={c('email-container', 'field-container')}>
-            <span className={c('field-title')}>Email</span>
-            <TextField placeholder="Enter email" type="email" name="email" />
-          </div>
-          <div className={c('name-container', 'field-container')}>
-            <span className={c('field-title')}>Name</span>
-            <TextField placeholder="Enter name" type="text" name="name" />
-          </div>
+        <div className={c('email-container', 'field-container')}>
+          <span className={c('field-title')}>Email</span>
+          <TextField placeholder="Enter email" type="email" name="email" />
+        </div>
+        <div className={c('name-container', 'field-container')}>
+          <span className={c('field-title')}>Name</span>
+          <TextField placeholder="Enter name" type="text" name="name" />
+        </div>
 
-          <div className={c('logo', 'field-container')}>
-            <span className={c('field-title')}>Head Shot</span>
-            <ImageUploadField className={'image-container'} type={'file'} name="headshot" />
-          </div>
+        <div className={c('logo', 'field-container')}>
+          <span className={c('field-title')}>Head Shot</span>
+          <ImageUploadField className={'image-container'} type={'file'} name="headshot" />
+        </div>
 
-          <div className={c('right-container')}>
-            <div className={c('ecode-container', 'field-container')}>
-              <span className={c('field-title')}>E-Code</span>
-              <TextField placeholder="Enter e-code" type="text" name="ecode" />
-            </div>
-
-            <div className={c('designation-container', 'field-container')}>
-              <span className={c('field-title')}>Designation</span>
-              <SelectField
-                className={'org-add-form'}
-                name="designation_id"
-                options={designations}
-                isLoading={isFetchingDesignations}
-              />
-            </div>
-            <div className={c('org-container', 'field-container')}>
-              <span className={c('field-title')}>Organization</span>
-              <SelectField
-                className={'org-add-form'}
-                name="organization_id"
-                options={organizations}
-                isLoading={isFetchingOrgs}
-              />
-            </div>
+        <div className={c('right-container')}>
+          <div className={c('ecode-container', 'field-container')}>
+            <span className={c('field-title')}>E-Code</span>
+            <TextField placeholder="Enter e-code" type="text" name="ecode" />
           </div>
 
-          <div className={c('button-container')}>
-            <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
-              {p.isSubmitting ? 'Saving...' : 'Save'}
-            </button>
+          <div className={c('designation-container', 'field-container')}>
+            <span className={c('field-title')}>Designation</span>
+            <SelectField
+              className={'org-add-form'}
+              name="designation_id"
+              options={designations}
+              isLoading={isFetchingDesignations}
+            />
           </div>
-        </form>
-      </div>
-    </DashboardLayout>
+          <div className={c('org-container', 'field-container')}>
+            <span className={c('field-title')}>Organization</span>
+            <SelectField
+              className={'org-add-form'}
+              name="organization_id"
+              options={organizations}
+              isLoading={isFetchingOrgs}
+            />
+          </div>
+        </div>
+
+        <div className={c('button-container')}>
+          <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+            {p.isSubmitting ? 'Saving...' : 'Save'}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
@@ -158,12 +156,14 @@ export default () => {
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      {AddEmployee}
-    </Formik>
+    <DashboardLayout title={'Snake Oil Software - Employees'} Header={Header}>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {AddEmployee}
+      </Formik>
+    </DashboardLayout>
   );
 };

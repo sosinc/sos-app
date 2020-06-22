@@ -27,33 +27,31 @@ const Header: React.FC = () => (
 
 const AddOrg: React.FC<FormikProps<FormValues>> = (p) => {
   return (
-    <DashboardLayout title={'Snake Oil Software - Organizations'} Header={Header}>
-      <div className={c('org-container')}>
-        <form className={c('org-form')} onSubmit={p.handleSubmit}>
-          <h2 className={c('title')}> Create Organization</h2>
-          <div className={c('name-container', 'field-container')}>
-            <span className={c('field-title')}>Name</span>
-            <TextField placeholder="Enter organization name" type="name" name="name" />
-          </div>
+    <div className={c('org-container')}>
+      <form className={c('org-form')} onSubmit={p.handleSubmit}>
+        <h2 className={c('title')}> Create Organization</h2>
+        <div className={c('name-container', 'field-container')}>
+          <span className={c('field-title')}>Name</span>
+          <TextField placeholder="Enter organization name" type="name" name="name" />
+        </div>
 
-          <div className={c('image-container-logo', 'field-container')}>
-            <span className={c('field-title')}>Logo</span>
-            <ImageUploadField className={c('org-logo')} type={'file'} name="square_logo" />
-          </div>
+        <div className={c('image-container-logo', 'field-container')}>
+          <span className={c('field-title')}>Logo</span>
+          <ImageUploadField className={c('org-logo')} type={'file'} name="square_logo" />
+        </div>
 
-          <div className={c('image-container-banner', 'field-container')}>
-            <span className={c('field-title')}>Banner</span>
-            <ImageUploadField className={c('org-banner')} type="file" name="banner" />
-          </div>
+        <div className={c('image-container-banner', 'field-container')}>
+          <span className={c('field-title')}>Banner</span>
+          <ImageUploadField className={c('org-banner')} type="file" name="banner" />
+        </div>
 
-          <div className={c('button-container')}>
-            <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
-              {p.isSubmitting ? 'Saving...' : 'Save'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </DashboardLayout>
+        <div className={c('button-container')}>
+          <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+            {p.isSubmitting ? 'Saving...' : 'Save'}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
@@ -100,12 +98,14 @@ export default () => {
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      {AddOrg}
-    </Formik>
+    <DashboardLayout title={'Snake Oil Software - Organizations'} Header={Header}>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {AddOrg}
+      </Formik>
+    </DashboardLayout>
   );
 };
