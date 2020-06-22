@@ -8,6 +8,7 @@ import { Organization } from 'src/entities/Organizations';
 import { Project } from 'src/entities/Project';
 
 import { User } from '.';
+import { projectSelector } from 'src/duck/project';
 
 export interface CurrentUser extends User {
   employee?: Employee;
@@ -21,30 +22,29 @@ export interface CurrentUser extends User {
  * that User exists e.g inside <WithUser>
  */
 export const currentUser = (): CurrentUser => {
-  const {
-    user,
-    employee,
-    organization,
-    project: { projects: allProjects },
-  } = useSelector((state: RootState) => {
+  const { user, employee, organization, projects } = useSelector((state: RootState) => {
     const { activeEmployeeId } = state.auth;
     const activeEmployee = activeEmployeeId
       ? employeeSelector.selectById(state, activeEmployeeId)
       : undefined;
     const activeOrg =
       activeEmployee && orgSelector.selectById(state, activeEmployee.organization_id);
+    // TODO: These should be employee's projects
+    const activeProjects =
+      activeOrg &&
+      projectSelector.selectAll(state).filter((p) => p.organization_id === activeOrg.id);
 
     return {
       employee: activeEmployee,
       organization: activeOrg,
-      project: state.projects,
+      projects: activeProjects,
       user: state.auth.user,
     };
   });
 
-  const projects = allProjects.length
-    ? allProjects.filter((p) => p.organization_id === organization?.id)
-    : [];
+  // const projects = allProjects.length
+  //   ? allProjects.filter((p) => p.organization_id === organization?.id)
+  //   : [];
 
   return { ...(user as User), employee, organization, projects };
 };

@@ -12,7 +12,7 @@ export const useAsyncThunk = (
   const [flash] = useFlash();
   const dispatch = useDispatch();
 
-  const fetchOrgs = useCallback(async () => {
+  const fetchEntities = useCallback(async () => {
     try {
       setIsFetching(true);
       await unwrapResult((await dispatch(asyncThunk())) as any);
@@ -36,8 +36,8 @@ export const useAsyncThunk = (
   }, []);
 
   useEffect(() => {
-    fetchOrgs();
-  }, [fetchOrgs]);
+    fetchEntities();
+  }, [fetchEntities]);
 
   return [isFetching];
 };

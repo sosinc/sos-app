@@ -1,11 +1,14 @@
 import classNames from 'classnames/bind';
 import Link from 'next/link';
 import { MdAdd, MdFolder } from 'react-icons/md';
+import { useSelector } from 'react-redux';
 
 import NoItemsFound from 'src/components/NoItemsFound';
 import ProjectList from 'src/components/Projects/List';
 import DashboardLayout from 'src/containers/DashboardLayout';
+import { fetchProjects, projectSelector } from 'src/duck/project';
 import { currentUser } from 'src/entities/User/selectors';
+import { useAsyncThunk } from 'src/lib/useAsyncThunk';
 
 import style from './style.module.scss';
 
@@ -24,7 +27,13 @@ const Header: React.FC = () => (
 
 const Index = () => {
   const user = currentUser();
-  const projects = user.projects ? user.projects : [];
+  let projects = user.projects ? user.projects : [];
+  let isFetching = false;
+
+  if (user.role.id === 'APP_ADMIN') {
+    projects = useSelector(projectSelector.selectAll);
+    [isFetching] = useAsyncThunk(fetchProjects, 'Failed to fetch some Projects :-(');
+  }
 
   if (!projects.length) {
     return (
@@ -39,7 +48,7 @@ const Index = () => {
     );
   }
 
-  return <ProjectList projects={projects} />;
+  return <ProjectList projects={projects} isFetching={isFetching} />;
 };
 
 export default () => (

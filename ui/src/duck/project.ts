@@ -1,13 +1,15 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from '@reduxjs/toolkit';
 
 import { fetchCurrentUser } from 'src/duck/auth';
 import { create, CreatePayload, fetchMany, Project } from 'src/entities/Project';
+import { RootState } from '.';
 
-export interface ProjectState {
-  projects: Project[];
-  error?: string;
-  isFetching: boolean;
-}
+const projectAdapter = createEntityAdapter<Project>({
+  sortComparer: (a, b) => a.name.localeCompare(b.name),
+});
+export const projectSelector = projectAdapter.getSelectors<RootState>((state) => state.projects);
+
+export type ProjectState = EntityState<Project>;
 
 export const fetchProjects = createAsyncThunk<
   Project[],
@@ -21,36 +23,17 @@ export const createProject = createAsyncThunk<
   { rejectValue: Error; state: ProjectState }
 >('project/create', create);
 
-const initialState: ProjectState = {
-  isFetching: false,
-  projects: [],
-};
-
 export default createSlice({
   extraReducers: (builder) => {
-    builder.addCase(createProject.fulfilled, (state, { payload }) => {
-      state.projects.push(payload);
-    });
+    builder.addCase(createProject.fulfilled, projectAdapter.addOne);
 
-    builder.addCase(fetchProjects.pending, (state) => {
-      state.isFetching = true;
-    });
-
-    builder.addCase(fetchProjects.rejected, (state, { error }) => {
-      state.isFetching = false;
-      state.error = error.message;
-    });
-
-    builder.addCase(fetchProjects.fulfilled, (state, { payload }) => {
-      state.isFetching = false;
-      state.projects = payload;
-    });
+    builder.addCase(fetchProjects.fulfilled, projectAdapter.upsertMany);
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
-      state.projects = payload.projects;
+      projectAdapter.upsertMany(state, payload.projects);
     });
   },
-  initialState,
+  initialState: projectAdapter.getInitialState(),
   name: 'projects',
   reducers: {},
 });
