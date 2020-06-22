@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import Head from 'next/head';
 import Link from 'next/link';
 import { FaUsers } from 'react-icons/fa';
-import { MdBusiness, MdMoreHoriz } from 'react-icons/md';
+import { MdBusiness, MdMoreHoriz, MdFolder } from 'react-icons/md';
 
 import FallbackIcon from 'src/containers/FallbackIcon';
 import WithUser from 'src/containers/WithUser';
@@ -31,6 +31,13 @@ const adminSection = (
       <div className={c('row')}>
         <FaUsers />
         <span className={c('row-text')}>Employees</span>
+      </div>
+    </Link>
+
+    <Link href="/projects">
+      <div className={c('row')}>
+        <MdFolder />
+        <span className={c('row-text')}>Projects</span>
       </div>
     </Link>
   </>
