@@ -26,7 +26,6 @@ export type OrganizationState = EntityState<Organization>;
 
 export default createSlice({
   extraReducers: (builder) => {
-    builder.addCase(createOrganization.fulfilled, orgAdapter.addOne);
     builder.addCase(fetchOrganizations.fulfilled, orgAdapter.upsertMany);
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
