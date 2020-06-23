@@ -72,6 +72,7 @@ const Index: React.FC<LayoutProps> = (p) => {
   return (
     <WithUser inverted={false} redirectPath="/">
       <Head>
+        <link rel="shortcut icon" href="/assets/images/sos-logo.svg" />
         <title>{p.title}</title>
       </Head>
 

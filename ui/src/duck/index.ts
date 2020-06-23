@@ -5,7 +5,7 @@ import auth from './auth';
 import designation from './designation';
 import employee from './employee';
 import flashMessages from './flashMessages';
-import organization from './organization';
+import organization from './organizations';
 import project from './project';
 
 const reducer = combineReducers({

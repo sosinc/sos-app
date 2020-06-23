@@ -1,9 +1,7 @@
-import { unwrapResult } from '@reduxjs/toolkit';
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import Link from 'next/link';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
@@ -11,9 +9,10 @@ import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
-import { fetchDesignation } from 'src/duck/designation';
-import { createEmployee } from 'src/duck/employee';
-import { fetchOrganization } from 'src/duck/organization';
+import { designationSelector, fetchDesignations } from 'src/duck/designation';
+import { createEmployeeAction } from 'src/duck/employee';
+import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
+import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
 
@@ -31,88 +30,73 @@ const Header: React.FC = () => (
 );
 
 const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
-  const dispatch = useDispatch();
-  const {
-    organization: { organizations, isFetching: isFetchingOrganizations },
-    designation: { designation, isFetching: isFetchingDesignations },
-  } = useSelector((state: RootState) => ({
-    designation: state.designations,
-    organization: state.organization,
+  const { organizations, designations } = useSelector((state: RootState) => ({
+    designations: designationSelector.selectAll(state),
+    organizations: orgSelector.selectAll(state),
   }));
+  const [isFetchingOrgs] = useQuery(fetchOrganizations, {
+    errorTitle: 'Failed to fetch organizations. Please refresh the page',
+  });
+  const [isFetchingDesignations] = useQuery(fetchDesignations, {
+    errorTitle: 'Failed to fetch designations. Please refresh the page',
+  });
 
-  useEffect(() => {
-    dispatch(fetchOrganization());
-    dispatch(fetchDesignation());
-  }, []);
-
-  if (isFetchingOrganizations && isFetchingDesignations) {
-    return <span>loading...</span>;
+  if (organizations.length && !p.values.organization_id) {
+    p.setFieldValue('organization_id', organizations[0].id);
   }
 
   return (
-    <DashboardLayout title={'Snake Oil Software - Employees'} Header={Header}>
-      <div className={c('container')}>
-        <form className={c('form')} onSubmit={p.handleSubmit}>
-          <h2 className={c('title')}> Create Employee</h2>
+    <div className={c('container')}>
+      <form className={c('form')} onSubmit={p.handleSubmit}>
+        <h2 className={c('title')}> Create Employee</h2>
 
-          <div className={c('email-container', 'field-container')}>
-            <span className={c('field-title')}>Email</span>
-            <TextField
-              className={'form-text-field'}
-              placeholder="Enter email"
-              type="email"
-              name="email"
+        <div className={c('email-container', 'field-container')}>
+          <span className={c('field-title')}>Email</span>
+          <TextField placeholder="Enter email" type="email" name="email" />
+        </div>
+        <div className={c('name-container', 'field-container')}>
+          <span className={c('field-title')}>Name</span>
+          <TextField placeholder="Enter name" type="text" name="name" />
+        </div>
+
+        <div className={c('logo', 'field-container')}>
+          <span className={c('field-title')}>Head Shot</span>
+          <ImageUploadField className={'image-container'} type={'file'} name="headshot" />
+        </div>
+
+        <div className={c('right-container')}>
+          <div className={c('ecode-container', 'field-container')}>
+            <span className={c('field-title')}>E-Code</span>
+            <TextField placeholder="Enter e-code" type="text" name="ecode" />
+          </div>
+
+          <div className={c('designation-container', 'field-container')}>
+            <span className={c('field-title')}>Designation</span>
+            <SelectField
+              className={'org-add-form'}
+              name="designation_id"
+              options={designations}
+              isLoading={isFetchingDesignations}
             />
           </div>
-          <div className={c('name-container', 'field-container')}>
-            <span className={c('field-title')}>Name</span>
-            <TextField
-              className={'form-text-field'}
-              placeholder="Enter name"
-              type="text"
-              name="name"
+          <div className={c('org-container', 'field-container')}>
+            <span className={c('field-title')}>Organization</span>
+            <SelectField
+              className={'org-add-form'}
+              name="organization_id"
+              options={organizations}
+              isLoading={isFetchingOrgs}
             />
           </div>
+        </div>
 
-          <div className={c('logo', 'field-container')}>
-            <span className={c('field-title')}>Head Shot</span>
-            <ImageUploadField className={'image-container'} type={'file'} name="headshot" />
-          </div>
-
-          <div className={c('right-container')}>
-            <div className={c('ecode-container', 'field-container')}>
-              <span className={c('field-title')}>E-Code</span>
-              <TextField
-                className={'form-text-field'}
-                placeholder="Enter e-code"
-                type="text"
-                name="ecode"
-              />
-            </div>
-
-            <div className={c('designation-container', 'field-container')}>
-              <span className={c('field-title')}>Designation</span>
-              <SelectField className={'org-add-form'} name="designation_id" options={designation} />
-            </div>
-            <div className={c('org-container', 'field-container')}>
-              <span className={c('field-title')}>Organization</span>
-              <SelectField
-                className={'org-add-form'}
-                name="organization_id"
-                options={organizations}
-                autoSelectFirst={true}
-              />
-            </div>
-          </div>
-
-          <div className={c('button-container')}>
-            <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
-              {p.isSubmitting ? 'Saving...' : 'Save'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </DashboardLayout>
+        <div className={c('button-container')}>
+          <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+            {p.isSubmitting ? 'Saving...' : 'Save'}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
@@ -137,9 +121,7 @@ const initialValues = {
 const validationSchema = Yup.object().shape({
   designation_id: Yup.string().required('Required'),
   ecode: Yup.string().required('Required'),
-  email: Yup.string()
-    .email()
-    .required('Required'),
+  email: Yup.string().email().required('Required'),
   headshot: Yup.string(),
   name: Yup.string()
     .min(2, 'Must be 2 characters or more')
@@ -149,34 +131,34 @@ const validationSchema = Yup.object().shape({
 });
 
 export default () => {
-  const dispatch = useDispatch();
+  const [createEmployee] = useAsyncThunk(createEmployeeAction, {
+    errorTitle: 'Failed to crate Employee',
+    rethrowError: true,
+    successTitle: 'Employee created successfully',
+  });
 
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
-    actions.setSubmitting(true);
-    const resp = await dispatch(createEmployee(values));
-
-    actions.setSubmitting(false);
-
     try {
-      unwrapResult(resp as any);
+      actions.setSubmitting(true);
+      await createEmployee(values);
       actions.resetForm();
     } catch (err) {
-      if (/uniqueness violation/i.test(err.message)) {
-        actions.setFieldError('email', 'An organization with same name already exists');
+      if (/Duplicate employee email/i.test(err.message)) {
+        actions.setFieldError('email', 'A employee with same email already exists');
       }
-
-      // tslint:disable-next-line:no-console
-      console.error('Something went wrong', err.message);
+      actions.setSubmitting(false);
     }
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      {AddEmployee}
-    </Formik>
+    <DashboardLayout title={'Snake Oil Software - Employees'} Header={Header}>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {AddEmployee}
+      </Formik>
+    </DashboardLayout>
   );
 };

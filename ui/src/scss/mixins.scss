@@ -28,3 +28,24 @@
   width: $size;
   z-index: 1;
 }
+
+@mixin bone {
+  background-color: $color-text-dim3;
+  border-radius: 4px;
+  color: transparent;
+  overflow: hidden;
+  position: relative;
+
+  &::after {
+    animation: conveyer-belt 1.5s infinite;
+    background: linear-gradient(90deg, transparent, $color-text-dim2, transparent);
+    bottom: 0;
+    content: '';
+    display: block;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translateX(-100%);
+  }
+}

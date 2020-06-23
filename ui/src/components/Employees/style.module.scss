@@ -1,10 +1,9 @@
 @import 'src/scss/lib';
 
 .container {
-  color: $color-text-dim2;
-  padding: 20px;
-  text-align: left;
-  width: 55%;
+  margin-top: 48px;
+  width: 100%;
+
 
   @media(max-width: $md) {
     margin-top: 100px;
@@ -16,86 +15,66 @@
 }
 
 .content {
-  background: $color-select-active;
-  border-radius: 5px;
-  display: grid;
-  grid-auto-rows: minmax(2em, auto);
-  grid-column-gap: 1em;
-  grid-row-gap: 0;
-  grid-template-columns: 20% 25% 1fr;
-  height: 6em;
-  margin-top: 2em;
-  padding: 15px;
+  align-items: center;
+  color: $color-text-bright1;
+  cursor: pointer;
+  display: flex;
+  margin: 0.5em auto;
+  max-width: 1200px;
+  padding: 5px;
+  text-align: left;
 }
 
-.section1 {
-  display: grid;
-  grid-auto-rows: minmax(1em, auto);
-  grid-column: 1;
-  grid-column-gap: 7px;
-  grid-row: 1;
-  grid-row-gap: 8px;
-  grid-template-columns: 40% 1fr;
-  grid-template-rows: 26px 26px;
-}
-
-.headshot {
-  border: 1px solid $color-text-dim3;
+.fallback-icon {
+  $size: 24px;
+  background: $color-cta;
   border-radius: 50%;
-  grid-column: 1;
-  grid-row: 1/3;
-  height: 100%;
-  object-fit: cover;
-  width: 100%;
+  color: $color-button-text-inverted;
+  font-size: 10px;
+  height: $size;
+  width: $size;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
 }
 
 .name {
   color: $color-text-primary;
-  font-size: 1em;
-  grid-column: 2;
-  grid-row: 1;
-  margin-top: 10px;
+  font-size: 1.1em;
   overflow: hidden;
+  padding-bottom: 3px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .designation {
-  font-size: 0.9em;
-  grid-column: 2;
-  grid-row: 2;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: $color-text-dim2;
+  font-size: 10px;
 }
 
-.section2 {
-  display: grid;
-  grid-auto-rows: minmax(1em, auto);
-  grid-column: 2;
-  grid-row: 1;
-  grid-row-gap: 8px;
-  grid-template-columns: 1fr;
-  grid-template-rows: 26px 26px;
-}
+.skeleton {
+  .details {
+    width: 100%;
+  }
 
-.project-title {
-  color: $color-text-primary;
-  font-size: 1em;
-  grid-column: 1;
-  grid-row: 1;
-  margin-top: 10px;
-}
+  .fallback-icon {
+    @include bone;
+    border-radius: 50%;
+  }
 
-.project-container {
-  font-size: 0.9em;
-  grid-column: 1;
-  grid-row: 2;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+  .name {
+    @include bone;
 
-.project-items {
-  margin-left: 5px;
+    font-size: 13px;
+    margin-bottom: 2px;
+    width: 60%;
+  }
+
+  .designation {
+    @include bone;
+    width: 20%;
+  }
 }

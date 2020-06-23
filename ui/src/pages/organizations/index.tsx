@@ -1,14 +1,13 @@
 import classNames from 'classnames/bind';
 import Link from 'next/link';
-import { useEffect } from 'react';
 import { MdAdd, MdBusiness } from 'react-icons/md';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import NoItemsFound from 'src/components/NoItemsFound';
 import OrganizationsList from 'src/components/Organization/List';
 import DashboardLayout from 'src/containers/DashboardLayout';
-import { RootState } from 'src/duck';
-import { fetchOrganization, OrganizationState } from 'src/duck/organization';
+import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
+import { useQuery } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
 
@@ -26,20 +25,12 @@ const Header: React.FC = () => (
 );
 
 const Index = () => {
-  const dispatch = useDispatch();
-  const { organizations, isFetching } = useSelector<RootState, OrganizationState>(
-    (state) => state.organization,
-  );
+  const organizations = useSelector(orgSelector.selectAll);
+  const [isFetching] = useQuery(fetchOrganizations, {
+    errorTitle: 'Failed to fetch some Organizations',
+  });
 
-  useEffect(() => {
-    dispatch(fetchOrganization());
-  }, []);
-
-  if (isFetching) {
-    return <span>loading...</span>;
-  }
-
-  if (!organizations.length) {
+  if (!organizations.length && !isFetching) {
     return (
       <div className={c('not-found-container')}>
         <NoItemsFound
@@ -52,7 +43,7 @@ const Index = () => {
     );
   }
 
-  return <OrganizationsList organizations={organizations} />;
+  return <OrganizationsList organizations={organizations} isFetching={isFetching} />;
 };
 
 export default () => (

@@ -1,33 +1,26 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from '@reduxjs/toolkit';
 
 import { Designation, fetchMany } from 'src/entities/Designation';
+import { RootState } from '.';
 
-export interface DesignationState {
-  isFetching: boolean;
-  designation: Designation[];
-}
+const designationAdapter = createEntityAdapter<Designation>();
+export const designationSelector = designationAdapter.getSelectors<RootState>(
+  (s) => s.designations,
+);
 
-export const fetchDesignation = createAsyncThunk<
+export type DesignationState = EntityState<Designation>;
+
+export const fetchDesignations = createAsyncThunk<
   Designation[],
   undefined,
   { rejectValue: Error; state: DesignationState }
 >('designations/fetchMany', fetchMany);
 
-const initialState: DesignationState = {
-  designation: [],
-  isFetching: false,
-};
+const initialState: DesignationState = designationAdapter.getInitialState();
 
 export default createSlice({
   extraReducers: (builder) => {
-    builder.addCase(fetchDesignation.pending, (state) => {
-      state.isFetching = true;
-    });
-
-    builder.addCase(fetchDesignation.fulfilled, (state, { payload }) => {
-      state.isFetching = false;
-      state.designation = payload;
-    });
+    builder.addCase(fetchDesignations.fulfilled, designationAdapter.upsertMany);
   },
   initialState,
   name: 'designations',

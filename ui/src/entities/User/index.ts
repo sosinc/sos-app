@@ -74,10 +74,12 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
         organization {
           id
           name
+          square_logo
           projects {
             id
             name
-            logo
+            logo_square
+            description
             organization_id
           }
         }
@@ -96,17 +98,22 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
     throw new Error('Could not get current user');
   }
 
-  const employees = me.as_employee.map((e: any) => ({
-    ecode: e.ecode,
-    name: e.name,
-    organization_id: e.organization_id,
+  const employees = me.as_employee.map((employee: any) => ({
+    ecode: employee.ecode,
+    name: employee.name,
+    organization_id: employee.organization_id,
   }));
-  const organizations = me.as_employee.map((e: any) => ({
-    id: e.organization.id,
-    name: e.organization.name,
+  const organizations = me.as_employee.map((org: any) => ({
+    id: org.organization.id,
+    name: org.organization.name,
+    square_logo: resolveStorageFile(org.square_logo),
   }));
-  const projects = me.as_employee.flatMap((e: any) =>
-    e.organization.projects.map((p: any) => ({ ...p, employeeId: e.id })),
+  const projects = me.as_employee.flatMap((employee: any) =>
+    employee.organization.projects.map((project: any) => ({
+      ...project,
+      employeeId: project.id,
+      logo_square: resolveStorageFile(project.logo_square),
+    })),
   );
 
   return {

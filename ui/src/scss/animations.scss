@@ -56,3 +56,9 @@
     width: 20px;
   }
 }
+
+@keyframes conveyer-belt {
+  100% {
+    transform: translateX(100%);
+  }
+}
