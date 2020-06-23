@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import SelectField from 'src/components/Form/SelectField';
+import TextAreaField from 'src/components/Form/TextAreaField';
 import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
@@ -79,6 +80,7 @@ const AddProject: React.FC<FormikProps<FormValues>> = (p) => {
               type="text"
               name="description"
             />
+            <TextAreaField name="description" placeholder="Enter description" />
           </div>
 
           <div className={c('square-logo', 'field-container')}>
