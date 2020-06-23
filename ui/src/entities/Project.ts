@@ -9,6 +9,7 @@ export interface Project {
   issue_link_template?: string;
   pr_link_template?: string;
   organization_id: string;
+  teams_count: number;
 }
 
 export interface CreatePayload {
@@ -33,9 +34,16 @@ export const create = async (payload: CreatePayload): Promise<Project> => {
     }
   }`;
 
-  const data = await client.request(query, payload);
+  try {
+    const data = await client.request(query, payload);
 
-  return data.payload;
+    return data.payload;
+  } catch (err) {
+    if (/uniqueness violation/i.test(err.message)) {
+      throw new Error('Duplicate project name');
+    }
+    throw new Error('Something went wrong :-(');
+  }
 };
 
 export const fetchMany = async (): Promise<Project[]> => {
@@ -46,6 +54,11 @@ export const fetchMany = async (): Promise<Project[]> => {
       logo_square
       description
       organization_id
+      teams_aggregate {
+        aggregate {
+          count
+        }
+      }
     }
   }`;
 
@@ -54,7 +67,8 @@ export const fetchMany = async (): Promise<Project[]> => {
   return data?.projects.length
     ? data.projects.map((e: any) => ({
         ...e,
-        logo: resolveStorageFile(e.logo),
+        logo_square: resolveStorageFile(e.logo_square),
+        teams_count: data?.teams_aggregate?.aggregate?.count || 0,
       }))
     : [];
 };

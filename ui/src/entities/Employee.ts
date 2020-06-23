@@ -37,9 +37,17 @@ export const create = async (payload: CreatePayload): Promise<Employee> => {
       }
   }`;
 
-  const data = await client.request(query, payload);
+  try {
+    const data = await client.request(query, payload);
 
-  return data.payload;
+    return data.payload;
+  }  catch (err) {
+    if (/uniqueness violation/i.test(err.message)) {
+      throw new Error('Duplicate employee email');
+    }
+
+    throw new Error('Something went wrong :-(');
+  }
 };
 
 export const fetchMany = async (): Promise<Employee[]> => {

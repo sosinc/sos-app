@@ -9,6 +9,7 @@
 }
 
 .message-container {
+  align-items: center;
   background: $color-flash-bg;
   border: 1px solid $color-flash-border;
   border-radius: 4px;
@@ -22,14 +23,24 @@
 
 .status-icon {
   color: $color-text-primary;
-  height: 16px;
+  height: 20px;
   margin-right: 6px;
-  width: 16px;
+  width: 20px;
 
   &.error {
     color: $color-error-border;
   }
+
+  &.success {
+    color: $color-success-border;
+  }
 }
+
+.flash-icon {
+  height: 100%;
+  width: 100%;
+}
+
 
 .title {
   font-weight: bold;

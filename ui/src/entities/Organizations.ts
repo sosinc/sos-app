@@ -23,13 +23,22 @@ export const create = async (payload: CreatePayload): Promise<Organization> => {
         name: $name,
         banner: $banner,
         square_logo: $square_logo
-      })
-      {id}
+      }) {
+        id
+      }
   }`;
 
-  const data = await client.request(query, payload);
+  try {
+    const data = await client.request(query, payload);
 
-  return data.payload;
+    return data.payload;
+  }  catch (err) {
+    if (/uniqueness violation/i.test(err.message)) {
+      throw new Error('Duplicate organization name');
+    }
+
+    throw new Error('Something went wrong :-(');
+  }
 };
 
 export const fetchMany = async (): Promise<Organization[]> => {
@@ -53,7 +62,7 @@ export const fetchMany = async (): Promise<Organization[]> => {
     return {
       ...org,
       banner: resolveStorageFile(org.banner),
-      employees_count: org?.employees_agregate?.aggregate?.count || 0,
+      employees_count: org?.employees_aggregate?.aggregate?.count || 0,
       square_logo: resolveStorageFile(org.square_logo),
     };
   });

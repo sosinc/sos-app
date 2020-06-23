@@ -1,15 +1,14 @@
 import classNames from 'classnames/bind';
 import Link from 'next/link';
-import { useEffect } from 'react';
 import { FaUsers } from 'react-icons/fa';
 import { MdAdd } from 'react-icons/md';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import EmployeesList from 'src/components/Employees/List';
 import NoItemsFound from 'src/components/NoItemsFound';
 import DashboardLayout from 'src/containers/DashboardLayout';
-import { RootState } from 'src/duck';
-import { EmployeeState, fetchEmployees } from 'src/duck/employee';
+import { employeeSelector, fetchEmployees } from 'src/duck/employee';
+import { useQuery } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
 
@@ -27,20 +26,12 @@ const Header: React.FC = () => (
 );
 
 const Index = () => {
-  const dispatch = useDispatch();
-  const { employees, isFetching } = useSelector<RootState, EmployeeState>(
-    (state) => state.employees,
-  );
+  const employees = useSelector(employeeSelector.selectAll);
+  const [isFetching] = useQuery(fetchEmployees, {
+    errorTitle: 'Failed to fetch some Employees :-(',
+  });
 
-  useEffect(() => {
-    dispatch(fetchEmployees());
-  }, []);
-
-  if (isFetching) {
-    return <span>loading...</span>;
-  }
-
-  if (!employees.length) {
+  if (!employees.length && !isFetching) {
     return (
       <div className={c('not-found-container')}>
         <NoItemsFound
@@ -53,7 +44,7 @@ const Index = () => {
     );
   }
 
-  return <EmployeesList employees={employees} />;
+  return <EmployeesList employees={employees} isFetching={isFetching} />;
 };
 
 export default () => (

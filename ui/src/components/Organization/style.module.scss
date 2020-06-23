@@ -1,6 +1,6 @@
 @import 'src/scss/lib';
 
-.organization {
+.container {
   margin-top: 48px;
   width: 100%;
 
@@ -14,23 +14,15 @@
   }
 }
 
-
-.container {
+.organization {
   align-items: center;
   color: $color-text-bright1;
   cursor: pointer;
   display: flex;
   margin: 0.5em auto;
-  max-width: 680px;
+  max-width: 1200px;
   padding: 5px;
-
   text-align: left;
-
-  &:hover {
-    background: $color-select-active;
-    border: 0;
-    border-radius: 5px;
-  }
 }
 
 .fallback-icon {
@@ -43,7 +35,7 @@
   width: $size;
 }
 
-.organization-container {
+.organization-details {
   display: flex;
   flex-direction: column;
   margin-left: 10px;
@@ -61,4 +53,28 @@
 .count {
   color: $color-text-dim2;
   font-size: 10px;
+}
+
+.skeleton {
+  .organization-details {
+    width: 100%;
+  }
+
+  .fallback-icon {
+    @include bone;
+    border-radius: 50%;
+  }
+
+  .name {
+    @include bone;
+
+    font-size: 13px;
+    margin-bottom: 2px;
+    width: 60%;
+  }
+
+  .count {
+    @include bone;
+    width: 20%;
+  }
 }
