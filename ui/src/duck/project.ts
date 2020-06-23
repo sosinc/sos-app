@@ -17,7 +17,7 @@ export const fetchProjects = createAsyncThunk<
   { rejectValue: Error; state: ProjectState }
 >('projects/fetchMany', fetchMany);
 
-export const createProject = createAsyncThunk<
+export const createProjectAction = createAsyncThunk<
   Project,
   CreatePayload,
   { rejectValue: Error; state: ProjectState }

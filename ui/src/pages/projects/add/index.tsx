@@ -9,7 +9,7 @@ import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
-import { createProject } from 'src/duck/project';
+import { createProjectAction } from 'src/duck/project';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
@@ -130,7 +130,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export default () => {
-  const [createPro] = useAsyncThunk(createProject, {
+  const [createProject] = useAsyncThunk(createProjectAction, {
     errorTitle: 'Failed to create Project',
     rethrowError: true,
     successTitle: 'Project created successfully',
@@ -139,7 +139,7 @@ export default () => {
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
     try {
       actions.setSubmitting(true);
-      await createPro(values);
+      await createProject(values);
       actions.resetForm();
     } catch (err) {
       if (/Duplicate project name/i.test(err.message)) {

@@ -3,12 +3,11 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'src/duck';
 import { employeeSelector } from 'src/duck/employee';
 import { orgSelector } from 'src/duck/organizations';
+import { projectSelector } from 'src/duck/project';
 import { Employee } from 'src/entities/Employee';
 import { Organization } from 'src/entities/Organizations';
 import { Project } from 'src/entities/Project';
-
 import { User } from '.';
-import { projectSelector } from 'src/duck/project';
 
 export interface CurrentUser extends User {
   employee?: Employee;

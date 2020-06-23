@@ -19,7 +19,7 @@ export interface AuthState {
   isFetchingUser: boolean;
 }
 
-export const loginUser = createAsyncThunk<
+export const loginUserAction = createAsyncThunk<
   User,
   LoginPayload,
   { rejectValue: Error; state: AuthState }
@@ -33,12 +33,12 @@ export const fetchCurrentUser = createAsyncThunk<
   { rejectValue: Error; state: AuthState }
 >('auth/fetchCurrentUser', apiFetchCurrentUser);
 
-export const sendPasswordResetOTP = createAsyncThunk<undefined, string>(
+export const sendPasswordResetOTPAction = createAsyncThunk<undefined, string>(
   'auth/sendPasswordResetOTP',
   apiResetPasswordOTP,
 );
 
-export const resetPassword = createAsyncThunk<undefined, ResetPasswordPayload>(
+export const resetPasswordAction = createAsyncThunk<undefined, ResetPasswordPayload>(
   'auth/resetPassword',
   apiResetPassword,
 );
@@ -50,16 +50,16 @@ const initialState: AuthState = {
 
 export default createSlice({
   extraReducers: (builder) => {
-    builder.addCase(loginUser.pending, (state) => {
+    builder.addCase(loginUserAction.pending, (state) => {
       state.isLoggingIn = true;
     });
 
-    builder.addCase(loginUser.rejected, (state, { payload }) => {
+    builder.addCase(loginUserAction.rejected, (state, { payload }) => {
       state.isLoggingIn = false;
       state.error = payload?.message;
     });
 
-    builder.addCase(loginUser.fulfilled, (state, { payload }) => {
+    builder.addCase(loginUserAction.fulfilled, (state, { payload }) => {
       state.isLoggingIn = false;
       state.user = payload;
     });

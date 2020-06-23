@@ -8,7 +8,7 @@ import LoginForm from 'src/components/LoginForm';
 import Modal from 'src/components/Modal';
 import ResetPassword from 'src/components/ResetPassword';
 import WithUser from 'src/containers/WithUser';
-import { loginUser, resetPassword, sendPasswordResetOTP } from 'src/duck/auth';
+import { loginUserAction, resetPasswordAction, sendPasswordResetOTPAction } from 'src/duck/auth';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
 
 import style from './index.module.scss';
@@ -17,32 +17,32 @@ const c = classNames.bind(style);
 
 const Index = () => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [loginAction] = useAsyncThunk(loginUser, {
+  const [login] = useAsyncThunk(loginUserAction, {
     errorTitle: 'Login Failed',
     rethrowError: true,
     successTitle: 'Logged in successfully',
   });
-  const [otpAction] = useAsyncThunk(sendPasswordResetOTP, {
+  const [resetPasswordOtp] = useAsyncThunk(sendPasswordResetOTPAction, {
     errorTitle: 'Failed to send OTP',
     rethrowError: true,
     successTitle: 'OTP send successfully',
   });
-  const [resetPasswordAction] = useAsyncThunk(resetPassword, {
+  const [resetPassword] = useAsyncThunk(resetPasswordAction, {
     errorTitle: 'Reset password failed',
     rethrowError: true,
     successTitle: 'Password reset successfully!',
   });
 
   const handleLogin = async (values: any) => {
-    await loginAction(values);
+    await login(values);
   };
 
   const handleSendOtp = async (email: string) => {
-    await otpAction(email);
+    await resetPasswordOtp(email);
   };
 
   const handleResetPassword = async (values: any) => {
-    await resetPasswordAction(values);
+    await resetPassword(values);
     setModalOpen(false);
   };
 

@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
-import { createOrganization } from 'src/duck/organizations';
+import { createOrganizationAction } from 'src/duck/organizations';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
@@ -76,7 +76,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export default () => {
-  const [createOrg] = useAsyncThunk(createOrganization, {
+  const [createOrganization] = useAsyncThunk(createOrganizationAction, {
     errorTitle: 'Failed to create Organization',
     rethrowError: true,
     successTitle: 'Organization created successfully',
@@ -85,7 +85,7 @@ export default () => {
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
     try {
       actions.setSubmitting(true);
-      await createOrg(values);
+      await createOrganization(values);
       actions.resetForm();
     } catch (err) {
       if (/Duplicate organization name/i.test(err.message)) {

@@ -10,6 +10,10 @@ interface Options {
   successTitle?: string;
 }
 
+/**
+ * useAsyncThunk return a callback
+ * it return a promise which is resolved/rejected to notify user when the operation is completed via flash message
+ */
 export const useAsyncThunk = (
   asyncThunk: (args?: any) => AsyncThunkAction<any, any, any>,
   options: Options = {},
@@ -55,6 +59,10 @@ export const useAsyncThunk = (
   return [execute, isFetching] as [(arg?: any) => Promise<void>, boolean];
 };
 
+/**
+ * useQuery basically calls the useAsyncThunk function inside the useEffect hook
+ * it returns a loading state and a promise
+ */
 export const useQuery = (
   asyncThunk: (args?: any) => AsyncThunkAction<any, any, any>,
   options: Options = {},

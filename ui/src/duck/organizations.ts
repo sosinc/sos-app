@@ -10,7 +10,7 @@ const orgAdapter = createEntityAdapter<Organization>({
 
 export const orgSelector = orgAdapter.getSelectors<RootState>((state) => state.organizations);
 
-export const createOrganization = createAsyncThunk<
+export const createOrganizationAction = createAsyncThunk<
   Organization,
   CreatePayload,
   { rejectValue: Error; state: OrganizationState }
