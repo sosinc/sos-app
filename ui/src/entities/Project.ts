@@ -34,9 +34,16 @@ export const create = async (payload: CreatePayload): Promise<Project> => {
     }
   }`;
 
-  const data = await client.request(query, payload);
+  try {
+    const data = await client.request(query, payload);
 
-  return data.payload;
+    return data.payload;
+  } catch (err) {
+    if (/uniqueness violation/i.test(err.message)) {
+      throw new Error('Duplicate project name');
+    }
+    throw new Error('Something went wrong :-(');
+  }
 };
 
 export const fetchMany = async (): Promise<Project[]> => {
@@ -61,7 +68,7 @@ export const fetchMany = async (): Promise<Project[]> => {
     ? data.projects.map((e: any) => ({
         ...e,
         logo_square: resolveStorageFile(e.logo_square),
-      teams_count: data?.teams_aggregate?.aggregate?.count || 0,
+        teams_count: data?.teams_aggregate?.aggregate?.count || 0,
       }))
     : [];
 };

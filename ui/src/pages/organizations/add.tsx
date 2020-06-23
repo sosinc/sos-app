@@ -7,7 +7,7 @@ import ImageUploadField from 'src/components/Form/ImageUploadField';
 import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { createOrganization } from 'src/duck/organizations';
-import { useAsyncThunk } from 'src/lib/useAsyncThunk';
+import { useAsyncThunk } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
 
@@ -88,7 +88,7 @@ export default () => {
       await createOrg(values);
       actions.resetForm();
     } catch (err) {
-      if (/duplicate organization name/i.test(err.message)) {
+      if (/Duplicate organization name/i.test(err.message)) {
         actions.setFieldError('name', 'An organization with same name already exists');
       }
     }

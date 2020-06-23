@@ -25,8 +25,6 @@ export const createProject = createAsyncThunk<
 
 export default createSlice({
   extraReducers: (builder) => {
-    builder.addCase(createProject.fulfilled, projectAdapter.addOne);
-
     builder.addCase(fetchProjects.fulfilled, projectAdapter.upsertMany);
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {

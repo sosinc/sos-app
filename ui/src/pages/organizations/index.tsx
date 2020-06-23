@@ -7,7 +7,7 @@ import NoItemsFound from 'src/components/NoItemsFound';
 import OrganizationsList from 'src/components/Organization/List';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
-import { useAsyncThunk } from 'src/lib/useAsyncThunk';
+import { useQuery } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
 
@@ -26,7 +26,9 @@ const Header: React.FC = () => (
 
 const Index = () => {
   const organizations = useSelector(orgSelector.selectAll);
-  const [isFetching] = useAsyncThunk(fetchOrganizations, 'Failed to fetch some Organizations');
+  const [isFetching] = useQuery(fetchOrganizations, {
+    errorTitle: 'Failed to fetch some Organizations',
+  });
 
   if (!organizations.length && !isFetching) {
     return (

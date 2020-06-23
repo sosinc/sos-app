@@ -8,7 +8,7 @@ import ProjectList from 'src/components/Projects/List';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { fetchProjects, projectSelector } from 'src/duck/project';
 import { currentUser } from 'src/entities/User/selectors';
-import { useAsyncThunk } from 'src/lib/useAsyncThunk';
+import { useQuery } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
 
@@ -32,7 +32,9 @@ const Index = () => {
 
   if (user.role.id === 'APP_ADMIN') {
     projects = useSelector(projectSelector.selectAll);
-    [isFetching] = useAsyncThunk(fetchProjects, 'Failed to fetch some Projects :-(');
+    [isFetching] = useQuery(fetchProjects, {
+      errorTitle: 'Failed to fetch some Projects :-(',
+    });
   }
 
   if (!projects.length) {

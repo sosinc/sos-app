@@ -19,7 +19,7 @@ export const fetchEmployees = createAsyncThunk<
   { rejectValue: Error; state: EmployeeState }
 >('employees/fetchMany', fetchMany);
 
-export const createEmployee = createAsyncThunk<
+export const createEmployeeAction = createAsyncThunk<
   Employee,
   CreatePayload,
   { rejectValue: Error; state: EmployeeState }
@@ -27,8 +27,6 @@ export const createEmployee = createAsyncThunk<
 
 export default createSlice({
   extraReducers: (builder) => {
-    builder.addCase(createEmployee.fulfilled, employeeAdapter.addOne);
-
     builder.addCase(fetchEmployees.fulfilled, employeeAdapter.upsertMany);
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {

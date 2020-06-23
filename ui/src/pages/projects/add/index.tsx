@@ -1,8 +1,7 @@
-import { unwrapResult } from '@reduxjs/toolkit';
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import Link from 'next/link';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
@@ -11,7 +10,7 @@ import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
 import { createProject } from 'src/duck/project';
-import { useAsyncThunk } from 'src/lib/useAsyncThunk';
+import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
 
@@ -37,10 +36,9 @@ const AddProject: React.FC<FormikProps<FormValues>> = (p) => {
 
   if (user.role.id === 'APP_ADMIN') {
     userOrganizations = useSelector(orgSelector.selectAll);
-    [isFetchingOrgs] = useAsyncThunk(
-      fetchOrganizations,
-      'Failed to fetch organizations. Please refresh the page',
-    );
+    [isFetchingOrgs] = useQuery(fetchOrganizations, {
+      errorTitle: 'Failed to fetch organizations. Please refresh the page',
+    });
   }
 
   if (userOrganizations.length && !p.values.organization_id) {
@@ -132,24 +130,22 @@ const validationSchema = Yup.object().shape({
 });
 
 export default () => {
-  const dispatch = useDispatch();
+  const [createPro] = useAsyncThunk(createProject, {
+    errorTitle: 'Failed to create Project',
+    rethrowError: true,
+    successTitle: 'Project created successfully',
+  });
 
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
-    actions.setSubmitting(true);
-    const resp = await dispatch(createProject(values));
-
-    actions.setSubmitting(false);
-
     try {
-      unwrapResult(resp as any);
+      actions.setSubmitting(true);
+      await createPro(values);
       actions.resetForm();
     } catch (err) {
-      if (/uniqueness violation/i.test(err.message)) {
-        actions.setFieldError('name', 'A project with same name already exists');
+      if (/Duplicate project name/i.test(err.message)) {
+        actions.setFieldError('name', 'An project with same name already exists');
       }
-
-      // tslint:disable-next-line:no-console
-      console.error('Something went wrong', err.message);
+      actions.setSubmitting(false);
     }
   };
 

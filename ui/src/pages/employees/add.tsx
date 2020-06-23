@@ -1,8 +1,7 @@
-import { unwrapResult } from '@reduxjs/toolkit';
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import Link from 'next/link';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
@@ -11,9 +10,9 @@ import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
 import { designationSelector, fetchDesignations } from 'src/duck/designation';
-import { createEmployee } from 'src/duck/employee';
+import { createEmployeeAction } from 'src/duck/employee';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
-import { useAsyncThunk } from 'src/lib/useAsyncThunk';
+import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
 
@@ -35,14 +34,12 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
     designations: designationSelector.selectAll(state),
     organizations: orgSelector.selectAll(state),
   }));
-  const [isFetchingOrgs] = useAsyncThunk(
-    fetchOrganizations,
-    'Failed to fetch organizations. Please refresh the page',
-  );
-  const [isFetchingDesignations] = useAsyncThunk(
-    fetchDesignations,
-    'Failed to fetch designations. Please refresh the page',
-  );
+  const [isFetchingOrgs] = useQuery(fetchOrganizations, {
+    errorTitle: 'Failed to fetch organizations. Please refresh the page',
+  });
+  const [isFetchingDesignations] = useQuery(fetchDesignations, {
+    errorTitle: 'Failed to fetch designations. Please refresh the page',
+  });
 
   if (organizations.length && !p.values.organization_id) {
     p.setFieldValue('organization_id', organizations[0].id);
@@ -134,24 +131,22 @@ const validationSchema = Yup.object().shape({
 });
 
 export default () => {
-  const dispatch = useDispatch();
+  const [createEmployee] = useAsyncThunk(createEmployeeAction, {
+    errorTitle: 'Failed to crate Employee',
+    rethrowError: true,
+    successTitle: 'Employee created successfully',
+  });
 
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
-    actions.setSubmitting(true);
-    const resp = await dispatch(createEmployee(values));
-
-    actions.setSubmitting(false);
-
     try {
-      unwrapResult(resp as any);
+      actions.setSubmitting(true);
+      await createEmployee(values);
       actions.resetForm();
     } catch (err) {
-      if (/uniqueness violation/i.test(err.message)) {
-        actions.setFieldError('email', 'An organization with same name already exists');
+      if (/Duplicate employee email/i.test(err.message)) {
+        actions.setFieldError('email', 'A employee with same email already exists');
       }
-
-      // tslint:disable-next-line:no-console
-      console.error('Something went wrong', err.message);
+      actions.setSubmitting(false);
     }
   };
 

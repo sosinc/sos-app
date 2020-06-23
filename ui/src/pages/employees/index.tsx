@@ -8,7 +8,7 @@ import EmployeesList from 'src/components/Employees/List';
 import NoItemsFound from 'src/components/NoItemsFound';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { employeeSelector, fetchEmployees } from 'src/duck/employee';
-import { useAsyncThunk } from 'src/lib/useAsyncThunk';
+import { useQuery } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
 
@@ -27,7 +27,9 @@ const Header: React.FC = () => (
 
 const Index = () => {
   const employees = useSelector(employeeSelector.selectAll);
-  const [isFetching] = useAsyncThunk(fetchEmployees, 'Failed to fetch some Employees :-(');
+  const [isFetching] = useQuery(fetchEmployees, {
+    errorTitle: 'Failed to fetch some Employees :-(',
+  });
 
   if (!employees.length && !isFetching) {
     return (
