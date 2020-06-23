@@ -1,9 +1,7 @@
-import { unwrapResult } from '@reduxjs/toolkit';
 import classNames from 'classnames/bind';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import FullPageLayout from 'src/components/FullPageLayout';
 import LoginForm from 'src/components/LoginForm';
@@ -11,58 +9,41 @@ import Modal from 'src/components/Modal';
 import ResetPassword from 'src/components/ResetPassword';
 import WithUser from 'src/containers/WithUser';
 import { loginUser, resetPassword, sendPasswordResetOTP } from 'src/duck/auth';
-import { useFlash } from 'src/duck/flashMessages';
+import { useAsyncThunk } from 'src/lib/asyncHooks';
 
 import style from './index.module.scss';
 
 const c = classNames.bind(style);
 
 const Index = () => {
-  const dispatch = useDispatch();
   const [isModalOpen, setModalOpen] = useState(false);
-  const [flash] = useFlash();
+  const [loginAction] = useAsyncThunk(loginUser, {
+    errorTitle: 'Login Failed',
+    rethrowError: true,
+    successTitle: 'Logged in successfully',
+  });
+  const [otpAction] = useAsyncThunk(sendPasswordResetOTP, {
+    errorTitle: 'Failed to send OTP',
+    rethrowError: true,
+    successTitle: 'OTP send successfully',
+  });
+  const [resetPasswordAction] = useAsyncThunk(resetPassword, {
+    errorTitle: 'Reset password failed',
+    rethrowError: true,
+    successTitle: 'Password reset successfully!',
+  });
 
   const handleLogin = async (values: any) => {
-    try {
-      await unwrapResult((await dispatch(loginUser(values))) as any);
-      flash('Logged in successfully!');
-    } catch (err) {
-      flash({
-        body: err.message,
-        title: 'Login Failed!',
-        type: 'error',
-      });
-    }
+    await loginAction(values);
   };
 
   const handleSendOtp = async (email: string) => {
-    try {
-      await unwrapResult((await dispatch(sendPasswordResetOTP(email))) as any);
-      flash('OTP sent successfully!');
-    } catch (err) {
-      flash({
-        body: err.message,
-        title: 'Failed to send OTP',
-        type: 'error',
-      });
-
-      throw err;
-    }
+    await otpAction(email);
   };
 
   const handleResetPassword = async (values: any) => {
-    try {
-      await unwrapResult((await dispatch(resetPassword(values))) as any);
-
-      flash({ body: 'Please login with your new password', title: 'Password reset successfully!' });
-      setModalOpen(false);
-    } catch (err) {
-      flash({
-        body: err.message,
-        title: 'Failed to send OTP',
-        type: 'error',
-      });
-    }
+    await resetPasswordAction(values);
+    setModalOpen(false);
   };
 
   return (
