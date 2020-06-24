@@ -57,7 +57,7 @@ const AddProject: React.FC<FormikProps<FormValues>> = (p) => {
         </div>
         <div className={c('description-container', 'field-container')}>
           <span className={c('field-title')}>Description</span>
-          <TextField placeholder="Enter Description" type="text" name="description" />
+          <TextAreaField placeholder="Enter Description" name="description" />
         </div>
 
         <div className={c('square-logo', 'field-container')}>

@@ -1,5 +1,8 @@
-import { connect, FormikContextType } from 'formik';
+import c from 'classnames';
+import { connect, FormikContextType, getIn } from 'formik';
 import { MutableRefObject } from 'react';
+
+import s from './style.module.scss';
 
 interface TextAreaFieldProps {
   name: string;
@@ -17,14 +20,24 @@ const TextAreaField: React.FC<TextAreaFieldProps & { formik: FormikContextType<{
   formik,
   ...p
 }) => {
+  const isTouched = getIn(formik.touched, p.name);
+  const error = isTouched ? getIn(formik.errors, p.name) : null;
+  const inputProps = formik.getFieldProps(p.name);
+
+  const containerClass = c(s['text-area-field-container'], p.className, {
+    [s['has-error']]: error,
+    [s.field]: !p.className,
+  });
+
   return (
-    <div>
+    <div className={containerClass}>
       <textarea
         name={p.name}
         className={p.className}
         placeholder={p.placeholder}
         rows={p.rows}
         cols={p.cols}
+        {...inputProps}
       />
     </div>
   );
