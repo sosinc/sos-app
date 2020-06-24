@@ -126,3 +126,26 @@
   padding: 0 4em;
   transition: all 0.2s;
 }
+
+.skeleton {
+  .field-container,
+  .button-container {
+    @include bone;
+
+    color: transparent;
+    cursor: default;
+    height: 48px;
+  }
+
+  .square-logo {
+    height: 150px;
+  }
+
+  input,
+  .field-title,
+  .image-container,
+  .org-add-form,
+  .save-button {
+    display: none;
+  }
+}

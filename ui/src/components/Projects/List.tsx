@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+import Link from 'next/link';
 import style from 'src/components/Projects/style.module.scss';
 import FallbackIcon from 'src/containers/FallbackIcon';
 import { Project } from 'src/entities/Project';
@@ -11,15 +12,17 @@ interface Props {
 }
 
 const ProjectItem: React.FC<Project> = (o) => (
-  <div className={c('content')} key={o.id}>
-    <div className={c('fallback-icon')}>
-      <FallbackIcon logo={o.logo_square} name={o.name} />
+  <Link href={`/projects/${o.id}`} key={o.id}>
+    <div className={c('content')}>
+      <div className={c('fallback-icon')}>
+        <FallbackIcon logo={o.logo_square} name={o.name} />
+      </div>
+      <div className={c('details')}>
+        <span className={c('name')}>{o.name}</span>
+        <span className={c('count')}> {o.teams_count} teams</span>
+      </div>
     </div>
-    <div className={c('details')}>
-      <span className={c('name')}>{o.name}</span>
-      <span className={c('count')}> {o.teams_count} teams</span>
-    </div>
-  </div>
+  </Link>
 );
 
 const Skeleton = () => (
