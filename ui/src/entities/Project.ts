@@ -1,5 +1,6 @@
 import client from 'src/lib/client';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
+import setTimeoutP from 'src/lib/setTimeoutP';
 
 export interface Project {
   id: string;
@@ -19,6 +20,10 @@ export interface CreatePayload {
   issue_link_template?: string;
   pr_link_template?: string;
   organization_id: string;
+}
+
+export interface GetOnePayload {
+  id: string;
 }
 
 export const create = async (payload: CreatePayload): Promise<Project> => {
@@ -71,4 +76,26 @@ export const fetchMany = async (): Promise<Project[]> => {
         teams_count: data?.teams_aggregate?.aggregate?.count || 0,
       }))
     : [];
+};
+
+export const fetchOne = async (payload: GetOnePayload): Promise<Project> => {
+  const query = `query ($id: uuid!){
+    projects_by_pk(id: $id) {
+      id
+      name
+      logo_square
+      description
+      issue_link_template
+      pr_link_template
+      organization_id
+    }
+  }`;
+
+  const data = await client.request(query, payload);
+
+  await setTimeoutP(3000);
+
+  return data?.projects_by_pk
+    ? { ...data.projects_by_pk, logo_square: resolveStorageFile(data.projects_by_pk.logo_square) }
+    : {};
 };
