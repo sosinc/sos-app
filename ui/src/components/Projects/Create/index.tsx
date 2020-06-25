@@ -2,12 +2,15 @@ import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import Link from 'next/link';
 import { useEffect } from 'react';
+import { AiOutlineTeam } from 'react-icons/ai';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
+import NoItemsFound from 'src/components/NoItemsFound';
 import { Organization } from 'src/entities/Organizations';
+import TeamsList from 'src/components/Projects/TemsList';
 
 import style from './style.module.scss';
 
@@ -24,7 +27,10 @@ interface Props {
 
 const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) => (
   <form className={c('form')} onSubmit={p.handleSubmit}>
-    <h2 className={c('title')}> Create Project</h2>
+    <div className={c('title-container')}>
+      <h2>{p.isEditMode ? p.values.name : 'Create Project'} </h2>
+      <span className={c('sub-title')}>Manage your project</span>
+    </div>
     <div className={c('name-container', 'field-container')}>
       <span className={c('field-title')}>Name</span>
       <TextField placeholder="Enter Name" type="text" name="name" />
@@ -60,21 +66,61 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
       <span className={c('field-title')}>Pr Link Template</span>
       <TextField placeholder="Enter pr link template" type="text" name="pr_link_template" />
     </div>
-
-    <div className={c('button-container')}>
-      <button className={c('save-button')} type="submit" disabled={p.isSubmitting || p.isEditMode}>
-        {p.isSubmitting ? 'Saving...' : 'Save'}
-      </button>
-    </div>
-    {p.isEditMode && addTeam(p.projectId)}
+    {!p.isEditMode ? submitButton(p) : addTeam(p.projectId)}
   </form>
 );
 
-const addTeam = (projectId: any) => (
-  <Link href={`/projects/${projectId}/teams/add`}>
-    <a className={c('add-team')}>Add team </a>
-  </Link>
-);
+const submitButton = (p: any) => {
+  return (
+    <div className={c('button-container')}>
+      <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+        {p.isSubmitting ? 'Saving...' : 'Save'}
+      </button>
+    </div>
+  );
+};
+
+const noTeam = (projectId: string) => {
+  return (
+    <div className={c('not-found-container')}>
+      <NoItemsFound
+        Icon={AiOutlineTeam}
+        message="No Team found"
+        addItemText="Add a team"
+        addItemUrl={`/projects/${projectId}/teams/add`}
+      />
+    </div>
+  );
+};
+
+const addTeam = (projectId: any) => {
+  const teams = [
+    {
+      banner: '',
+      id: '122',
+      issue_link_template: '',
+      logo_square: '',
+      name: 'AB',
+      pr_link_template: '',
+      project_id: '',
+    },
+  ];
+  return (
+    <>
+      <div className={c('title-container', 'add-team')}>
+        <Link href={`/projects/${projectId}/teams/add`}>
+          <a className={c('add-team')}>
+            <h2>Add Team </h2>{' '}
+          </a>
+        </Link>
+        <span className={c('sub-title')}>Manage your teams</span>
+      </div>
+      <div className={c('team-container')}>
+        {!teams.length ? <TeamsList teams={teams} /> : noTeam(projectId)}
+      </div>
+    </>
+  );
+};
 
 const CreateProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) => {
   useEffect(() => {
