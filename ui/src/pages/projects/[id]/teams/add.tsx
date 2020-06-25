@@ -7,29 +7,38 @@ import ImageUploadField from 'src/components/Form/ImageUploadField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import TextField from 'src/components/Form/TextField';
 import { createTeamAction } from 'src/duck/team';
-import { useAsyncThunk } from 'src/lib/asyncHooks';
+import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/duck';
+import { projectSelector, fetchProject } from 'src/duck/project';
 
 const c = classNames.bind(style);
 
-const Header: React.FC = () => (
-  <div className={c('header')}>
-    <span>
-      <Link href="/projects">
-        <a>Projects > </a>
-      </Link>
-      <Link href="/projects">
-        <a> Details > </a>
-      </Link>
-      <Link href="/projects">
-        <a>Teams > </a>
-      </Link>
-      Create
-    </span>
-  </div>
-);
+const Header: React.FC = () => {
+  const router = useRouter();
+  const projectId = String(router.query.id);
+  useQuery(() => fetchProject({ id: projectId }), {
+    errorTitle: 'Failed to fetch some project details',
+  });
+
+  const project = useSelector((state: RootState) => projectSelector.selectById(state, projectId));
+  return (
+    <div className={c('header')}>
+      <span>
+        <Link href="/projects">
+          <a>Projects > </a>
+        </Link>
+        <Link href={`/projects/${projectId}`}>
+          <a> {project?.name || 'project'} > </a>
+        </Link>
+        Add Team
+      </span>
+    </div>
+  );
+};
 
 const CreateTeam: React.FC<FormikProps<FormValues>> = (p) => {
   return (

@@ -62,7 +62,7 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
     </div>
 
     <div className={c('button-container')}>
-      <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+      <button className={c('save-button')} type="submit" disabled={p.isSubmitting || p.isEditMode}>
         {p.isSubmitting ? 'Saving...' : 'Save'}
       </button>
     </div>

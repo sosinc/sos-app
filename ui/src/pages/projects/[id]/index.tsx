@@ -16,16 +16,21 @@ import { RootState } from 'src/duck';
 
 const c = classNames.bind(style);
 
-const Header: React.FC = () => (
-  <div className={c('header')}>
-    <span>
-      <Link href="/projects">
-        <a>Projects > </a>
-      </Link>
-      Details
-    </span>
-  </div>
-);
+const Header: React.FC = () => {
+  const router = useRouter();
+  const queryId = String(router.query.id);
+  const project = useSelector((state: RootState) => projectSelector.selectById(state, queryId));
+  return (
+    <div className={c('header')}>
+      <span>
+        <Link href="/projects">
+          <a>Projects > </a>
+        </Link>
+        {project?.name || 'Project'}
+      </span>
+    </div>
+  );
+};
 
 const ProjectDetails: React.FC<FormikValues> = () => {
   const router = useRouter();
