@@ -1,18 +1,18 @@
 import classNames from 'classnames/bind';
 import { FormikHelpers, FormikValues } from 'formik';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
 import CreateProject, { CreateProjectFormValues } from 'src/components/Projects/Create';
 import DashboardLayout from 'src/containers/DashboardLayout';
-import { fetchProject, projectSelector } from 'src/duck/project';
+import { RootState } from 'src/duck';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
+import { fetchProject, projectSelector } from 'src/duck/project';
 import { createProjectAction } from 'src/duck/project';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 import style from '../style.module.scss';
-import { useRouter } from 'next/router';
-import { RootState } from 'src/duck';
 
 const c = classNames.bind(style);
 
@@ -76,7 +76,7 @@ const ProjectDetails: React.FC<FormikValues> = () => {
     }
   };
 
-  const values: CreateProjectFormValues = {
+  const formValues: CreateProjectFormValues = {
     description: project?.description || '',
     issue_link_template: project?.issue_link_template || '',
     logo_square: project?.logo_square || '',
@@ -90,7 +90,7 @@ const ProjectDetails: React.FC<FormikValues> = () => {
       onSubmit={handleSubmit}
       isFetchingOrgs={isFetchingOrgs}
       organizations={userOrganizations}
-      values={values}
+      values={formValues}
       isFetchingProject={isFetchingProject}
       isEditMode={true}
       projectId={queryId || ''}

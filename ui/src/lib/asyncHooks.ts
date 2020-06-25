@@ -25,7 +25,7 @@ export const useAsyncThunk = (
   const runAsyncThunk = useCallback(async (args?: any) => {
     try {
       setIsFetching(true);
-      const result = await unwrapResult(await dispatch(asyncThunk(args)) as any);
+      const result = await unwrapResult((await dispatch(asyncThunk(args))) as any);
 
       if (options.successTitle) {
         flash({

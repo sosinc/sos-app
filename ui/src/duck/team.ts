@@ -1,10 +1,6 @@
 import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from '@reduxjs/toolkit';
 
-import {
-  create,
-  CreatePayload,
-  Team,
-} from 'src/entities/Team';
+import { create, CreatePayload, Team } from 'src/entities/Team';
 import { RootState } from '.';
 
 const TeamAdapter = createEntityAdapter<Team>({
@@ -21,7 +17,7 @@ export const createTeamAction = createAsyncThunk<
 >('team/create', create);
 
 export default createSlice({
-    initialState: TeamAdapter.getInitialState(),
+  initialState: TeamAdapter.getInitialState(),
   name: 'teams',
   reducers: {},
 });

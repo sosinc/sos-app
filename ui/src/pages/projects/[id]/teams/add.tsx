@@ -1,19 +1,18 @@
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import * as Yup from 'yup';
 
+import { useSelector } from 'react-redux';
 import ImageUploadField from 'src/components/Form/ImageUploadField';
-import DashboardLayout from 'src/containers/DashboardLayout';
 import TextField from 'src/components/Form/TextField';
+import DashboardLayout from 'src/containers/DashboardLayout';
+import { RootState } from 'src/duck';
+import { fetchProject, projectSelector } from 'src/duck/project';
 import { createTeamAction } from 'src/duck/team';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
-
 import style from './style.module.scss';
-import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
-import { RootState } from 'src/duck';
-import { projectSelector, fetchProject } from 'src/duck/project';
 
 const c = classNames.bind(style);
 
@@ -106,7 +105,7 @@ const validationSchema = Yup.object().shape({
 
 export default () => {
   const router = useRouter();
-  const project_id = String(router.query.id);
+  const projectId = String(router.query.id);
 
   const [createTeam] = useAsyncThunk(createTeamAction, {
     errorTitle: 'Failed to crate Team',
@@ -117,7 +116,7 @@ export default () => {
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
     try {
       actions.setSubmitting(true);
-      await createTeam({ ...values, project_id });
+      await createTeam({ ...values, project_id: projectId });
       actions.resetForm();
     } catch (err) {
       if (/Duplicate team name/i.test(err.message)) {
