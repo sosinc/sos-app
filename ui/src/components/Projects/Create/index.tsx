@@ -144,6 +144,7 @@ const OuterForm: React.FC<OuterFormProps> = (p) => {
   );
   return (
     <Formik
+      enableReinitialize={true}
       initialValues={p.values ? p.values : initialValues}
       validationSchema={validationSchema}
       onSubmit={p.onSubmit}

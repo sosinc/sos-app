@@ -5,5 +5,9 @@ export default (filePath?: string) => {
     return;
   }
 
+  if (filePath.startsWith('http')) {
+    return filePath;
+  }
+
   return new URL(`${config.urls.storage}${filePath}`).toString();
 };
