@@ -3,14 +3,15 @@ import { Formik, FormikHelpers, FormikProps } from 'formik';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { AiOutlineTeam } from 'react-icons/ai';
+import { MdAdd } from 'react-icons/md';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import NoItemsFound from 'src/components/NoItemsFound';
-import { Organization } from 'src/entities/Organizations';
 import TeamsList from 'src/components/Projects/TemsList';
+import { Organization } from 'src/entities/Organizations';
 
 import style from './style.module.scss';
 
@@ -29,7 +30,6 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
   <form className={c('form')} onSubmit={p.handleSubmit}>
     <div className={c('title-container')}>
       <h2>{p.isEditMode ? p.values.name : 'Create Project'} </h2>
-      <span className={c('sub-title')}>Manage your project</span>
     </div>
     <div className={c('name-container', 'field-container')}>
       <span className={c('field-title')}>Name</span>
@@ -82,14 +82,12 @@ const submitButton = (p: any) => {
 
 const noTeam = (projectId: string) => {
   return (
-    <div className={c('not-found-container')}>
-      <NoItemsFound
-        Icon={AiOutlineTeam}
-        message="No Team found"
-        addItemText="Add a team"
-        addItemUrl={`/projects/${projectId}/teams/add`}
-      />
-    </div>
+    <NoItemsFound
+      Icon={AiOutlineTeam}
+      message="No Teams found"
+      addItemText="Add a team"
+      addItemUrl={`/projects/${projectId}/teams/add`}
+    />
   );
 };
 
@@ -108,12 +106,15 @@ const addTeam = (projectId: any) => {
   return (
     <>
       <div className={c('title-container', 'add-team')}>
+        <div className={c('title')}>
+          <h3>Teams </h3>
+          <span className={c('sub-title')}>Manage this project teams</span>
+        </div>
         <Link href={`/projects/${projectId}/teams/add`}>
-          <a className={c('add-team')}>
-            <h2>Add Team </h2>{' '}
+          <a className={c('add-button')} title="Add Team">
+            <MdAdd className={c('icon')} />
           </a>
         </Link>
-        <span className={c('sub-title')}>Manage your teams</span>
       </div>
       <div className={c('team-container')}>
         {!teams.length ? <TeamsList teams={teams} /> : noTeam(projectId)}
