@@ -7,6 +7,7 @@ import employee from './employee';
 import flashMessages from './flashMessages';
 import organization from './organizations';
 import project from './project';
+import team from './team';
 
 const reducer = combineReducers({
   [auth.name]: auth.reducer,
@@ -15,6 +16,7 @@ const reducer = combineReducers({
   [employee.name]: employee.reducer,
   [organization.name]: organization.reducer,
   [project.name]: project.reducer,
+  [team.name]: team.reducer,
 });
 
 const rootReducer: Reducer<RootState> = (state, action): RootState => {

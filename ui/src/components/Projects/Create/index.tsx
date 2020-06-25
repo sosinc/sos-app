@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
+import Link from 'next/link';
 import { useEffect } from 'react';
 import * as Yup from 'yup';
 
@@ -18,10 +19,12 @@ interface Props {
   values?: CreateProjectFormValues;
   isEditMode?: boolean;
   isFetchingProject?: boolean;
+  projectId?: string;
 }
 
 const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) => (
   <form className={c('form')} onSubmit={p.handleSubmit}>
+    <h2 className={c('title')}> Create Project</h2>
     <div className={c('name-container', 'field-container')}>
       <span className={c('field-title')}>Name</span>
       <TextField placeholder="Enter Name" type="text" name="name" />
@@ -63,7 +66,14 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
         {p.isSubmitting ? 'Saving...' : 'Save'}
       </button>
     </div>
+    {p.isEditMode && addTeam(p.projectId)}
   </form>
+);
+
+const addTeam = (projectId: any) => (
+  <Link href={`/projects/${projectId}/teams/add`}>
+    <a className={c('add-team')}>Add team </a>
+  </Link>
 );
 
 const CreateProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) => {
@@ -75,7 +85,6 @@ const CreateProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> 
 
   return (
     <div className={c('container')}>
-      <h2 className={c('title')}> Create Project</h2>
       <div className={c({ skeleton: p.isFetchingProject })}>
         <ProjectForm {...p} />
       </div>
@@ -129,10 +138,10 @@ const OuterForm: React.FC<OuterFormProps> = (p) => {
       organizations={p.organizations}
       isFetchingOrgs={p.isFetchingOrgs}
       isEditMode={p.isEditMode}
+      projectId={p.projectId}
       {...formikProps}
     />
   );
-
   return (
     <Formik
       initialValues={p.values ? p.values : initialValues}

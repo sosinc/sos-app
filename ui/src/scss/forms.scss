@@ -11,6 +11,10 @@
   transition: all 0.2s;
   width: 100%;
 
+  &:focus {
+    box-shadow: 0 0 2px 2px $color-input-border;
+  }
+
   @media(max-width: $sm) {
     border: 1px solid $color-boundary;
     margin: 0 0 8px;
@@ -34,4 +38,22 @@
 
   background: $color-cta;
   color: $color-button-text-inverted;
+}
+
+%clear-field-container {
+  flex-grow: 1;
+  position: relative;
+  width: 100%;
+
+  &.has-error {
+    background: $color-error-bg;
+
+    input {
+      background: $color-error-bg;
+    }
+  }
+
+  input {
+    @extend %form-input;
+  }
 }

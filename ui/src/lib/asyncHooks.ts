@@ -52,11 +52,7 @@ export const useAsyncThunk = (
     }
   }, []);
 
-  const execute = useCallback(async (arg?: any) => {
-    runAsyncThunk(arg);
-  }, []);
-
-  return [execute, isFetching] as [(arg?: any) => Promise<void>, boolean];
+  return [runAsyncThunk, isFetching] as [(arg?: any) => Promise<void>, boolean];
 };
 
 /**

@@ -1,6 +1,5 @@
 import client from 'src/lib/client';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
-import setTimeoutP from 'src/lib/setTimeoutP';
 
 export interface Project {
   id: string;
@@ -92,8 +91,6 @@ export const fetchOne = async (payload: GetOnePayload): Promise<Project> => {
   }`;
 
   const data = await client.request(query, payload);
-
-  await setTimeoutP(3000);
 
   return data?.projects_by_pk
     ? { ...data.projects_by_pk, logo_square: resolveStorageFile(data.projects_by_pk.logo_square) }

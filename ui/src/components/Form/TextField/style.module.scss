@@ -1,25 +1,5 @@
 @import 'src/scss/lib';
 
-.input-field-container {
-  flex-grow: 1;
-  position: relative;
-  width: 100%;
-}
-
-.field {
-  flex-grow: 1;
-  position: relative;
-  width: 100%;
-
-  &.has-error {
-    background: $color-error-bg;
-
-    input {
-      background: $color-error-bg;
-    }
-  }
-
-  input {
-    @extend %form-input;
-  }
+.container {
+  @extend %clear-field-container;
 }

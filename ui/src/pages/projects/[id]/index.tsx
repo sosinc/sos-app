@@ -10,7 +10,7 @@ import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
 import { createProjectAction } from 'src/duck/project';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
-import style from './style.module.scss';
+import style from '../style.module.scss';
 import { useRouter } from 'next/router';
 import { RootState } from 'src/duck';
 
@@ -88,6 +88,7 @@ const ProjectDetails: React.FC<FormikValues> = () => {
       values={values}
       isFetchingProject={isFetchingProject}
       isEditMode={true}
+      projectId={queryId || ''}
     />
   );
 };
