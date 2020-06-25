@@ -28,7 +28,10 @@ const AddOrg: React.FC<FormikProps<FormValues>> = (p) => {
   return (
     <div className={c('org-container')}>
       <form className={c('org-form')} onSubmit={p.handleSubmit}>
-        <h2 className={c('title')}> Create Organization</h2>
+        <div className={c('title-container')}>
+          <h2> Create Organization</h2>
+          <span className={c('sub-title')}>Manage your organization</span>
+        </div>
         <div className={c('name-container', 'field-container')}>
           <span className={c('field-title')}>Name</span>
           <TextField placeholder="Enter organization name" type="name" name="name" />

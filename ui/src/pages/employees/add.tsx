@@ -48,7 +48,10 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
   return (
     <div className={c('container')}>
       <form className={c('form')} onSubmit={p.handleSubmit}>
-        <h2 className={c('title')}> Create Employee</h2>
+        <div className={c('title-container')}>
+          <h2> Create Employee</h2>
+          <span className={c('sub-title')}>Manage your employee</span>
+        </div>
 
         <div className={c('email-container', 'field-container')}>
           <span className={c('field-title')}>Email</span>

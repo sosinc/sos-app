@@ -57,3 +57,19 @@
     @extend %form-input;
   }
 }
+
+%title-container {
+  border-bottom: 1px solid $color-boundary;
+  color: $color-text-primary;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2em;
+  padding-bottom: 2em;
+  text-align: left;
+
+  .sub-title {
+    color: $color-text-dim1;
+    font-size: 13px;
+    margin-top: 8px;
+  }
+}
