@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import CreateProject, { CreateProjectFormValues } from 'src/components/Projects/Create';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
-import { createProjectAction } from 'src/duck/project';
+import { createProjectAction } from 'src/duck/projects';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 import style from './style.module.scss';

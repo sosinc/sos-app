@@ -9,8 +9,8 @@ import ImageUploadField from 'src/components/Form/ImageUploadField';
 import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
-import { fetchProject, projectSelector } from 'src/duck/project';
-import { createTeamAction } from 'src/duck/team';
+import { fetchProject, projectSelector } from 'src/duck/projects';
+import { createTeamAction } from 'src/duck/teams';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 import style from './style.module.scss';
 
@@ -71,11 +71,12 @@ const CreateTeam: React.FC<FormikProps<FormValues>> = (p) => {
           </div>
         </div>
 
-        <div className={c('button-container')}>
-          <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+        <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+          <div className={c({ 'saving-in': p.isSubmitting })}>
             {p.isSubmitting ? 'Saving...' : 'Save'}
-          </button>
-        </div>
+            <span />
+          </div>
+        </button>
       </form>
     </div>
   );

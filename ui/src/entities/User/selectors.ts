@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
 
 import { RootState } from 'src/duck';
-import { employeeSelector } from 'src/duck/employee';
+import { employeeSelector } from 'src/duck/employees';
 import { orgSelector } from 'src/duck/organizations';
-import { projectSelector } from 'src/duck/project';
+import { projectSelector } from 'src/duck/projects';
 import { Employee } from 'src/entities/Employee';
 import { Organization } from 'src/entities/Organizations';
 import { Project } from 'src/entities/Project';

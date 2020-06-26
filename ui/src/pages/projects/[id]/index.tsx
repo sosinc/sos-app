@@ -8,8 +8,8 @@ import CreateProject, { CreateProjectFormValues } from 'src/components/Projects/
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
-import { fetchProject, projectSelector } from 'src/duck/project';
-import { createProjectAction } from 'src/duck/project';
+import { fetchProject, projectSelector } from 'src/duck/projects';
+import { createProjectAction } from 'src/duck/projects';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 import style from '../style.module.scss';
@@ -92,7 +92,6 @@ const ProjectDetails: React.FC<FormikValues> = () => {
       organizations={userOrganizations}
       values={formValues}
       isFetchingProject={isFetchingProject}
-      isEditMode={true}
       projectId={queryId || ''}
     />
   );
