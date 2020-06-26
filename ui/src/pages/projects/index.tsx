@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import NoItemsFound from 'src/components/NoItemsFound';
 import ProjectList from 'src/components/Projects/List';
 import DashboardLayout from 'src/containers/DashboardLayout';
-import { fetchProjects, projectSelector } from 'src/duck/project';
+import { fetchProjects, projectSelector } from 'src/duck/projects';
 import { currentUser } from 'src/entities/User/selectors';
 import { useQuery } from 'src/lib/asyncHooks';
 

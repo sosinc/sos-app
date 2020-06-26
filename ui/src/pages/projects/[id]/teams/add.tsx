@@ -9,8 +9,8 @@ import ImageUploadField from 'src/components/Form/ImageUploadField';
 import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
-import { fetchProject, projectSelector } from 'src/duck/project';
-import { createTeamAction } from 'src/duck/team';
+import { fetchProject, projectSelector } from 'src/duck/projects';
+import { createTeamAction } from 'src/duck/teams';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 import style from './style.module.scss';
 

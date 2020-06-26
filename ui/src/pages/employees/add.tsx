@@ -9,8 +9,8 @@ import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
-import { designationSelector, fetchDesignations } from 'src/duck/designation';
-import { createEmployeeAction } from 'src/duck/employee';
+import { designationSelector, fetchDesignations } from 'src/duck/designations';
+import { createEmployeeAction } from 'src/duck/employees';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 
