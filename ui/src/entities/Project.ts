@@ -21,6 +21,10 @@ export interface CreatePayload {
   organization_id: string;
 }
 
+export interface GetOnePayload {
+  id: string;
+}
+
 export const create = async (payload: CreatePayload): Promise<Project> => {
   const query = `
   mutation ($name: String!, $logo_square: String, $description: String, $issue_link_template: String, $pr_link_template: String, $organization_id: uuid!){
@@ -71,4 +75,24 @@ export const fetchMany = async (): Promise<Project[]> => {
         teams_count: data?.teams_aggregate?.aggregate?.count || 0,
       }))
     : [];
+};
+
+export const fetchOne = async (payload: GetOnePayload): Promise<Project> => {
+  const query = `query ($id: uuid!){
+    projects_by_pk(id: $id) {
+      id
+      name
+      logo_square
+      description
+      issue_link_template
+      pr_link_template
+      organization_id
+    }
+  }`;
+
+  const data = await client.request(query, payload);
+
+  return data?.projects_by_pk
+    ? { ...data.projects_by_pk, logo_square: resolveStorageFile(data.projects_by_pk.logo_square) }
+    : {};
 };

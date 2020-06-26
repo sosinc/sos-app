@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import EmployeesList from 'src/components/Employees/List';
 import NoItemsFound from 'src/components/NoItemsFound';
 import DashboardLayout from 'src/containers/DashboardLayout';
-import { employeeSelector, fetchEmployees } from 'src/duck/employee';
+import { employeeSelector, fetchEmployees } from 'src/duck/employees';
 import { useQuery } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';

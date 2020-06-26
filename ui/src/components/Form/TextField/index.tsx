@@ -8,6 +8,7 @@ import s from './style.module.scss';
 interface TextFieldProps {
   name: string;
   className?: string;
+  inputClassName?: string;
   placeholder?: string;
   inputRef?: MutableRefObject<HTMLInputElement | null>;
   tabIndex?: number;
@@ -22,14 +23,15 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
   const error = isTouched ? getIn(formik.errors, p.name) : null;
   const inputProps = formik.getFieldProps(p.name);
 
-  const containerClass = c(s['input-field-container'], p.className, {
+  const containerClass = c(p.className, {
     [s['has-error']]: error,
-    [s.field]: !p.className,
+    [s.container]: !p.className,
   });
 
   return (
     <div className={containerClass}>
       <input
+        className={p.inputClassName}
         type={p.type || 'text'}
         tabIndex={p.tabIndex}
         placeholder={p.placeholder}

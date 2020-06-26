@@ -1,43 +1,31 @@
 @import 'src/scss/lib';
 
-.header {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.not-found-container {
-  padding-top: 7em;
-}
-
-.add-button {
-  $size: 28px;
-  @extend %button-primary;
-
-  align-items: center;
-  display: flex;
-  height: $size;
-  justify-content: center;
-  padding: 0;
-  width: $size;
-
-  .icon {
-    height: 1.2em;
-    width: 1.2em;
-  }
-}
-
-// ---
-
-.org-container {
+.container {
   color: $color-text-dim2;
   display: flex;
   flex-direction: column;
   margin-top: 7em;
 }
 
-.org-form {
+.add-icon {
+  color: $color-text-dim2;
+  height: 45px;
+  margin: 0 auto;
+  margin-bottom: 1em;
+  width: 45px;
+}
+
+.add {
+  color: $color-cta;
+  margin-top: 1em;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.form {
   display: grid;
   font: inherit;
   grid-auto-rows: minmax(2em, auto);
@@ -52,17 +40,14 @@
   @media(max-width: $sm) {
     flex-direction: column;
   }
-
-  &.has-error {
-    background: $color-error-bg;
-  }
 }
 
-.title-container {
-  @extend %title-container;
-
+.title {
+  color: $color-text-bright1;
   grid-column: 1/3;
   grid-row: 1;
+  margin-bottom: 0.5em;
+  text-align: left;
 }
 
 .field-container {
@@ -76,30 +61,37 @@
   position: relative;
 }
 
-.field-title {
-  color: $color-text-dim2;
-  text-align: left;
-}
-
-.org-logo {
+.square-logo {
+  grid-column: 1;
+  grid-row: 3;
+  height: 10em;
   width: 10em;
 }
 
-.image-container-logo {
-  grid-column: 1;
-  grid-row: 3;
-}
-
-.image-container-banner {
+.right-container {
+  display: grid;
+  grid-auto-rows: minmax(2em, auto);
   grid-column: 2;
+  grid-column-gap: 15px;
   grid-row: 3;
+  grid-row-gap: 2em;
+  grid-template-columns: 1fr 1fr;
+  height: 11em;
 }
 
-.input-file {
-  cursor: pointer;
-  height: 100%;
-  opacity: 0;
-  width: 100%;
+.issue-link-container {
+  grid-column: 1/3;
+  grid-row: 1;
+}
+
+.pr-link-container {
+  grid-column: 1/3;
+  grid-row: 2;
+}
+
+.field-title {
+  color: $color-text-dim2;
+  text-align: left;
 }
 
 .save-button {

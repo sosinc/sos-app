@@ -4,7 +4,7 @@
   color: $color-text-dim2;
   display: flex;
   flex-direction: column;
-  margin-top: 7em;
+  margin-top: 5em;
 }
 
 .add-icon {
@@ -42,12 +42,11 @@
   }
 }
 
-.title {
-  color: $color-text-bright1;
+.title-container {
+  @extend %title-container;
+
   grid-column: 1/3;
   grid-row: 1;
-  margin-bottom: 0.5em;
-  text-align: left;
 }
 
 .field-container {
@@ -105,13 +104,6 @@
   text-align: left;
 }
 
-.button-container {
-  display: grid;
-  grid-column: 1;
-  grid-row: 6;
-  justify-content: flex-start;
-}
-
 .save-button {
   background: $color-button-cta-bg;
   border: 0;
@@ -121,8 +113,79 @@
   flex-shrink: 0;
   font-size: 14px;
   font-weight: 600;
+  grid-column: 1;
+  grid-row: 6;
   height: 48px;
   outline: none;
   padding: 0 4em;
   transition: all 0.2s;
+}
+
+.saving-in {
+  position: relative;
+
+  span {
+    @extend %working;
+    position: absolute;
+  }
+}
+
+
+.add-team {
+  flex-direction: row;
+  grid-column: 1/3;
+  grid-row: 6;
+  justify-content: space-between;
+  margin-top: 1em;
+}
+
+.team-container {
+  grid-column: 1/3;
+  min-height: 300px;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-button {
+  $size: 28px;
+  @extend %button-primary;
+
+  align-items: center;
+  display: flex;
+  height: $size;
+  justify-content: center;
+  padding: 0;
+  width: $size;
+
+  .icon {
+    height: 1.2em;
+    width: 1.2em;
+  }
+}
+
+
+.skeleton {
+  .field-container,
+  .button-container {
+    @include bone;
+
+    color: transparent;
+    cursor: default;
+    height: 48px;
+  }
+
+  .square-logo {
+    height: 150px;
+  }
+
+  input,
+  .field-title,
+  .image-container,
+  .org-add-form,
+  .save-button {
+    display: none;
+  }
 }

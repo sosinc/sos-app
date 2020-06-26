@@ -41,7 +41,7 @@ export const create = async (payload: CreatePayload): Promise<Employee> => {
     const data = await client.request(query, payload);
 
     return data.payload;
-  }  catch (err) {
+  } catch (err) {
     if (/uniqueness violation/i.test(err.message)) {
       throw new Error('Duplicate employee email');
     }

@@ -9,8 +9,8 @@ import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
-import { designationSelector, fetchDesignations } from 'src/duck/designation';
-import { createEmployeeAction } from 'src/duck/employee';
+import { designationSelector, fetchDesignations } from 'src/duck/designations';
+import { createEmployeeAction } from 'src/duck/employees';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 
@@ -48,7 +48,10 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
   return (
     <div className={c('container')}>
       <form className={c('form')} onSubmit={p.handleSubmit}>
-        <h2 className={c('title')}> Create Employee</h2>
+        <div className={c('title-container')}>
+          <h2> Create Employee</h2>
+          <span className={c('sub-title')}>Manage your employee</span>
+        </div>
 
         <div className={c('email-container', 'field-container')}>
           <span className={c('field-title')}>Email</span>
@@ -90,11 +93,12 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
           </div>
         </div>
 
-        <div className={c('button-container')}>
-          <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+        <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+          <div className={c({ 'saving-in': p.isSubmitting })}>
             {p.isSubmitting ? 'Saving...' : 'Save'}
-          </button>
-        </div>
+            <span />
+          </div>
+        </button>
       </form>
     </div>
   );
