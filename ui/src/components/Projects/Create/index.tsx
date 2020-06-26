@@ -21,7 +21,6 @@ interface Props {
   organizations: Organization[];
   isFetchingOrgs: boolean;
   values?: CreateProjectFormValues;
-  isEditMode?: boolean;
   isFetchingProject?: boolean;
   projectId?: string;
 }
@@ -29,7 +28,7 @@ interface Props {
 const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) => (
   <form className={c('form')} onSubmit={p.handleSubmit}>
     <div className={c('title-container')}>
-      <h2>{p.isEditMode ? p.values.name : 'Create Project'} </h2>
+      <h2>{p.projectId ? p.values.name : 'Create Project'} </h2>
     </div>
     <div className={c('name-container', 'field-container')}>
       <span className={c('field-title')}>Name</span>
@@ -66,17 +65,18 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
       <span className={c('field-title')}>Pr Link Template</span>
       <TextField placeholder="Enter pr link template" type="text" name="pr_link_template" />
     </div>
-    {!p.isEditMode ? submitButton(p) : addTeam(p.projectId)}
+    {!p.projectId ? submitButton(p) : addTeam(p.projectId)}
   </form>
 );
 
 const submitButton = (p: any) => {
   return (
-    <div className={c('button-container')}>
-      <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+    <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+      <div className={c({ 'saving-in': p.isSubmitting })}>
         {p.isSubmitting ? 'Saving...' : 'Save'}
-      </button>
-    </div>
+        <span />
+      </div>
+    </button>
   );
 };
 
@@ -184,7 +184,6 @@ const OuterForm: React.FC<OuterFormProps> = (p) => {
       isFetchingProject={p.isFetchingProject}
       organizations={p.organizations}
       isFetchingOrgs={p.isFetchingOrgs}
-      isEditMode={p.isEditMode}
       projectId={p.projectId}
       {...formikProps}
     />

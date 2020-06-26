@@ -93,11 +93,12 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
           </div>
         </div>
 
-        <div className={c('button-container')}>
-          <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+        <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+          <div className={c({ 'saving-in': p.isSubmitting })}>
             {p.isSubmitting ? 'Saving...' : 'Save'}
-          </button>
-        </div>
+            <span />
+          </div>
+        </button>
       </form>
     </div>
   );

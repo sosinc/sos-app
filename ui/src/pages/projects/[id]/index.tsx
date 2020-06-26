@@ -92,7 +92,6 @@ const ProjectDetails: React.FC<FormikValues> = () => {
       organizations={userOrganizations}
       values={formValues}
       isFetchingProject={isFetchingProject}
-      isEditMode={true}
       projectId={queryId || ''}
     />
   );
