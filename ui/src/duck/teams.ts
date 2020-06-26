@@ -2,7 +2,7 @@ import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from 
 
 import { create, CreatePayload, Team } from 'src/entities/Team';
 import { RootState } from '.';
-import { fetchProject } from './project';
+import { fetchProject } from './projects';
 
 const TeamAdapter = createEntityAdapter<Team>({
   sortComparer: (a, b) => a.name.localeCompare(b.name),

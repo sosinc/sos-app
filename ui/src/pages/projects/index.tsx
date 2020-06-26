@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { MdAdd, MdFolder } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
+import Listing, { ListItemProps } from 'src/components/Listing';
 import NoItemsFound from 'src/components/NoItemsFound';
-import ProjectList from 'src/components/Projects/List';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { fetchProjects, projectSelector } from 'src/duck/projects';
 import { currentUser } from 'src/entities/User/selectors';
@@ -50,7 +50,19 @@ const Index = () => {
     );
   }
 
-  return <ProjectList projects={projects} isFetching={isFetching} />;
+  const listItems: ListItemProps[] = projects.map((p) => ({
+    href: `/projects/${p.id}`,
+    id: p.id,
+    logo: p.logo_square,
+    subtitle: `${p.teams_count} members`,
+    title: p.name,
+  }));
+
+  return (
+    <div className={c('list-container')}>
+      <Listing items={listItems} isFetching={isFetching} />
+    </div>
+  );
 };
 
 export default () => (

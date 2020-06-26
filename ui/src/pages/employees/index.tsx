@@ -4,7 +4,7 @@ import { FaUsers } from 'react-icons/fa';
 import { MdAdd } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
-import EmployeesList from 'src/components/Employees/List';
+import Listing, { ListItemProps } from 'src/components/Listing';
 import NoItemsFound from 'src/components/NoItemsFound';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { employeeSelector, fetchEmployees } from 'src/duck/employees';
@@ -44,7 +44,18 @@ const Index = () => {
     );
   }
 
-  return <EmployeesList employees={employees} isFetching={isFetching} />;
+  const listItems: ListItemProps[] = employees.map((e) => ({
+    id: e.ecode,
+    logo: e.headshot,
+    subtitle: `${e.designation_id}`,
+    title: e.name,
+  }));
+
+  return (
+    <div className={c('list-container')}>
+      <Listing items={listItems} isFetching={isFetching} />
+    </div>
+  );
 };
 
 export default () => (
