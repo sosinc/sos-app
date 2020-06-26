@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 import { AiOutlineTeam } from 'react-icons/ai';
 import { MdAdd } from 'react-icons/md';
+import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
@@ -11,6 +12,7 @@ import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import NoItemsFound from 'src/components/NoItemsFound';
 import TeamsList from 'src/components/Projects/TemsList';
+import { teamSelector } from 'src/duck/team';
 import { Organization } from 'src/entities/Organizations';
 
 import style from './style.module.scss';
@@ -66,7 +68,7 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
       <span className={c('field-title')}>Pr Link Template</span>
       <TextField placeholder="Enter pr link template" type="text" name="pr_link_template" />
     </div>
-    {!p.isEditMode ? submitButton(p) : addTeam(p.projectId)}
+    {!p.isEditMode ? submitButton(p) : addTeam(p)}
   </form>
 );
 
@@ -91,18 +93,9 @@ const noTeam = (projectId: string) => {
   );
 };
 
-const addTeam = (projectId: any) => {
-  const teams = [
-    {
-      banner: '',
-      id: '122',
-      issue_link_template: '',
-      logo_square: '',
-      name: 'AB',
-      pr_link_template: '',
-      project_id: '',
-    },
-  ];
+const addTeam = (project: any) => {
+  const teams = useSelector(teamSelector.selectAll);
+
   return (
     <>
       <div className={c('title-container', 'add-team')}>
@@ -110,14 +103,14 @@ const addTeam = (projectId: any) => {
           <h3>Teams </h3>
           <span className={c('sub-title')}>Manage this project teams</span>
         </div>
-        <Link href={`/projects/${projectId}/teams/add`}>
+        <Link href={`/projects/${project.projectId}/teams/add`}>
           <a className={c('add-button')} title="Add Team">
             <MdAdd className={c('icon')} />
           </a>
         </Link>
       </div>
       <div className={c('team-container')}>
-        {!teams.length ? <TeamsList teams={teams} /> : noTeam(projectId)}
+        {teams.length ? <TeamsList teams={teams} /> : noTeam(project.projectId)}
       </div>
     </>
   );

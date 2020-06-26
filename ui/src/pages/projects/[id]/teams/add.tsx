@@ -31,7 +31,7 @@ const Header: React.FC = () => {
           <a>Projects > </a>
         </Link>
         <Link href={`/projects/${projectId}`}>
-          <a> {project?.name || 'project'} > </a>
+          <a> {project?.name || 'Project'} > </a>
         </Link>
         Add Team
       </span>
@@ -43,7 +43,9 @@ const CreateTeam: React.FC<FormikProps<FormValues>> = (p) => {
   return (
     <div className={c('container')}>
       <form className={c('form')} onSubmit={p.handleSubmit}>
-        <h2 className={c('title')}> Create Team</h2>
+        <div className={c('title-container')}>
+          <h2>Create Team</h2>
+        </div>
         <div className={c('name-container', 'field-container')}>
           <span className={c('field-title')}>Name</span>
           <TextField placeholder="Enter Name" type="text" name="name" />

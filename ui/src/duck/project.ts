@@ -8,6 +8,7 @@ import {
   fetchOne,
   GetOnePayload,
   Project,
+  ProjectResponse,
 } from 'src/entities/Project';
 import { RootState } from '.';
 
@@ -25,7 +26,7 @@ export const fetchProjects = createAsyncThunk<
 >('projects/fetchMany', fetchMany);
 
 export const fetchProject = createAsyncThunk<
-  Project,
+  ProjectResponse,
   GetOnePayload,
   { rejectValue: Error; state: ProjectState }
 >('projects/fetchOne', fetchOne);
@@ -41,7 +42,7 @@ export default createSlice({
     builder.addCase(fetchProjects.fulfilled, projectAdapter.upsertMany);
 
     builder.addCase(fetchProject.fulfilled, (state, { payload }) => {
-      projectAdapter.upsertOne(state, payload);
+      projectAdapter.upsertOne(state, payload.project);
     });
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
