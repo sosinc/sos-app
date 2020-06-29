@@ -95,12 +95,19 @@ const noTeam = (projectId: string) => {
 
 const addTeam = (p: Props) => {
   const teams = useSelector(teamSelector.selectAll);
-  const listItems: ListItemProps[] = teams.map((t) => ({
+  const teamListItems: ListItemProps[] = teams.map((t) => ({
+    href: `/projects/${p.projectId}/teams/${t.id}`,
     id: t.id,
     logo: t.logo_square,
     subtitle: `0 members`,
     title: t.name,
   }));
+
+  const isProjectTeams = teams.length ? (
+    <Listing items={teamListItems} isFetching={p.isFetchingProject} />
+  ) : (
+    noTeam(p?.projectId || '')
+  );
 
   return (
     <>
@@ -115,13 +122,7 @@ const addTeam = (p: Props) => {
           </a>
         </Link>
       </div>
-      <div className={c('team-container')}>
-        {teams.length ? (
-          <Listing items={listItems} isFetching={p.isFetchingProject} />
-        ) : (
-          noTeam(p?.projectId || '')
-        )}
-      </div>
+      <div className={c('team-container')}>{isProjectTeams}</div>
     </>
   );
 };
