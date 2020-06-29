@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { MdAdd, MdBusiness } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
+import Listing, { ListItemProps } from 'src/components/Listing';
 import NoItemsFound from 'src/components/NoItemsFound';
-import OrganizationsList from 'src/components/Organization/List';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
 import { useQuery } from 'src/lib/asyncHooks';
@@ -43,7 +43,18 @@ const Index = () => {
     );
   }
 
-  return <OrganizationsList organizations={organizations} isFetching={isFetching} />;
+  const listItems: ListItemProps[] = organizations.map((o) => ({
+    id: o.id,
+    logo: o.square_logo,
+    subtitle: `${o.employees_count} employees`,
+    title: o.name,
+  }));
+
+  return (
+    <div className={c('list-container')}>
+      <Listing items={listItems} isFetching={isFetching} />
+    </div>
+  );
 };
 
 export default () => (

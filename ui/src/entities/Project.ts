@@ -1,5 +1,6 @@
 import client from 'src/lib/client';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
+import { Team } from './Team';
 
 export interface Project {
   id: string;
@@ -23,6 +24,11 @@ export interface CreatePayload {
 
 export interface GetOnePayload {
   id: string;
+}
+
+export interface ProjectResponse {
+  project: Project;
+  teams: Team[];
 }
 
 export const create = async (payload: CreatePayload): Promise<Project> => {
@@ -77,7 +83,7 @@ export const fetchMany = async (): Promise<Project[]> => {
     : [];
 };
 
-export const fetchOne = async (payload: GetOnePayload): Promise<Project> => {
+export const fetchOne = async (payload: GetOnePayload): Promise<ProjectResponse> => {
   const query = `query ($id: uuid!){
     projects_by_pk(id: $id) {
       id
@@ -87,12 +93,32 @@ export const fetchOne = async (payload: GetOnePayload): Promise<Project> => {
       issue_link_template
       pr_link_template
       organization_id
+      teams{
+        id
+        name
+        logo_square
+      }
     }
   }`;
 
   const data = await client.request(query, payload);
+  let project = data.projects_by_pk;
 
-  return data?.projects_by_pk
-    ? { ...data.projects_by_pk, logo_square: resolveStorageFile(data.projects_by_pk.logo_square) }
-    : {};
-};
+  if (!project) {
+    throw new Error('Could not get projects at the moment');
+  }
+
+  const teams = project.teams.length ? project.teams.map((t: Team) => ({
+    ...t,
+    logo_square: resolveStorageFile(t.logo_square),
+    project_id: project.id,
+  })) : [];
+
+  project = {...project, logo_square: resolveStorageFile(project.logo_square)};
+  delete project.teams;
+
+  return {
+    project,
+    teams,
+  };
+ };

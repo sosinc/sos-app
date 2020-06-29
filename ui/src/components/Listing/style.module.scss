@@ -1,9 +1,7 @@
 @import 'src/scss/lib';
 
 .container {
-  margin-top: 48px;
   width: 100%;
-
 
   @media(max-width: $md) {
     margin-top: 100px;
@@ -39,9 +37,10 @@
   display: flex;
   flex-direction: column;
   margin-left: 10px;
+  width: 100%;
 }
 
-.name {
+.title {
   color: $color-text-primary;
   font-size: 1.1em;
   overflow: hidden;
@@ -50,13 +49,13 @@
   white-space: nowrap;
 }
 
-.designation {
+.subtitle {
   color: $color-text-dim2;
   font-size: 10px;
 }
 
 .skeleton {
-  .details {
+  .organization-details {
     width: 100%;
   }
 
@@ -65,7 +64,7 @@
     border-radius: 50%;
   }
 
-  .name {
+  .title {
     @include bone;
 
     font-size: 13px;
@@ -73,7 +72,7 @@
     width: 60%;
   }
 
-  .designation {
+  .subtitle {
     @include bone;
     width: 20%;
   }

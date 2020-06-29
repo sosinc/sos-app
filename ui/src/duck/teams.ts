@@ -2,6 +2,7 @@ import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from 
 
 import { create, CreatePayload, Team } from 'src/entities/Team';
 import { RootState } from '.';
+import { fetchProject } from './projects';
 
 const TeamAdapter = createEntityAdapter<Team>({
   sortComparer: (a, b) => a.name.localeCompare(b.name),
@@ -17,6 +18,11 @@ export const createTeamAction = createAsyncThunk<
 >('team/create', create);
 
 export default createSlice({
+  extraReducers: (builder) => {
+    builder.addCase(fetchProject.fulfilled, (state, { payload }) => {
+      TeamAdapter.upsertMany(state, payload.teams);
+    });
+  },
   initialState: TeamAdapter.getInitialState(),
   name: 'teams',
   reducers: {},
