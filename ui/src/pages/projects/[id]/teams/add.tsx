@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import CreateTeam, { CreateTeamFormValues } from 'src/components/Teams/Create';
 import DashboardLayout from 'src/containers/DashboardLayout';
+import { fetchEmployees, employeeSelector } from 'src/duck/employees';
 import { RootState } from 'src/duck';
 import { fetchProject, projectSelector } from 'src/duck/projects';
 import { createTeamAction } from 'src/duck/teams';
@@ -41,6 +42,10 @@ const AddTeam: React.FC<FormikValues> = () => {
   const router = useRouter();
   const projectId = String(router.query.id);
 
+  const employees = useSelector(employeeSelector.selectAll);
+  const [isFetchingEmployees] = useQuery(fetchEmployees, {
+    errorTitle: 'Failed to fetch some Employees :-(',
+  });
   const [createTeam] = useAsyncThunk(createTeamAction, {
     errorTitle: 'Failed to create Team',
     rethrowError: true,
@@ -61,7 +66,13 @@ const AddTeam: React.FC<FormikValues> = () => {
       helpers.setSubmitting(false);
     }
   };
-  return <CreateTeam onSubmit={handleSubmit} />;
+  return (
+    <CreateTeam
+      onSubmit={handleSubmit}
+      employees={employees}
+      isFetchingEmployees={isFetchingEmployees}
+    />
+  );
 };
 
 export default () => {

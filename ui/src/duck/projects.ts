@@ -38,7 +38,7 @@ export const createProjectAction = createAsyncThunk<
 >('project/create', create);
 
 export default createSlice({
-  extraReducers: (builder) => {
+  extraReducers: async (builder) => {
     builder.addCase(fetchProjects.fulfilled, projectAdapter.upsertMany);
 
     builder.addCase(fetchProject.fulfilled, (state, { payload }) => {
@@ -47,6 +47,10 @@ export default createSlice({
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
       projectAdapter.upsertMany(state, payload.projects);
+    });
+
+    builder.addCase('teams/fetchOne/fulfilled', (state, { payload }: any) => {
+      projectAdapter.upsertOne(state, payload.project);
     });
   },
   initialState: projectAdapter.getInitialState(),

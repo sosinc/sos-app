@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 
 import CreateTeam, { CreateTeamFormValues } from 'src/components/Teams/Create';
 import DashboardLayout from 'src/containers/DashboardLayout';
+import { fetchEmployees, employeeSelector } from 'src/duck/employees';
 import { RootState } from 'src/duck';
 import { fetchTeam, teamSelector } from 'src/duck/teams';
 import { projectSelector } from 'src/duck/projects';
@@ -13,7 +14,6 @@ import { createTeamAction } from 'src/duck/teams';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
-import { fetchEmployees, employeeSelector } from 'src/duck/employees';
 
 const c = classNames.bind(style);
 
