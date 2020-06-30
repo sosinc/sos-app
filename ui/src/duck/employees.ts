@@ -5,8 +5,6 @@ import { create, CreatePayload, Employee, fetchMany } from 'src/entities/Employe
 import { RootState } from '.';
 
 const employeeAdapter = createEntityAdapter<Employee>({
-  // Employees get their unique ID from combination of Ecode and organization ID
-  selectId: (e) => `${e.ecode}-${e.organization_id}`,
   sortComparer: (a, b) => a.name.localeCompare(b.name),
 });
 export const employeeSelector = employeeAdapter.getSelectors<RootState>((state) => state.employees);
@@ -27,10 +25,17 @@ export const createEmployeeAction = createAsyncThunk<
 
 export default createSlice({
   extraReducers: (builder) => {
-    builder.addCase(fetchEmployees.fulfilled, employeeAdapter.upsertMany);
+    builder.addCase(fetchEmployees.fulfilled, (state, { payload }) => {
+      // Employees get their unique ID from combination of Ecode and organization ID
+      const employees = payload.map((e) => ({ ...e, id: `${e.ecode}-${e.organization_id}` }));
+
+      employeeAdapter.upsertMany(state, employees);
+    });
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
-      employeeAdapter.upsertMany(state, payload.employees);
+      const employees = payload.employees.map((e) => ({ ...e, id: `${e.ecode}-${e.organization_id}` }));
+
+      employeeAdapter.upsertMany(state, employees);
     });
   },
   initialState: employeeAdapter.getInitialState(),
