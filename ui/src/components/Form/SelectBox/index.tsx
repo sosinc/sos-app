@@ -62,7 +62,7 @@ const SelectBox: React.FC<FileFieldProps> = ({ ...p }) => {
   return (
     <div className={containerClass} onClick={handleOpen}>
       <div className={c('select-container')}>
-        Select Member
+        Add Team Member
         <Icon />
       </div>
       {isOpen ? selectList : null}

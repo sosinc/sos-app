@@ -49,6 +49,7 @@ const TeamDetails: React.FC<FormikValues> = () => {
   const team = useSelector((state: RootState) => teamSelector.selectById(state, teamId));
 
   const employees = useSelector(employeeSelector.selectAll);
+
   const [isFetchingEmployees] = useQuery(fetchEmployees, {
     errorTitle: 'Failed to fetch some Employees :-(',
   });
@@ -90,7 +91,7 @@ const TeamDetails: React.FC<FormikValues> = () => {
       values={formValues}
       isFetchingEmployees={isFetchingEmployees}
       employees={employees}
-      teamId={teamId}
+      team={team}
     />
   );
 };
