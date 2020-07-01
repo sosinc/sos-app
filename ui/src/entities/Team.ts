@@ -1,9 +1,8 @@
 import client from 'src/lib/client';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
 import { Project } from './Project';
-import { Member } from './TeamMember';
 
-export interface Team {
+export interface TeamResponse {
   id: string;
   name: string;
   banner: string;
@@ -11,9 +10,10 @@ export interface Team {
   project_id: string;
   issue_link_template: string;
   pr_link_template: string;
+  memberIds: string[];
 }
 
-export interface CreatePayload {
+export interface CreateTeamArgs {
   project_id: string;
   name: string;
   logo_square?: string;
@@ -21,13 +21,23 @@ export interface CreatePayload {
   pr_link_template?: string;
 }
 
-export interface TeamResponse {
-  project: Project;
-  team: Team;
-  members: Member[];
+export interface CreateMemberArgs {
+  ecode: string;
+  team_id: string;
+  organization_id: string;
 }
 
-export const create = async (payload: CreatePayload): Promise<Team> => {
+export interface CreateMemberResponse {
+  teamId: string;
+  employeeId: string;
+}
+
+export interface FetchOneTeamResponse {
+  project: Project;
+  team: TeamResponse;
+}
+
+export const create = async (payload: CreateTeamArgs): Promise<TeamResponse> => {
   const query = `
   mutation ($name: String!, $project_id: uuid!, $logo_square: String, $issue_link_template: String, $pr_link_template: String,){
     insert_teams_one(object: {
@@ -53,50 +63,70 @@ export const create = async (payload: CreatePayload): Promise<Team> => {
   }
 };
 
-export const fetchOne = async (payload: {id: string}): Promise<TeamResponse> => {
+export const fetchOne = async (payload: { id: string }): Promise<FetchOneTeamResponse> => {
   const query = `query ($id: uuid!){
-  teams_by_pk(id: $id ) {
-    id
-    name
-    logo_square
-    issue_link_template
-    pr_link_template
-    project{
+    teams_by_pk(id: $id ) {
       id
       name
       logo_square
-      description
-      organization_id
-    }
-    members{
-      team_id
-      employee{
-        ecode
+      issue_link_template
+      pr_link_template
+      project{
+        id
         name
-        headshot
-        designation_id
+        logo_square
+        description
+        organization_id
+      }
+      members{
+        ecode
+        organization_id
       }
     }
-  }
-}`;
+  }`;
 
-  const data = await client.request(query, payload);
-  let team = data.teams_by_pk;
+  try {
+    const { project: projectData, members, ...teamData } = (
+      await client.request(query, payload)
+    ).teams_by_pk;
 
-  if (!team) {
+    const project = { ...projectData, logo_square: resolveStorageFile(projectData.logo_square) };
+    const memberIds = members.map(
+      (m: { ecode: string; organization_id: string }) => `${m.ecode}-${m.organization_id}`,
+    );
+
+    const team = { ...teamData, logo_square: resolveStorageFile(teamData.logo_square), memberIds };
+
+    return { team, project };
+  } catch (err) {
     throw new Error('Could not get team at the moment');
   }
+};
 
-  const project = {...team.project, logo_square: resolveStorageFile(team.project.logo_square)};
-  const members = !team.members.length ? [] : team.members.map((m: any) => ({
-    ...m.employee,
-    headshot: resolveStorageFile(m.employee.headshot),
-    id: `${m.employee.ecode}-${m.team_id}`,
-    team_id: m.team_id,
-  }));
+export const createMember = async (args: CreateMemberArgs): Promise<CreateMemberResponse> => {
+  const query = `
+    mutation ($ecode: String!, $team_id: uuid!, $organization_id: uuid!){
+      insert_team_members_one(object: {
+      ecode: $ecode
+      organization_id: $organization_id
+      team_id: $team_id
+    }) {
+      team_id
+    }
+  }`;
 
-  team = {...team, logo_square: resolveStorageFile(team.logo_square)};
-  delete team.project;
+  try {
+    await client.request(query, args);
 
-  return {team, project, members};
+    return {
+      employeeId: `${args.ecode}-${args.organization_id}`,
+      teamId: args.team_id,
+    };
+  } catch (err) {
+    if (/uniqueness violation/i.test(err.message)) {
+      throw new Error('Duplicate member');
+    }
+
+    throw new Error('Something went wrong :-(');
+  }
 };
