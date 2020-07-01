@@ -100,12 +100,14 @@ const TeamMembers = (p: {
     title: m.name,
   }));
 
-  const isProjectTeams = members.length ? <Listing items={teamListItems} /> : NoTeamMembers();
+  const employees = p.employees.filter((e) => members.indexOf(e) === -1);
+  const ProjectTeams = members.length ? <Listing items={teamListItems} /> : NoTeamMembers();
 
   const handleAddMember = async (id: string) => {
     const member = p.employees.find((e: Employee) => e.id === id);
 
     if (!member) {
+      // tslint:disable-next-line:no-console
       console.warn('Failed to add employee');
       return;
     }
@@ -130,12 +132,12 @@ const TeamMembers = (p: {
           <SelectBox
             className={c('org-add-form')}
             name="member"
-            options={p.employees}
+            options={employees}
             isLoading={p.isFetchingEmployees}
             onSelect={handleAddMember}
           />
         </div>
-        <div className={c('item-container')}>{isProjectTeams}</div>
+        <div className={c('item-container')}>{ProjectTeams}</div>
       </div>
     </div>
   );
