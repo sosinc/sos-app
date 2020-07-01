@@ -17,13 +17,14 @@ interface FileFieldProps {
   className?: string;
   options: SelectFieldItem[];
   isLoading?: boolean;
+  onSelect?: any;
 }
 const noOptions = <li className={c('select-option')}>{'No data'}</li>;
 const SelectBox: React.FC<FileFieldProps> = ({ ...p }) => {
   const [isOpen, setOpen] = useState(false);
 
   const handleSelectItem = (id: string) => () => {
-    console.warn('------', id);
+    p.onSelect(id);
   };
 
   const handleOpen = () => {
@@ -61,7 +62,7 @@ const SelectBox: React.FC<FileFieldProps> = ({ ...p }) => {
   return (
     <div className={containerClass} onClick={handleOpen}>
       <div className={c('select-container')}>
-        Select Value
+        Select Member
         <Icon />
       </div>
       {isOpen ? selectList : null}

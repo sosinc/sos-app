@@ -1,6 +1,7 @@
 import client from 'src/lib/client';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
 import { Project } from './Project';
+import { Member } from './TeamMember';
 
 export interface Team {
   id: string;
@@ -20,15 +21,10 @@ export interface CreatePayload {
   pr_link_template?: string;
 }
 
-export interface CreateMemberPayload {
-  ecode: string;
-  team_id: string;
-  organization_id: string;
-}
-
 export interface TeamResponse {
   project: Project;
   team: Team;
+  members: Member[];
 }
 
 export const create = async (payload: CreatePayload): Promise<Team> => {
@@ -72,6 +68,15 @@ export const fetchOne = async (payload: {id: string}): Promise<TeamResponse> => 
       description
       organization_id
     }
+    members{
+      team_id
+      employee{
+        ecode
+        name
+        headshot
+        designation_id
+      }
+    }
   }
 }`;
 
@@ -83,33 +88,15 @@ export const fetchOne = async (payload: {id: string}): Promise<TeamResponse> => 
   }
 
   const project = {...team.project, logo_square: resolveStorageFile(team.project.logo_square)};
+  const members = !team.members.length ? [] : team.members.map((m: any) => ({
+    ...m.employee,
+    headshot: resolveStorageFile(m.employee.headshot),
+    id: `${m.employee.ecode}-${m.team_id}`,
+    team_id: m.team_id,
+  }));
+
   team = {...team, logo_square: resolveStorageFile(team.logo_square)};
   delete team.project;
 
-  return {team, project};
-};
-
-export const createTeamMember = async (payload: CreateMemberPayload): Promise<{id: string}> => {
-  const query = `
-  mutation ($ecode: String!, $team_id: uuid!, $organization_id: Suuid){
-    insert_teams_one(object: {
-    name: $ecode
-    organization_id: $organization_id
-    team_id: $team_id
-    }) {
-      id
-    }
-}`;
-
-  try {
-    const data = await client.request(query, payload);
-
-    return data.payload;
-  } catch (err) {
-    if (/uniqueness violation/i.test(err.message)) {
-      throw new Error('Duplicate member name');
-    }
-
-    throw new Error('Something went wrong :-(');
-  }
+  return {team, project, members};
 };

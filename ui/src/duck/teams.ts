@@ -1,6 +1,6 @@
 import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from '@reduxjs/toolkit';
 
-import { create, CreateMemberPayload,  CreatePayload, createTeamMember, fetchOne, Team, TeamResponse } from 'src/entities/Team';
+import { create, CreatePayload, fetchOne, Team, TeamResponse } from 'src/entities/Team';
 import { RootState } from '.';
 import { fetchProject } from './projects';
 
@@ -16,12 +16,6 @@ export const createTeamAction = createAsyncThunk<
   CreatePayload,
   { rejectValue: Error; state: ProjectState }
 >('team/create', create);
-
-export const createMemberAction = createAsyncThunk<
-  {id: string},
-CreateMemberPayload,
-{ rejectValue: Error; state: ProjectState }
-  >('team/create', createTeamMember);
 
 export const fetchTeam = createAsyncThunk<
   TeamResponse,

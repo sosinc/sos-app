@@ -2,14 +2,19 @@ import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 /* import { useState } from 'react'; */
 import { AiOutlineTeam } from 'react-icons/ai';
+import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import SelectBox from 'src/components/Form/SelectBox';
 import TextField from 'src/components/Form/TextField';
-import Listing from 'src/components/Listing';
+import Listing, { ListItemProps } from 'src/components/Listing';
 import NoItemsFound from 'src/components/NoItemsFound';
 import { Employee } from 'src/entities/Employee';
+import { Member } from 'src/entities/TeamMember';
+
+import { createMemberAction, memberSelector } from 'src/duck/teamMembers';
+import { useAsyncThunk } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
 
@@ -77,15 +82,34 @@ const NoTeamMembers = () => {
 };
 
 const TeamMembers = (p: any) => {
-  const members = [];
-  /* const teamListItems: ListItemProps[] = members.map((t) => ({
-   *   id: t.id,
-   *   logo: t.logo_square,
-   *   subtitle: `0 members`,
-   *   title: t.name,
-   * })); */
+  const members = useSelector(memberSelector.selectAll);
+  const [createMember] = useAsyncThunk(createMemberAction, {
+    errorTitle: 'Failed to create Member',
+    rethrowError: true,
+    successTitle: 'Member created successfully',
+  });
 
-  const isProjectTeams = members.length ? <Listing items={[]} /> : NoTeamMembers();
+  console.warn('-------members----', members);
+  const teamListItems: ListItemProps[] = members.map((m: Member) => ({
+    id: m.id,
+    logo: m.headshot,
+    subtitle: m.designation_id,
+    title: m.name,
+  }));
+
+  const isProjectTeams = members.length ? <Listing items={teamListItems} /> : NoTeamMembers();
+
+  const handleAddMember = async (id: string) => {
+    let member = p.employees.filter((e: Employee) => {
+      return e.id === id;
+    });
+    member = member[0];
+    await createMember({
+      ecode: member.ecode,
+      organization_id: member.organization_id,
+      team_id: p.teamId,
+    });
+  };
 
   return (
     <div className={c('team-member-container', 'form')}>
@@ -103,6 +127,7 @@ const TeamMembers = (p: any) => {
             name="employee_id"
             options={p.employees}
             isLoading={p.isFetchingEmployees}
+            onSelect={handleAddMember}
           />
         </div>
 
@@ -181,7 +206,7 @@ const OuterForm: React.FC<OuterFormProps> = (p) => {
         {InnerForm}
       </Formik>
 
-      <TeamMembers employees={employees} />
+      <TeamMembers employees={employees} teamId={p.teamId} />
     </>
   );
 };
