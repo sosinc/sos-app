@@ -73,12 +73,11 @@ export const fetchMany = async (): Promise<Project[]> => {
   }`;
 
   const data = await client.request(query);
-
   return data?.projects.length
     ? data.projects.map((e: any) => ({
         ...e,
         logo_square: resolveStorageFile(e.logo_square),
-        teams_count: data?.teams_aggregate?.aggregate?.count || 0,
+        teams_count: e?.teams_aggregate?.aggregate?.count || 0,
       }))
     : [];
 };
@@ -97,6 +96,9 @@ export const fetchOne = async (payload: GetOnePayload): Promise<ProjectResponse>
         id
         name
         logo_square
+        members{
+          ecode
+        }
       }
     }
   }`;
@@ -108,9 +110,10 @@ export const fetchOne = async (payload: GetOnePayload): Promise<ProjectResponse>
     throw new Error('Could not get projects at the moment');
   }
 
-  const teams = project.teams.length ? project.teams.map((t: Team) => ({
+  const teams = project.teams.length ? project.teams.map((t: any) => ({
     ...t,
     logo_square: resolveStorageFile(t.logo_square),
+    membersCount: t.members.length,
     project_id: project.id,
   })) : [];
 

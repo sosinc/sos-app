@@ -1,12 +1,10 @@
 import classNames from 'classnames/bind';
-import { Formik, FormikHelpers, FormikProps } from 'formik';
+import { FormikHelpers, FormikValues } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import * as Yup from 'yup';
 
 import { useSelector } from 'react-redux';
-import ImageUploadField from 'src/components/Form/ImageUploadField';
-import TextField from 'src/components/Form/TextField';
+import CreateTeam, { CreateTeamFormValues } from 'src/components/Teams/Create';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
 import { fetchProject, projectSelector } from 'src/duck/projects';
@@ -39,105 +37,39 @@ const Header: React.FC = () => {
   );
 };
 
-const CreateTeam: React.FC<FormikProps<FormValues>> = (p) => {
-  return (
-    <div className={c('container')}>
-      <form className={c('form')} onSubmit={p.handleSubmit}>
-        <div className={c('title-container')}>
-          <h2>Create Team</h2>
-        </div>
-        <div className={c('name-container', 'field-container')}>
-          <span className={c('field-title')}>Name</span>
-          <TextField placeholder="Enter Name" type="text" name="name" />
-        </div>
-
-        <div className={c('square-logo', 'field-container')}>
-          <span className={c('field-title')}>Square Logo</span>
-          <ImageUploadField className={c('image-container')} type={'file'} name="logo_square" />
-        </div>
-
-        <div className={c('right-container')}>
-          <div className={c('issue-link-container', 'field-container')}>
-            <span className={c('field-title')}>Issue Link Template</span>
-            <TextField
-              placeholder="Enter issue Link Template"
-              type="text"
-              name="issue_link_template"
-            />
-          </div>
-          <div className={c('pr-link-container', 'field-container')}>
-            <span className={c('field-title')}>Pr Link Template</span>
-            <TextField placeholder="Enter pr link template" type="text" name="pr_link_template" />
-          </div>
-        </div>
-
-        <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
-          <div className={c({ 'saving-in': p.isSubmitting })}>
-            {p.isSubmitting ? 'Saving...' : 'Save'}
-            <span />
-          </div>
-        </button>
-      </form>
-    </div>
-  );
-};
-
-interface FormValues {
-  name: string;
-  logo_square: string;
-  issue_link_template: string;
-  pr_link_template: string;
-}
-
-const initialValues = {
-  issue_link_template: '',
-  logo_square: '',
-  name: '',
-  pr_link_template: '',
-};
-
-const validationSchema = Yup.object().shape({
-  issue_link_template: Yup.string(),
-  logo_square: Yup.string(),
-  name: Yup.string()
-    .min(2, 'Must be 2 characters or more')
-    .max(16, 'Must be 16 characters or less')
-    .required('Required'),
-  pr_link_template: Yup.string(),
-});
-
-export default () => {
+const AddTeam: React.FC<FormikValues> = () => {
   const router = useRouter();
   const projectId = String(router.query.id);
 
   const [createTeam] = useAsyncThunk(createTeamAction, {
-    errorTitle: 'Failed to crate Team',
+    errorTitle: 'Failed to create Team',
     rethrowError: true,
     successTitle: 'Team created successfully',
   });
 
-  const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
+  const handleSubmit = async (
+    values: CreateTeamFormValues,
+    helpers: FormikHelpers<CreateTeamFormValues>,
+  ) => {
     try {
-      actions.setSubmitting(true);
+      helpers.setSubmitting(true);
       await createTeam({ ...values, project_id: projectId });
-      actions.resetForm();
+      helpers.resetForm();
     } catch (err) {
       if (/Duplicate team name/i.test(err.message)) {
-        actions.setFieldError('name', 'A team with same name already exists');
+        helpers.setFieldError('name', 'A team with same name already exists');
       }
-      actions.setSubmitting(false);
+      helpers.setSubmitting(false);
     }
   };
 
+  return <CreateTeam onSubmit={handleSubmit} employees={[]} />;
+};
+
+export default () => {
   return (
-    <DashboardLayout title={'Projects - Snake Oil Software'} Header={Header}>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-      >
-        {CreateTeam}
-      </Formik>
+    <DashboardLayout title={'Teams - Snake Oil Software'} Header={Header}>
+      <AddTeam />
     </DashboardLayout>
   );
 };

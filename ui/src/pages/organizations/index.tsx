@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { MdAdd, MdBusiness } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
-import Listing, { ListItemProps } from 'src/components/Listing';
+import Listing, { ListingItemProps } from 'src/components/Listing';
 import NoItemsFound from 'src/components/NoItemsFound';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
@@ -43,7 +43,7 @@ const Index = () => {
     );
   }
 
-  const listItems: ListItemProps[] = organizations.map((o) => ({
+  const listItems: ListingItemProps[] = organizations.map((o) => ({
     id: o.id,
     logo: o.square_logo,
     subtitle: `${o.employees_count} employees`,

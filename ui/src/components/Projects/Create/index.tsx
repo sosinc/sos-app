@@ -10,7 +10,7 @@ import * as Yup from 'yup';
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
-import Listing, { ListItemProps } from 'src/components/Listing';
+import Listing, { ListingItemProps } from 'src/components/Listing';
 import NoItemsFound from 'src/components/NoItemsFound';
 import { teamSelector } from 'src/duck/teams';
 import { Organization } from 'src/entities/Organizations';
@@ -95,11 +95,11 @@ const noTeam = (projectId: string) => {
 
 const addTeam = (p: Props) => {
   const teams = useSelector(teamSelector.selectAll);
-  const teamListItems: ListItemProps[] = teams.map((t) => ({
+  const teamListItems: ListingItemProps[] = teams.map((t) => ({
     href: `/projects/${p.projectId}/teams/${t.id}`,
     id: t.id,
     logo: t.logo_square,
-    subtitle: `0 members`,
+    subtitle: `${t.membersCount} members`,
     title: t.name,
   }));
 
