@@ -6,11 +6,10 @@ import { useSelector } from 'react-redux';
 
 import CreateTeam, { CreateTeamFormValues } from 'src/components/Teams/Create';
 import DashboardLayout from 'src/containers/DashboardLayout';
-import { fetchEmployees, employeeSelector } from 'src/duck/employees';
 import { RootState } from 'src/duck';
-import { fetchTeam, teamSelector } from 'src/duck/teams';
+import { employeeSelector, fetchEmployees } from 'src/duck/employees';
 import { projectSelector } from 'src/duck/projects';
-import { createTeamAction } from 'src/duck/teams';
+import { createTeamAction, fetchTeam, teamSelector } from 'src/duck/teams';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
@@ -81,7 +80,6 @@ const TeamDetails: React.FC<FormikValues> = () => {
     logo_square: team?.logo_square || '',
     name: team?.name || '',
     pr_link_template: team?.pr_link_template || '',
-    employee_id: '',
   };
 
   return (
