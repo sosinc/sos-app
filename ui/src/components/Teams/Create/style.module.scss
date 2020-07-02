@@ -123,3 +123,12 @@
 .emp-container {
   margin-bottom: 1em;
 }
+
+.del-icon {
+  $size: 1.3em;
+
+  color: $color-text-dim2;
+  cursor: pointer;
+  height: $size;
+  width: $size;
+}

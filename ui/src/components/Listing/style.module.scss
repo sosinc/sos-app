@@ -20,6 +20,10 @@
   max-width: 1200px;
   padding: 5px;
   text-align: left;
+
+  &:hover .action {
+    visibility: visible;
+  }
 }
 
 .fallback-icon {
@@ -47,11 +51,19 @@
   padding-bottom: 3px;
   text-overflow: ellipsis;
   white-space: nowrap;
+  width: 25%;
 }
 
 .subtitle {
   color: $color-text-dim2;
   font-size: 10px;
+  width: 25%;
+}
+
+.action {
+
+  cursor: pointer;
+  visibility: hidden;
 }
 
 .skeleton {
