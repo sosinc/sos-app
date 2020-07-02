@@ -1,16 +1,17 @@
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { AiOutlineTeam } from 'react-icons/ai';
+import { MdDelete } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import SelectBox from 'src/components/Form/SelectBox';
 import TextField from 'src/components/Form/TextField';
-import Listing, { ListItemProps } from 'src/components/Listing';
+import Listing, { ListingItemProps } from 'src/components/Listing';
 import NoItemsFound from 'src/components/NoItemsFound';
 import { RootState } from 'src/duck';
-import { createMemberAction } from 'src/duck/teams';
+import { createMemberAction, deleteMemberAction } from 'src/duck/teams';
 import { Employee } from 'src/entities/Employee';
 import { TeamResponse } from 'src/entities/Team';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
@@ -89,19 +90,46 @@ const TeamMembers = (p: {
     successTitle: 'Member created successfully',
   });
 
+  const [deleteMember] = useAsyncThunk(deleteMemberAction, {
+    errorTitle: 'Failed to remove Member',
+    rethrowError: true,
+    successTitle: 'Member removed successfully',
+  });
+
+  const handleDeleteMember = async (id: string) => {
+    const removeMember = p.employees.find((e) => e.id === id);
+
+    await deleteMember({
+      ecode: removeMember?.ecode,
+      organization_id: removeMember?.organization_id,
+      team_id: p.team.id,
+    });
+  };
+
   const members = useSelector((state: RootState) => {
     return p.team.memberIds.map((mid) => state.employees.entities[mid]);
   }).filter((m) => Boolean(m)) as Employee[];
 
-  const teamListItems: ListItemProps[] = members.map((m: Employee) => ({
+  const teamListItems: ListingItemProps[] = members.map((m: Employee) => ({
     id: m.id,
     logo: m.headshot,
     subtitle: m.designation_id,
     title: m.name,
   }));
 
+  const RemoveMember: React.FC<{ id: string }> = ({ id }) => (
+    <MdDelete
+      className={c('del-icon')}
+      onClick={() => handleDeleteMember(id)}
+      title={'Remove Member'}
+    />
+  );
   const employees = p.employees.filter((e) => members.indexOf(e) === -1);
-  const ProjectTeams = members.length ? <Listing items={teamListItems} /> : NoTeamMembers();
+  const ProjectTeams = members.length ? (
+    <Listing items={teamListItems} Actions={RemoveMember} />
+  ) : (
+    NoTeamMembers()
+  );
 
   const handleAddMember = async (id: string) => {
     const member = p.employees.find((e: Employee) => e.id === id);
@@ -150,11 +178,9 @@ export interface CreateTeamFormValues {
   name: string;
   pr_link_template: string;
   logo_square: string;
-  employee_id: string;
 }
 
 const validationSchema = Yup.object().shape({
-  employee_id: Yup.string(),
   issue_link_template: Yup.string(),
   logo_square: Yup.string(),
   name: Yup.string()
@@ -174,7 +200,6 @@ interface OuterFormProps extends CreateTeamProps {
 }
 
 const initialValues = {
-  employee_id: '',
   issue_link_template: '',
   logo_square: '',
   name: '',

@@ -130,3 +130,28 @@ export const createMember = async (args: CreateMemberArgs): Promise<CreateMember
     throw new Error('Something went wrong :-(');
   }
 };
+
+export const deleteMember = async (args: CreateMemberArgs): Promise<CreateMemberResponse> => {
+  const query = `
+    mutation ($team_id: uuid!, $ecode: String!, $organization_id: uuid!) {
+      delete_team_members_by_pk(
+        ecode: $ecode,
+        organization_id: $organization_id,
+        team_id: $team_id)
+       {
+         ecode
+         organization_id
+      }
+  }`;
+
+  try {
+    await client.request(query, args);
+
+    return {
+      employeeId: `${args.ecode}-${args.organization_id}`,
+      teamId: args.team_id,
+    };
+  } catch (err) {
+    throw new Error('Something went wrong :-(');
+  }
+};
