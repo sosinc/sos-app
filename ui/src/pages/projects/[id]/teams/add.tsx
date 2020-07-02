@@ -63,9 +63,7 @@ const AddTeam: React.FC<FormikValues> = () => {
     }
   };
 
-  return (
-    <CreateTeam onSubmit={handleSubmit} employees={[]} isFetchingEmployees={isFetchingEmployees} />
-  );
+  return <CreateTeam onSubmit={handleSubmit} employees={[]} />;
 };
 
 export default () => {
