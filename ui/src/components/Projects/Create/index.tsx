@@ -99,7 +99,7 @@ const addTeam = (p: Props) => {
     href: `/projects/${p.projectId}/teams/${t.id}`,
     id: t.id,
     logo: t.logo_square,
-    subtitle: `0 members`,
+    subtitle: `${t.membersCount} members`,
     title: t.name,
   }));
 

@@ -1,6 +1,6 @@
 import client from 'src/lib/client';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
-import { TeamResponse } from './Team';
+import { Team } from './Team';
 
 export interface Project {
   id: string;
@@ -28,7 +28,7 @@ export interface GetOnePayload {
 
 export interface ProjectResponse {
   project: Project;
-  teams: TeamResponse[];
+  teams: Team[];
 }
 
 export const create = async (payload: CreatePayload): Promise<Project> => {
@@ -73,12 +73,11 @@ export const fetchMany = async (): Promise<Project[]> => {
   }`;
 
   const data = await client.request(query);
-
   return data?.projects.length
     ? data.projects.map((e: any) => ({
         ...e,
         logo_square: resolveStorageFile(e.logo_square),
-        teams_count: data?.teams_aggregate?.aggregate?.count || 0,
+        teams_count: e?.teams_aggregate?.aggregate?.count || 0,
       }))
     : [];
 };
@@ -97,6 +96,9 @@ export const fetchOne = async (payload: GetOnePayload): Promise<ProjectResponse>
         id
         name
         logo_square
+        members{
+          ecode
+        }
       }
     }
   }`;
@@ -108,9 +110,10 @@ export const fetchOne = async (payload: GetOnePayload): Promise<ProjectResponse>
     throw new Error('Could not get projects at the moment');
   }
 
-  const teams = project.teams.length ? project.teams.map((t: TeamResponse) => ({
+  const teams = project.teams.length ? project.teams.map((t: any) => ({
     ...t,
     logo_square: resolveStorageFile(t.logo_square),
+    membersCount: t.members.length,
     project_id: project.id,
   })) : [];
 

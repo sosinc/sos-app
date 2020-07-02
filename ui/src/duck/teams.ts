@@ -9,20 +9,20 @@ import {
   deleteMember,
   fetchOne,
   FetchOneTeamResponse,
-  TeamResponse,
+  Team,
 } from 'src/entities/Team';
 import { RootState } from '.';
 import { fetchProject } from './projects';
 
-const TeamAdapter = createEntityAdapter<TeamResponse>({
+const TeamAdapter = createEntityAdapter<Team>({
   sortComparer: (a, b) => a.name.localeCompare(b.name),
 });
 export const teamSelector = TeamAdapter.getSelectors<RootState>((state) => state.teams);
 
-export type ProjectState = EntityState<TeamResponse>;
+export type ProjectState = EntityState<Team>;
 
 export const createTeamAction = createAsyncThunk<
-  TeamResponse,
+  Team,
   CreateTeamArgs,
   { rejectValue: Error; state: ProjectState }
 >('team/create', create);

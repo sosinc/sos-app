@@ -2,7 +2,7 @@ import client from 'src/lib/client';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
 import { Project } from './Project';
 
-export interface TeamResponse {
+export interface Team {
   id: string;
   name: string;
   banner: string;
@@ -11,6 +11,7 @@ export interface TeamResponse {
   issue_link_template: string;
   pr_link_template: string;
   memberIds: string[];
+  membersCount: number;
 }
 
 export interface CreateTeamArgs {
@@ -34,10 +35,10 @@ export interface CreateMemberResponse {
 
 export interface FetchOneTeamResponse {
   project: Project;
-  team: TeamResponse;
+  team: Team;
 }
 
-export const create = async (payload: CreateTeamArgs): Promise<TeamResponse> => {
+export const create = async (payload: CreateTeamArgs): Promise<Team> => {
   const query = `
   mutation ($name: String!, $project_id: uuid!, $logo_square: String, $issue_link_template: String, $pr_link_template: String,){
     insert_teams_one(object: {

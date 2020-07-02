@@ -13,7 +13,7 @@ import NoItemsFound from 'src/components/NoItemsFound';
 import { RootState } from 'src/duck';
 import { createMemberAction, deleteMemberAction } from 'src/duck/teams';
 import { Employee } from 'src/entities/Employee';
-import { TeamResponse } from 'src/entities/Team';
+import { Team } from 'src/entities/Team';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
@@ -23,7 +23,7 @@ const c = classNames.bind(style);
 interface CreateTeamProps {
   values?: CreateTeamFormValues;
   isFetchingTeam?: boolean;
-  team?: TeamResponse;
+  team?: Team;
 }
 
 const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamProps> = (p) => {
@@ -79,11 +79,7 @@ const NoTeamMembers = () => {
   );
 };
 
-const TeamMembers = (p: {
-  team: TeamResponse;
-  employees: Employee[];
-  isFetchingEmployees: boolean;
-}) => {
+const TeamMembers = (p: { team: Team; employees: Employee[]; isFetchingEmployees: boolean }) => {
   const [createMember] = useAsyncThunk(createMemberAction, {
     errorTitle: 'Failed to create Member',
     rethrowError: true,

@@ -54,7 +54,7 @@ const Index = () => {
     href: `/projects/${p.id}`,
     id: p.id,
     logo: p.logo_square,
-    subtitle: `${p.teams_count} members`,
+    subtitle: `${p.teams_count} teams`,
     title: p.name,
   }));
 
