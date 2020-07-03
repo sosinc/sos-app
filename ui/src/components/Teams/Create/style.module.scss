@@ -7,24 +7,6 @@
   margin-top: 7em;
 }
 
-.add-icon {
-  color: $color-text-dim2;
-  height: 45px;
-  margin: 0 auto;
-  margin-bottom: 1em;
-  width: 45px;
-}
-
-.add {
-  color: $color-cta;
-  margin-top: 1em;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
 .form {
   display: grid;
   font: inherit;
@@ -42,12 +24,11 @@
   }
 }
 
-.title {
-  color: $color-text-bright1;
+.title-container {
+  @extend %title-container;
+
   grid-column: 1/3;
   grid-row: 1;
-  margin-bottom: 0.5em;
-  text-align: left;
 }
 
 .field-container {
@@ -61,16 +42,9 @@
   position: relative;
 }
 
-.description-container {
-  grid-column: 1/3;
-  grid-row: 3;
-  position: relative;
-}
-
 .square-logo {
   grid-column: 1;
-  grid-row: 4;
-  height: 10em;
+  grid-row: 3;
   width: 10em;
 }
 
@@ -79,7 +53,7 @@
   grid-auto-rows: minmax(2em, auto);
   grid-column: 2;
   grid-column-gap: 15px;
-  grid-row: 4;
+  grid-row: 3;
   grid-row-gap: 2em;
   grid-template-columns: 1fr 1fr;
   height: 11em;
@@ -90,26 +64,14 @@
   grid-row: 1;
 }
 
-.org-container {
-  grid-column: 1/3;
-  grid-row: 2;
-}
-
 .pr-link-container {
   grid-column: 1/3;
-  grid-row: 5;
+  grid-row: 2;
 }
 
 .field-title {
   color: $color-text-dim2;
   text-align: left;
-}
-
-.button-container {
-  display: grid;
-  grid-column: 1;
-  grid-row: 6;
-  justify-content: flex-start;
 }
 
 .save-button {
@@ -121,8 +83,52 @@
   flex-shrink: 0;
   font-size: 14px;
   font-weight: 600;
+  grid-column: 1/3;
+  grid-row: 4;
   height: 48px;
   outline: none;
   padding: 0 4em;
   transition: all 0.2s;
+}
+
+.saving-in {
+  position: relative;
+
+  span {
+    @extend %working;
+    position: absolute;
+  }
+}
+
+.team-member-container {
+  margin-top: 1em;
+}
+
+.add-team {
+  grid-row: 1;
+  margin-bottom: 0;
+}
+
+.team-container {
+  grid-column: 1/3;
+  grid-row: 2;
+  min-height: 300px;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+}
+
+.emp-container {
+  margin-bottom: 1em;
+}
+
+.del-icon {
+  $size: 1.3em;
+
+  color: $color-text-dim2;
+  cursor: pointer;
+  height: $size;
+  width: $size;
 }

@@ -2,6 +2,12 @@ version: 2
 tables:
 - table:
     schema: public
+    name: daily_task_notes
+- table:
+    schema: public
+    name: daily_tasks
+- table:
+    schema: public
     name: designations
   is_enum: true
   select_permissions:

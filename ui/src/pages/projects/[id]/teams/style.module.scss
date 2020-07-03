@@ -1,0 +1,26 @@
+@import 'src/scss/lib';
+
+.container {
+  color: $color-text-dim2;
+  display: flex;
+  flex-direction: column;
+  margin-top: 7em;
+}
+
+.add-icon {
+  color: $color-text-dim2;
+  height: 45px;
+  margin: 0 auto;
+  margin-bottom: 1em;
+  width: 45px;
+}
+
+.add {
+  color: $color-cta;
+  margin-top: 1em;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

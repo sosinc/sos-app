@@ -1,0 +1,10 @@
+- args:
+    is_enum: false
+    name: daily_tasks
+    schema: public
+  type: track_table
+- args:
+    is_enum: false
+    name: daily_task_notes
+    schema: public
+  type: track_table

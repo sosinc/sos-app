@@ -1,7 +1,15 @@
 import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from '@reduxjs/toolkit';
 
 import { fetchCurrentUser } from 'src/duck/auth';
-import { create, CreatePayload, fetchMany, Project } from 'src/entities/Project';
+import {
+  create,
+  CreatePayload,
+  fetchMany,
+  fetchOne,
+  GetOnePayload,
+  Project,
+  ProjectResponse,
+} from 'src/entities/Project';
 import { RootState } from '.';
 
 const projectAdapter = createEntityAdapter<Project>({
@@ -17,6 +25,12 @@ export const fetchProjects = createAsyncThunk<
   { rejectValue: Error; state: ProjectState }
 >('projects/fetchMany', fetchMany);
 
+export const fetchProject = createAsyncThunk<
+  ProjectResponse,
+  GetOnePayload,
+  { rejectValue: Error; state: ProjectState }
+>('projects/fetchOne', fetchOne);
+
 export const createProjectAction = createAsyncThunk<
   Project,
   CreatePayload,
@@ -24,11 +38,19 @@ export const createProjectAction = createAsyncThunk<
 >('project/create', create);
 
 export default createSlice({
-  extraReducers: (builder) => {
+  extraReducers: async (builder) => {
     builder.addCase(fetchProjects.fulfilled, projectAdapter.upsertMany);
+
+    builder.addCase(fetchProject.fulfilled, (state, { payload }) => {
+      projectAdapter.upsertOne(state, payload.project);
+    });
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
       projectAdapter.upsertMany(state, payload.projects);
+    });
+
+    builder.addCase('teams/fetchOne/fulfilled', (state, { payload }: any) => {
+      projectAdapter.upsertOne(state, payload.project);
     });
   },
   initialState: projectAdapter.getInitialState(),

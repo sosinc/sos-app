@@ -1,0 +1,86 @@
+@import 'src/scss/lib';
+
+.input-field-container {
+  background: none;
+  border: 1px solid $color-button-border;
+  border-radius: 4px;
+  box-shadow: none;
+  color: $color-text-dim2;
+  font-weight: 400;
+  height: 40px;
+  outline: none;
+  padding: 10px;
+  position: relative;
+  transition: all 0.2s;
+  width: 100%;
+
+  &.has-error {
+    background: $color-error-bg;
+  }
+
+  &.is-loading {
+    overflow: hidden;
+    pointer-events: none;
+
+    &::after {
+      animation: conveyer-belt 1.5s infinite;
+      background: $color-cta;
+      bottom: 0;
+      content: '';
+      height: 2px;
+      left: 0;
+      position: absolute;
+      transform: translateX(-100%);
+      width: 100%;
+    }
+  }
+}
+
+.select-container {
+  cursor: pointer;
+  text-align: left;
+}
+
+.select-backdrop {
+  background: transparent;
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
+.select-options {
+  height: 12em;
+  overflow-y: auto;
+  position: absolute;
+  right: 0;
+  top: 2.9em;
+  width: 100%;
+  z-index: 1;
+}
+
+.select-option {
+  background: $color-boundary;
+  // border-bottom: 1px solid $color-button-border;
+  cursor: pointer;
+  font-size: 1em;
+  list-style-type: none;
+  padding: 12px 20px;
+  text-align: left;
+
+  &:hover {
+    background-color: $color-select-active;
+    color: $color-button-text;
+  }
+}
+
+.icon {
+  $size: 36px;
+
+  height: $size;
+  position: absolute;
+  right: 4px;
+  top: 0;
+  width: $size;
+}

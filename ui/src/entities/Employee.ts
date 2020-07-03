@@ -2,6 +2,7 @@ import client from 'src/lib/client';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
 
 export interface Employee {
+  id: string;
   ecode: string;
   email: string;
   name: string;
@@ -41,7 +42,7 @@ export const create = async (payload: CreatePayload): Promise<Employee> => {
     const data = await client.request(query, payload);
 
     return data.payload;
-  }  catch (err) {
+  } catch (err) {
     if (/uniqueness violation/i.test(err.message)) {
       throw new Error('Duplicate employee email');
     }

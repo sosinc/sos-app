@@ -1,5 +1,6 @@
 import client from 'src/lib/client';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
+import { Team } from './Team';
 
 export interface Project {
   id: string;
@@ -19,6 +20,15 @@ export interface CreatePayload {
   issue_link_template?: string;
   pr_link_template?: string;
   organization_id: string;
+}
+
+export interface GetOnePayload {
+  id: string;
+}
+
+export interface ProjectResponse {
+  project: Project;
+  teams: Team[];
 }
 
 export const create = async (payload: CreatePayload): Promise<Project> => {
@@ -63,12 +73,55 @@ export const fetchMany = async (): Promise<Project[]> => {
   }`;
 
   const data = await client.request(query);
-
   return data?.projects.length
     ? data.projects.map((e: any) => ({
         ...e,
         logo_square: resolveStorageFile(e.logo_square),
-        teams_count: data?.teams_aggregate?.aggregate?.count || 0,
+        teams_count: e?.teams_aggregate?.aggregate?.count || 0,
       }))
     : [];
 };
+
+export const fetchOne = async (payload: GetOnePayload): Promise<ProjectResponse> => {
+  const query = `query ($id: uuid!){
+    projects_by_pk(id: $id) {
+      id
+      name
+      logo_square
+      description
+      issue_link_template
+      pr_link_template
+      organization_id
+      teams{
+        id
+        name
+        logo_square
+        members{
+          ecode
+        }
+      }
+    }
+  }`;
+
+  const data = await client.request(query, payload);
+  let project = data.projects_by_pk;
+
+  if (!project) {
+    throw new Error('Could not get projects at the moment');
+  }
+
+  const teams = project.teams.length ? project.teams.map((t: any) => ({
+    ...t,
+    logo_square: resolveStorageFile(t.logo_square),
+    membersCount: t.members.length,
+    project_id: project.id,
+  })) : [];
+
+  project = {...project, logo_square: resolveStorageFile(project.logo_square)};
+  delete project.teams;
+
+  return {
+    project,
+    teams,
+  };
+ };
