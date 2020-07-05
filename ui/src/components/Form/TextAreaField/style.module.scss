@@ -22,5 +22,6 @@
   textarea {
     @extend %form-input;
     font-family: inherit;
+    height: unset;
   }
 }

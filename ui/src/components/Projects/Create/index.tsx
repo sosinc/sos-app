@@ -13,6 +13,7 @@ import TextField from 'src/components/Form/TextField';
 import Listing, { ListingItemProps } from 'src/components/Listing';
 import NoItemsFound from 'src/components/NoItemsFound';
 import { teamSelector } from 'src/duck/teams';
+import TextAreaField from 'src/components/Form/TextAreaField';
 import { Organization } from 'src/entities/Organizations';
 
 import style from './style.module.scss';
@@ -38,7 +39,7 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
     </div>
     <div className={c('description-container', 'field-container')}>
       <span className={c('field-title')}>Description</span>
-      <TextField placeholder="Enter Description" type="text" name="description" />
+      <TextAreaField name="description" placeholder="Enter Description" rows={4} cols={50} />
     </div>
 
     <div className={c('square-logo', 'field-container')}>
@@ -106,8 +107,8 @@ const addTeam = (p: Props) => {
   const isProjectTeams = teams.length ? (
     <Listing items={teamListItems} isFetching={p.isFetchingProject} />
   ) : (
-    noTeam(p?.projectId || '')
-  );
+      noTeam(p?.projectId || '')
+    );
 
   return (
     <>
