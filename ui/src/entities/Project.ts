@@ -110,18 +110,20 @@ export const fetchOne = async (payload: GetOnePayload): Promise<ProjectResponse>
     throw new Error('Could not get projects at the moment');
   }
 
-  const teams = project.teams.length ? project.teams.map((t: any) => ({
-    ...t,
-    logo_square: resolveStorageFile(t.logo_square),
-    membersCount: t.members.length,
-    project_id: project.id,
-  })) : [];
+  const teams = project.teams.length
+    ? project.teams.map((t: any) => ({
+        ...t,
+        logo_square: resolveStorageFile(t.logo_square),
+        membersCount: t.members.length,
+        project_id: project.id,
+      }))
+    : [];
 
-  project = {...project, logo_square: resolveStorageFile(project.logo_square)};
+  project = { ...project, logo_square: resolveStorageFile(project.logo_square) };
   delete project.teams;
 
   return {
     project,
     teams,
   };
- };
+};

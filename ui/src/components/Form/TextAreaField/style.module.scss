@@ -1,0 +1,27 @@
+@import 'src/scss/lib';
+
+.text-area-field-container {
+  flex-grow: 1;
+  position: relative;
+  width: 100%;
+}
+
+.field {
+  flex-grow: 1;
+  position: relative;
+  width: 100%;
+
+  &.has-error {
+    background: $color-error-bg;
+
+    textarea {
+      background: $color-error-bg;
+    }
+  }
+
+  textarea {
+    @extend %form-input;
+    font-family: inherit;
+    height: unset;
+  }
+}

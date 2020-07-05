@@ -9,6 +9,7 @@ import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import SelectField from 'src/components/Form/SelectField';
+import TextAreaField from 'src/components/Form/TextAreaField';
 import TextField from 'src/components/Form/TextField';
 import Listing, { ListingItemProps } from 'src/components/Listing';
 import NoItemsFound from 'src/components/NoItemsFound';
@@ -38,7 +39,7 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
     </div>
     <div className={c('description-container', 'field-container')}>
       <span className={c('field-title')}>Description</span>
-      <TextField placeholder="Enter Description" type="text" name="description" />
+      <TextAreaField name="description" placeholder="Enter Description" rows={4} cols={50} />
     </div>
 
     <div className={c('square-logo', 'field-container')}>
