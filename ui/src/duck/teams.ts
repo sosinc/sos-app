@@ -35,9 +35,9 @@ export const createMemberAction = createAsyncThunk<
 
 export const deleteMemberAction = createAsyncThunk<
   CreateMemberResponse,
-CreateMemberArgs,
-{ rejectValue: Error; state: ProjectState }
-  >('team/member/remove', deleteMember);
+  CreateMemberArgs,
+  { rejectValue: Error; state: ProjectState }
+>('team/member/remove', deleteMember);
 
 export const fetchTeam = createAsyncThunk<
   FetchOneTeamResponse,

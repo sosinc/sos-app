@@ -33,7 +33,10 @@ export default createSlice({
     });
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
-      const employees = payload.employees.map((e) => ({ ...e, id: `${e.ecode}-${e.organization_id}` }));
+      const employees = payload.employees.map((e) => ({
+        ...e,
+        id: `${e.ecode}-${e.organization_id}`,
+      }));
 
       employeeAdapter.upsertMany(state, employees);
     });
