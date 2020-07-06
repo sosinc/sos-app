@@ -2,12 +2,6 @@ version: 2
 tables:
 - table:
     schema: public
-    name: daily_task_notes
-- table:
-    schema: public
-    name: daily_tasks
-- table:
-    schema: public
     name: designations
   is_enum: true
   select_permissions:
@@ -298,10 +292,11 @@ tables:
       - created_at
       - updated_at
       filter:
-        organization:
-          employees:
-            user_id:
-              _eq: X-Hasura-User-Id
+        teams:
+          members:
+            employee:
+              user_id:
+                _eq: X-Hasura-User-Id
   update_permissions:
   - role: app_admin
     permission:
@@ -451,10 +446,12 @@ tables:
       - created_at
       - updated_at
       filter:
-        members:
-          employee:
-            user_id:
-              _eq: X-Hasura-User-Id
+        project:
+          teams:
+            members:
+              employee:
+                user_id:
+                  _eq: X-Hasura-User-Id
       allow_aggregations: true
   update_permissions:
   - role: app_admin
