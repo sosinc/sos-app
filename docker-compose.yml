@@ -61,6 +61,7 @@ services:
       NEW_USER_WEBHOOK: http://sidecar/v1/api/on-new-user
       NEW_EMPLOYEE_WEBHOOK: http://sidecar/v1/api/on-new-employee
       SIDECAR_GRAPHQL_URL: http://sidecar/v1/graphql
+      NEW_PROJECT_WEBHOOK: http://sidecar/v1/api/on-new-project
 
   sidecar:
     build: ./sidecar
