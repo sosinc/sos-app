@@ -10,6 +10,7 @@ export interface Role {
 }
 
 export interface User {
+  id: string;
   name: string;
   email: string;
   role: Role;
@@ -81,6 +82,11 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
             logo_square
             description
             organization_id
+            teams_aggregate {
+              aggregate {
+                count
+                }
+             }
           }
         }
       }
@@ -113,6 +119,7 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
       ...project,
       employeeId: project.id,
       logo_square: resolveStorageFile(project.logo_square),
+      teams_count: project?.teams_aggregate?.aggregate?.count || 0,
     })),
   );
 
@@ -123,6 +130,7 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
     user: {
       avatar: resolveStorageFile(me.avatar),
       email: me.email,
+      id: me.id,
       name: me.name,
       role: me.role,
     },

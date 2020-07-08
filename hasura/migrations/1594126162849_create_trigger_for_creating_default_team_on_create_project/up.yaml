@@ -1,0 +1,79 @@
+- args:
+    headers: []
+    insert:
+      columns: '*'
+    name: create_team_for_new_project
+    replace: false
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    table:
+      name: projects
+      schema: public
+    webhook_from_env: NEW_PROJECT_WEBHOOK
+  type: create_event_trigger
+- args:
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: drop_select_permission
+- args:
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: true
+      columns:
+      - id
+      - name
+      - logo
+      - logo_square
+      - issue_link_template
+      - pr_link_template
+      - project_id
+      - created_at
+      - updated_at
+      computed_fields: []
+      filter:
+        project:
+          teams:
+            members:
+              employee:
+                user_id:
+                  _eq: X-Hasura-User-Id
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: create_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - id
+      - name
+      - logo
+      - logo_square
+      - description
+      - organization_id
+      - issue_link_template
+      - pr_link_template
+      - created_at
+      - updated_at
+      computed_fields: []
+      filter:
+        teams:
+          members:
+            employee:
+              user_id:
+                _eq: X-Hasura-User-Id
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: create_select_permission
