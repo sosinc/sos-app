@@ -2,6 +2,12 @@ version: 2
 tables:
 - table:
     schema: public
+    name: daily_task_notes
+- table:
+    schema: public
+    name: daily_tasks
+- table:
+    schema: public
     name: designations
   is_enum: true
   select_permissions:
@@ -235,6 +241,8 @@ tables:
   - role: app_admin
     permission:
       check: {}
+      set:
+        created_by: x-hasura-User-Id
       columns:
       - description
       - issue_link_template
@@ -251,6 +259,8 @@ tables:
           employees:
             user_id:
               _eq: X-Hasura-User-Id
+      set:
+        created_by: x-hasura-User-Id
       columns:
       - id
       - name
@@ -386,9 +396,8 @@ tables:
       - updated_at
       - organization_id
       filter:
-        employee:
-          user_id:
-            _eq: X-Hasura-User-Id
+        team_id:
+          _eq: X-Hasura-User-Id
   update_permissions:
   - role: app_admin
     permission:
