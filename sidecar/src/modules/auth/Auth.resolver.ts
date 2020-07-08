@@ -9,6 +9,8 @@ import ServerError from "../../lib/ServerError";
 import makeRandom from "../../lib/makeRandom";
 import { UserLogin } from "../../entity/UserLogin.entity";
 
+import { Employee } from "../../entity/Employee.entity";
+
 const { APP_NAME = "App" } = process.env;
 
 @Resolver(returns => String)
@@ -18,6 +20,9 @@ export class AuthResolver {
 
   @InjectRepository(UserLogin)
   private userLoginRepo: Repository<UserLogin>;
+
+  @InjectRepository(Employee)
+  private employeeRepo: Repository<Employee>;
 
   @Query()
   ping(): string {
@@ -61,6 +66,13 @@ export class AuthResolver {
       }
 
       if (user && session) {
+        if (user.role_id === "USER") {
+          const employee = await this.employeeRepo.findOneOrFail({ user_id: user.id });
+
+          // eslint-disable-next-line no-param-reassign
+          session.organizationId = employee.organization_id;
+        }
+
         // eslint-disable-next-line no-param-reassign
         session.user = user;
       }

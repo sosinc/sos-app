@@ -81,6 +81,11 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
             logo_square
             description
             organization_id
+            teams_aggregate {
+              aggregate {
+                count
+              }
+            }
           }
         }
       }
@@ -113,6 +118,7 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
       ...project,
       employeeId: project.id,
       logo_square: resolveStorageFile(project.logo_square),
+      teams_count: project?.teams_aggregate?.aggregate?.count || 0,
     })),
   );
 
