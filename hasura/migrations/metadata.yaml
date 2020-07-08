@@ -395,9 +395,7 @@ tables:
       - created_at
       - updated_at
       - organization_id
-      filter:
-        team_id:
-          _eq: X-Hasura-User-Id
+      filter: {}
   update_permissions:
   - role: app_admin
     permission:
