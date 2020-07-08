@@ -5,6 +5,7 @@ import { Employee } from "../entity/Employee.entity";
 
 const api = Router();
 
+// user can see only those projects which he/she is a member so when a employee creates a project than this hook create a team which he is member
 api.post("/on-new-project", async (req, res) => {
   const {
     event: { data: { new: project } },
@@ -17,6 +18,7 @@ api.post("/on-new-project", async (req, res) => {
   const user = await employeeRepo.findOneOrFail({ user_id: project.created_by });
   if (!user.ecode) {
     res.status(201).send();
+    return;
   }
 
   const memberRepo = TeamMember.getRepository();
