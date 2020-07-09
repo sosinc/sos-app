@@ -1,0 +1,10 @@
+@import 'src/scss/lib';
+
+.container {
+  background: $color-bg-secondary;
+  box-shadow: -40px 0 40px rgba(0, 0, 0, 0.11);
+  height: 100%;
+  position: absolute;
+  right: 0;
+  width: 591px;
+}
