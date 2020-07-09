@@ -117,6 +117,10 @@ tables:
 - table:
     schema: public
     name: me
+  configuration:
+    custom_root_fields: {}
+    custom_column_names:
+      ?column?: current_organization_id
   object_relationships:
   - name: role
     using:
@@ -183,6 +187,16 @@ tables:
         table:
           schema: public
           name: projects
+  computed_fields:
+  - name: is_current
+    definition:
+      function:
+        schema: public
+        name: is_current_organization
+      session_argument: hasura_session
+      table_argument: organizations_row
+    comment: Tells if this organization is logged in user's current (i.e selected)
+      organization
   insert_permissions:
   - role: app_admin
     permission:
@@ -196,10 +210,14 @@ tables:
   - role: app_admin
     permission:
       columns:
-      - square_logo
-      - banner
       - name
+      - square_logo
+      - created_at
+      - updated_at
       - id
+      - banner
+      computed_fields:
+      - is_current
       filter: {}
   - role: user
     permission:
@@ -208,6 +226,8 @@ tables:
       - name
       - square_logo
       - banner
+      computed_fields:
+      - is_current
       filter:
         employees:
           user_id:
@@ -241,8 +261,6 @@ tables:
   - role: app_admin
     permission:
       check: {}
-      set:
-        created_by: x-hasura-User-Id
       columns:
       - description
       - issue_link_template
@@ -259,8 +277,6 @@ tables:
           employees:
             user_id:
               _eq: X-Hasura-User-Id
-      set:
-        created_by: x-hasura-User-Id
       columns:
       - id
       - name
@@ -302,11 +318,10 @@ tables:
       - created_at
       - updated_at
       filter:
-        teams:
-          members:
-            employee:
-              user_id:
-                _eq: X-Hasura-User-Id
+        organization:
+          employees:
+            user_id:
+              _eq: X-Hasura-User-Id
   update_permissions:
   - role: app_admin
     permission:
@@ -324,17 +339,6 @@ tables:
   - role: app_admin
     permission:
       filter: {}
-  event_triggers:
-  - name: create_team_for_new_project
-    definition:
-      enable_manual: false
-      insert:
-        columns: '*'
-    retry_conf:
-      num_retries: 0
-      interval_sec: 10
-      timeout_sec: 60
-    webhook_from_env: NEW_PROJECT_WEBHOOK
 - table:
     schema: public
     name: roles
@@ -395,7 +399,10 @@ tables:
       - created_at
       - updated_at
       - organization_id
-      filter: {}
+      filter:
+        employee:
+          user_id:
+            _eq: X-Hasura-User-Id
   update_permissions:
   - role: app_admin
     permission:
@@ -405,8 +412,19 @@ tables:
       - team_id
       filter: {}
       check: null
+  - role: user
+    permission:
+      columns:
+      - ecode
+      - organization_id
+      - team_id
+      filter: {}
+      check: {}
   delete_permissions:
   - role: app_admin
+    permission:
+      filter: {}
+  - role: user
     permission:
       filter: {}
 - table:
@@ -464,12 +482,10 @@ tables:
       - created_at
       - updated_at
       filter:
-        project:
-          teams:
-            members:
-              employee:
-                user_id:
-                  _eq: X-Hasura-User-Id
+        members:
+          employee:
+            user_id:
+              _eq: X-Hasura-User-Id
       allow_aggregations: true
   update_permissions:
   - role: app_admin
