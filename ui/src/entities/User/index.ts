@@ -10,6 +10,7 @@ export interface Role {
 }
 
 export interface User {
+  id: string;
   name: string;
   email: string;
   role: Role;
@@ -129,6 +130,7 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
     user: {
       avatar: resolveStorageFile(me.avatar),
       email: me.email,
+      id: me.id,
       name: me.name,
       role: me.role,
     },

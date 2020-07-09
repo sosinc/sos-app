@@ -1,0 +1,22 @@
+- args:
+    role: user
+    table:
+      name: team_members
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - ecode
+      - team_id
+      - created_at
+      - updated_at
+      - organization_id
+      computed_fields: []
+      filter: {}
+    role: user
+    table:
+      name: team_members
+      schema: public
+  type: create_select_permission
