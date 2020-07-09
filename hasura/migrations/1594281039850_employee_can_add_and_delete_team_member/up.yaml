@@ -1,0 +1,39 @@
+- args:
+    permission:
+      backend_only: false
+      filter: {}
+    role: user
+    table:
+      name: team_members
+      schema: public
+  type: create_delete_permission
+- args:
+    permission:
+      backend_only: false
+      check: {}
+      columns:
+      - ecode
+      - organization_id
+      - team_id
+      filter: {}
+      set: {}
+    role: user
+    table:
+      name: team_members
+      schema: public
+  type: create_update_permission
+- args:
+    permission:
+      allow_upsert: true
+      backend_only: false
+      check: {}
+      columns:
+      - ecode
+      - organization_id
+      - team_id
+      set: {}
+    role: user
+    table:
+      name: team_members
+      schema: public
+  type: create_insert_permission
