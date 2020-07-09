@@ -1,0 +1,170 @@
+- args:
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: drop_insert_permission
+- args:
+    permission:
+      backend_only: false
+      check:
+        organization:
+          employees:
+            user_id:
+              _eq: X-Hasura-User-Id
+      columns:
+      - id
+      - name
+      - logo
+      - logo_square
+      - description
+      - organization_id
+      - issue_link_template
+      - pr_link_template
+      - created_at
+      - updated_at
+      set:
+        created_by: x-hasura-User-Id
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: create_insert_permission
+- args:
+    role: app_admin
+    table:
+      name: projects
+      schema: public
+  type: drop_insert_permission
+- args:
+    permission:
+      backend_only: false
+      check: {}
+      columns:
+      - description
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - organization_id
+      - pr_link_template
+      set:
+        created_by: x-hasura-User-Id
+    role: app_admin
+    table:
+      name: projects
+      schema: public
+  type: create_insert_permission
+- args:
+    role: user
+    table:
+      name: team_members
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - ecode
+      - team_id
+      - created_at
+      - updated_at
+      - organization_id
+      computed_fields: []
+      filter: {}
+    role: user
+    table:
+      name: team_members
+      schema: public
+  type: create_select_permission
+- args:
+    role: user
+    table:
+      name: employees
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - created_at
+      - designation_id
+      - ecode
+      - email
+      - headshot
+      - joining_date
+      - name
+      - organization_id
+      - relieving_date
+      - updated_at
+      - user_id
+      computed_fields: []
+      filter:
+        organization_id:
+          _eq: X-Hasura-Organization-Id
+    role: user
+    table:
+      name: employees
+      schema: public
+  type: create_select_permission
+- args:
+    definition:
+      function:
+        name: is_current_organization
+        schema: public
+      session_argument: hasura_session
+      table_argument: organizations_row
+    name: is_current
+    table:
+      name: organizations
+      schema: public
+  type: add_computed_field
+- args:
+    role: user
+    table:
+      name: organizations
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: true
+      columns:
+      - id
+      - name
+      - square_logo
+      - banner
+      computed_fields:
+      - is_current
+      filter:
+        employees:
+          user_id:
+            _eq: X-Hasura-User-Id
+    role: user
+    table:
+      name: organizations
+      schema: public
+  type: create_select_permission
+- args:
+    role: app_admin
+    table:
+      name: organizations
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - name
+      - square_logo
+      - created_at
+      - updated_at
+      - id
+      - banner
+      computed_fields:
+      - is_current
+      filter: {}
+    role: app_admin
+    table:
+      name: organizations
+      schema: public
+  type: create_select_permission

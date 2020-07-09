@@ -5,6 +5,7 @@ const api = Router();
 
 api.get("/authenticate", (req, res) => {
   const user = req.session?.user as User;
+  const organization_id = req.session?.organizationId;
 
   if (!user) {
     return res.json({
@@ -15,6 +16,7 @@ api.get("/authenticate", (req, res) => {
   return res.json({
     "x-hasura-role": user.role_id.toLowerCase(),
     "x-hasura-user-id": user.id,
+    "x-hasura-Organization-id": organization_id,
   });
 });
 

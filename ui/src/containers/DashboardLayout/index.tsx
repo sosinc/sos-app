@@ -45,7 +45,7 @@ const adminSection = (
 
 const project = (item: Project) => {
   return (
-    <Link href="/projects" key={item.id}>
+    <Link href={`/projects/${item.id}`} key={item.id}>
       <div className={c('row')}>
         <div className={c('fallback-icon')}>
           <FallbackIcon logo={item.logo_square} name={item.name} />
@@ -64,7 +64,9 @@ const Index: React.FC<LayoutProps> = (p) => {
 
   const userSection = (
     <>
-      <div className={c('header-row')}> Projects</div>
+      <Link href="/projects">
+        <div className={c('header-row')}> Projects</div>
+      </Link>
       {projects.map(project)}
     </>
   );

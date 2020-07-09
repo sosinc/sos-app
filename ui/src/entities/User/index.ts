@@ -85,8 +85,8 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
             teams_aggregate {
               aggregate {
                 count
-                }
-             }
+              }
+            }
           }
         }
       }

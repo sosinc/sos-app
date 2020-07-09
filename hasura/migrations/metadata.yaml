@@ -83,8 +83,8 @@ tables:
       - updated_at
       - user_id
       filter:
-        user_id:
-          _eq: X-Hasura-User-Id
+        organization_id:
+          _eq: X-Hasura-Organization-Id
   update_permissions:
   - role: app_admin
     permission:
@@ -183,6 +183,14 @@ tables:
         table:
           schema: public
           name: projects
+  computed_fields:
+  - name: is_current
+    definition:
+      function:
+        schema: public
+        name: is_current_organization
+      session_argument: hasura_session
+      table_argument: organizations_row
   insert_permissions:
   - role: app_admin
     permission:
@@ -196,10 +204,14 @@ tables:
   - role: app_admin
     permission:
       columns:
-      - square_logo
-      - banner
       - name
+      - square_logo
+      - created_at
+      - updated_at
       - id
+      - banner
+      computed_fields:
+      - is_current
       filter: {}
   - role: user
     permission:
@@ -208,6 +220,8 @@ tables:
       - name
       - square_logo
       - banner
+      computed_fields:
+      - is_current
       filter:
         employees:
           user_id:
@@ -377,6 +391,14 @@ tables:
       - organization_id
       - team_id
       backend_only: false
+  - role: user
+    permission:
+      check: {}
+      columns:
+      - ecode
+      - organization_id
+      - team_id
+      backend_only: false
   select_permissions:
   - role: app_admin
     permission:
@@ -405,8 +427,19 @@ tables:
       - team_id
       filter: {}
       check: null
+  - role: user
+    permission:
+      columns:
+      - ecode
+      - organization_id
+      - team_id
+      filter: {}
+      check: {}
   delete_permissions:
   - role: app_admin
+    permission:
+      filter: {}
+  - role: user
     permission:
       filter: {}
 - table:
