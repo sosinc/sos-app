@@ -95,23 +95,29 @@
 // add status header
 
 .add-todays-status {
+  color: $color-text-dim2;
+  font-size: 13px;
+}
+
+.status-header-container {
   align-items: center;
   border-bottom: 1px solid $color-boundary;
-  color: $color-text-dim2;
   display: flex;
-  font-size: 13px;
   height: 56px;
   justify-content: space-between;
-  padding: 0 24px;
+}
+
+.add-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 10em;
 }
 
 %slide-bar-button {
   color: $color-text-dim2;
   cursor: pointer;
   font-size: 13px;
-  margin-right: 5px;
-  padding: 5px;
-  transform: matrix(1, 0, 0, -1, 0, 0);
+  padding: 7px;
 }
 
 .slide-bar-button {
@@ -122,6 +128,8 @@
   border-radius: 4px;
   box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
   box-sizing: border-box;
+  color: $color-text-primary;
+  width: 5em;
 }
 
 .cancel-button {
@@ -132,6 +140,7 @@
 
 .add-status-body {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   margin-top: 15px;
   width: 100%;
@@ -179,9 +188,34 @@
 .add-status-item {
   align-items: center;
   display: flex;
-  margin-right: 20px;
+  margin-right: 6px;
+  width: 78px;
+}
+
+.add-issue {
+  background: $color-bg-secondary;
+  border: 0;
+  border-radius: 4px;
+  color: $color-text-dim2;
+  font-size: 13px;
+  height: 20px;
+  width: 59px;
 }
 
 .add-item-icon {
+  $size: 14px;
+
+  height: $size;
   margin-right: 5px;
+  width: $size;
+}
+
+.add-item-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.add-status-user {
+  color: $color-text-primary;
 }

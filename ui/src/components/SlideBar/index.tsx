@@ -8,7 +8,7 @@ interface Props {
   onClose: () => void;
   children: React.ReactElement;
   isOpen: boolean;
-  Header: React.FC;
+  Header: React.FC<{ onClose: () => void }>;
 }
 
 const SlideBar: React.FC<Props> = (p) => {
@@ -18,7 +18,7 @@ const SlideBar: React.FC<Props> = (p) => {
 
   return (
     <div className={c('container')}>
-      <p.Header />
+      <p.Header onClose={p.onClose} />
       {p.children}
     </div>
   );
