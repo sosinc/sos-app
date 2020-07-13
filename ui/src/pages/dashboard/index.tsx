@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { MdAdd, MdMoreHoriz, MdRadioButtonUnchecked } from 'react-icons/md';
 import { RiNewspaperLine, RiPlayListAddLine } from 'react-icons/ri';
 
-import DailyStatusField from 'src/components/Form/DailyStatusField';
+import DailyStatusForm from 'src/components/DailyStatusForm';
 import NoItemsFound from 'src/components/NoItemsFound';
 import SlideBar from 'src/components/SlideBar';
 import DashboardLayout from 'src/containers/DashboardLayout';
@@ -38,22 +38,6 @@ const CommitmentRow: React.FC = () => (
   </div>
 );
 
-const StatusRowHeader: React.FC<{ onClose: () => void }> = (p) => {
-  return (
-    <div className={c('add-todays-status')}>
-      <div className={c('status-header-container')}>
-        <span className={c('add-title')}> Add Today's Status</span>
-        <div className={c('add-buttons')}>
-          <span className={c('cancel-button')} onClick={p.onClose}>
-            Cancel
-          </span>
-          <span className={c('slide-bar-button')}>Save</span>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const NoTodaysCommitment: React.FC<{ addItemCb: () => void }> = (p) => (
   <div className={c('not-found-container')}>
     <NoItemsFound
@@ -79,8 +63,8 @@ const Dashboard = () => {
       title={'Dashboard - Snake Oil Software'}
       Header={() => <Header openSlidebar={() => setOpen(true)} />}
     >
-      <SlideBar onClose={() => setOpen(false)} isOpen={isOpen} Header={StatusRowHeader}>
-        <DailyStatusField />
+      <SlideBar onClose={() => setOpen(false)} isOpen={isOpen}>
+        <DailyStatusForm onClose={() => setOpen(false)} />
       </SlideBar>
       <div className={c('container')}>
         <div className={c('todays-commitments')}>{commitmentData}</div>

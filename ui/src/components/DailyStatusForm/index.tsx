@@ -1,10 +1,11 @@
 import classNames from 'classnames/bind';
-import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik';
+import { FieldArray, FieldArrayRenderProps, Form, Formik, FormikProps } from 'formik';
 import { KeyboardEvent } from 'react';
 import { GoGitPullRequest, GoIssueOpened } from 'react-icons/go';
 import { MdKeyboardReturn } from 'react-icons/md';
 
 import FallbackIcon from 'src/containers/FallbackIcon';
+import Header from './Header';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -28,7 +29,7 @@ interface DailyStatusFormValues {
   statusUpdates: NewStatusUpdate[];
 }
 
-const initialValues = {
+const initialValues: DailyStatusFormValues = {
   statusUpdates: [
     {
       employeeId: '',
@@ -106,40 +107,48 @@ const DailyStatusFields: React.FC<FieldArrayRenderProps & { value: NewStatusUpda
   };
 
   const handleDelete = (index: number) => {
+    if (index === 0) {
+      return;
+    }
+
     remove(index);
   };
 
-  const StatusFields = statusUpdates.map((s, index) =>
-    StatusField({
-      name: `statusUpdates.${index}`,
-      onDelete: () => handleDelete(index),
-      onSave: handleSaveStatus,
-      status: s,
-    }),
-  );
+  const StatusFields = statusUpdates.map((s, index) => (
+    <StatusField
+      key={index}
+      name={`statusUpdates.${index}`}
+      onDelete={() => handleDelete(index)}
+      onSave={handleSaveStatus}
+      status={s}
+    />
+  ));
 
   return <>{StatusFields}</>;
 };
 
-const FieldArr = () => {
+const InnerForm: React.FC<FormikProps<DailyStatusFormValues> & { onClose: () => void }> = (p) => (
+  <Form>
+    <Header onClose={p.onClose} onSubmit={p.submitForm} />
+
+    <FieldArray
+      name="statusUpdates"
+      render={(props) => DailyStatusFields({ ...props, value: p.values.statusUpdates })}
+    />
+  </Form>
+);
+
+const FieldArr: React.FC<{ onClose: () => void }> = (p) => {
   const handleSubmit = (values: DailyStatusFormValues) => {
     console.warn('------values--------', values);
   };
 
-  const StatusFields = ({ values }: { values: DailyStatusFormValues }) => (
-    <Form>
-      <FieldArray
-        name="statusUpdates"
-        render={(props) => DailyStatusFields({ ...props, value: values.statusUpdates })}
-      />
-      <button type="submit">Submit</button>
-    </Form>
-  );
-
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-      {StatusFields}
-    </Formik>
+    <>
+      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        {(formikProps) => InnerForm({ onClose: p.onClose, ...formikProps })}
+      </Formik>
+    </>
   );
 };
 
