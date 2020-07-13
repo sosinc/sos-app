@@ -23,12 +23,13 @@
   width: 537px;
 }
 
-.enter-icon-container {
+.input-action-container {
   align-items: center;
   background: $color-boundary;
   border: 1px solid $color-button-border;
   border-radius: 4px;
   box-sizing: border-box;
+  cursor: pointer;
   display: flex;
   height: 28px;
   justify-content: center;

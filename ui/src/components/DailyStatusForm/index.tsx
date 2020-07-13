@@ -1,8 +1,8 @@
 import classNames from 'classnames/bind';
-import { FieldArray, FieldArrayRenderProps, Form, Formik, FormikProps } from 'formik';
+import { Field, FieldArray, FieldArrayRenderProps, Form, Formik, FormikProps } from 'formik';
 import { KeyboardEvent } from 'react';
 import { GoGitPullRequest, GoIssueOpened } from 'react-icons/go';
-import { MdKeyboardReturn } from 'react-icons/md';
+import { MdClose, MdKeyboardReturn } from 'react-icons/md';
 
 import FallbackIcon from 'src/containers/FallbackIcon';
 import Header from './Header';
@@ -44,7 +44,7 @@ const StatusField: React.FC<{
   status: NewStatusUpdate;
   name: string;
   onSave: () => void;
-  onDelete: () => void;
+  onDelete?: () => void;
 }> = (p) => {
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.keyCode === 13) {
@@ -55,17 +55,19 @@ const StatusField: React.FC<{
   return (
     <div className={c('add-status-body')}>
       <div className={c('add-status-row')}>
-        <input
+        <Field
           className={c('add-status')}
           type={'text'}
           name={`${p.name}.status`}
           onKeyDown={handleKeyDown}
           placeholder="Status"
         />
-        <span className={c('enter-icon-container')} onClick={p.onSave}>
-          <MdKeyboardReturn />
+        <span className={c('input-action-container')}>
+          {!p.onDelete && <MdKeyboardReturn onClick={p.onSave} />}
+          {p.onDelete && <MdClose onClick={p.onDelete} />}
         </span>
       </div>
+
       <div className={c('add-row-items')}>
         <div className={c('add-status-item')}>
           <GoIssueOpened className={c('add-item-icon')} />
@@ -87,30 +89,20 @@ const StatusField: React.FC<{
           <span className={c('add-item-text')}>{''}</span>
         </div>
       </div>
-
-      <div className="col">
-        <button type="button" className="secondary" onClick={p.onDelete}>
-          X
-        </button>
-      </div>
     </div>
   );
 };
 
 const DailyStatusFields: React.FC<FieldArrayRenderProps & { value: NewStatusUpdate[] }> = ({
   remove,
-  push,
+  unshift,
   value: statusUpdates,
 }) => {
   const handleSaveStatus = () => {
-    push({ status: '', pr: '', issue: '', employeeId: '' });
+    unshift({ status: '', pr: '', issue: '', employeeId: '' });
   };
 
   const handleDelete = (index: number) => {
-    if (index === 0) {
-      return;
-    }
-
     remove(index);
   };
 
@@ -118,7 +110,7 @@ const DailyStatusFields: React.FC<FieldArrayRenderProps & { value: NewStatusUpda
     <StatusField
       key={index}
       name={`statusUpdates.${index}`}
-      onDelete={() => handleDelete(index)}
+      onDelete={index ? () => handleDelete(index) : undefined}
       onSave={handleSaveStatus}
       status={s}
     />
