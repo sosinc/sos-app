@@ -1,0 +1,22 @@
+- args:
+    permission:
+      backend_only: false
+      check: {}
+      columns:
+      - billable_hours
+      - date
+      - description
+      - estimated_hours
+      - is_delivered
+      - issue_id
+      - pr_id
+      - project_id
+      - title
+      set:
+        created_by: x-hasura-User-Id
+        user_id: x-hasura-User-Id
+    role: user
+    table:
+      name: daily_tasks
+      schema: public
+  type: create_insert_permission
