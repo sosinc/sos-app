@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import {
+  createDailyTasks,
+  CreateDailyTaskArgs,
   CurrentUserResponse,
   fetchCurrentUser as apiFetchCurrentUser,
   login,
@@ -41,6 +43,11 @@ export const sendPasswordResetOTPAction = createAsyncThunk<undefined, string>(
 export const resetPasswordAction = createAsyncThunk<undefined, ResetPasswordPayload>(
   'auth/resetPassword',
   apiResetPassword,
+);
+
+export const addDaliyStatusAction = createAsyncThunk<undefined,  CreateDailyTaskArgs[]>(
+  'user/addDaliyTasks',
+  createDailyTasks,
 );
 
 const initialState: AuthState = {

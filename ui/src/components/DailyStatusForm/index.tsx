@@ -1,28 +1,33 @@
 import classNames from 'classnames/bind';
-import { Field, FieldArray, FieldArrayRenderProps, Form, Formik, FormikProps } from 'formik';
+import {
+  Field,
+  FieldArray,
+  FieldArrayRenderProps,
+  Form,
+  Formik,
+  FormikHelpers,
+  FormikProps,
+} from 'formik';
 import { KeyboardEvent } from 'react';
 import { GoGitPullRequest, GoIssueOpened } from 'react-icons/go';
-import { MdClose, MdKeyboardReturn } from 'react-icons/md';
+import { MdAlarm, MdClose, MdKeyboardReturn } from 'react-icons/md';
+//import * as Yup from 'yup';
 
-import FallbackIcon from 'src/containers/FallbackIcon';
+import { addDaliyStatusAction } from 'src/duck/auth';
+import { currentUser } from 'src/entities/User/selectors';
+import { useAsyncThunk } from 'src/lib/asyncHooks';
 import Header from './Header';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
-/* interface DailyStatusFieldProps {
- *   name: string;
- *   className?: string;
- *   inputClassName?: string;
- *   placeholder?: string;
- * }
- *  */
-
 interface NewStatusUpdate {
-  issue?: string;
-  pr?: string;
-  status: string;
-  employeeId: string;
+  description: string;
+  estimated_hours?: number;
+  issue_id?: any;
+  pr_id?: any;
+  project_id: string;
+  title: string;
 }
 
 interface DailyStatusFormValues {
@@ -32,10 +37,12 @@ interface DailyStatusFormValues {
 const initialValues: DailyStatusFormValues = {
   statusUpdates: [
     {
-      employeeId: '',
-      issue: '',
-      pr: '',
-      status: '',
+      description: '',
+      estimated_hours: 0,
+      issue_id: null,
+      pr_id: null,
+      project_id: '',
+      title: '',
     },
   ],
 };
@@ -58,7 +65,7 @@ const StatusField: React.FC<{
         <Field
           className={c('add-status')}
           type={'text'}
-          name={`${p.name}.status`}
+          name={`${p.name}.title`}
           onKeyDown={handleKeyDown}
           placeholder="Status"
         />
@@ -70,23 +77,27 @@ const StatusField: React.FC<{
 
       <div className={c('add-row-items')}>
         <div className={c('add-status-item')}>
-          <GoIssueOpened className={c('add-item-icon')} />
-          <input
+          <GoIssueOpened className={c('add-item-icon')} title="Issue id" />
+          <Field
             className={c('add-issue')}
             type={'text'}
             placeholder="Issue"
-            name={`${name}.issue`}
+            name={`${name}.issue_Id`}
           />
         </div>
         <div className={c('add-status-item')}>
-          <GoGitPullRequest className={c('add-item-icon')} />
-          <input className={c('add-issue')} type={'text'} placeholder="PR" name={`${name}.pr`} />
+          <GoGitPullRequest className={c('add-item-icon')} title="Pr id" />
+          <Field className={c('add-issue')} type={'text'} placeholder="PR" name={`${name}.pr_Id`} />
         </div>
-        <div className={c('add-status-item', 'add-status-user')}>
-          <span className={c('add-item-icon')}>
-            <FallbackIcon logo={''} name={''} />
-          </span>
-          <span className={c('add-item-text')}>{''}</span>
+
+        <div className={c('add-status-item')}>
+          <MdAlarm className={c('add-item-icon')} title="Estimated should be in hours" />
+          <Field
+            className={c('add-issue')}
+            type={'text'}
+            placeholder="Estimation"
+            name={`${name}.estimated_hours`}
+          />
         </div>
       </div>
     </div>
@@ -99,7 +110,16 @@ const DailyStatusFields: React.FC<FieldArrayRenderProps & { value: NewStatusUpda
   value: statusUpdates,
 }) => {
   const handleSaveStatus = () => {
-    unshift({ status: '', pr: '', issue: '', employeeId: '' });
+    if (statusUpdates[0].title.trim()) {
+      unshift({
+        description: '',
+        estimated_hours: 0,
+        issue_id: null,
+        pr_id: null,
+        project_id: '',
+        title: '',
+      });
+    }
   };
 
   const handleDelete = (index: number) => {
@@ -131,10 +151,40 @@ const InnerForm: React.FC<FormikProps<DailyStatusFormValues> & { onClose: () => 
 );
 
 const FieldArr: React.FC<{ onClose: () => void }> = (p) => {
-  const handleSubmit = (values: DailyStatusFormValues) => {
-    console.warn('------values--------', values);
+  const [addDailyStatus] = useAsyncThunk(addDaliyStatusAction, {
+    errorTitle: 'Failed to add statuss',
+    rethrowError: true,
+    successTitle: 'status added successfully',
+  });
+
+  const user = currentUser();
+  const projectId = user.projects ? user.projects[0].id : null;
+
+  const handleSubmit = async (
+    values: DailyStatusFormValues,
+    helpers: FormikHelpers<DailyStatusFormValues>,
+  ) => {
+    const filteredValues = values.statusUpdates.filter((v) => v.title);
+    const finalValues = filteredValues.map((v) => {
+      return { ...v, project_id: projectId };
+    });
+    await addDailyStatus(finalValues);
+    helpers.resetForm();
   };
 
+  /* const schema = Yup.object().shape({
+   *   statusUpdates: Yup.array()
+   *     .of(
+   *       Yup.object().shape({
+   *         pr: Yup.string().min(2, 'too short').required('Required'),
+   *         status: Yup.string().min(4, 'too short').required('Required'),
+   *       }),
+   *     )
+
+   *     .required('Must have status')
+   *     .min(1, 'Minimum of 1 status'),
+   * });
+   */
   return (
     <>
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
