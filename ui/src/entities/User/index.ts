@@ -193,7 +193,6 @@ export const createDailyTasks = async (payload: CreateDailyTaskArgs[]): Promise<
 
     return data.payload;
   } catch (err) {
-    console.log('---err', err.message)
     if (/uniqueness violation/i.test(err.message)) {
       throw new Error('Duplicate title');
     }

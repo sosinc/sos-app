@@ -72,7 +72,7 @@ const Index: React.FC<LayoutProps> = (p) => {
   );
 
   return (
-    <WithUser inverted={false} redirectPath="/">
+    <WithUser inverted={false} redirectPath={'/'}>
       <Head>
         <link rel="shortcut icon" href="/assets/images/sos-logo.svg" />
         <title>{p.title}</title>
@@ -81,7 +81,7 @@ const Index: React.FC<LayoutProps> = (p) => {
       <div className={c('container')}>
         <div className={c('sidebar')}>
           <div className={c('header')}>
-            <Link href="/">
+            <Link href={role === 'USER' ? '/' : '/organizations'}>
               <div className={c('logo-image', 'fallback-icon')} title={organization?.name}>
                 <FallbackIcon logo={organization?.square_logo} name={organization?.name} />
               </div>
