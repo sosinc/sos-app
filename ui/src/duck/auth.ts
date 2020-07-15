@@ -45,7 +45,7 @@ export const resetPasswordAction = createAsyncThunk<undefined, ResetPasswordPayl
   apiResetPassword,
 );
 
-export const addDaliyStatusAction = createAsyncThunk<undefined,  CreateDailyTaskArgs[]>(
+export const createDaliyStatusAction = createAsyncThunk<undefined,  CreateDailyTaskArgs[]>(
   'user/addDaliyTasks',
   createDailyTasks,
 );

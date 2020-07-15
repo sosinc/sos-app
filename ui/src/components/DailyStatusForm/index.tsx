@@ -13,7 +13,7 @@ import { GoGitPullRequest, GoIssueOpened } from 'react-icons/go';
 import { MdAlarm, MdClose, MdKeyboardReturn } from 'react-icons/md';
 
 import SelectField from 'src/components/Form/SelectField';
-import { addDaliyStatusAction } from 'src/duck/auth';
+import { createDaliyStatusAction } from 'src/duck/auth';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
 import Header from './Header';
@@ -169,7 +169,7 @@ const InnerForm: React.FC<FormikProps<DailyStatusFormValues> & { onClose: () => 
 );
 
 const FieldArr: React.FC<{ onClose: () => void }> = (p) => {
-  const [addDailyStatus] = useAsyncThunk(addDaliyStatusAction, {
+  const [createDailyStatus] = useAsyncThunk(createDaliyStatusAction, {
     errorTitle: 'Failed to add statuss',
     rethrowError: true,
     successTitle: 'status added successfully',
@@ -191,7 +191,7 @@ const FieldArr: React.FC<{ onClose: () => void }> = (p) => {
     helpers: FormikHelpers<DailyStatusFormValues>,
   ) => {
     const filteredValues = values.statusUpdates.filter((v) => v.title);
-    await addDailyStatus(filteredValues);
+    await createDailyStatus(filteredValues);
     helpers.resetForm();
   };
 
