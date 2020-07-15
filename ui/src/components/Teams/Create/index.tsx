@@ -156,7 +156,7 @@ const TeamMembers = (p: { team: Team; employees: Employee[]; isFetchingEmployees
           <SelectBox
             className={c('org-add-form')}
             name="member"
-            options={employees}
+            options={employees.map((e) => ({ id: e.id, name: e.name, logo: e.headshot }))}
             isLoading={p.isFetchingEmployees}
             onSelect={handleAddMember}
           />

@@ -11,8 +11,8 @@ import {
 import { KeyboardEvent } from 'react';
 import { GoGitPullRequest, GoIssueOpened } from 'react-icons/go';
 import { MdAlarm, MdClose, MdKeyboardReturn } from 'react-icons/md';
-//import * as Yup from 'yup';
 
+import SelectField from 'src/components/Form/SelectField';
 import { addDaliyStatusAction } from 'src/duck/auth';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
@@ -53,6 +53,9 @@ const StatusField: React.FC<{
   onSave: () => void;
   onDelete?: () => void;
 }> = (p) => {
+  const user = currentUser();
+  const userProjects = user.projects ? user.projects : [];
+  const projects = userProjects.map((i) => ({ id: i.id, name: i.name, logo: i.logo_square }));
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.keyCode === 13) {
       p.onSave();
@@ -82,12 +85,17 @@ const StatusField: React.FC<{
             className={c('add-issue')}
             type={'text'}
             placeholder="Issue"
-            name={`${name}.issue_Id`}
+            name={`${p.name}.issue_Id`}
           />
         </div>
         <div className={c('add-status-item')}>
           <GoGitPullRequest className={c('add-item-icon')} title="Pr id" />
-          <Field className={c('add-issue')} type={'text'} placeholder="PR" name={`${name}.pr_Id`} />
+          <Field
+            className={c('add-issue')}
+            type={'text'}
+            placeholder="PR"
+            name={`${p.name}.pr_Id`}
+          />
         </div>
 
         <div className={c('add-status-item')}>
@@ -96,7 +104,17 @@ const StatusField: React.FC<{
             className={c('add-issue')}
             type={'text'}
             placeholder="Estimation"
-            name={`${name}.estimated_hours`}
+            name={`${p.name}.estimated_hours`}
+          />
+        </div>
+
+        <div className={c('add-status-item', 'projct-container')}>
+          <SelectField
+            className={c('project-id-field')}
+            name={`${p.name}.project_id`}
+            options={projects}
+            isLoading={false}
+            isDropdownIconHidden={true}
           />
         </div>
       </div>
@@ -156,38 +174,34 @@ const FieldArr: React.FC<{ onClose: () => void }> = (p) => {
     rethrowError: true,
     successTitle: 'status added successfully',
   });
-
   const user = currentUser();
-  const projectId = user.projects ? user.projects[0].id : null;
+  const projectId = user.projects?.length && user.projects[0].id;
+
+  if (!projectId) {
+    throw new Error('You are not supposed to be here!');
+  }
+
+  const initialStatusUpdates = initialValues.statusUpdates.map((s) => ({
+    ...s,
+    project_id: projectId,
+  }));
 
   const handleSubmit = async (
     values: DailyStatusFormValues,
     helpers: FormikHelpers<DailyStatusFormValues>,
   ) => {
     const filteredValues = values.statusUpdates.filter((v) => v.title);
-    const finalValues = filteredValues.map((v) => {
-      return { ...v, project_id: projectId };
-    });
-    await addDailyStatus(finalValues);
+    await addDailyStatus(filteredValues);
     helpers.resetForm();
   };
 
-  /* const schema = Yup.object().shape({
-   *   statusUpdates: Yup.array()
-   *     .of(
-   *       Yup.object().shape({
-   *         pr: Yup.string().min(2, 'too short').required('Required'),
-   *         status: Yup.string().min(4, 'too short').required('Required'),
-   *       }),
-   *     )
-
-   *     .required('Must have status')
-   *     .min(1, 'Minimum of 1 status'),
-   * });
-   */
   return (
     <>
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <Formik
+        initialValues={{ ...initialValues, statusUpdates: initialStatusUpdates }}
+        onSubmit={handleSubmit}
+        enableReinitialize={true}
+      >
         {(formikProps) => InnerForm({ onClose: p.onClose, ...formikProps })}
       </Formik>
     </>

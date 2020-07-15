@@ -62,8 +62,8 @@
 
 .select-option {
   background: $color-boundary;
-  // border-bottom: 1px solid $color-button-border;
   cursor: pointer;
+  display: flex;
   font-size: 1em;
   list-style-type: none;
   padding: 12px 20px;
@@ -73,6 +73,25 @@
     background-color: $color-select-active;
     color: $color-button-text;
   }
+}
+
+.logo {
+  $size: 20px;
+  background: $color-text-dim3;
+  border-radius: 50%;
+  color: $color-input-text;
+  font-size: 9px;
+  height: $size;
+  margin-right: 1em;
+  width: $size;
+}
+
+.title {
+  max-width: 8em;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .icon {

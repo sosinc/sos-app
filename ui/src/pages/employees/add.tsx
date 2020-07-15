@@ -78,8 +78,9 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
             <SelectField
               className={'org-add-form'}
               name="designation_id"
-              options={designations}
+              options={designations.map((d) => ({ id: d.id, name: d.name }))}
               isLoading={isFetchingDesignations}
+              isLogoHidden={true}
             />
           </div>
           <div className={c('org-container', 'field-container')}>
@@ -87,7 +88,7 @@ const AddEmployee: React.FC<FormikProps<FormValues>> = (p) => {
             <SelectField
               className={'org-add-form'}
               name="organization_id"
-              options={organizations}
+              options={organizations.map((o) => ({ id: o.id, name: o.name, logo: o.square_logo }))}
               isLoading={isFetchingOrgs}
             />
           </div>
@@ -125,9 +126,7 @@ const initialValues = {
 const validationSchema = Yup.object().shape({
   designation_id: Yup.string().required('Required'),
   ecode: Yup.string().required('Required'),
-  email: Yup.string()
-    .email()
-    .required('Required'),
+  email: Yup.string().email().required('Required'),
   headshot: Yup.string(),
   name: Yup.string()
     .min(2, 'Must be 2 characters or more')
