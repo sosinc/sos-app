@@ -13,7 +13,7 @@ import { GoGitPullRequest, GoIssueOpened } from 'react-icons/go';
 import { MdAlarm, MdClose, MdKeyboardReturn } from 'react-icons/md';
 
 import SelectField from 'src/components/Form/SelectField';
-import { createDaliyStatusAction } from 'src/duck/auth';
+import { createDaliyStatusAction } from 'src/duck/tasks';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
 import Header from './Header';
@@ -85,7 +85,7 @@ const StatusField: React.FC<{
             className={c('add-issue')}
             type={'text'}
             placeholder="Issue"
-            name={`${p.name}.issue_Id`}
+            name={`${p.name}.issue_id`}
           />
         </div>
         <div className={c('add-status-item')}>
@@ -94,7 +94,7 @@ const StatusField: React.FC<{
             className={c('add-issue')}
             type={'text'}
             placeholder="PR"
-            name={`${p.name}.pr_Id`}
+            name={`${p.name}.pr_id`}
           />
         </div>
 

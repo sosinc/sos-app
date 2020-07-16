@@ -36,36 +36,119 @@
 .todays-commitments {
   border-bottom: 1px solid $color-boundary;
   min-height: 185px;
+  padding-bottom: 5em;
 }
 
-.commitments-body {
-  border: 1px solid $color-boundary;
+// commitments---Row-------------
+
+
+.task-body {
+  border-top: 1px solid $color-boundary;
   color: $color-text-bright1;
   font-size: 13px;
   padding: 0 24px;
   width: 100%;
 }
 
-.status-row {
+.task-row {
   align-items: center;
   display: flex;
   height: 36px;
   justify-content: space-between;
 }
 
-.status-row-left {
+.row-left-container {
+  align-items: center;
   display: flex;
-  justify-content: space-between;
-  width: 12em;
+  width: 80%;
 }
 
 .row-item {
+  @extend %handel-text-overflow;
+
   color: $color-text-dim2;
+  margin-right: 15px;
+  max-width: 60px;
 }
 
-.status-row-right {
-  color: $color-cta;
+.task-title {
+  @extend %handel-text-overflow;
+
+  text-align: left;
+  width: 40%;
 }
+
+.row-right-container {
+  align-items: center;
+  color: $color-cta;
+  display: flex;
+}
+
+.pr-container {
+  border: 1px solid $color-boundary;
+  border-radius: 48px;
+  box-sizing: border-box;
+  color: $color-text-dim2;
+  display: flex;
+  font-size: 12px;
+  height: 26px;
+  margin-right: 1em;
+  min-width: 60px;
+  padding: 5px;
+  position: relative;
+  text-align: right;
+}
+
+.pr-icon {
+  $size: 14px;
+
+  color: $color-cta;
+  height: $size;
+  margin-right: 5px;
+  width: $size;
+}
+
+.fallback-logo {
+  $size: 18px;
+  background: $color-text-dim3;
+  border-radius: 50%;
+  color: $color-input-text;
+  font-size: 9px;
+  height: $size;
+  margin-right: 1em;
+  width: $size;
+}
+
+.skeleton {
+  .tasks-body {
+    width: 100%;
+  }
+
+  .row-left-container {
+    @include bone;
+
+    .row-item {
+      visibility: hidden;
+    }
+  }
+
+  .row-right-container {
+    @include bone;
+
+    height: 16px;
+
+    .pr-container {
+      visibility: hidden;
+    }
+
+    .fallback-logo {
+      visibility: hidden;
+    }
+  }
+}
+
+
+//------------------
 
 .team-activity {
   color: $color-text-bright1;
