@@ -38,8 +38,18 @@ export const createDailyTasks = async (payload: DailyTask[]): Promise<undefined>
 };
 
 export const fetchManyDailyTasks = async (): Promise<FetchTasksResponse> => {
+  const date = new Date();
+  const today = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
+
   const query = `{
-    daily_tasks {
+    daily_tasks (
+      order_by: { created_at: asc },
+      where: { _or: [
+      { date: { _eq: "${today}" } },
+      { is_delivered: { _eq: false } }
+      { is_delivered: { _eq: null } }
+      ] }
+    ) {
       id
       title
       pr_id

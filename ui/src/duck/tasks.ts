@@ -8,9 +8,7 @@ import {
 } from 'src/entities/Task';
 import { RootState } from '.';
 
-const taskAdapter = createEntityAdapter<DailyTask>({
-  sortComparer: (a, b) => a.title.localeCompare(b.title),
-});
+const taskAdapter = createEntityAdapter<DailyTask>();
 export const taskSelector = taskAdapter.getSelectors<RootState>((state) => state.tasks);
 
 export type TasksState = EntityState<DailyTask>;

@@ -5,7 +5,6 @@ import { MdAdd, MdMoreHoriz, MdRadioButtonUnchecked } from 'react-icons/md';
 import { RiNewspaperLine, RiPlayListAddLine } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
 
-import { currentUser } from 'src/entities/User/selectors';
 import DailyStatusForm from 'src/components/DailyStatusForm';
 import NoItemsFound from 'src/components/NoItemsFound';
 import SlideBar from 'src/components/SlideBar';
@@ -13,6 +12,7 @@ import DashboardLayout from 'src/containers/DashboardLayout';
 import FallbackIcon from 'src/containers/FallbackIcon';
 import { fetchDailyTasks, taskSelector } from 'src/duck/tasks';
 import { DailyTask } from 'src/entities/Task';
+import { currentUser } from 'src/entities/User/selectors';
 import { useQuery } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
