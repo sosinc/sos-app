@@ -11,6 +11,7 @@ import {
   ProjectResponse,
 } from 'src/entities/Project';
 import { RootState } from '.';
+import { fetchDailyTasks } from './tasks';
 
 const projectAdapter = createEntityAdapter<Project>({
   sortComparer: (a, b) => a.name.localeCompare(b.name),
@@ -52,6 +53,11 @@ export default createSlice({
     builder.addCase('teams/fetchOne/fulfilled', (state, { payload }: any) => {
       projectAdapter.upsertOne(state, payload.project);
     });
+
+    builder.addCase(fetchDailyTasks.fulfilled, (state, { payload }) => {
+      projectAdapter.upsertMany(state, payload.projects);
+    });
+
   },
   initialState: projectAdapter.getInitialState(),
   name: 'projects',
