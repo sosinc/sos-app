@@ -6,6 +6,10 @@ tables:
 - table:
     schema: public
     name: daily_tasks
+  object_relationships:
+  - name: project
+    using:
+      foreign_key_constraint_on: project_id
   insert_permissions:
   - role: user
     permission:
@@ -24,6 +28,27 @@ tables:
       - project_id
       - title
       backend_only: false
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - project_id
+      - title
+      - description
+      - issue_id
+      - pr_id
+      - is_delivered
+      - created_by
+      - estimated_hours
+      - billable_hours
+      - date
+      - created_at
+      - updated_at
+      - id
+      - user_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
 - table:
     schema: public
     name: designations

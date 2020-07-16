@@ -1,0 +1,41 @@
+- args:
+    role: user
+    table:
+      name: daily_tasks
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - project_id
+      - title
+      - description
+      - issue_id
+      - pr_id
+      - is_delivered
+      - created_by
+      - estimated_hours
+      - billable_hours
+      - date
+      - created_at
+      - updated_at
+      - id
+      - user_id
+      computed_fields: []
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+    role: user
+    table:
+      name: daily_tasks
+      schema: public
+  type: create_select_permission
+- args:
+    name: project
+    table:
+      name: daily_tasks
+      schema: public
+    using:
+      foreign_key_constraint_on: project_id
+  type: create_object_relationship
