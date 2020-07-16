@@ -9,6 +9,7 @@ import Modal from 'src/components/Modal';
 import ResetPassword from 'src/components/ResetPassword';
 import WithUser from 'src/containers/WithUser';
 import { loginUserAction, resetPasswordAction, sendPasswordResetOTPAction } from 'src/duck/auth';
+import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
 
 import style from './index.module.scss';
@@ -16,6 +17,7 @@ import style from './index.module.scss';
 const c = classNames.bind(style);
 
 const Index = () => {
+  const user = currentUser();
   const [isModalOpen, setModalOpen] = useState(false);
   const [login] = useAsyncThunk(loginUserAction, {
     errorTitle: 'Login Failed',
@@ -47,7 +49,10 @@ const Index = () => {
   };
 
   return (
-    <WithUser inverted={true} redirectPath={'/dashboard'}>
+    <WithUser
+      inverted={true}
+      redirectPath={user && user.name === 'Admin' ? '/organizations' : '/dashboard'}
+    >
       <Head>
         <link rel="shortcut icon" href="/assets/images/sos-logo.svg" />
         <title>SoS App</title>

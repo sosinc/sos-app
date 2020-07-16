@@ -58,7 +58,7 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
         <SelectField
           className={c('org-add-form')}
           name="organization_id"
-          options={p.organizations}
+          options={p.organizations.map((o) => ({ id: o.id, name: o.name, logo: o.square_logo }))}
           isLoading={p.isFetchingOrgs}
         />
       </div>

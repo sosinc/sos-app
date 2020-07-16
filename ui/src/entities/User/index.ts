@@ -27,6 +27,17 @@ export interface ResetPasswordPayload {
   otp: string;
 }
 
+export interface CreateDailyTaskArgs {
+  project_id: string;
+  title: string;
+  description: string;
+  issue_id: string;
+  pr_id: string;
+  estimated_hours: number;
+  billable_hours: number;
+  user_id: string;
+}
+
 export const login = async (payload: LoginPayload): Promise<User> => {
   const query = `
     mutation($email: String!, $password: String!) {
@@ -167,6 +178,24 @@ export const resetPassword = async (payload: ResetPasswordPayload): Promise<unde
       throw new Error(err.response.errors[0].message);
     }
 
+    throw new Error('Something went wrong :-(');
+  }
+};
+
+export const createDailyTasks = async (payload: CreateDailyTaskArgs[]): Promise<undefined> => {
+  const query = `
+    mutation ($statusUpdates: [daily_tasks_insert_input!]!) {
+      insert_daily_tasks(objects: $statusUpdates) { affected_rows }
+    }`;
+
+  try {
+    const data = await client.request(query, {statusUpdates: payload });
+
+    return data.payload;
+  } catch (err) {
+    if (/uniqueness violation/i.test(err.message)) {
+      throw new Error('Duplicate title');
+    }
     throw new Error('Something went wrong :-(');
   }
 };

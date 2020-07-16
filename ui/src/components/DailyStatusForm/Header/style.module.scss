@@ -1,0 +1,43 @@
+@import 'src/scss/lib';
+
+.add-todays-status {
+  color: $color-text-dim2;
+  font-size: 13px;
+}
+
+.status-header-container {
+  align-items: center;
+  border-bottom: 1px solid $color-boundary;
+  display: flex;
+  height: 56px;
+  justify-content: space-between;
+}
+
+.add-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 10em;
+}
+
+%slide-bar-button {
+  color: $color-text-dim2;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 7px;
+}
+
+.slide-bar-button {
+  @extend %slide-bar-button;
+
+  background: $color-button-bg;
+  border: 1px solid $color-button-border;
+  border-radius: 4px;
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+  color: $color-text-primary;
+  width: 5em;
+}
+
+.cancel-button {
+  @extend %slide-bar-button;
+}

@@ -6,6 +6,24 @@ tables:
 - table:
     schema: public
     name: daily_tasks
+  insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      set:
+        created_by: x-hasura-User-Id
+        user_id: x-hasura-User-Id
+      columns:
+      - billable_hours
+      - date
+      - description
+      - estimated_hours
+      - is_delivered
+      - issue_id
+      - pr_id
+      - project_id
+      - title
+      backend_only: false
 - table:
     schema: public
     name: designations

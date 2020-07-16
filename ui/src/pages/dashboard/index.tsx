@@ -1,23 +1,24 @@
 import classNames from 'classnames/bind';
-import Link from 'next/link';
+import { useState } from 'react';
 import { MdAdd, MdMoreHoriz, MdRadioButtonUnchecked } from 'react-icons/md';
 import { RiNewspaperLine, RiPlayListAddLine } from 'react-icons/ri';
 
+import DailyStatusForm from 'src/components/DailyStatusForm';
 import NoItemsFound from 'src/components/NoItemsFound';
+import SlideBar from 'src/components/SlideBar';
 import DashboardLayout from 'src/containers/DashboardLayout';
+
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
 const commitments = [];
-const Header: React.FC = () => (
+const Header: React.FC<{ openSlidebar: () => void }> = (p) => (
   <div className={c('header')}>
     Today's Commitments
-    <Link href="/">
-      <a className={c('add-button')} title="Add">
-        <MdAdd className={c('icon')} />
-      </a>
-    </Link>
+    <span className={c('add-button')} title="Add" onClick={p.openSlidebar}>
+      <MdAdd className={c('icon')} />
+    </span>
   </div>
 );
 
@@ -37,24 +38,36 @@ const CommitmentRow: React.FC = () => (
   </div>
 );
 
-const noTodaysCommitment = (
+const NoTodaysCommitment: React.FC<{ addItemCb: () => void }> = (p) => (
   <div className={c('not-found-container')}>
     <NoItemsFound
       Icon={RiPlayListAddLine}
       message=" You haven't added a status update for today."
       addItemText="Add one"
       addItemUrl=""
+      addItemCb={p.addItemCb}
     />
   </div>
 );
 
 const Dashboard = () => {
+  const [isOpen, setOpen] = useState(true);
+  const commitmentData = commitments.length ? (
+    <CommitmentRow />
+  ) : (
+    <NoTodaysCommitment addItemCb={() => setOpen(true)} />
+  );
+
   return (
-    <DashboardLayout title={'Dashboard - Snake Oil Software'} Header={Header}>
+    <DashboardLayout
+      title={'Dashboard - Snake Oil Software'}
+      Header={() => <Header openSlidebar={() => setOpen(true)} />}
+    >
+      <SlideBar onClose={() => setOpen(false)} isOpen={isOpen}>
+        <DailyStatusForm onClose={() => setOpen(false)} />
+      </SlideBar>
       <div className={c('container')}>
-        <div className={c('todays-commitments')}>
-          {commitments.length ? <CommitmentRow /> : noTodaysCommitment}
-        </div>
+        <div className={c('todays-commitments')}>{commitmentData}</div>
 
         <div className={c('team-activity')}>
           <div className={c('activity-header')}>
