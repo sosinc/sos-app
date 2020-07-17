@@ -26,7 +26,7 @@ export const createDailyTasks = async (payload: DailyTask[]): Promise<undefined>
     }`;
 
   try {
-    const data = await client.request(query, {statusUpdates: payload });
+    const data = await client.request(query, { statusUpdates: payload });
 
     return data.payload;
   } catch (err) {
@@ -39,7 +39,7 @@ export const createDailyTasks = async (payload: DailyTask[]): Promise<undefined>
 
 export const fetchManyDailyTasks = async (): Promise<FetchTasksResponse> => {
   const date = new Date();
-  const today = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
+  const today = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 
   const query = `{
     daily_tasks (
@@ -68,8 +68,9 @@ export const fetchManyDailyTasks = async (): Promise<FetchTasksResponse> => {
   const data = await client.request(query);
 
   const projects = data.daily_tasks.map((d: any) => ({
-     ...d.project, logo_square : resolveStorageFile(d.project.logo_square)}
-  ));
+    ...d.project,
+    logo_square: resolveStorageFile(d.project.logo_square),
+  }));
 
   return {
     projects,

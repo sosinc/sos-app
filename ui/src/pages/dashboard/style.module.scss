@@ -64,7 +64,7 @@
 }
 
 .row-item {
-  @extend %handel-text-overflow;
+  @extend %handle-text-overflow;
 
   color: $color-text-dim2;
   margin-right: 15px;
@@ -73,7 +73,7 @@
 }
 
 .task-title {
-  @extend %handel-text-overflow;
+  @extend %handle-text-overflow;
 
   text-align: left;
   width: 40%;

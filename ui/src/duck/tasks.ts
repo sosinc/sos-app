@@ -13,7 +13,7 @@ export const taskSelector = taskAdapter.getSelectors<RootState>((state) => state
 
 export type TasksState = EntityState<DailyTask>;
 
-export const createDaliyStatusAction = createAsyncThunk<undefined,  DailyTask[]>(
+export const createDaliyStatusAction = createAsyncThunk<undefined, DailyTask[]>(
   'user/addDaliyTasks',
   createDailyTasks,
 );
@@ -21,17 +21,15 @@ export const createDaliyStatusAction = createAsyncThunk<undefined,  DailyTask[]>
 export const fetchDailyTasks = createAsyncThunk<
   FetchTasksResponse,
   undefined,
-{ rejectValue: Error; state: TasksState }
-  >('user/fetchMany', fetchManyDailyTasks );
+  { rejectValue: Error; state: TasksState }
+>('user/fetchMany', fetchManyDailyTasks);
 
 export default createSlice({
   extraReducers: async (builder) => {
-
     builder.addCase(fetchDailyTasks.fulfilled, (state, { payload }) => {
       taskAdapter.upsertMany(state, payload.tasks);
     });
-
-     },
+  },
   initialState: taskAdapter.getInitialState(),
   name: 'tasks',
   reducers: {},

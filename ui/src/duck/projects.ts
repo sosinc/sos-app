@@ -57,7 +57,6 @@ export default createSlice({
     builder.addCase(fetchDailyTasks.fulfilled, (state, { payload }) => {
       projectAdapter.upsertMany(state, payload.projects);
     });
-
   },
   initialState: projectAdapter.getInitialState(),
   name: 'projects',
