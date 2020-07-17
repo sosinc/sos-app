@@ -5,6 +5,8 @@ import {
   DailyTask,
   fetchManyDailyTasks,
   FetchTasksResponse,
+  updateDailyTasks,
+  UpdateTaskArgs,
 } from 'src/entities/Task';
 import { RootState } from '.';
 
@@ -16,6 +18,11 @@ export type TasksState = EntityState<DailyTask>;
 export const createDaliyStatusAction = createAsyncThunk<undefined, DailyTask[]>(
   'user/addDaliyTasks',
   createDailyTasks,
+);
+
+export const updateDailyStatusActions = createAsyncThunk<{ id: string }, UpdateTaskArgs>(
+  'user/updateDatilTask',
+  updateDailyTasks,
 );
 
 export const fetchDailyTasks = createAsyncThunk<

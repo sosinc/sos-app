@@ -4,6 +4,7 @@ import { Project } from './Project';
 
 export interface DailyTask {
   id: string;
+  is_delivered: boolean;
   project_id: string;
   title: string;
   description: string;
@@ -17,6 +18,11 @@ export interface DailyTask {
 export interface FetchTasksResponse {
   projects: Project[];
   tasks: DailyTask[];
+}
+
+export interface UpdateTaskArgs {
+  id: string;
+  isDelivered: boolean;
 }
 
 export const createDailyTasks = async (payload: DailyTask[]): Promise<undefined> => {
@@ -45,12 +51,12 @@ export const fetchManyDailyTasks = async (): Promise<FetchTasksResponse> => {
     daily_tasks (
       order_by: { created_at: asc },
       where: { _or: [
-      { date: { _eq: "${today}" } },
+      { date: { _eq: "${today}" } }
       { is_delivered: { _eq: false } }
-      { is_delivered: { _eq: null } }
       ] }
     ) {
       id
+      is_delivered
       title
       pr_id
       issue_id
@@ -76,4 +82,22 @@ export const fetchManyDailyTasks = async (): Promise<FetchTasksResponse> => {
     projects,
     tasks: data.daily_tasks,
   };
+};
+
+export const updateDailyTasks = async (payload: UpdateTaskArgs): Promise<{ id: string }> => {
+  const query = `
+mutation ($isDelivered: Boolean, $id: uuid!) {
+      update_daily_tasks_by_pk( pk_columns: {id: $id } _set:{ is_delivered: $isDelivered})
+        {
+          id
+        }
+    }`;
+
+  try {
+    const data = await client.request(query, payload);
+
+    return data.payload;
+  } catch (err) {
+    throw new Error('Something went wrong :-(');
+  }
 };
