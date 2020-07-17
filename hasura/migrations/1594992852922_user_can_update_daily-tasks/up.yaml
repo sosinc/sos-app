@@ -1,0 +1,24 @@
+- args:
+    permission:
+      backend_only: false
+      check:
+        user_id:
+          _eq: X-Hasura-User-Id
+      columns:
+      - billable_hours
+      - description
+      - estimated_hours
+      - id
+      - is_delivered
+      - issue_id
+      - pr_id
+      - title
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      set: {}
+    role: user
+    table:
+      name: daily_tasks
+      schema: public
+  type: create_update_permission
