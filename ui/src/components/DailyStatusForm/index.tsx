@@ -13,7 +13,8 @@ import { GoGitPullRequest, GoIssueOpened } from 'react-icons/go';
 import { MdAlarm, MdClose, MdKeyboardReturn } from 'react-icons/md';
 
 import SelectField from 'src/components/Form/SelectField';
-import { createDaliyStatusAction } from 'src/duck/auth';
+import { createDaliyStatusAction } from 'src/duck/tasks';
+import { fetchDailyTasks } from 'src/duck/tasks';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
 import Header from './Header';
@@ -39,8 +40,8 @@ const initialValues: DailyStatusFormValues = {
     {
       description: '',
       estimated_hours: 0,
-      issue_id: null,
-      pr_id: null,
+      issue_id: '',
+      pr_id: '',
       project_id: '',
       title: '',
     },
@@ -85,7 +86,7 @@ const StatusField: React.FC<{
             className={c('add-issue')}
             type={'text'}
             placeholder="Issue"
-            name={`${p.name}.issue_Id`}
+            name={`${p.name}.issue_id`}
           />
         </div>
         <div className={c('add-status-item')}>
@@ -94,7 +95,7 @@ const StatusField: React.FC<{
             className={c('add-issue')}
             type={'text'}
             placeholder="PR"
-            name={`${p.name}.pr_Id`}
+            name={`${p.name}.pr_id`}
           />
         </div>
 
@@ -174,6 +175,10 @@ const FieldArr: React.FC<{ onClose: () => void }> = (p) => {
     rethrowError: true,
     successTitle: 'status added successfully',
   });
+
+  const [getNewTasks] = useAsyncThunk(fetchDailyTasks, {
+    errorTitle: 'Failed to fetch some Tasks',
+  });
   const user = currentUser();
   const projectId = user.projects?.length && user.projects[0].id;
 
@@ -193,6 +198,7 @@ const FieldArr: React.FC<{ onClose: () => void }> = (p) => {
     const filteredValues = values.statusUpdates.filter((v) => v.title);
     await createDailyStatus(filteredValues);
     helpers.resetForm();
+    getNewTasks();
   };
 
   return (
