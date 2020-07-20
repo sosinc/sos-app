@@ -41,7 +41,7 @@ const NoTodaysCommitment = () => (
   </div>
 );
 
-const CommitmentRow: React.FC = () => {
+const DailyTasks: React.FC = () => {
   const [updateDailyStatus] = useAsyncThunk(updateDailyStatusActions, {
     errorTitle: 'Failed to add statuss',
     rethrowError: true,
@@ -117,4 +117,4 @@ const CommitmentRow: React.FC = () => {
   );
 };
 
-export default CommitmentRow;
+export default DailyTasks;

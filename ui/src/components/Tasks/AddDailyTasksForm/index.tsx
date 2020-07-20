@@ -181,7 +181,7 @@ const InnerForm: React.FC<FormikProps<DailyStatusFormValues> & DailyStatusFormPr
   );
 };
 
-const DailyStatusForm: React.FC<DailyStatusFormProps> = (p) => {
+const AddDailyTasksForm: React.FC<DailyStatusFormProps> = (p) => {
   const [createDailyStatus] = useAsyncThunk(createDaliyStatusAction, {
     errorTitle: 'Failed to add statuss',
     rethrowError: true,
@@ -231,4 +231,4 @@ const DailyStatusForm: React.FC<DailyStatusFormProps> = (p) => {
   );
 };
 
-export default DailyStatusForm;
+export default AddDailyTasksForm;

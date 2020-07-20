@@ -3,10 +3,10 @@ import { useRef, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { RiNewspaperLine } from 'react-icons/ri';
 
-import DailyStatusForm from 'src/components/DailyStatusForm';
-import CommitmentRow from 'src/components/DailyStatusForm/Listin';
 import NoItemsFound from 'src/components/NoItemsFound';
 import SlideBar from 'src/components/SlideBar';
+import AddDailyTasksForm from 'src/components/Tasks/AddDailyTasksForm';
+import DailyTasks from 'src/components/Tasks/DailyTasks';
 import DashboardLayout from 'src/containers/DashboardLayout';
 
 import style from './style.module.scss';
@@ -48,11 +48,11 @@ const Dashboard = () => {
         isDirtyPopupOpen={isDirtyPopupOpen}
         setIsDirtyPopupOpen={setIsDirtyPopupOpen}
       >
-        <DailyStatusForm onClose={handleCloseSlideBar} isDirtyRef={isDirtyRef} />
+        <AddDailyTasksForm onClose={handleCloseSlideBar} isDirtyRef={isDirtyRef} />
       </SlideBar>
       <div className={c('container')}>
         <div className={c('todays-commitments')}>
-          <CommitmentRow />
+          <DailyTasks />
         </div>
 
         <div className={c('team-activity')}>
