@@ -173,7 +173,7 @@ const FieldArr: React.FC<{ onClose: () => void }> = (p) => {
   const [createDailyStatus] = useAsyncThunk(createDaliyStatusAction, {
     errorTitle: 'Failed to add statuss',
     rethrowError: true,
-    successTitle: 'status added successfully',
+    successTitle: 'Status added successfully',
   });
 
   const [getNewTasks] = useAsyncThunk(fetchDailyTasks, {
@@ -196,9 +196,12 @@ const FieldArr: React.FC<{ onClose: () => void }> = (p) => {
     helpers: FormikHelpers<DailyStatusFormValues>,
   ) => {
     const filteredValues = values.statusUpdates.filter((v) => v.title);
-    await createDailyStatus(filteredValues);
-    helpers.resetForm();
-    getNewTasks();
+    if (filteredValues.length) {
+      await createDailyStatus(filteredValues);
+      helpers.resetForm();
+      getNewTasks();
+      p.onClose();
+    }
   };
 
   return (

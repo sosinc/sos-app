@@ -36,6 +36,14 @@ export default createSlice({
     builder.addCase(fetchDailyTasks.fulfilled, (state, { payload }) => {
       taskAdapter.upsertMany(state, payload.tasks);
     });
+
+    builder.addCase(updateDailyStatusActions.fulfilled, (state, { payload }) => {
+      if (!payload) {
+        return;
+      }
+      taskAdapter.updateOne(state, {id: payload.id, changes: payload});
+    });
+
   },
   initialState: taskAdapter.getInitialState(),
   name: 'tasks',

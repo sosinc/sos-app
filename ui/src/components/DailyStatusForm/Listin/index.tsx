@@ -57,10 +57,6 @@ const CommitmentRow: React.FC = () => {
     errorTitle: 'Failed to fetch some Tasks',
   });
 
-  const [getNewTasks] = useAsyncThunk(fetchDailyTasks, {
-    errorTitle: 'Failed to fetch some Tasks',
-  });
-
   const prField = (prId: string) => (
     <div className={c('pr-container')}>
       <GoGitPullRequest className={c('pr-icon')} title={'Pr id'} />
@@ -71,7 +67,6 @@ const CommitmentRow: React.FC = () => {
   const ListingItem: React.FC<DailyTask> = (p) => {
     const handleChangeStatus = async (status: string) => {
       await updateDailyStatus({ id: p.id, isDelivered: status === 'done' });
-      getNewTasks();
     };
 
     const Logo: React.FC = () => {

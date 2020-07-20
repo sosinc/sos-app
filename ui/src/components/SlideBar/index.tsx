@@ -17,10 +17,15 @@ const SlideBar: React.FC<Props> = (p) => {
   }
 
   return (
-    <div className={c('container')}>
-      {p.Header && <p.Header onClose={p.onClose} />}
-      {p.children}
-    </div>
+    <>
+      <div className={c('backdrop')} />
+      <div className={c('container')} onClick={p.onClose}>
+        <div className={c('content')} onClick={(e) => e.stopPropagation()}>
+          {p.Header && <p.Header onClose={p.onClose} />}
+          {p.children}
+        </div>
+      </div>
+    </>
   );
 };
 

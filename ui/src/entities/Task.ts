@@ -90,13 +90,14 @@ mutation ($isDelivered: Boolean, $id: uuid!) {
       update_daily_tasks_by_pk( pk_columns: {id: $id } _set:{ is_delivered: $isDelivered})
         {
           id
+          is_delivered
         }
     }`;
 
   try {
     const data = await client.request(query, payload);
 
-    return data.payload;
+    return data.update_daily_tasks_by_pk;
   } catch (err) {
     throw new Error('Something went wrong :-(');
   }
