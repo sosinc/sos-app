@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { RiNewspaperLine } from 'react-icons/ri';
 
@@ -23,15 +23,32 @@ const Header: React.FC<{ openSlidebar: () => void }> = (p) => (
 );
 
 const Dashboard = () => {
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setOpen] = useState<boolean>(false);
+  const [isDirtyPopupOpen, setIsDirtyPopupOpen] = useState<boolean>(false);
+  const isDirtyRef = useRef<boolean>(false);
+
+  const handleCloseSlideBar = () => {
+    if (isDirtyRef.current && !isDirtyPopupOpen) {
+      setIsDirtyPopupOpen(true);
+      return;
+    }
+
+    setOpen(false);
+    setIsDirtyPopupOpen(false);
+  };
 
   return (
     <DashboardLayout
       title={'Dashboard - Snake Oil Software'}
       Header={() => <Header openSlidebar={() => setOpen(true)} />}
     >
-      <SlideBar onClose={() => setOpen(false)} isOpen={isOpen}>
-        <DailyStatusForm onClose={() => setOpen(false)} />
+      <SlideBar
+        onClose={handleCloseSlideBar}
+        isOpen={isOpen}
+        isDirtyPopupOpen={isDirtyPopupOpen}
+        setIsDirtyPopupOpen={setIsDirtyPopupOpen}
+      >
+        <DailyStatusForm onClose={handleCloseSlideBar} isDirtyRef={isDirtyRef} />
       </SlideBar>
       <div className={c('container')}>
         <div className={c('todays-commitments')}>

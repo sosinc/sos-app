@@ -42,20 +42,20 @@ const NoTodaysCommitment = () => (
 );
 
 const CommitmentRow: React.FC = () => {
-  const user = currentUser();
-  const projects = user.projects || [];
-  const getProject = (id: string) => projects.find((i) => i.id === id);
-
   const [updateDailyStatus] = useAsyncThunk(updateDailyStatusActions, {
     errorTitle: 'Failed to add statuss',
     rethrowError: true,
     successTitle: 'status added successfully',
   });
 
-  const dailyTasks = useSelector(taskSelector.selectAll);
   const [isFetching] = useQuery(fetchDailyTasks, {
     errorTitle: 'Failed to fetch some Tasks',
   });
+
+  const user = currentUser();
+  const projects = user.projects || [];
+  const getProject = (id: string) => projects.find((i) => i.id === id);
+  const dailyTasks = useSelector(taskSelector.selectAll);
 
   const prField = (prId: string) => (
     <div className={c('pr-container')}>

@@ -8,7 +8,7 @@ import {
   FormikHelpers,
   FormikProps,
 } from 'formik';
-import { KeyboardEvent } from 'react';
+import { KeyboardEvent, MutableRefObject } from 'react';
 import { GoGitPullRequest, GoIssueOpened } from 'react-icons/go';
 import { MdAlarm, MdClose, MdKeyboardReturn } from 'react-icons/md';
 
@@ -133,8 +133,8 @@ const DailyStatusFields: React.FC<FieldArrayRenderProps & { value: NewStatusUpda
       unshift({
         description: '',
         estimated_hours: 0,
-        issue_id: null,
-        pr_id: null,
+        issue_id: '',
+        pr_id: '',
         project_id: '',
         title: '',
       });
@@ -158,18 +158,30 @@ const DailyStatusFields: React.FC<FieldArrayRenderProps & { value: NewStatusUpda
   return <>{StatusFields}</>;
 };
 
-const InnerForm: React.FC<FormikProps<DailyStatusFormValues> & { onClose: () => void }> = (p) => (
-  <Form>
-    <Header onClose={p.onClose} onSubmit={p.submitForm} />
+interface DailyStatusFormProps {
+  onClose: () => void;
+  isDirtyRef: MutableRefObject<boolean>;
+}
 
-    <FieldArray
-      name="statusUpdates"
-      render={(props) => DailyStatusFields({ ...props, value: p.values.statusUpdates })}
-    />
-  </Form>
-);
+const InnerForm: React.FC<FormikProps<DailyStatusFormValues> & DailyStatusFormProps> = (p) => {
+  p.isDirtyRef.current = p.dirty;
 
-const FieldArr: React.FC<{ onClose: () => void }> = (p) => {
+  const handleCancel = () => {
+    p.onClose();
+  };
+
+  return (
+    <Form>
+      <Header onClose={handleCancel} onSubmit={p.submitForm} />
+      <FieldArray
+        name="statusUpdates"
+        render={(props) => DailyStatusFields({ ...props, value: p.values.statusUpdates })}
+      />
+    </Form>
+  );
+};
+
+const DailyStatusForm: React.FC<DailyStatusFormProps> = (p) => {
   const [createDailyStatus] = useAsyncThunk(createDaliyStatusAction, {
     errorTitle: 'Failed to add statuss',
     rethrowError: true,
@@ -211,10 +223,12 @@ const FieldArr: React.FC<{ onClose: () => void }> = (p) => {
         onSubmit={handleSubmit}
         enableReinitialize={true}
       >
-        {(formikProps) => InnerForm({ onClose: p.onClose, ...formikProps })}
+        {(formikProps) =>
+          InnerForm({ onClose: p.onClose, isDirtyRef: p.isDirtyRef, ...formikProps })
+        }
       </Formik>
     </>
   );
 };
 
-export default FieldArr;
+export default DailyStatusForm;
