@@ -71,7 +71,7 @@ const DailyTasks: React.FC = () => {
 
     const Logo: React.FC = () => {
       const statusLogo = p.is_delivered ? (
-        <MdCheckCircle className={c('row-item')} title={'Todo'} />
+        <MdCheckCircle className={c('row-item', 'done-icon')} title={'Todo'} />
       ) : (
         <MdRadioButtonUnchecked className={c('row-item')} title={'Done'} />
       );

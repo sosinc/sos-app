@@ -35,7 +35,7 @@ const SelectFieldRow: React.FC<SelectFieldItem> = (p) => {
 
   return (
     <>
-      <div className={c(p.Logo ? 'llogo' : 'logo')}>{Icon}</div>
+      <div className={c(p.Logo ? 'logo-container' : 'logo')}>{Icon}</div>
       <div className={c('title')}>{p.name} </div>
     </>
   );

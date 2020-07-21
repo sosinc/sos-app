@@ -21,7 +21,7 @@ export const createDaliyStatusAction = createAsyncThunk<undefined, DailyTask[]>(
 );
 
 export const updateDailyStatusActions = createAsyncThunk<{ id: string }, UpdateTaskArgs>(
-  'user/updateDatilTask',
+  'user/updateDailylTask',
   updateDailyTasks,
 );
 

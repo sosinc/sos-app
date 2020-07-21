@@ -34,6 +34,10 @@
   width: 60px;
 }
 
+.done-icon {
+  color: $color-cta;
+}
+
 .row-status-item {
   border: 0;
   cursor: pointer;
@@ -117,6 +121,11 @@
     .row-item {
       visibility: hidden;
     }
+
+    .row-status-item {
+      display: none;
+    }
+
   }
 
   .row-right-container {
