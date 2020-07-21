@@ -51,12 +51,13 @@
 }
 
 .select-options {
+  border: 0;
+  border-radius: 5px;
   height: 12em;
   overflow-y: auto;
   position: absolute;
   right: 0;
   top: 2.9em;
-  width: 100%;
   z-index: 1;
 }
 
@@ -81,6 +82,14 @@
   border-radius: 50%;
   color: $color-input-text;
   font-size: 9px;
+  height: $size;
+  margin-right: 1em;
+  width: $size;
+}
+
+.logo-container {
+  $size: 20px;
+  color: $color-input-text;
   height: $size;
   margin-right: 1em;
   width: $size;

@@ -5,6 +5,8 @@ import {
   DailyTask,
   fetchManyDailyTasks,
   FetchTasksResponse,
+  updateDailyTasks,
+  UpdateTaskArgs,
 } from 'src/entities/Task';
 import { RootState } from '.';
 
@@ -18,6 +20,11 @@ export const createDaliyStatusAction = createAsyncThunk<undefined, DailyTask[]>(
   createDailyTasks,
 );
 
+export const updateDailyStatusActions = createAsyncThunk<{ id: string }, UpdateTaskArgs>(
+  'user/updateDailylTask',
+  updateDailyTasks,
+);
+
 export const fetchDailyTasks = createAsyncThunk<
   FetchTasksResponse,
   undefined,
@@ -28,6 +35,13 @@ export default createSlice({
   extraReducers: async (builder) => {
     builder.addCase(fetchDailyTasks.fulfilled, (state, { payload }) => {
       taskAdapter.upsertMany(state, payload.tasks);
+    });
+
+    builder.addCase(updateDailyStatusActions.fulfilled, (state, { payload }) => {
+      if (!payload) {
+        return;
+      }
+      taskAdapter.updateOne(state, { id: payload.id, changes: payload });
     });
   },
   initialState: taskAdapter.getInitialState(),

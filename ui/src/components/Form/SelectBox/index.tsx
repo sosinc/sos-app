@@ -11,24 +11,31 @@ interface SelectFieldItem {
   id: string;
   name: string;
   logo?: string;
+  Logo?: React.FC;
 }
 
 interface FileFieldProps {
   name: string;
   className?: string;
+  isDropdownIconHidden?: boolean;
+  title?: string;
   options: SelectFieldItem[];
   isLoading?: boolean;
   onSelect?: any;
+  Header?: React.FC;
 }
 const noOptions = <li className={c('select-option')}>{'No data'}</li>;
 
 const SelectFieldRow: React.FC<SelectFieldItem> = (p) => {
+  let Icon = <FallbackIcon logo={p.logo} name={p.name} />;
+
+  if (p.Logo) {
+    Icon = <p.Logo />;
+  }
+
   return (
     <>
-      <div className={c('logo')}>
-        <FallbackIcon logo={p.logo} name={p.name} />
-      </div>
-
+      <div className={c(p.Logo ? 'logo-container' : 'logo')}>{Icon}</div>
       <div className={c('title')}>{p.name} </div>
     </>
   );
@@ -75,8 +82,9 @@ const SelectBox: React.FC<FileFieldProps> = ({ ...p }) => {
   return (
     <div className={containerClass} onClick={handleOpen}>
       <div className={c('select-container')}>
-        Add Team Member
-        <Icon />
+        {p.Header && <p.Header />}
+        {p.title}
+        {!p.isDropdownIconHidden && <Icon />}
       </div>
       {isOpen ? selectList : null}
     </div>
