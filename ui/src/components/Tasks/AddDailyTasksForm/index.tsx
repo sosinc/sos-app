@@ -166,13 +166,9 @@ interface DailyStatusFormProps {
 const InnerForm: React.FC<FormikProps<DailyStatusFormValues> & DailyStatusFormProps> = (p) => {
   p.isDirtyRef.current = p.dirty;
 
-  const handleCancel = () => {
-    p.onClose();
-  };
-
   return (
     <Form>
-      <Header onClose={handleCancel} onSubmit={p.submitForm} />
+      <Header onClose={p.onClose} onSubmit={p.submitForm} />
       <FieldArray
         name="statusUpdates"
         render={(props) => DailyStatusFields({ ...props, value: p.values.statusUpdates })}
@@ -216,6 +212,8 @@ const AddDailyTasksForm: React.FC<DailyStatusFormProps> = (p) => {
     }
   };
 
+  const otherProps = { onClose: p.onClose, isDirtyRef: p.isDirtyRef };
+
   return (
     <>
       <Formik
@@ -223,9 +221,7 @@ const AddDailyTasksForm: React.FC<DailyStatusFormProps> = (p) => {
         onSubmit={handleSubmit}
         enableReinitialize={true}
       >
-        {(formikProps) =>
-          InnerForm({ onClose: p.onClose, isDirtyRef: p.isDirtyRef, ...formikProps })
-        }
+        {(formikProps) => InnerForm({ ...otherProps, ...formikProps })}
       </Formik>
     </>
   );

@@ -41,9 +41,8 @@ export default createSlice({
       if (!payload) {
         return;
       }
-      taskAdapter.updateOne(state, {id: payload.id, changes: payload});
+      taskAdapter.updateOne(state, { id: payload.id, changes: payload });
     });
-
   },
   initialState: taskAdapter.getInitialState(),
   name: 'tasks',
