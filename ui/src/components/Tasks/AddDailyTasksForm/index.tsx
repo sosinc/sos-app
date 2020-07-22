@@ -31,6 +31,12 @@ interface NewStatusUpdate {
   title: string;
 }
 
+const estimations = [
+  { id: '0.30', name: '30 Minutes' },
+  { id: '1', name: '1 Hour' },
+  { id: '2', name: '2 Hour' },
+];
+
 interface DailyStatusFormValues {
   statusUpdates: NewStatusUpdate[];
 }
@@ -99,17 +105,18 @@ const StatusField: React.FC<{
           />
         </div>
 
-        <div className={c('add-status-item')}>
-          <MdAlarm className={c('add-item-icon')} title="Estimated should be in hours" />
-          <Field
-            className={c('add-issue')}
-            type={'text'}
-            placeholder="Estimation"
+        <div className={c('add-status-item', 'select-field-container')}>
+          <MdAlarm className={c('add-item-icon')} title="Estimation in hours" />
+          <SelectField
+            className={c('project-id-field')}
             name={`${p.name}.estimated_hours`}
+            options={estimations}
+            isDropdownIconHidden={true}
+            isLogoHidden={true}
           />
         </div>
 
-        <div className={c('add-status-item', 'projct-container')}>
+        <div className={c('add-status-item', 'select-field-container')}>
           <SelectField
             className={c('project-id-field')}
             name={`${p.name}.project_id`}
@@ -128,6 +135,8 @@ const DailyStatusFields: React.FC<FieldArrayRenderProps & { value: NewStatusUpda
   unshift,
   value: statusUpdates,
 }) => {
+  //  const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
+
   const handleSaveStatus = () => {
     if (statusUpdates[0].title.trim()) {
       unshift({
@@ -135,7 +144,7 @@ const DailyStatusFields: React.FC<FieldArrayRenderProps & { value: NewStatusUpda
         estimated_hours: 0,
         issue_id: '',
         pr_id: '',
-        project_id: '',
+        project_id: statusUpdates[0].project_id,
         title: '',
       });
     }
