@@ -93,7 +93,7 @@ const DailyTasks: React.FC = () => {
                 options={selectOptions}
                 onSelect={handleChangeStatus}
                 isDropdownIconHidden={true}
-                Header={Logo}
+                FirstValue={Logo}
               />
               <span className={c('task-title')}>{p.title}</span>
             </div>
