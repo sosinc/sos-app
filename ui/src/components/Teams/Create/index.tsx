@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
-import SelectBox from 'src/components/Form/SelectBox';
+import SelectBox, { SelectFieldItem } from 'src/components/Form/SelectBox';
 import TextField from 'src/components/Form/TextField';
 import Listing, { ListingItemProps } from 'src/components/Listing';
 import NoItemsFound from 'src/components/NoItemsFound';
@@ -127,8 +127,8 @@ const TeamMembers = (p: { team: Team; employees: Employee[]; isFetchingEmployees
     NoTeamMembers()
   );
 
-  const handleAddMember = async (id: string) => {
-    const member = p.employees.find((e: Employee) => e.id === id);
+  const handleAddMember = async (item?: SelectFieldItem) => {
+    const member = p.employees.find((e: Employee) => e.id === item?.id);
 
     if (!member) {
       // tslint:disable-next-line:no-console
@@ -156,10 +156,11 @@ const TeamMembers = (p: { team: Team; employees: Employee[]; isFetchingEmployees
           <SelectBox
             className={c('org-add-form')}
             name="member"
-            title={'Add Team MemberAdd Team Member'}
             options={employees.map((e) => ({ id: e.id, name: e.name, logo: e.headshot }))}
             isLoading={p.isFetchingEmployees}
             onSelect={handleAddMember}
+            value=""
+            Selected={() => <p>Add a team member</p>}
           />
         </div>
         <div className={c('item-container')}>{ProjectTeams}</div>

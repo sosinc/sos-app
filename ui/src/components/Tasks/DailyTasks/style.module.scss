@@ -26,12 +26,27 @@
   width: 80%;
 }
 
-.row-item {
+.task-issue {
   @extend %handle-text-overflow;
 
-  color: $color-text-dim2;
   margin-right: 15px;
-  width: 60px;
+  text-align: center;
+  width: 5em;
+}
+
+.row-item {
+  color: $color-text-dim2;
+  display: block;
+  height: 16px;
+  margin-right: 15px;
+  width: 16px;
+}
+
+.row-item-icon {
+  $size: 20px;
+
+  height: $size;
+  width: $size;
 }
 
 .done-icon {
@@ -41,13 +56,13 @@
 .row-status-item {
   border: 0;
   cursor: pointer;
+  height: auto;
   margin-right: 15px;
-  width: 60px;
+  padding: 0;
+  width: auto;
 }
 
 .task-title {
-  @extend %handle-text-overflow;
-
   text-align: left;
   width: 40%;
 }

@@ -7,7 +7,7 @@ import styles from './style.module.scss';
 
 const c = classNames.bind(styles);
 
-interface SelectFieldItem {
+export interface SelectFieldItem {
   id: string;
   name: string;
   logo?: string;
@@ -18,34 +18,37 @@ interface FileFieldProps {
   name: string;
   className?: string;
   isDropdownIconHidden?: boolean;
-  title?: string;
   options: SelectFieldItem[];
   isLoading?: boolean;
-  onSelect?: any;
-  FirstValue?: React.FC;
-  isLogoHidden?: boolean;
+  onSelect: (item: SelectFieldItem) => void;
+  value: string;
+  Selected: React.FC<{ item?: SelectFieldItem }>;
 }
+
 const noOptions = <li className={c('select-option')}>{'No data'}</li>;
+
+const SelectFieldRow: React.FC<SelectFieldItem> = (f) => {
+  let itemIcon = <FallbackIcon logo={f.logo} name={f.name} />;
+
+  if (f.Logo) {
+    itemIcon = <f.Logo />;
+  }
+
+  return (
+    <>
+      <div className={c(f.Logo ? 'logo-container' : 'logo')}>{itemIcon}</div>
+      <div className={c('title')}>{f.name} </div>
+    </>
+  );
+};
 
 const SelectBox: React.FC<FileFieldProps> = ({ ...p }) => {
   const [isOpen, setOpen] = useState(false);
 
-  const SelectFieldRow: React.FC<SelectFieldItem> = (f) => {
-    let itemIcon = <FallbackIcon logo={f.logo} name={p.name} />;
-
-    if (f.Logo) {
-      itemIcon = <f.Logo />;
+  const handleSelectItem = (item: SelectFieldItem) => () => {
+    if (item.id !== p.value) {
+      p.onSelect(item);
     }
-
-    return (
-      <>
-        {!p.isLogoHidden && <div className={c(f.Logo ? 'logo-container' : 'logo')}>{itemIcon}</div>}
-        <div className={c('title')}>{f.name} </div>
-      </>
-    );
-  };
-  const handleSelectItem = (id: string) => () => {
-    p.onSelect(id);
   };
 
   const handleOpen = () => {
@@ -65,7 +68,7 @@ const SelectBox: React.FC<FileFieldProps> = ({ ...p }) => {
       className={c('select-option')}
       data-name={item.name}
       key={item.id}
-      onClick={handleSelectItem(item.id)}
+      onClick={handleSelectItem(item)}
     >
       <SelectFieldRow {...item} />
     </li>
@@ -83,8 +86,7 @@ const SelectBox: React.FC<FileFieldProps> = ({ ...p }) => {
   return (
     <div className={containerClass} onClick={handleOpen}>
       <div className={c('select-container')}>
-        {p.FirstValue && <p.FirstValue />}
-        {p.title}
+        <p.Selected item={p.options.find((i) => i.id === p.value)} />
         {!p.isDropdownIconHidden && <Icon />}
       </div>
       {isOpen ? selectList : null}

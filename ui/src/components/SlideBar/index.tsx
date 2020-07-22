@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind';
 
-import Modal from 'src/components/Modal';
-import Popup from 'src/components/Modal/Popup';
+import WarningModal from 'src/components/Modal/Warning';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -23,16 +22,16 @@ const SlideBar: React.FC<Props> = (p) => {
   if (!p.isOpen) {
     return null;
   }
-  const isFormDirty = (
-    <Modal onClose={() => setIsDirtyPopupOpen(false)} isOpen={Boolean(p.isDirtyPopupOpen)}>
-      <Popup
-        title={'Are you sure'}
-        subTitle={' You have unsaved tasks which will not be saved'}
-        onClose={p.onClose}
-        setIsDirtyPopupOpen={setIsDirtyPopupOpen}
-      />
-    </Modal>
+  const dirtyFormPrompt = (
+    <WarningModal
+      isOpen={Boolean(p.isDirtyPopupOpen)}
+      title={'Are you sure'}
+      subTitle={' You have unsaved tasks which will not be saved'}
+      onAccept={p.onClose}
+      onCancel={() => setIsDirtyPopupOpen(false)}
+    />
   );
+
   return (
     <>
       <div className={c('backdrop')} />
@@ -40,7 +39,7 @@ const SlideBar: React.FC<Props> = (p) => {
         <div className={c('content')} onClick={(e) => e.stopPropagation()}>
           {p.Header && <p.Header onClose={p.onClose} />}
           {p.children}
-          {isFormDirty}
+          {dirtyFormPrompt}
         </div>
       </div>
     </>
