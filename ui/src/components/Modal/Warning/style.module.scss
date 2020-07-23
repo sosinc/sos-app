@@ -11,7 +11,7 @@
 
 .popup-info {
   align-items: center;
-  color: $color-text-primary;
+  color: $color-text-dim2;
   display: flex;
   flex-direction: column;
 }
@@ -21,35 +21,52 @@
 
   color: $color-text-dim2;
   height: $size;
-  margin-bottom: 1.5em;
   width: $size;
 }
 
-.popup-message {
-  color: $color-text-dim2;
-  margin-top: 0.5em;
+.title-container {
+  margin: 1.5em 0;
+}
+
+.title {
+  color: $color-text-primary;
+  margin-bottom: 0.4em;
 }
 
 .popup-buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 1.5em;
+  padding: 3px;
   width: 10em;
 }
 
-.other-button {
+%modal-button {
+  align-items: center;
   background: $color-button-bg;
   border: 1px solid $color-button-border;
   border-radius: 4px;
-  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
-  box-sizing: border-box;
   color: $color-text-primary;
   cursor: pointer;
+  display: flex;
   font-size: 13px;
-  padding: 7px;
+  height: 35px;
+  justify-content: center;
+  outline: none;
+  padding: 7px 2em;
   width: 5em;
 }
 
+.other-button {
+  @extend %modal-button;
+
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+}
+
 .continue-button {
-  color: $color-text-dim2;
+  @extend %modal-button;
+
+  background: $color-button-cta-bg;
+  border: 0;
+  font-weight: 600;
 }

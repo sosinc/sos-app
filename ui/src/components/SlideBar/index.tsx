@@ -25,7 +25,7 @@ const SlideBar: React.FC<Props> = (p) => {
   const dirtyFormPrompt = (
     <WarningModal
       isOpen={Boolean(p.isDirtyPopupOpen)}
-      title={'Are you sure'}
+      title={'Are you sure ?'}
       subTitle={' You have unsaved tasks which will not be saved'}
       onAccept={p.onClose}
       onCancel={() => setIsDirtyPopupOpen(false)}
