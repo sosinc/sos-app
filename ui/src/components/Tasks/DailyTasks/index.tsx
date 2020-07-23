@@ -1,10 +1,13 @@
 import classNames from 'classnames/bind';
+import { useState } from 'react';
 import { GoGitPullRequest } from 'react-icons/go';
 import { MdCheckCircle, MdMoreHoriz, MdRadioButtonUnchecked } from 'react-icons/md';
 import { RiPlayListAddLine } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
+import Router from 'next/router';
 
 import SelectBox, { SelectFieldItem } from 'src/components/Form/SelectBox';
+import WarningModal from 'src/components/Modal/Warning';
 import NoItemsFound from 'src/components/NoItemsFound';
 import FallbackIcon from 'src/containers/FallbackIcon';
 import { fetchDailyTasks, taskSelector, updateDailyStatusActions } from 'src/duck/tasks';
@@ -50,6 +53,9 @@ const SelectedValue: React.FC<{ item?: SelectFieldItem }> = (p) => {
 };
 
 const DailyTasks: React.FC = () => {
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const [projectId, setProjectId] = useState('');
+
   const [updateDailyStatus] = useAsyncThunk(updateDailyStatusActions, {
     errorTitle: 'Failed to add statuss',
     rethrowError: true,
@@ -65,10 +71,26 @@ const DailyTasks: React.FC = () => {
   const getProject = (id: string) => projects.find((i) => i.id === id);
   const dailyTasks = useSelector(taskSelector.selectAll);
 
-  const prField = (prId: string) => (
-    <div className={c('pr-container')}>
+  const checkTemplateLink = (id: string, projectid: string, type: string) => {
+    const project = getProject(projectid);
+    const redirectUrl = type === 'pr' ? project?.pr_link_template : project?.issue_link_template;
+
+    if (!redirectUrl) {
+      setModalOpen(true);
+      setProjectId(projectid);
+      return;
+    }
+
+    window.open(redirectUrl.replace('{{ID}}', id));
+  };
+
+  const prField = (task: DailyTask) => (
+    <div
+      className={c('pr-container')}
+      onClick={() => checkTemplateLink(task.pr_id, task.project_id, 'pr')}
+    >
       <GoGitPullRequest className={c('pr-icon')} title={'Pr id'} />
-      {`#${prId}`}
+      {`#${task.pr_id}`}
     </div>
   );
 
@@ -83,7 +105,13 @@ const DailyTasks: React.FC = () => {
           <div className={c('task-row')}>
             <div className={c('row-left-container')}>
               <MdMoreHoriz className={c('row-item')} title={'More'} />
-              <span className={c('task-issue')}>{p.issue_id ? p.issue_id : '?'}</span>
+              <span
+                className={c('task-issue')}
+                title={p.issue_id ? p.issue_id : 'Issue id'}
+                onClick={() => p.issue_id && checkTemplateLink(p.issue_id, p.project_id, 'issue')}
+              >
+                {p.issue_id ? p.issue_id : '?'}
+              </span>
               <SelectBox
                 className={c('row-status-item')}
                 name={'task-status'}
@@ -96,7 +124,7 @@ const DailyTasks: React.FC = () => {
               <span className={c('task-title')}>{p.title}</span>
             </div>
             <div className={c('row-right-container')}>
-              {p.pr_id && prField(p.pr_id)}
+              {p.pr_id && prField(p)}
               <div className={c('fallback-logo')} title={getProject(p.project_id)?.name}>
                 <FallbackIcon
                   logo={getProject(p.project_id)?.logo_square}
@@ -110,8 +138,22 @@ const DailyTasks: React.FC = () => {
     );
   };
 
+  const setTemplateUrl = () => {
+    Router.push(`/projects/${projectId}`);
+    setModalOpen(false);
+  };
+
   return (
-    <>{dailyTasks.length ? dailyTasks.map((i) => ListingItem({ ...i })) : <NoTodaysCommitment />}</>
+    <>
+      <WarningModal
+        onAccept={setTemplateUrl}
+        onCancel={() => setModalOpen(false)}
+        isOpen={isModalOpen}
+        title={'Warning'}
+        subTitle={'Please configure Issue/PR URL template in project settings'}
+      />
+      {dailyTasks.length ? dailyTasks.map((i) => ListingItem({ ...i })) : <NoTodaysCommitment />}
+    </>
   );
 };
 
