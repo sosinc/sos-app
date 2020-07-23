@@ -26,6 +26,7 @@
 
 .title-container {
   margin: 1.5em 0;
+  margin-top: calc(1.5em - 6px);
 }
 
 .title {
@@ -36,7 +37,6 @@
 .popup-buttons {
   display: flex;
   justify-content: space-between;
-  padding: 3px;
   width: 10em;
 }
 
@@ -56,14 +56,14 @@
   width: 5em;
 }
 
-.other-button {
+.close {
   @extend %modal-button;
 
   box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
   box-sizing: border-box;
 }
 
-.continue-button {
+.accept {
   @extend %modal-button;
 
   background: $color-button-cta-bg;

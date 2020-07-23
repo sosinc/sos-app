@@ -10,6 +10,8 @@ interface Props {
   isOpen: boolean;
   title: string;
   subTitle: string;
+  closeButtonText?: string;
+  acceptButtonText?: string;
   onAccept: () => void;
   onCancel: () => void;
 }
@@ -27,11 +29,11 @@ const WarningModal: React.FC<Props> = (p) => {
         </div>
 
         <div className={c('popup-buttons')}>
-          <button className={c('continue-button')} onClick={p.onCancel}>
-            Cancel
+          <button className={c('close')} onClick={p.onCancel}>
+            {p.closeButtonText || 'Cancel'}
           </button>
-          <button className={c('other-button')} onClick={p.onAccept}>
-            Ok
+          <button className={c('accept')} onClick={p.onAccept}>
+            {p.acceptButtonText || 'Ok'}
           </button>
         </div>
       </div>

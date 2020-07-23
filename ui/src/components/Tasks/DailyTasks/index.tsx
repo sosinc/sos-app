@@ -1,10 +1,10 @@
 import classNames from 'classnames/bind';
+import Router from 'next/router';
 import { useState } from 'react';
 import { GoGitPullRequest } from 'react-icons/go';
 import { MdCheckCircle, MdMoreHoriz, MdRadioButtonUnchecked } from 'react-icons/md';
 import { RiPlayListAddLine } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
-import Router from 'next/router';
 
 import SelectBox, { SelectFieldItem } from 'src/components/Form/SelectBox';
 import WarningModal from 'src/components/Modal/Warning';
@@ -66,11 +66,6 @@ const DailyTasks: React.FC = () => {
     errorTitle: 'Failed to fetch some Tasks',
   });
 
-  const user = currentUser();
-  const projects = user.projects || [];
-  const getProject = (id: string) => projects.find((i) => i.id === id);
-  const dailyTasks = useSelector(taskSelector.selectAll);
-
   const checkTemplateLink = (id: string, projectid: string, type: string) => {
     const project = getProject(projectid);
     const redirectUrl = type === 'pr' ? project?.pr_link_template : project?.issue_link_template;
@@ -83,6 +78,16 @@ const DailyTasks: React.FC = () => {
 
     window.open(redirectUrl.replace('{{ID}}', id));
   };
+
+  const setTemplateUrl = () => {
+    Router.push(`/projects/${projectId}`);
+    setModalOpen(false);
+  };
+
+  const user = currentUser();
+  const projects = user.projects || [];
+  const getProject = (id: string) => projects.find((i) => i.id === id);
+  const dailyTasks = useSelector(taskSelector.selectAll);
 
   const prField = (task: DailyTask) => (
     <div
@@ -138,16 +143,12 @@ const DailyTasks: React.FC = () => {
     );
   };
 
-  const setTemplateUrl = () => {
-    Router.push(`/projects/${projectId}`);
-    setModalOpen(false);
-  };
-
   return (
     <>
       <WarningModal
         onAccept={setTemplateUrl}
         onCancel={() => setModalOpen(false)}
+        acceptButtonText={'Setting'}
         isOpen={isModalOpen}
         title={'Warning'}
         subTitle={'Please configure Issue/PR URL template in project settings'}
