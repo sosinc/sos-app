@@ -20,17 +20,19 @@ const WarningModal: React.FC<Props> = (p) => {
       <div className={c('popup-container')}>
         <div className={c('popup-info')}>
           <MdErrorOutline className={c('popup-icon')} />
-          <h2>{p.title}</h2>
-          <span className={c('popup-message')}>{p.subTitle}</span>
+          <div className={c('title-container')}>
+            <h2 className={c('title')}>{p.title}</h2>
+            <span>{p.subTitle}</span>
+          </div>
         </div>
 
         <div className={c('popup-buttons')}>
-          <span className={c('other-button')} onClick={p.onCancel}>
+          <button className={c('continue-button')} onClick={p.onCancel}>
             Cancel
-          </span>
-          <span className={c('other-button', 'continue-button')} onClick={p.onAccept}>
+          </button>
+          <button className={c('other-button')} onClick={p.onAccept}>
             Ok
-          </span>
+          </button>
         </div>
       </div>
     </Modal>
