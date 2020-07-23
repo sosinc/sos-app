@@ -1,4 +1,6 @@
 import classNames from 'classnames/bind';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import Router from 'next/router';
 import { useState } from 'react';
 import { GoGitPullRequest } from 'react-icons/go';
@@ -19,6 +21,7 @@ import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
+dayjs.extend(relativeTime);
 
 const selectOptions = [
   {
@@ -132,6 +135,9 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
             </div>
             <div className={c('row-right-container')}>
               {p.pr_id && prField(p)}
+              <span className={c('row-date')} title={dayjs(p.date).format('DD, MMM YYYY')}>
+                {dayjs(p.date).fromNow()}
+              </span>
               <div className={c('fallback-logo')} title={project?.name}>
                 <FallbackIcon logo={project?.logo_square} name={project?.name} />
               </div>
