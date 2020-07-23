@@ -4,7 +4,7 @@ import { MdCheckCircle, MdMoreHoriz, MdRadioButtonUnchecked } from 'react-icons/
 import { RiPlayListAddLine } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
 
-import SelectBox from 'src/components/Form/SelectBox';
+import SelectBox, { SelectFieldItem } from 'src/components/Form/SelectBox';
 import NoItemsFound from 'src/components/NoItemsFound';
 import FallbackIcon from 'src/containers/FallbackIcon';
 import { fetchDailyTasks, taskSelector, updateDailyStatusActions } from 'src/duck/tasks';
@@ -41,6 +41,14 @@ const NoTodaysCommitment = () => (
   </div>
 );
 
+const SelectedValue: React.FC<{ item?: SelectFieldItem }> = (p) => {
+  if (!p.item || p.item.id === 'todo') {
+    return <MdRadioButtonUnchecked className={c('row-item-icon')} title={'Done'} />;
+  }
+
+  return <MdCheckCircle className={c('row-item-icon', 'done-icon')} title={'Todo'} />;
+};
+
 const DailyTasks: React.FC = () => {
   const [updateDailyStatus] = useAsyncThunk(updateDailyStatusActions, {
     errorTitle: 'Failed to add statuss',
@@ -65,17 +73,8 @@ const DailyTasks: React.FC = () => {
   );
 
   const ListingItem: React.FC<DailyTask> = (p) => {
-    const handleChangeStatus = async (status: string) => {
-      await updateDailyStatus({ id: p.id, isDelivered: status === 'done' });
-    };
-
-    const Logo: React.FC = () => {
-      const statusLogo = p.is_delivered ? (
-        <MdCheckCircle className={c('row-item', 'done-icon')} title={'Todo'} />
-      ) : (
-        <MdRadioButtonUnchecked className={c('row-item')} title={'Done'} />
-      );
-      return <>{statusLogo}</>;
+    const handleChangeStatus = async (item: { id: string; name: string }) => {
+      await updateDailyStatus({ id: p.id, isDelivered: item.id === 'done' });
     };
 
     return (
@@ -84,16 +83,15 @@ const DailyTasks: React.FC = () => {
           <div className={c('task-row')}>
             <div className={c('row-left-container')}>
               <MdMoreHoriz className={c('row-item')} title={'More'} />
-              <span className={c('row-item')} title={p.issue_id ? p.issue_id : 'Issue id'}>
-                {p.issue_id ? p.issue_id : '?'}
-              </span>
+              <span className={c('task-issue')}>{p.issue_id ? p.issue_id : '?'}</span>
               <SelectBox
                 className={c('row-status-item')}
                 name={'task-status'}
                 options={selectOptions}
                 onSelect={handleChangeStatus}
+                value={p.is_delivered ? 'done' : 'todo'}
                 isDropdownIconHidden={true}
-                Header={Logo}
+                Selected={SelectedValue}
               />
               <span className={c('task-title')}>{p.title}</span>
             </div>

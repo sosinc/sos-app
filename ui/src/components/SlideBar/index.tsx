@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind';
-import { MdErrorOutline } from 'react-icons/md';
 
-import Modal from 'src/components/Modal';
+import WarningModal from 'src/components/Modal/Warning';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -20,32 +19,19 @@ const SlideBar: React.FC<Props> = (p) => {
     ? p.setIsDirtyPopupOpen
     : (_: boolean) => undefined;
 
-  const Popup: React.FC = () => (
-    <div className={c('popup-container')}>
-      <div className={c('popup-info')}>
-        <MdErrorOutline className={c('popup-icon')} />
-        <h2>Are you sure </h2>
-        <span className={c('popup-message')}>You have unsaved tasks which will not be saved</span>
-      </div>
-      <div className={c('popup-buttons')}>
-        <span className={c('other-button')} onClick={() => setIsDirtyPopupOpen(false)}>
-          Cancel
-        </span>
-        <span className={c('other-button', 'continue-button')} onClick={p.onClose}>
-          Ok
-        </span>
-      </div>
-    </div>
-  );
-
   if (!p.isOpen) {
     return null;
   }
-  const isFormDirty = (
-    <Modal onClose={() => setIsDirtyPopupOpen(false)} isOpen={Boolean(p.isDirtyPopupOpen)}>
-      <Popup />
-    </Modal>
+  const dirtyFormPrompt = (
+    <WarningModal
+      isOpen={Boolean(p.isDirtyPopupOpen)}
+      title={'Are you sure'}
+      subTitle={' You have unsaved tasks which will not be saved'}
+      onAccept={p.onClose}
+      onCancel={() => setIsDirtyPopupOpen(false)}
+    />
   );
+
   return (
     <>
       <div className={c('backdrop')} />
@@ -53,7 +39,7 @@ const SlideBar: React.FC<Props> = (p) => {
         <div className={c('content')} onClick={(e) => e.stopPropagation()}>
           {p.Header && <p.Header onClose={p.onClose} />}
           {p.children}
-          {isFormDirty}
+          {dirtyFormPrompt}
         </div>
       </div>
     </>
