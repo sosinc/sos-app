@@ -29,6 +29,7 @@
 .task-issue {
   @extend %handle-text-overflow;
 
+  cursor: pointer;
   margin-right: 15px;
   text-align: center;
   width: 5em;
@@ -36,8 +37,7 @@
 
 .row-item {
   color: $color-text-dim2;
-  display: block;
-  height: 16px;
+  cursor: pointer;
   margin-right: 15px;
   width: 16px;
 }
@@ -78,6 +78,7 @@
   border-radius: 48px;
   box-sizing: border-box;
   color: $color-text-dim2;
+  cursor: pointer;
   display: flex;
   font-size: 12px;
   height: 26px;

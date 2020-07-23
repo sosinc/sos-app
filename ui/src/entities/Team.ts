@@ -78,6 +78,8 @@ export const fetchOne = async (payload: { id: string }): Promise<FetchOneTeamRes
         logo_square
         description
         organization_id
+        issue_link_template
+        pr_link_template
       }
       members{
         ecode

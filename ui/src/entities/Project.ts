@@ -39,6 +39,8 @@ export const create = async (payload: CreatePayload): Promise<Project> => {
     logo_square: $logo_square,
     description: $description,
     organization_id: $organization_id,
+    issue_link_template: $issue_link_template,
+    pr_link_template: $pr_link_template,
     }) {
       id
     }
@@ -92,6 +94,8 @@ export const fetchOne = async (payload: GetOnePayload): Promise<ProjectResponse>
       issue_link_template
       pr_link_template
       organization_id
+      issue_link_template
+      pr_link_template
       teams{
         id
         name
