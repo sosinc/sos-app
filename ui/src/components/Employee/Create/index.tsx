@@ -50,7 +50,7 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
 
           <div className={c('logo', 'field-container')}>
             <span className={c('field-title')}>Head Shot</span>
-            <ImageUploadField className={'image-container'} type={'file'} name="headshot" />
+            <ImageUploadField className={c('image-container')} type={'file'} name="headshot" />
           </div>
 
           <div className={c('right-container')}>
@@ -62,7 +62,7 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
             <div className={c('designation-container', 'field-container')}>
               <span className={c('field-title')}>Designation</span>
               <SelectField
-                className={'org-add-form'}
+                className={c('select-field')}
                 name="designation_id"
                 options={p.designations.map((d) => ({ id: d.id, name: d.name }))}
                 isLoading={p.isFetchingDesignations}
@@ -72,13 +72,9 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
             <div className={c('org-container', 'field-container')}>
               <span className={c('field-title')}>Organization</span>
               <SelectField
-                className={'org-add-form'}
+                className={c('select-field')}
                 name="organization_id"
-                options={p.organizations.map((o) => ({
-                  id: o.id,
-                  name: o.name,
-                  logo: o.square_logo,
-                }))}
+                options={p.organizations.map((o) => ({ ...o, logo: o.square_logo }))}
                 isLoading={p.isFetchingOrgs}
               />
             </div>

@@ -97,3 +97,32 @@
     position: absolute;
   }
 }
+
+.skeleton {
+  .field-container,
+  .button-container {
+    @include bone;
+
+    color: transparent;
+    cursor: default;
+    height: 48px;
+  }
+
+  .image-container-logo,
+  .image-container-banner {
+    height: 150px;
+  }
+
+  .org-logo,
+  .org-banner {
+    visibility: hidden;
+  }
+
+  input,
+  .field-title,
+  .image-container,
+  .org-add-form,
+  .save-button {
+    display: none;
+  }
+}
