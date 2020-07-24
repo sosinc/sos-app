@@ -39,7 +39,7 @@ const OrganizationDetails: React.FC<FormikValues> = () => {
   const organization = useSelector((state: RootState) => orgSelector.selectById(state, queryId));
 
   const [isFetchingOrg] = useQuery(() => fetchOrganization({ id: queryId }), {
-    errorTitle: 'Failed to fetch some team details',
+    errorTitle: 'Failed to fetch some Organization details',
   });
 
   const [createOrganization] = useAsyncThunk(updateOrganizationAction, {

@@ -42,8 +42,8 @@ export default createSlice({
 
     builder.addCase(fetchOrganization.fulfilled, (state, { payload }) => {
       orgAdapter.upsertOne(state, payload);
-
     });
+
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
       orgAdapter.upsertMany(state, payload.organizations);
     });
