@@ -5,11 +5,12 @@ import {
   createMember,
   CreateMemberArgs,
   CreateMemberResponse,
-  CreateTeamArgs,
   deleteMember,
   fetchOne,
   FetchOneTeamResponse,
   Team,
+  TeamArgsr,
+  update,
 } from 'src/entities/Team';
 import { RootState } from '.';
 import { fetchProject } from './projects';
@@ -23,9 +24,15 @@ export type ProjectState = EntityState<Team>;
 
 export const createTeamAction = createAsyncThunk<
   Team,
-  CreateTeamArgs,
+  TeamArgsr,
   { rejectValue: Error; state: ProjectState }
 >('team/create', create);
+
+export const updateTeamAction = createAsyncThunk<
+  Team,
+ TeamArgsr,
+{ rejectValue: Error; state: ProjectState }
+  >('team/create', update);
 
 export const createMemberAction = createAsyncThunk<
   CreateMemberResponse,

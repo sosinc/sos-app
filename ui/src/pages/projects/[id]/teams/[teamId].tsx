@@ -9,7 +9,7 @@ import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
 import { employeeSelector, fetchEmployees } from 'src/duck/employees';
 import { projectSelector } from 'src/duck/projects';
-import { createTeamAction, fetchTeam, teamSelector } from 'src/duck/teams';
+import { updateTeamAction, fetchTeam, teamSelector } from 'src/duck/teams';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
@@ -53,7 +53,7 @@ const TeamDetails: React.FC<FormikValues> = () => {
     errorTitle: 'Failed to fetch some Employees :-(',
   });
 
-  const [createTeam] = useAsyncThunk(createTeamAction, {
+  const [updateTeam] = useAsyncThunk(updateTeamAction, {
     errorTitle: 'Failed to create team member',
     rethrowError: true,
     successTitle: 'Created successfully',
@@ -65,8 +65,7 @@ const TeamDetails: React.FC<FormikValues> = () => {
   ) => {
     try {
       helpers.setSubmitting(true);
-      await createTeam(values);
-      helpers.resetForm();
+      await updateTeam({ ...values, teamId });
     } catch (err) {
       if (/Duplicate project name/i.test(err.message)) {
         helpers.setFieldError('name', 'An member with same name already exists');
