@@ -98,6 +98,11 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
     setModalOpen(false);
   };
 
+  const dateFromNow = () => {
+    const d = dayjs(p.date).fromNow();
+    return d.split(' ')[1] === 'hours' ? 'a day ago' : d;
+  };
+
   return (
     <>
       <WarningModal
@@ -136,7 +141,7 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
             <div className={c('row-right-container')}>
               {p.pr_id && prField(p)}
               <span className={c('row-date')} title={dayjs(p.date).format('DD, MMM YYYY')}>
-                {dayjs(p.date).fromNow()}
+                {dateFromNow()}
               </span>
               <div className={c('fallback-logo')} title={project?.name}>
                 <FallbackIcon logo={project?.logo_square} name={project?.name} />
