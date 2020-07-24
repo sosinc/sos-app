@@ -1,8 +1,11 @@
+import dayjs from 'dayjs';
+
 import client from 'src/lib/client';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
 import { Project } from './Project';
 
 export interface DailyTask {
+  date: string;
   id: string;
   is_delivered: boolean;
   project_id: string;
@@ -44,8 +47,7 @@ export const createDailyTasks = async (payload: DailyTask[]): Promise<undefined>
 };
 
 export const fetchManyDailyTasks = async (): Promise<FetchTasksResponse> => {
-  const date = new Date();
-  const today = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  const today = dayjs(new Date()).format('YYYY-MM-DD');
 
   const query = `{
     daily_tasks (

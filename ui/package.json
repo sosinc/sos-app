@@ -26,7 +26,7 @@
     "@types/yup": "^0.26.26",
     "classnames": "^2.2.6",
     "common-tags": "^1.8.0",
-    "dayjs": "^1.8.17",
+    "dayjs": "^1.8.30",
     "formik": "^2.1.4",
     "graphql-request": "^2.0.0",
     "history": "^4.10.1",
