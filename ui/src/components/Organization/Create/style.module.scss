@@ -1,13 +1,13 @@
 @import 'src/scss/lib';
 
-.container {
+.org-container {
   color: $color-text-dim2;
   display: flex;
   flex-direction: column;
   margin-top: 7em;
 }
 
-.form {
+.org-form {
   display: grid;
   font: inherit;
   grid-auto-rows: minmax(2em, auto);
@@ -21,6 +21,10 @@
 
   @media(max-width: $sm) {
     flex-direction: column;
+  }
+
+  &.has-error {
+    background: $color-error-bg;
   }
 }
 
@@ -42,36 +46,30 @@
   position: relative;
 }
 
-.square-logo {
-  grid-column: 1;
-  grid-row: 3;
-  width: 10em;
-}
-
-.right-container {
-  display: grid;
-  grid-auto-rows: minmax(2em, auto);
-  grid-column: 2;
-  grid-column-gap: 15px;
-  grid-row: 3;
-  grid-row-gap: 2em;
-  grid-template-columns: 1fr 1fr;
-  height: 11em;
-}
-
-.issue-link-container {
-  grid-column: 1/3;
-  grid-row: 1;
-}
-
-.pr-link-container {
-  grid-column: 1/3;
-  grid-row: 2;
-}
-
 .field-title {
   color: $color-text-dim2;
   text-align: left;
+}
+
+.org-logo {
+  width: 10em;
+}
+
+.image-container-logo {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.image-container-banner {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.input-file {
+  cursor: pointer;
+  height: 100%;
+  opacity: 0;
+  width: 100%;
 }
 
 .save-button {
@@ -83,7 +81,7 @@
   flex-shrink: 0;
   font-size: 14px;
   font-weight: 600;
-  grid-column: 1/3;
+  grid-column: 1;
   grid-row: 4;
   height: 48px;
   outline: none;
@@ -100,39 +98,6 @@
   }
 }
 
-.team-member-container {
-  margin-top: 1em;
-}
-
-.add-team {
-  grid-row: 1;
-  margin-bottom: 0;
-}
-
-.team-container {
-  grid-column: 1/3;
-  grid-row: 2;
-  min-height: 300px;
-}
-
-.title {
-  display: flex;
-  flex-direction: column;
-}
-
-.emp-container {
-  margin-bottom: 1em;
-}
-
-.del-icon {
-  $size: 1.3em;
-
-  color: $color-text-dim2;
-  cursor: pointer;
-  height: $size;
-  width: $size;
-}
-
 .skeleton {
   .field-container,
   .button-container {
@@ -143,12 +108,13 @@
     height: 48px;
   }
 
-  .square-logo {
+  .image-container-logo,
+  .image-container-banner {
     height: 150px;
   }
 
-  .image-container,
-  .field-title {
+  .org-logo,
+  .org-banner {
     visibility: hidden;
   }
 
@@ -156,8 +122,7 @@
   .field-title,
   .image-container,
   .org-add-form,
-  .save-button,
-  .select-field {
+  .save-button {
     display: none;
   }
 }

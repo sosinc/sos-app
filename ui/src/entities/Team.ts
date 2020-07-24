@@ -14,7 +14,7 @@ export interface Team {
   membersCount: number;
 }
 
-export interface CreateTeamArgs {
+export interface TeamArgs {
   project_id: string;
   name: string;
   logo_square?: string;
@@ -38,18 +38,48 @@ export interface FetchOneTeamResponse {
   team: Team;
 }
 
-export const create = async (payload: CreateTeamArgs): Promise<Team> => {
+export const create = async (payload: TeamArgs): Promise<Team> => {
   const query = `
   mutation ($name: String!, $project_id: uuid!, $logo_square: String, $issue_link_template: String, $pr_link_template: String,){
     insert_teams_one(object: {
       name: $name
       logo_square: $logo_square
       project_id: $project_id
+      issue_link_template: $issue_link_template,
+      pr_link_template: $pr_link_template,
       }) {
         id
         name
       }
   }`;
+
+  try {
+    const data = await client.request(query, payload);
+
+    return data.payload;
+  } catch (err) {
+    if (/uniqueness violation/i.test(err.message)) {
+      throw new Error('Duplicate team name');
+    }
+
+    throw new Error('Something went wrong :-(');
+  }
+};
+
+export const update = async (payload: TeamArgs): Promise<Team> => {
+  const query = `
+    mutation ($teamId: uuid!, $name: String!, $project_id: uuid, $logo_square: String, $issue_link_template: String, $pr_link_template: String){
+      update_teams_by_pk( pk_columns: {id: $teamId }
+        _set:{
+          name: $name
+          logo_square: $logo_square,
+          issue_link_template: $issue_link_template,
+          pr_link_template: $pr_link_template,
+        }){
+           id
+           name
+          }
+      }`;
 
   try {
     const data = await client.request(query, payload);

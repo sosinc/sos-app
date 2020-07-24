@@ -3,12 +3,13 @@ import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from 
 import { fetchCurrentUser } from 'src/duck/auth';
 import {
   create,
-  CreatePayload,
   fetchMany,
   fetchOne,
   GetOnePayload,
   Project,
+  ProjectArgs,
   ProjectResponse,
+  update,
 } from 'src/entities/Project';
 import { RootState } from '.';
 import { fetchDailyTasks } from './tasks';
@@ -34,9 +35,15 @@ export const fetchProject = createAsyncThunk<
 
 export const createProjectAction = createAsyncThunk<
   Project,
-  CreatePayload,
+  ProjectArgs,
   { rejectValue: Error; state: ProjectState }
 >('project/create', create);
+
+export const updateProjectAction = createAsyncThunk<
+  Project,
+  ProjectArgs,
+  { rejectValue: Error; state: ProjectState }
+>('project/update', update);
 
 export default createSlice({
   extraReducers: async (builder) => {

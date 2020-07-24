@@ -7,6 +7,24 @@
   margin-top: 7em;
 }
 
+.add-icon {
+  color: $color-text-dim2;
+  height: 45px;
+  margin: 0 auto;
+  margin-bottom: 1em;
+  width: 45px;
+}
+
+.add {
+  color: $color-cta;
+  margin-top: 1em;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .form {
   display: grid;
   font: inherit;
@@ -22,6 +40,10 @@
   @media(max-width: $sm) {
     flex-direction: column;
   }
+
+  &.has-error {
+    background: $color-error-bg;
+  }
 }
 
 .title-container {
@@ -36,16 +58,16 @@
   grid-row-gap: 7px;
 }
 
-.name-container {
+.email-container {
   grid-column: 1/3;
   grid-row: 2;
   position: relative;
 }
 
-.square-logo {
-  grid-column: 1;
+.name-container {
+  grid-column: 1/3;
   grid-row: 3;
-  width: 10em;
+  position: relative;
 }
 
 .right-container {
@@ -53,25 +75,43 @@
   grid-auto-rows: minmax(2em, auto);
   grid-column: 2;
   grid-column-gap: 15px;
-  grid-row: 3;
+  grid-row: 4;
   grid-row-gap: 2em;
   grid-template-columns: 1fr 1fr;
   height: 11em;
 }
 
-.issue-link-container {
+.ecode-container {
   grid-column: 1/3;
   grid-row: 1;
+  position: relative;
 }
 
-.pr-link-container {
-  grid-column: 1/3;
+.designation-container {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.org-container {
+  grid-column: 2;
   grid-row: 2;
 }
 
 .field-title {
   color: $color-text-dim2;
   text-align: left;
+}
+
+.image-wrapper-logo {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.input-file {
+  cursor: pointer;
+  height: 100%;
+  opacity: 0;
+  width: 100%;
 }
 
 .save-button {
@@ -83,8 +123,8 @@
   flex-shrink: 0;
   font-size: 14px;
   font-weight: 600;
-  grid-column: 1/3;
-  grid-row: 4;
+  grid-column: 1;
+  grid-row: 5;
   height: 48px;
   outline: none;
   padding: 0 4em;
@@ -100,39 +140,6 @@
   }
 }
 
-.team-member-container {
-  margin-top: 1em;
-}
-
-.add-team {
-  grid-row: 1;
-  margin-bottom: 0;
-}
-
-.team-container {
-  grid-column: 1/3;
-  grid-row: 2;
-  min-height: 300px;
-}
-
-.title {
-  display: flex;
-  flex-direction: column;
-}
-
-.emp-container {
-  margin-bottom: 1em;
-}
-
-.del-icon {
-  $size: 1.3em;
-
-  color: $color-text-dim2;
-  cursor: pointer;
-  height: $size;
-  width: $size;
-}
-
 .skeleton {
   .field-container,
   .button-container {
@@ -143,7 +150,7 @@
     height: 48px;
   }
 
-  .square-logo {
+  .logo {
     height: 150px;
   }
 

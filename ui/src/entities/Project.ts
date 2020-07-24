@@ -13,7 +13,8 @@ export interface Project {
   teams_count: number;
 }
 
-export interface CreatePayload {
+export interface ProjectArgs {
+  id: string;
   name: string;
   logo_square: string;
   description: string;
@@ -31,7 +32,7 @@ export interface ProjectResponse {
   teams: Team[];
 }
 
-export const create = async (payload: CreatePayload): Promise<Project> => {
+export const create = async (payload: ProjectArgs): Promise<Project> => {
   const query = `
   mutation ($name: String!, $logo_square: String, $description: String, $issue_link_template: String, $pr_link_template: String, $organization_id: uuid!){
     insert_projects_one(object: {
@@ -45,6 +46,35 @@ export const create = async (payload: CreatePayload): Promise<Project> => {
       id
     }
   }`;
+
+  try {
+    const data = await client.request(query, payload);
+
+    return data.payload;
+  } catch (err) {
+    if (/uniqueness violation/i.test(err.message)) {
+      throw new Error('Duplicate project name');
+    }
+    throw new Error('Something went wrong :-(');
+  }
+};
+
+export const update = async (payload: ProjectArgs): Promise<Project> => {
+  const query = `
+    mutation ($projectId: uuid!, $name: String!, $logo_square: String, $description: String, $issue_link_template: String, $pr_link_template: String, $organization_id: uuid!){
+      update_projects_by_pk( pk_columns:
+        {id: $projectId }
+          _set:{
+            name: $name
+            logo_square: $logo_square,
+            description: $description,
+            issue_link_template: $issue_link_template,
+            pr_link_template: $pr_link_template,
+          })
+        {
+          id
+        }
+    }`;
 
   try {
     const data = await client.request(query, payload);

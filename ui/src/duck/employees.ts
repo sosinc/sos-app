@@ -1,7 +1,7 @@
 import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from '@reduxjs/toolkit';
 
 import { fetchCurrentUser } from 'src/duck/auth';
-import { create, CreatePayload, Employee, fetchMany } from 'src/entities/Employee';
+import { create, Employee, EmployeeArgs, fetchMany, fetchOne, update } from 'src/entities/Employee';
 import { RootState } from '.';
 
 const employeeAdapter = createEntityAdapter<Employee>({
@@ -17,11 +17,23 @@ export const fetchEmployees = createAsyncThunk<
   { rejectValue: Error; state: EmployeeState }
 >('employees/fetchMany', fetchMany);
 
+export const fetchEmployee = createAsyncThunk<
+  Employee,
+  { orgId: string; ecode: string },
+  { rejectValue: Error; state: EmployeeState }
+>('employees/fetchOne', fetchOne);
+
 export const createEmployeeAction = createAsyncThunk<
   Employee,
-  CreatePayload,
+  EmployeeArgs,
   { rejectValue: Error; state: EmployeeState }
 >('employees/create', create);
+
+export const updateEmployeeAction = createAsyncThunk<
+  Employee,
+  EmployeeArgs,
+  { rejectValue: Error; state: EmployeeState }
+>('employees/update', update);
 
 export default createSlice({
   extraReducers: (builder) => {
@@ -30,6 +42,10 @@ export default createSlice({
       const employees = payload.map((e) => ({ ...e, id: `${e.ecode}-${e.organization_id}` }));
 
       employeeAdapter.upsertMany(state, employees);
+    });
+
+    builder.addCase(fetchEmployee.fulfilled, (state, { payload }) => {
+      employeeAdapter.upsertOne(state, payload);
     });
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {

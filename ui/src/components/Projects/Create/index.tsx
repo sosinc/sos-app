@@ -68,7 +68,8 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
       <span className={c('field-title')}>Pr Link Template</span>
       <TextField placeholder="Enter pr link template" type="text" name="pr_link_template" />
     </div>
-    {!p.projectId ? submitButton(p) : addTeam(p)}
+    {submitButton(p)}
+    {p.projectId && addTeam(p)}
   </form>
 );
 
@@ -76,7 +77,7 @@ const submitButton = (p: any) => {
   return (
     <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
       <div className={c({ 'saving-in': p.isSubmitting })}>
-        {p.isSubmitting ? 'Saving...' : 'Save'}
+        {p.isSubmitting ? 'Saving' : 'Save'}
         <span />
       </div>
     </button>

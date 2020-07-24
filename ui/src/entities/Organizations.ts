@@ -9,13 +9,14 @@ export interface Organization {
   employees_count: number;
 }
 
-export interface CreatePayload {
+export interface OrganizationArgs {
+  id: string;
   name: string;
   banner?: string;
   square_logo?: string;
 }
 
-export const create = async (payload: CreatePayload): Promise<Organization> => {
+export const create = async (payload: OrganizationArgs): Promise<Organization> => {
   const query = `
   mutation ($name: String!, $banner: String, $square_logo: String){
     insert_organizations_one(
@@ -27,6 +28,32 @@ export const create = async (payload: CreatePayload): Promise<Organization> => {
         id
       }
   }`;
+
+  try {
+    const data = await client.request(query, payload);
+
+    return data.payload;
+  } catch (err) {
+    if (/uniqueness violation/i.test(err.message)) {
+      throw new Error('Duplicate organization name');
+    }
+
+    throw new Error('Something went wrong :-(');
+  }
+};
+
+export const update = async (payload: OrganizationArgs): Promise<Organization> => {
+  const query = `
+    mutation ($orgId: uuid!, $name: String!, $banner: String, $square_logo: String){
+      update_organizations_by_pk ( pk_columns: {id: $orgId }
+      _set:{
+        name: $name,
+        banner: $banner,
+        square_logo: $square_logo
+      }) {
+        id
+        }
+    }`;
 
   try {
     const data = await client.request(query, payload);
@@ -68,4 +95,24 @@ export const fetchMany = async (): Promise<Organization[]> => {
   });
 
   return organizations || [];
+};
+
+export const fetchOne = async (payload: { id: string }): Promise<Organization> => {
+  const query = `query ($id: uuid!){
+    organizations_by_pk(id: $id ) {
+      id
+      name
+      square_logo
+      banner
+      }
+  }`;
+
+  const data = await client.request(query, payload);
+  const organization = data.organizations_by_pk;
+
+  if (!organization) {
+    throw new Error('Could not get organization at the moment');
+  }
+
+  return organization;
 };

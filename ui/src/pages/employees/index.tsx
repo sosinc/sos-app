@@ -45,6 +45,7 @@ const Index = () => {
   }
 
   const listItems: ListingItemProps[] = employees.map((e) => ({
+    href: `/employees/${e.id}`,
     id: e.ecode,
     logo: e.headshot,
     subtitle: `${e.designation_id}`,

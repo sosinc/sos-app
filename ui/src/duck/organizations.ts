@@ -1,7 +1,14 @@
 import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from '@reduxjs/toolkit';
 
 import { fetchCurrentUser } from 'src/duck/auth';
-import { create, CreatePayload, fetchMany, Organization } from 'src/entities/Organizations';
+import {
+  create,
+  fetchMany,
+  fetchOne,
+  Organization,
+  OrganizationArgs,
+  update,
+} from 'src/entities/Organizations';
 import { RootState } from '.';
 
 const orgAdapter = createEntityAdapter<Organization>({
@@ -12,9 +19,15 @@ export const orgSelector = orgAdapter.getSelectors<RootState>((state) => state.o
 
 export const createOrganizationAction = createAsyncThunk<
   Organization,
-  CreatePayload,
+  OrganizationArgs,
   { rejectValue: Error; state: OrganizationState }
 >('organizations/create', create);
+
+export const updateOrganizationAction = createAsyncThunk<
+  Organization,
+  OrganizationArgs,
+  { rejectValue: Error; state: OrganizationState }
+>('organizations/update', update);
 
 export const fetchOrganizations = createAsyncThunk<
   Organization[],
@@ -22,11 +35,21 @@ export const fetchOrganizations = createAsyncThunk<
   { rejectValue: Error; state: OrganizationState }
 >('organizations/fetchMany', fetchMany);
 
+export const fetchOrganization = createAsyncThunk<
+  Organization,
+  { id: string },
+  { rejectValue: Error; state: OrganizationState }
+>('organizations/fetchOne', fetchOne);
+
 export type OrganizationState = EntityState<Organization>;
 
 export default createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchOrganizations.fulfilled, orgAdapter.upsertMany);
+
+    builder.addCase(fetchOrganization.fulfilled, (state, { payload }) => {
+      orgAdapter.upsertOne(state, payload);
+    });
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
       orgAdapter.upsertMany(state, payload.organizations);
