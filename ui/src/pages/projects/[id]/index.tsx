@@ -9,7 +9,7 @@ import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
 import { fetchProject, projectSelector } from 'src/duck/projects';
-import { createProjectAction } from 'src/duck/projects';
+import { updateProjectAction } from 'src/duck/projects';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 import style from '../style.module.scss';
@@ -54,10 +54,10 @@ const ProjectDetails: React.FC<FormikValues> = () => {
 
   userOrganizations = useSelector(orgSelector.selectAll);
 
-  const [createProject] = useAsyncThunk(createProjectAction, {
-    errorTitle: 'Failed to create Project',
+  const [updateProject] = useAsyncThunk(updateProjectAction, {
+    errorTitle: 'Failed to update Project',
     rethrowError: true,
-    successTitle: 'Project created successfully',
+    successTitle: 'Project update successfully',
   });
 
   const handleSubmit = async (
@@ -66,8 +66,7 @@ const ProjectDetails: React.FC<FormikValues> = () => {
   ) => {
     try {
       helpers.setSubmitting(true);
-      await createProject(values);
-      helpers.resetForm();
+      await updateProject({ ...values, projectId: queryId });
     } catch (err) {
       if (/Duplicate project name/i.test(err.message)) {
         helpers.setFieldError('name', 'An project with same name already exists');
