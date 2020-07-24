@@ -44,6 +44,7 @@ const Index = () => {
   }
 
   const listItems: ListingItemProps[] = organizations.map((o) => ({
+    href: `/organizations/${o.id}`,
     id: o.id,
     logo: o.square_logo,
     subtitle: `${o.employees_count} employees`,

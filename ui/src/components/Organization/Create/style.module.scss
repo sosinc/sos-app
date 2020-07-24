@@ -1,0 +1,99 @@
+@import 'src/scss/lib';
+
+.org-container {
+  color: $color-text-dim2;
+  display: flex;
+  flex-direction: column;
+  margin-top: 7em;
+}
+
+.org-form {
+  display: grid;
+  font: inherit;
+  grid-auto-rows: minmax(2em, auto);
+  grid-column-gap: 15px;
+  grid-row-gap: 2em;
+  grid-template-columns: 25% 1fr;
+  max-width: 90vw;
+  padding: 15px;
+  position: relative;
+  width: 700px;
+
+  @media(max-width: $sm) {
+    flex-direction: column;
+  }
+
+  &.has-error {
+    background: $color-error-bg;
+  }
+}
+
+.title-container {
+  @extend %title-container;
+
+  grid-column: 1/3;
+  grid-row: 1;
+}
+
+.field-container {
+  display: grid;
+  grid-row-gap: 7px;
+}
+
+.name-container {
+  grid-column: 1/3;
+  grid-row: 2;
+  position: relative;
+}
+
+.field-title {
+  color: $color-text-dim2;
+  text-align: left;
+}
+
+.org-logo {
+  width: 10em;
+}
+
+.image-container-logo {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.image-container-banner {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.input-file {
+  cursor: pointer;
+  height: 100%;
+  opacity: 0;
+  width: 100%;
+}
+
+.save-button {
+  background: $color-button-cta-bg;
+  border: 0;
+  border-radius: 4px;
+  color: $color-button-text;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 600;
+  grid-column: 1;
+  grid-row: 4;
+  height: 48px;
+  outline: none;
+  padding: 0 4em;
+  transition: all 0.2s;
+}
+
+.saving-in {
+  position: relative;
+
+  span {
+    @extend %working;
+    position: absolute;
+  }
+}
