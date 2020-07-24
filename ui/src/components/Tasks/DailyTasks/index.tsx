@@ -99,8 +99,12 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
   };
 
   const dateFromNow = () => {
-    const d = dayjs(p.date).fromNow();
-    return d.split(' ')[1] === 'hours' ? 'a day ago' : d;
+    const day = dayjs(p.date);
+    if (!day.isBefore(dayjs(), 'day')) {
+      return 'Today';
+    }
+
+    return day.fromNow();
   };
 
   return (
