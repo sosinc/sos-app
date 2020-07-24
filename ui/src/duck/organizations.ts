@@ -1,7 +1,14 @@
 import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from '@reduxjs/toolkit';
 
 import { fetchCurrentUser } from 'src/duck/auth';
-import { create, fetchMany, fetchOne, Organization, OrganizationArgs, update } from 'src/entities/Organizations';
+import {
+  create,
+  fetchMany,
+  fetchOne,
+  Organization,
+  OrganizationArgs,
+  update,
+} from 'src/entities/Organizations';
 import { RootState } from '.';
 
 const orgAdapter = createEntityAdapter<Organization>({
@@ -19,8 +26,8 @@ export const createOrganizationAction = createAsyncThunk<
 export const updateOrganizationAction = createAsyncThunk<
   Organization,
   OrganizationArgs,
-{ rejectValue: Error; state: OrganizationState }
-  >('organizations/update', update);
+  { rejectValue: Error; state: OrganizationState }
+>('organizations/update', update);
 
 export const fetchOrganizations = createAsyncThunk<
   Organization[],
@@ -30,9 +37,9 @@ export const fetchOrganizations = createAsyncThunk<
 
 export const fetchOrganization = createAsyncThunk<
   Organization,
-{id: string},
-{ rejectValue: Error; state: OrganizationState }
-  >('organizations/fetchOne', fetchOne);
+  { id: string },
+  { rejectValue: Error; state: OrganizationState }
+>('organizations/fetchOne', fetchOne);
 
 export type OrganizationState = EntityState<Organization>;
 

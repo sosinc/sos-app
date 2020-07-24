@@ -58,7 +58,7 @@ const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamPro
           </div>
           <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
             <div className={c({ 'saving-in': p.isSubmitting })}>
-              {p.isSubmitting ? 'Saving...' : 'Save'}
+              {p.isSubmitting ? 'Saving' : 'Save'}
               <span />
             </div>
           </button>

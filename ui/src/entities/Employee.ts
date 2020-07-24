@@ -80,7 +80,6 @@ export const update = async (payload: EmployeeArgs): Promise<Employee> => {
   }
 };
 
-
 export const fetchMany = async (): Promise<Employee[]> => {
   const query = `{
   employees {
@@ -104,7 +103,7 @@ export const fetchMany = async (): Promise<Employee[]> => {
     : [];
 };
 
-export const fetchOne = async (payload: {orgId: string, ecode: string}): Promise<Employee> => {
+export const fetchOne = async (payload: { orgId: string; ecode: string }): Promise<Employee> => {
   const query = `query ($orgId: uuid!, $ecode: String!){
     employees_by_pk(ecode: $ecode, organization_id: $orgId ) {
       ecode

@@ -19,9 +19,9 @@ export const fetchEmployees = createAsyncThunk<
 
 export const fetchEmployee = createAsyncThunk<
   Employee,
-{orgId: string, ecode: string},
-{ rejectValue: Error; state: EmployeeState }
-  >('employees/fetchOne', fetchOne);
+  { orgId: string; ecode: string },
+  { rejectValue: Error; state: EmployeeState }
+>('employees/fetchOne', fetchOne);
 
 export const createEmployeeAction = createAsyncThunk<
   Employee,
@@ -31,9 +31,9 @@ export const createEmployeeAction = createAsyncThunk<
 
 export const updateEmployeeAction = createAsyncThunk<
   Employee,
-EmployeeArgs,
-{ rejectValue: Error; state: EmployeeState }
-  >('employees/update', update);
+  EmployeeArgs,
+  { rejectValue: Error; state: EmployeeState }
+>('employees/update', update);
 
 export default createSlice({
   extraReducers: (builder) => {

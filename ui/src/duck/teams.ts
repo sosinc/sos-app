@@ -9,7 +9,7 @@ import {
   fetchOne,
   FetchOneTeamResponse,
   Team,
-  TeamArgsr,
+  TeamArgs,
   update,
 } from 'src/entities/Team';
 import { RootState } from '.';
@@ -24,15 +24,15 @@ export type ProjectState = EntityState<Team>;
 
 export const createTeamAction = createAsyncThunk<
   Team,
-  TeamArgsr,
+  TeamArgs,
   { rejectValue: Error; state: ProjectState }
 >('team/create', create);
 
 export const updateTeamAction = createAsyncThunk<
   Team,
- TeamArgsr,
-{ rejectValue: Error; state: ProjectState }
-  >('team/create', update);
+  TeamArgs,
+  { rejectValue: Error; state: ProjectState }
+>('team/create', update);
 
 export const createMemberAction = createAsyncThunk<
   CreateMemberResponse,

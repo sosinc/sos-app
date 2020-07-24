@@ -41,9 +41,9 @@ export const createProjectAction = createAsyncThunk<
 
 export const updateProjectAction = createAsyncThunk<
   Project,
-ProjectArgs,
-{ rejectValue: Error; state: ProjectState }
-  >('project/update', update);
+  ProjectArgs,
+  { rejectValue: Error; state: ProjectState }
+>('project/update', update);
 
 export default createSlice({
   extraReducers: async (builder) => {

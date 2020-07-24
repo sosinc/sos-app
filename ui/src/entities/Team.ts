@@ -14,7 +14,7 @@ export interface Team {
   membersCount: number;
 }
 
-export interface TeamArgsr {
+export interface TeamArgs {
   project_id: string;
   name: string;
   logo_square?: string;
@@ -38,7 +38,7 @@ export interface FetchOneTeamResponse {
   team: Team;
 }
 
-export const create = async (payload: TeamArgsr): Promise<Team> => {
+export const create = async (payload: TeamArgs): Promise<Team> => {
   const query = `
   mutation ($name: String!, $project_id: uuid!, $logo_square: String, $issue_link_template: String, $pr_link_template: String,){
     insert_teams_one(object: {
@@ -66,7 +66,7 @@ export const create = async (payload: TeamArgsr): Promise<Team> => {
   }
 };
 
-export const update = async (payload: TeamArgsr): Promise<Team> => {
+export const update = async (payload: TeamArgs): Promise<Team> => {
   const query = `
     mutation ($teamId: uuid!, $name: String!, $project_id: uuid, $logo_square: String, $issue_link_template: String, $pr_link_template: String){
       update_teams_by_pk( pk_columns: {id: $teamId }

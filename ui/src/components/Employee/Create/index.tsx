@@ -36,7 +36,7 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
         <form className={c('form')} onSubmit={p.handleSubmit}>
           <div className={c('title-container')}>
             <h2>{p.values ? p.values.name : 'Create Employee'} </h2>
-            <span className={c('sub-title')}>Manage your employee</span>
+            <span className={c('sub-title')}>Manage employee</span>
           </div>
 
           <div className={c('email-container', 'field-container')}>
@@ -82,7 +82,7 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
 
           <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
             <div className={c({ 'saving-in': p.isSubmitting })}>
-              {p.isSubmitting ? 'Saving...' : 'Save'}
+              {p.isSubmitting ? 'Saving' : 'Save'}
               <span />
             </div>
           </button>
@@ -110,7 +110,7 @@ const validationSchema = Yup.object().shape({
   headshot: Yup.string(),
   name: Yup.string()
     .min(2, 'Must be 2 characters or more')
-    .max(16, 'Must be 16 characters or less')
+    .max(100, 'Must be 100 characters or less')
     .required('Required'),
   organization_id: Yup.string().required('Required'),
 });

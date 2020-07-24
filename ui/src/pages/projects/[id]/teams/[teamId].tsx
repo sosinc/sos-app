@@ -9,7 +9,7 @@ import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
 import { employeeSelector, fetchEmployees } from 'src/duck/employees';
 import { projectSelector } from 'src/duck/projects';
-import { updateTeamAction, fetchTeam, teamSelector } from 'src/duck/teams';
+import { fetchTeam, teamSelector, updateTeamAction } from 'src/duck/teams';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';

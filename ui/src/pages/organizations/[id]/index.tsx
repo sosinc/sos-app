@@ -5,9 +5,9 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
 import CreateOrganization, { CreateOrgFormValues } from 'src/components/Organization/Create';
-import { updateOrganizationAction, orgSelector, fetchOrganization } from 'src/duck/organizations';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
+import { fetchOrganization, orgSelector, updateOrganizationAction } from 'src/duck/organizations';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 
 import style from '../style.module.scss';
@@ -65,8 +65,8 @@ const OrganizationDetails: React.FC<FormikValues> = () => {
 
   const formValues: CreateOrgFormValues = {
     banner: organization?.banner || '',
-    square_logo: organization?.square_logo || '',
     name: organization?.name || '',
+    square_logo: organization?.square_logo || '',
   };
 
   return (

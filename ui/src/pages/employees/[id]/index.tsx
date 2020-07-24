@@ -5,12 +5,12 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
 import CreateEmployee, { CreateEmployeeFormValues } from 'src/components/Employee/Create';
-import { orgSelector, fetchOrganizations } from 'src/duck/organizations';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
-import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
-import { employeeSelector, fetchEmployee, updateEmployeeAction } from 'src/duck/employees';
 import { designationSelector, fetchDesignations } from 'src/duck/designations';
+import { employeeSelector, fetchEmployee, updateEmployeeAction } from 'src/duck/employees';
+import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
+import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 
 import style from '../style.module.scss';
 
@@ -80,11 +80,11 @@ const EmployeeDetails: React.FC<FormikValues> = () => {
   };
 
   const formValues: CreateEmployeeFormValues = {
-    name: employee?.name || '',
     designation_id: employee?.designation_id || '',
     ecode: employee?.ecode || '',
     email: employee?.email || '',
     headshot: employee?.headshot || '',
+    name: employee?.name || '',
     organization_id: employee?.organization_id || '',
   };
 

@@ -97,7 +97,7 @@ export const fetchMany = async (): Promise<Organization[]> => {
   return organizations || [];
 };
 
-export const fetchOne = async (payload: {id: string}): Promise<Organization> => {
+export const fetchOne = async (payload: { id: string }): Promise<Organization> => {
   const query = `query ($id: uuid!){
     organizations_by_pk(id: $id ) {
       id
