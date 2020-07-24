@@ -1,0 +1,68 @@
+- args:
+    permission:
+      backend_only: false
+      columns:
+      - description
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - organization_id
+      - pr_link_template
+      filter:
+        organization:
+          employees:
+            user_id:
+              _eq: X-Hasura-User-Id
+      set: {}
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: create_update_permission
+- args:
+    permission:
+      backend_only: false
+      columns:
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      filter:
+        project:
+          teams:
+            members:
+              employee:
+                user_id:
+                  _eq: X-Hasura-User-Id
+      set: {}
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: create_update_permission
+- args:
+    permission:
+      allow_upsert: true
+      backend_only: false
+      check:
+        project:
+          teams:
+            members:
+              employee:
+                user_id:
+                  _eq: X-Hasura-User-Id
+      columns:
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      - project_id
+      set: {}
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: create_insert_permission
