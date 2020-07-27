@@ -3,9 +3,11 @@ import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from 
 import {
   createDailyTasks,
   DailyTask,
+  deleteDailyTask,
   fetchManyDailyTasks,
   FetchTasksResponse,
-  updateDailyTasks,
+  updateDailyTask,
+  updateDailyTaskStatus,
   UpdateTaskArgs,
 } from 'src/entities/Task';
 import { RootState } from '.';
@@ -20,9 +22,19 @@ export const createDaliyStatusAction = createAsyncThunk<undefined, DailyTask[]>(
   createDailyTasks,
 );
 
-export const updateDailyStatusActions = createAsyncThunk<{ id: string }, UpdateTaskArgs>(
+export const updateDailyTaskActions = createAsyncThunk<{ id: string }, UpdateTaskArgs>(
   'user/updateDailylTask',
-  updateDailyTasks,
+  updateDailyTask,
+);
+
+export const updateDailyTaskStatusActions = createAsyncThunk<{ id: string }, UpdateTaskArgs>(
+  'user/updateDailylTaskStatus',
+  updateDailyTaskStatus,
+);
+
+export const deleteDailyTaskAction = createAsyncThunk<{ id: string }, { id: string }>(
+  'user/deleteDailylTask',
+  deleteDailyTask,
 );
 
 export const fetchDailyTasks = createAsyncThunk<
@@ -37,11 +49,25 @@ export default createSlice({
       taskAdapter.upsertMany(state, payload.tasks);
     });
 
-    builder.addCase(updateDailyStatusActions.fulfilled, (state, { payload }) => {
+    builder.addCase(updateDailyTaskActions.fulfilled, (state, { payload }) => {
       if (!payload) {
         return;
       }
       taskAdapter.updateOne(state, { id: payload.id, changes: payload });
+    });
+
+    builder.addCase(updateDailyTaskStatusActions.fulfilled, (state, { payload }) => {
+      if (!payload) {
+        return;
+      }
+      taskAdapter.updateOne(state, { id: payload.id, changes: payload });
+    });
+
+    builder.addCase(deleteDailyTaskAction.fulfilled, (state, { payload }) => {
+      if (!payload) {
+        return;
+      }
+      taskAdapter.removeOne(state, payload.id);
     });
   },
   initialState: taskAdapter.getInitialState(),

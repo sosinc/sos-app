@@ -86,10 +86,39 @@ export const fetchManyDailyTasks = async (): Promise<FetchTasksResponse> => {
   };
 };
 
-export const updateDailyTasks = async (payload: UpdateTaskArgs): Promise<{ id: string }> => {
+export const updateDailyTaskStatus = async (payload: UpdateTaskArgs): Promise<{ id: string }> => {
   const query = `
-mutation ($isDelivered: Boolean, $id: uuid!) {
-      update_daily_tasks_by_pk( pk_columns: {id: $id } _set:{ is_delivered: $isDelivered})
+   mutation ($id: uuid!, $isDelivered: Boolean ) {
+    update_daily_tasks_by_pk( pk_columns: {id: $id }
+      _set:{
+        is_delivered: $isDelivered,
+      })
+      {
+        id
+        is_delivered
+      }
+   }`;
+
+  try {
+    const data = await client.request(query, payload);
+
+    return data.update_daily_tasks_by_pk;
+  } catch (err) {
+    throw new Error('Something went wrong :-(');
+  }
+};
+
+export const updateDailyTask = async (payload: UpdateTaskArgs): Promise<{ id: string }> => {
+  const query = `
+mutation ($id: uuid!, $isDelivered: Boolean, $estimated_hours: numeric, $description: String, $issue_id: String, $pr_id: String, $project_id: uuid, $title: String ) {
+      update_daily_tasks_by_pk( pk_columns: {id: $id }
+      _set:{
+        is_delivered: $isDelivered,
+        estimated_hours: $estimated_hours,
+        issue_id: $issue_id,
+        pr_id: $pr_id,
+        title: $title,
+      })
         {
           id
           is_delivered
@@ -100,6 +129,23 @@ mutation ($isDelivered: Boolean, $id: uuid!) {
     const data = await client.request(query, payload);
 
     return data.update_daily_tasks_by_pk;
+  } catch (err) {
+    throw new Error('Something went wrong :-(');
+  }
+};
+
+export const deleteDailyTask = async (args: { id: string }): Promise<{ id: string }> => {
+  const query = `
+    mutation ($taskId: uuid!)  {
+      delete_daily_tasks_by_pk(id: $taskId) {
+        id
+      }
+    }`;
+
+  try {
+    const data = await client.request(query, args);
+
+    return data.delete_daily_tasks_by_pk;
   } catch (err) {
     throw new Error('Something went wrong :-(');
   }

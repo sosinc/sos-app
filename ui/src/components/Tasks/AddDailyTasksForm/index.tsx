@@ -13,7 +13,7 @@ import { GoGitPullRequest, GoIssueOpened } from 'react-icons/go';
 import { MdAlarm, MdClose, MdKeyboardReturn } from 'react-icons/md';
 
 import SelectField from 'src/components/Form/SelectField';
-import { createDaliyStatusAction } from 'src/duck/tasks';
+import { createDaliyStatusAction, updateDailyTaskActions } from 'src/duck/tasks';
 import { fetchDailyTasks } from 'src/duck/tasks';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
@@ -36,6 +36,16 @@ const estimations = [
   { id: '1', name: '1 Hour' },
   { id: '2', name: '2 Hour' },
 ];
+
+interface DailyStatusFormProps {
+  onClose: () => void;
+  /**
+   * checks if form initial state is changed and if it is changed than show warnign popup
+   */
+  isDirtyRef: MutableRefObject<boolean>;
+  value?: NewStatusUpdate[];
+  taskId?: string;
+}
 
 interface DailyStatusFormValues {
   statusUpdates: NewStatusUpdate[];
@@ -130,28 +140,28 @@ const StatusField: React.FC<{
   );
 };
 
-const DailyStatusFields: React.FC<FieldArrayRenderProps & { value: NewStatusUpdate[] }> = ({
-  remove,
-  unshift,
-  value: statusUpdates,
-}) => {
-  //  const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
-
+const DailyStatusFields: React.FC<
+  FieldArrayRenderProps & { value: NewStatusUpdate[]; taskId: any }
+> = ({ remove, unshift, value: statusUpdates, taskId: taskId }) => {
   const handleSaveStatus = () => {
-    if (statusUpdates[0].title.trim()) {
-      unshift({
-        description: '',
-        estimated_hours: 0,
-        issue_id: '',
-        pr_id: '',
-        project_id: statusUpdates[0].project_id,
-        title: '',
-      });
+    if (!taskId) {
+      if (statusUpdates[0].title.trim()) {
+        unshift({
+          description: '',
+          estimated_hours: 0,
+          issue_id: '',
+          pr_id: '',
+          project_id: statusUpdates[0].project_id,
+          title: '',
+        });
+      }
     }
   };
 
   const handleDelete = (index: number) => {
-    remove(index);
+    if (!taskId) {
+      remove(index);
+    }
   };
 
   const StatusFields = statusUpdates.map((s, index) => (
@@ -167,21 +177,19 @@ const DailyStatusFields: React.FC<FieldArrayRenderProps & { value: NewStatusUpda
   return <>{StatusFields}</>;
 };
 
-interface DailyStatusFormProps {
-  onClose: () => void;
-  isDirtyRef: MutableRefObject<boolean>;
-}
-
 const InnerForm: React.FC<FormikProps<DailyStatusFormValues> & DailyStatusFormProps> = (p) => {
   p.isDirtyRef.current = p.dirty;
+
+  const innerProps = (props: any) => ({
+    ...props,
+    taskId: p.taskId,
+    value: p.values.statusUpdates,
+  });
 
   return (
     <Form>
       <Header onClose={p.onClose} onSubmit={p.submitForm} />
-      <FieldArray
-        name="statusUpdates"
-        render={(props) => DailyStatusFields({ ...props, value: p.values.statusUpdates })}
-      />
+      <FieldArray name="statusUpdates" render={(props) => DailyStatusFields(innerProps(props))} />
     </Form>
   );
 };
@@ -191,6 +199,12 @@ const AddDailyTasksForm: React.FC<DailyStatusFormProps> = (p) => {
     errorTitle: 'Failed to add statuss',
     rethrowError: true,
     successTitle: 'Status added successfully',
+  });
+
+  const [updateDailyStatus] = useAsyncThunk(updateDailyTaskActions, {
+    errorTitle: 'Failed to update task',
+    rethrowError: true,
+    successTitle: 'task updated successfully',
   });
 
   const [getNewTasks] = useAsyncThunk(fetchDailyTasks, {
@@ -203,10 +217,14 @@ const AddDailyTasksForm: React.FC<DailyStatusFormProps> = (p) => {
     throw new Error('You are not supposed to be here!');
   }
 
-  const initialStatusUpdates = initialValues.statusUpdates.map((s) => ({
+  let initialStatusUpdates = initialValues.statusUpdates.map((s) => ({
     ...s,
     project_id: projectId,
   }));
+
+  if (p.value) {
+    initialStatusUpdates = p.value;
+  }
 
   const handleSubmit = async (
     values: DailyStatusFormValues,
@@ -214,14 +232,18 @@ const AddDailyTasksForm: React.FC<DailyStatusFormProps> = (p) => {
   ) => {
     const filteredValues = values.statusUpdates.filter((v) => v.title);
     if (filteredValues.length) {
-      await createDailyStatus(filteredValues);
+      if (p.value) {
+        await updateDailyStatus({ ...values.statusUpdates[0], id: p.taskId });
+      } else {
+        await createDailyStatus(filteredValues);
+      }
       helpers.resetForm();
       getNewTasks();
       p.onClose();
     }
   };
 
-  const otherProps = { onClose: p.onClose, isDirtyRef: p.isDirtyRef };
+  const otherProps = { onClose: p.onClose, isDirtyRef: p.isDirtyRef, taskId: p.taskId };
 
   return (
     <>
