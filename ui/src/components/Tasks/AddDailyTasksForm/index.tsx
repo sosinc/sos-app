@@ -13,7 +13,7 @@ import { GoGitPullRequest, GoIssueOpened } from 'react-icons/go';
 import { MdAlarm, MdClose, MdKeyboardReturn } from 'react-icons/md';
 
 import SelectField from 'src/components/Form/SelectField';
-import { createDailyTaskAction, updateDailyTaskActions } from 'src/duck/tasks';
+import { createDailyTaskAction, updateDailyTaskAction } from 'src/duck/tasks';
 import { fetchDailyTasks } from 'src/duck/tasks';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
@@ -32,7 +32,7 @@ interface NewStatusUpdate {
 }
 
 const estimations = [
-  { id: '0.30', name: '30 Minutes' },
+  { id: '0.5', name: '30 Minutes' },
   { id: '1', name: '1 Hour' },
   { id: '2', name: '2 Hour' },
 ];
@@ -209,7 +209,7 @@ const AddDailyTasksForm: React.FC<DailyStatusFormProps> = (p) => {
     successTitle: 'Task added successfully',
   });
 
-  const [updateDailyStatus] = useAsyncThunk(updateDailyTaskActions, {
+  const [updateDailytask] = useAsyncThunk(updateDailyTaskAction, {
     errorTitle: 'Failed to update Task',
     rethrowError: true,
     successTitle: 'Task updated successfully',
@@ -225,13 +225,13 @@ const AddDailyTasksForm: React.FC<DailyStatusFormProps> = (p) => {
     throw new Error('You are not supposed to be here!');
   }
 
-  let initialStatusUpdates = initialValues.statusUpdates.map((s) => ({
+  let initialTaskUpdates = initialValues.statusUpdates.map((s) => ({
     ...s,
     project_id: projectId,
   }));
 
   if (p.value) {
-    initialStatusUpdates = p.value;
+    initialTaskUpdates = p.value;
   }
 
   const handleSubmit = async (
@@ -241,7 +241,7 @@ const AddDailyTasksForm: React.FC<DailyStatusFormProps> = (p) => {
     const filteredValues = values.statusUpdates.filter((v) => v.title);
     if (filteredValues.length) {
       if (p.value) {
-        await updateDailyStatus({ ...values.statusUpdates[0], id: p.taskId });
+        await updateDailytask({ ...values.statusUpdates[0], id: p.taskId });
       } else {
         await createDailyTask(filteredValues);
       }
@@ -256,7 +256,7 @@ const AddDailyTasksForm: React.FC<DailyStatusFormProps> = (p) => {
   return (
     <>
       <Formik
-        initialValues={{ ...initialValues, statusUpdates: initialStatusUpdates }}
+        initialValues={{ ...initialValues, statusUpdates: initialTaskUpdates }}
         onSubmit={handleSubmit}
         enableReinitialize={true}
       >

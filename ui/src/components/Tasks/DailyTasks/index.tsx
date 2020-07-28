@@ -25,8 +25,8 @@ import { projectSelector } from 'src/duck/projects';
 import {
   deleteDailyTaskAction,
   fetchDailyTasks,
+  setDailyTaskStatusAction,
   taskSelector,
-  updateDailyTaskStatusActions,
 } from 'src/duck/tasks';
 import { DailyTask } from 'src/entities/Task';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
@@ -99,7 +99,7 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
 
   // PERF: If performance becomes a concern, move this to parent
   // and accept onChangeStatus as a prop
-  const [updateDailyStatus] = useAsyncThunk(updateDailyTaskStatusActions, {
+  const [updateDailyStatus] = useAsyncThunk(setDailyTaskStatusAction, {
     errorTitle: 'Failed to update status',
     rethrowError: true,
     successTitle: 'Status updated successfully',
@@ -138,7 +138,7 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
     </div>
   );
 
-  const handleMoreOptions = (item: { id: string; name: string }) => {
+  const handleSelectMoreOptions = (item: { id: string; name: string }) => {
     if (item.id === 'edit') {
       setSlideBar(true);
       return;
@@ -146,7 +146,7 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
     setModalOpen(true);
     setModalMessage({
       subTitle: 'You want to delete this task',
-      title: 'Are you sure ?',
+      title: 'Are you sure?',
       type: 'delete',
     });
     return;
@@ -255,7 +255,7 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
                 className={c('row-status-item')}
                 name={'task-status'}
                 options={selectMoreOptions}
-                onSelect={handleMoreOptions}
+                onSelect={handleSelectMoreOptions}
                 value=""
                 isDropdownIconHidden={true}
                 Selected={() => <MdMoreHoriz className={c('row-item')} title={'More'} />}
