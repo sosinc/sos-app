@@ -1,10 +1,4 @@
 - args:
-    role: user
-    table:
-      name: daily_tasks
-      schema: public
-  type: drop_select_permission
-- args:
     permission:
       allow_aggregations: false
       columns:
