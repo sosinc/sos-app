@@ -86,7 +86,7 @@ export const fetchManyDailyTasks = async (): Promise<FetchTasksResponse> => {
   };
 };
 
-export const updateDailyTaskStatus = async (payload: UpdateTaskArgs): Promise<{ id: string }> => {
+export const setDailyTaskStatus = async (payload: UpdateTaskArgs): Promise<{ id: string }> => {
   const query = `
    mutation ($id: uuid!, $isDelivered: Boolean ) {
     update_daily_tasks_by_pk( pk_columns: {id: $id }
@@ -110,10 +110,9 @@ export const updateDailyTaskStatus = async (payload: UpdateTaskArgs): Promise<{ 
 
 export const updateDailyTask = async (payload: UpdateTaskArgs): Promise<{ id: string }> => {
   const query = `
-mutation ($id: uuid!, $isDelivered: Boolean, $estimated_hours: numeric, $description: String, $issue_id: String, $pr_id: String, $project_id: uuid, $title: String ) {
+mutation ($id: uuid!, $estimated_hours: numeric, $description: String, $issue_id: String, $pr_id: String, $project_id: uuid, $title: String ) {
       update_daily_tasks_by_pk( pk_columns: {id: $id }
       _set:{
-        is_delivered: $isDelivered,
         estimated_hours: $estimated_hours,
         issue_id: $issue_id,
         pr_id: $pr_id,

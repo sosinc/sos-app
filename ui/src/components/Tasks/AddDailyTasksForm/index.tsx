@@ -13,7 +13,7 @@ import { GoGitPullRequest, GoIssueOpened } from 'react-icons/go';
 import { MdAlarm, MdClose, MdKeyboardReturn } from 'react-icons/md';
 
 import SelectField from 'src/components/Form/SelectField';
-import { createDailyTaskAction, updateDailyTaskActions } from 'src/duck/tasks';
+import { createDailyTaskAction, updateDailyTaskAction } from 'src/duck/tasks';
 import { fetchDailyTasks } from 'src/duck/tasks';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
@@ -22,7 +22,7 @@ import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
-interface NewStatusUpdate {
+interface NewTaskUpdate {
   description: string;
   estimated_hours?: number;
   issue_id?: any;
@@ -32,27 +32,27 @@ interface NewStatusUpdate {
 }
 
 const estimations = [
-  { id: '0.30', name: '30 Minutes' },
+  { id: '0.5', name: '30 Minutes' },
   { id: '1', name: '1 Hour' },
   { id: '2', name: '2 Hour' },
 ];
 
-interface DailyStatusFormProps {
+interface DailyTaskFormProps {
   onClose: () => void;
   /**
    * checks if form initial state is changed and if it is changed than show warnign popup
    */
   isDirtyRef: MutableRefObject<boolean>;
-  value?: NewStatusUpdate[];
+  value?: NewTaskUpdate[];
   taskId?: string;
 }
 
-interface DailyStatusFormValues {
-  statusUpdates: NewStatusUpdate[];
+interface DailyTaskFormValues {
+  taskUpdates: NewTaskUpdate[];
 }
 
-const initialValues: DailyStatusFormValues = {
-  statusUpdates: [
+const initialValues: DailyTaskFormValues = {
+  taskUpdates: [
     {
       description: '',
       estimated_hours: 0,
@@ -64,8 +64,8 @@ const initialValues: DailyStatusFormValues = {
   ],
 };
 
-const StatusField: React.FC<{
-  status: NewStatusUpdate;
+const TaskField: React.FC<{
+  status: NewTaskUpdate;
   name: string;
   onSave: () => void;
   onDelete?: () => void;
@@ -140,26 +140,26 @@ const StatusField: React.FC<{
   );
 };
 
-interface DailyStatusFieldsProps extends FieldArrayRenderProps {
-  value: NewStatusUpdate[];
+interface DailyTaskFieldsProps extends FieldArrayRenderProps {
+  value: NewTaskUpdate[];
   taskId?: string;
 }
 
-const DailyStatusFields: React.FC<DailyStatusFieldsProps> = ({
+const DailyTaskFields: React.FC<DailyTaskFieldsProps> = ({
   remove,
   unshift,
-  value: statusUpdates,
+  value: taskUpdates,
   taskId: taskId,
 }) => {
   const handleSaveStatus = () => {
     if (!taskId) {
-      if (statusUpdates[0].title.trim()) {
+      if (taskUpdates[0].title.trim()) {
         unshift({
           description: '',
           estimated_hours: 0,
           issue_id: '',
           pr_id: '',
-          project_id: statusUpdates[0].project_id,
+          project_id: taskUpdates[0].project_id,
           title: '',
         });
       }
@@ -172,10 +172,10 @@ const DailyStatusFields: React.FC<DailyStatusFieldsProps> = ({
     }
   };
 
-  const StatusFields = statusUpdates.map((s, index) => (
-    <StatusField
+  const StatusFields = taskUpdates.map((s, index) => (
+    <TaskField
       key={index}
-      name={`statusUpdates.${index}`}
+      name={`taskUpdates.${index}`}
       onDelete={index ? () => handleDelete(index) : undefined}
       onSave={handleSaveStatus}
       status={s}
@@ -185,31 +185,31 @@ const DailyStatusFields: React.FC<DailyStatusFieldsProps> = ({
   return <>{StatusFields}</>;
 };
 
-const InnerForm: React.FC<FormikProps<DailyStatusFormValues> & DailyStatusFormProps> = (p) => {
+const InnerForm: React.FC<FormikProps<DailyTaskFormValues> & DailyTaskFormProps> = (p) => {
   p.isDirtyRef.current = p.dirty;
 
-  const dsfProps = (props: FieldArrayRenderProps): DailyStatusFieldsProps => ({
+  const dsfProps = (props: FieldArrayRenderProps): DailyTaskFieldsProps => ({
     ...props,
     taskId: p.taskId,
-    value: p.values.statusUpdates,
+    value: p.values.taskUpdates,
   });
 
   return (
     <Form>
       <Header onClose={p.onClose} onSubmit={p.submitForm} />
-      <FieldArray name="statusUpdates" render={(props) => DailyStatusFields(dsfProps(props))} />
+      <FieldArray name="taskUpdates" render={(props) => DailyTaskFields(dsfProps(props))} />
     </Form>
   );
 };
 
-const AddDailyTasksForm: React.FC<DailyStatusFormProps> = (p) => {
+const AddDailyTasksForm: React.FC<DailyTaskFormProps> = (p) => {
   const [createDailyTask] = useAsyncThunk(createDailyTaskAction, {
     errorTitle: 'Failed to add Task',
     rethrowError: true,
     successTitle: 'Task added successfully',
   });
 
-  const [updateDailyStatus] = useAsyncThunk(updateDailyTaskActions, {
+  const [updateDailyTask] = useAsyncThunk(updateDailyTaskAction, {
     errorTitle: 'Failed to update Task',
     rethrowError: true,
     successTitle: 'Task updated successfully',
@@ -225,23 +225,23 @@ const AddDailyTasksForm: React.FC<DailyStatusFormProps> = (p) => {
     throw new Error('You are not supposed to be here!');
   }
 
-  let initialStatusUpdates = initialValues.statusUpdates.map((s) => ({
+  let initialTaskUpdates = initialValues.taskUpdates.map((s) => ({
     ...s,
     project_id: projectId,
   }));
 
   if (p.value) {
-    initialStatusUpdates = p.value;
+    initialTaskUpdates = p.value;
   }
 
   const handleSubmit = async (
-    values: DailyStatusFormValues,
-    helpers: FormikHelpers<DailyStatusFormValues>,
+    values: DailyTaskFormValues,
+    helpers: FormikHelpers<DailyTaskFormValues>,
   ) => {
-    const filteredValues = values.statusUpdates.filter((v) => v.title);
+    const filteredValues = values.taskUpdates.filter((v) => v.title);
     if (filteredValues.length) {
       if (p.value) {
-        await updateDailyStatus({ ...values.statusUpdates[0], id: p.taskId });
+        await updateDailyTask({ ...values.taskUpdates[0], id: p.taskId });
       } else {
         await createDailyTask(filteredValues);
       }
@@ -256,7 +256,7 @@ const AddDailyTasksForm: React.FC<DailyStatusFormProps> = (p) => {
   return (
     <>
       <Formik
-        initialValues={{ ...initialValues, statusUpdates: initialStatusUpdates }}
+        initialValues={{ ...initialValues, taskUpdates: initialTaskUpdates }}
         onSubmit={handleSubmit}
         enableReinitialize={true}
       >
