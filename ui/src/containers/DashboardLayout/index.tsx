@@ -65,7 +65,7 @@ const team = (t: Team) => {
 };
 
 const UserProject: React.FC<Project> = ({ ...item }) => {
-  const [isMenuOpen, setMenu] = useState<boolean>(false);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const allTeams = useSelector(teamSelector.selectAll);
   const teams = allTeams.filter((t) => t.project_id === item.id);
   const menuIcons = isMenuOpen ? (
@@ -83,7 +83,7 @@ const UserProject: React.FC<Project> = ({ ...item }) => {
           </div>
           <span className={c('row-text')}>{item.name}</span>
         </div>
-        <div className={c('row-menu-container')} onClick={() => setMenu(!isMenuOpen)}>
+        <div className={c('row-menu-container')} onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {menuIcons}
         </div>
       </div>
