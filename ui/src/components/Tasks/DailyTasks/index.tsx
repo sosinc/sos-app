@@ -84,7 +84,14 @@ const SelectedValue: React.FC<{ item?: SelectFieldItem }> = (p) => {
 
 const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetching, ...p }) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [modalMessage, setModalMessage] = useState({ title: '', subTitle: '' });
+  const [modalMessage, setModalMessage] = useState({
+    subTitle: '',
+    title: '',
+    type: '',
+  });
+  const [isSlideBarOpen, setSlideBar] = useState<boolean>(false);
+  const [isDirtyPopupOpen, setIsDirtyPopupOpen] = useState<boolean>(false);
+  const isDirtyRef = useRef<boolean>(false);
 
   const project = useSelector((state: RootState) =>
     projectSelector.selectById(state, p.project_id),
@@ -95,13 +102,13 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
   const [updateDailyStatus] = useAsyncThunk(updateDailyTaskStatusActions, {
     errorTitle: 'Failed to update status',
     rethrowError: true,
-    successTitle: 'status updated successfully',
+    successTitle: 'Status updated successfully',
   });
 
   const [deleteDailyTask] = useAsyncThunk(deleteDailyTaskAction, {
-    errorTitle: 'Failed to delete stuss',
+    errorTitle: 'Failed to delete task',
     rethrowError: true,
-    successTitle: 'task deleted successfully',
+    successTitle: 'Task deleted successfully',
   });
 
   const handleTemplateLink = (id: string, type: string) => {
@@ -112,6 +119,7 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
       setModalMessage({
         subTitle: 'Please configure Issue/PR URL template in project settings',
         title: 'Warning',
+        type: 'templeteUrl',
       });
       return;
     }
@@ -130,33 +138,6 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
     </div>
   );
 
-  const goToProjectSettings = () => {
-    Router.push(`/projects/${p.project_id}`);
-    setModalOpen(false);
-  };
-
-  const handleOnAccept = () => {
-    if (modalMessage.title === 'Warning') {
-      goToProjectSettings();
-      return;
-    }
-    deleteDailyTask({ taskId: p.id });
-    setModalOpen(false);
-  };
-
-  const dateFromNow = () => {
-    const day = dayjs(p.date);
-    if (!day.isBefore(dayjs(), 'day')) {
-      return 'Today';
-    }
-
-    return day.fromNow();
-  };
-
-  const [isSlideBarOpen, setSlideBar] = useState<boolean>(false);
-  const [isDirtyPopupOpen, setIsDirtyPopupOpen] = useState<boolean>(false);
-  const isDirtyRef = useRef<boolean>(false);
-
   const handleMoreOptions = (item: { id: string; name: string }) => {
     if (item.id === 'edit') {
       setSlideBar(true);
@@ -166,6 +147,7 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
     setModalMessage({
       subTitle: 'You want to delete this task',
       title: 'Are you sure ?',
+      type: 'delete',
     });
     return;
   };
@@ -179,6 +161,30 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
     setSlideBar(false);
     setIsDirtyPopupOpen(false);
   };
+
+  const handlePopupAccept = () => {
+    if (modalMessage.type === 'templeteUrl') {
+      goToProjectSettings();
+      return;
+    }
+    deleteDailyTask({ taskId: p.id });
+    setModalOpen(false);
+  };
+
+  const goToProjectSettings = () => {
+    Router.push(`/projects/${p.project_id}`);
+    setModalOpen(false);
+  };
+
+  const dateFromNow = () => {
+    const day = dayjs(p.date);
+    if (!day.isBefore(dayjs(), 'day')) {
+      return 'Today';
+    }
+
+    return day.fromNow();
+  };
+
   const editValue = {
     description: p.description || '',
     estimated_hours: p.estimated_hours || 0,
@@ -191,9 +197,9 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
   return (
     <>
       <WarningModal
-        onAccept={handleOnAccept}
+        onAccept={handlePopupAccept}
         onCancel={() => setModalOpen(false)}
-        acceptButtonText={modalMessage.title === 'warning' ? 'Setting' : 'Ok'}
+        acceptButtonText={modalMessage.type === 'templeteUrl' ? 'Setting' : 'Ok'}
         closeButtonText="Close"
         isOpen={isModalOpen}
         title={modalMessage.title}

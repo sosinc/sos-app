@@ -13,7 +13,7 @@ import { GoGitPullRequest, GoIssueOpened } from 'react-icons/go';
 import { MdAlarm, MdClose, MdKeyboardReturn } from 'react-icons/md';
 
 import SelectField from 'src/components/Form/SelectField';
-import { createDaliyStatusAction, updateDailyTaskActions } from 'src/duck/tasks';
+import { createDaliyTaskAction, updateDailyTaskActions } from 'src/duck/tasks';
 import { fetchDailyTasks } from 'src/duck/tasks';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
@@ -141,7 +141,7 @@ const StatusField: React.FC<{
 };
 
 const DailyStatusFields: React.FC<
-  FieldArrayRenderProps & { value: NewStatusUpdate[]; taskId: any }
+  FieldArrayRenderProps & { value: NewStatusUpdate[]; taskId: string }
 > = ({ remove, unshift, value: statusUpdates, taskId: taskId }) => {
   const handleSaveStatus = () => {
     if (!taskId) {
@@ -180,7 +180,7 @@ const DailyStatusFields: React.FC<
 const InnerForm: React.FC<FormikProps<DailyStatusFormValues> & DailyStatusFormProps> = (p) => {
   p.isDirtyRef.current = p.dirty;
 
-  const innerProps = (props: any) => ({
+  const dsfProps = (props: any) => ({
     ...props,
     taskId: p.taskId,
     value: p.values.statusUpdates,
@@ -189,22 +189,22 @@ const InnerForm: React.FC<FormikProps<DailyStatusFormValues> & DailyStatusFormPr
   return (
     <Form>
       <Header onClose={p.onClose} onSubmit={p.submitForm} />
-      <FieldArray name="statusUpdates" render={(props) => DailyStatusFields(innerProps(props))} />
+      <FieldArray name="statusUpdates" render={(props) => DailyStatusFields(dsfProps(props))} />
     </Form>
   );
 };
 
 const AddDailyTasksForm: React.FC<DailyStatusFormProps> = (p) => {
-  const [createDailyStatus] = useAsyncThunk(createDaliyStatusAction, {
-    errorTitle: 'Failed to add statuss',
+  const [createDailyTask] = useAsyncThunk(createDaliyTaskAction, {
+    errorTitle: 'Failed to add Task',
     rethrowError: true,
-    successTitle: 'Status added successfully',
+    successTitle: 'Task added successfully',
   });
 
   const [updateDailyStatus] = useAsyncThunk(updateDailyTaskActions, {
-    errorTitle: 'Failed to update task',
+    errorTitle: 'Failed to update Task',
     rethrowError: true,
-    successTitle: 'task updated successfully',
+    successTitle: 'Task updated successfully',
   });
 
   const [getNewTasks] = useAsyncThunk(fetchDailyTasks, {
@@ -235,7 +235,7 @@ const AddDailyTasksForm: React.FC<DailyStatusFormProps> = (p) => {
       if (p.value) {
         await updateDailyStatus({ ...values.statusUpdates[0], id: p.taskId });
       } else {
-        await createDailyStatus(filteredValues);
+        await createDailyTask(filteredValues);
       }
       helpers.resetForm();
       getNewTasks();
