@@ -3,6 +3,7 @@ import resolveStorageFile from 'src/utils/resolveStorageFile';
 import { Employee } from '../Employee';
 import { Organization } from '../Organizations';
 import { Project } from '../Project';
+import { Team } from '../Team';
 
 export interface Role {
   id: string;
@@ -54,6 +55,7 @@ export interface CurrentUserResponse {
   employees: Employee[];
   organizations: Organization[];
   projects: Project[];
+  teams: Team[];
 }
 
 /**
@@ -84,6 +86,14 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
             organization_id
             issue_link_template
             pr_link_template
+            teams {
+                id
+                logo_square
+                name
+                issue_link_template
+                pr_link_template
+                project_id
+            }
             teams_aggregate {
               aggregate {
                 count
@@ -125,10 +135,20 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
     })),
   );
 
+  const teams = me.as_employee.flatMap((employee: any) =>
+    employee.organization.projects.flatMap((project: any) =>
+      project.teams.map((t: any) => ({
+        ...t,
+        logo_square: resolveStorageFile(t.logo_square),
+      })),
+    ),
+  );
+
   return {
     employees,
     organizations,
     projects,
+    teams,
     user: {
       avatar: resolveStorageFile(me.avatar),
       email: me.email,
