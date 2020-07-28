@@ -70,6 +70,7 @@ export const update = async (payload: ProjectArgs): Promise<Project> => {
             description: $description,
             issue_link_template: $issue_link_template,
             pr_link_template: $pr_link_template,
+            organization_id: $organization_id
           })
         {
           id

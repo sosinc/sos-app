@@ -1,5 +1,6 @@
 import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from '@reduxjs/toolkit';
 
+import { fetchCurrentUser } from 'src/duck/auth';
 import {
   create,
   createMember,
@@ -15,10 +16,10 @@ import {
 import { RootState } from '.';
 import { fetchProject } from './projects';
 
-const TeamAdapter = createEntityAdapter<Team>({
+const teamAdapter = createEntityAdapter<Team>({
   sortComparer: (a, b) => a.name.localeCompare(b.name),
 });
-export const teamSelector = TeamAdapter.getSelectors<RootState>((state) => state.teams);
+export const teamSelector = teamAdapter.getSelectors<RootState>((state) => state.teams);
 
 export type ProjectState = EntityState<Team>;
 
@@ -55,11 +56,11 @@ export const fetchTeam = createAsyncThunk<
 export default createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchProject.fulfilled, (state, { payload }) => {
-      TeamAdapter.upsertMany(state, payload.teams);
+      teamAdapter.upsertMany(state, payload.teams);
     });
 
     builder.addCase(fetchTeam.fulfilled, (state, { payload }) => {
-      TeamAdapter.upsertOne(state, payload.team);
+      teamAdapter.upsertOne(state, payload.team);
     });
 
     builder.addCase(createMemberAction.fulfilled, (state, { payload }) => {
@@ -75,8 +76,12 @@ export default createSlice({
 
       team.memberIds = team.memberIds.filter((e) => e !== payload.employeeId);
     });
+
+    builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
+      teamAdapter.upsertMany(state, payload.teams);
+    });
   },
-  initialState: TeamAdapter.getInitialState(),
+  initialState: teamAdapter.getInitialState(),
   name: 'teams',
   reducers: {},
 });

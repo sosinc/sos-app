@@ -2,11 +2,21 @@ import classNames from 'classnames/bind';
 import Head from 'next/head';
 import Link from 'next/link';
 import { FaUsers } from 'react-icons/fa';
-import { MdBusiness, MdFolder, MdMoreHoriz } from 'react-icons/md';
+import {
+  MdBusiness,
+  MdFolder,
+  MdKeyboardArrowDown,
+  MdKeyboardArrowRight,
+  MdMoreHoriz,
+} from 'react-icons/md';
+import { useSelector } from 'react-redux';
 
+import { useState } from 'react';
 import FallbackIcon from 'src/containers/FallbackIcon';
 import WithUser from 'src/containers/WithUser';
+import { teamSelector } from 'src/duck/teams';
 import { Project } from 'src/entities/Project';
+import { Team } from 'src/entities/Team';
 import { currentUser } from 'src/entities/User/selectors';
 import style from './style.module.scss';
 
@@ -43,16 +53,43 @@ const adminSection = (
   </>
 );
 
-const project = (item: Project) => {
+const team = (t: Team) => {
   return (
-    <Link href={`/projects/${item.id}`} key={item.id}>
-      <div className={c('row')}>
-        <div className={c('fallback-icon')}>
-          <FallbackIcon logo={item.logo_square} name={item.name} />
-        </div>
-        <span className={c('row-text')}>{item.name}</span>
+    <div className={c('team-row')} key={t.id}>
+      <div className={c('team-fallback-icon')}>
+        <FallbackIcon logo={t.logo_square} name={t.name} />
       </div>
-    </Link>
+      <span className={c('team-row-text')}>{t.name}</span>
+    </div>
+  );
+};
+
+const UserProject: React.FC<Project> = ({ ...item }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const allTeams = useSelector(teamSelector.selectAll);
+  const teams = allTeams.filter((t) => t.project_id === item.id);
+  const menuIcons = isMenuOpen ? (
+    <MdKeyboardArrowDown className={c('row-menu-icon')} />
+  ) : (
+    <MdKeyboardArrowRight className={c('row-menu-icon')} />
+  );
+
+  return (
+    <>
+      <div className={c('project-row')} key={item.id}>
+        <div className={c('project-container')}>
+          <div className={c('fallback-icon')}>
+            <FallbackIcon logo={item.logo_square} name={item.name} />
+          </div>
+          <span className={c('row-text')}>{item.name}</span>
+        </div>
+        <div className={c('row-menu-container')} onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          {menuIcons}
+        </div>
+      </div>
+
+      {isMenuOpen && teams.map(team)}
+    </>
   );
 };
 
@@ -62,14 +99,18 @@ const Index: React.FC<LayoutProps> = (p) => {
   const projects = user.projects ? user.projects : [];
   const organization = user.organization;
 
-  const userSection = (
-    <>
-      <Link href="/projects">
-        <div className={c('header-row')}> Projects</div>
-      </Link>
-      {projects.map(project)}
-    </>
-  );
+  const userSection = () => {
+    const userProjects = projects.map((i) => <UserProject key={i.id} {...i} />);
+
+    return (
+      <>
+        <Link href="/projects">
+          <div className={c('header-row')}> Projects</div>
+        </Link>
+        {userProjects}
+      </>
+    );
+  };
 
   return (
     <WithUser inverted={false} redirectPath={'/'}>
@@ -99,7 +140,7 @@ const Index: React.FC<LayoutProps> = (p) => {
             <MdMoreHoriz title="more" className={c('dot-menu-icon')} />
           </div>
 
-          <div className={c('section')}>{role !== 'USER' ? adminSection : userSection}</div>
+          <div className={c('section')}>{role !== 'USER' ? adminSection : userSection()}</div>
 
           <div className={c('footer')}>
             <span className={c('feedback-icon')} />

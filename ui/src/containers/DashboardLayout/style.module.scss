@@ -139,9 +139,68 @@
       color: $color-text-bright1;
     }
   }
-
 }
 
+// ----project----
+.project-row {
+  @extend %row;
+  justify-content: space-between;
+}
+
+.project-container {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.row-menu-container {
+  $size: 1.6em;
+
+  align-items: center;
+  border: 0;
+  border-radius: 50%;
+  display: flex;
+  height: $size;
+  justify-content: center;
+  width: $size;
+
+  &:hover {
+    background: $color-select-active;
+    border: 0;
+    border-radius: 3px;
+  }
+}
+
+.row-menu-icon {
+  height: 1.5em;
+  width: 1.5em;
+}
+
+// team component
+
+.team-row {
+  @extend %row;
+  margin-left: 2em;
+}
+
+.team-fallback-icon {
+  $size: 17px;
+  background: $color-text-dim3;
+  border-radius: 50%;
+  color: $color-input-text;
+  font-size: 9px;
+  height: $size;
+  width: $size;
+}
+
+.team-row-text {
+  color: $color-text-primary;
+  font-size: 0.9em;
+  margin-left: 7px;
+  margin-right: 7px;
+}
+
+//------------------
 .content {
   align-items: center;
   display: flex;
@@ -149,11 +208,11 @@
   text-align: center;
   width: 100%;
 
-  @media(max-width: $md) {
+  @media (max-width: $md) {
     margin-top: 100px;
   }
 
-  @media(max-width: $sm) {
+  @media (max-width: $sm) {
     margin-top: 60px;
   }
 }
