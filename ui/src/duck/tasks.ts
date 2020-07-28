@@ -17,7 +17,7 @@ export const taskSelector = taskAdapter.getSelectors<RootState>((state) => state
 
 export type TasksState = EntityState<DailyTask>;
 
-export const createDaliyTaskAction = createAsyncThunk<undefined, DailyTask[]>(
+export const createDailyTaskAction = createAsyncThunk<undefined, DailyTask[]>(
   'user/addDaliyTasks',
   createDailyTasks,
 );

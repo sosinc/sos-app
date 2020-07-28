@@ -13,7 +13,7 @@ import { GoGitPullRequest, GoIssueOpened } from 'react-icons/go';
 import { MdAlarm, MdClose, MdKeyboardReturn } from 'react-icons/md';
 
 import SelectField from 'src/components/Form/SelectField';
-import { createDaliyTaskAction, updateDailyTaskActions } from 'src/duck/tasks';
+import { createDailyTaskAction, updateDailyTaskActions } from 'src/duck/tasks';
 import { fetchDailyTasks } from 'src/duck/tasks';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
@@ -140,9 +140,17 @@ const StatusField: React.FC<{
   );
 };
 
-const DailyStatusFields: React.FC<
-  FieldArrayRenderProps & { value: NewStatusUpdate[]; taskId: string }
-> = ({ remove, unshift, value: statusUpdates, taskId: taskId }) => {
+interface DailyStatusFieldsProps extends FieldArrayRenderProps {
+  value: NewStatusUpdate[];
+  taskId?: string;
+}
+
+const DailyStatusFields: React.FC<DailyStatusFieldsProps> = ({
+  remove,
+  unshift,
+  value: statusUpdates,
+  taskId: taskId,
+}) => {
   const handleSaveStatus = () => {
     if (!taskId) {
       if (statusUpdates[0].title.trim()) {
@@ -180,7 +188,7 @@ const DailyStatusFields: React.FC<
 const InnerForm: React.FC<FormikProps<DailyStatusFormValues> & DailyStatusFormProps> = (p) => {
   p.isDirtyRef.current = p.dirty;
 
-  const dsfProps = (props: any) => ({
+  const dsfProps = (props: FieldArrayRenderProps): DailyStatusFieldsProps => ({
     ...props,
     taskId: p.taskId,
     value: p.values.statusUpdates,
@@ -195,7 +203,7 @@ const InnerForm: React.FC<FormikProps<DailyStatusFormValues> & DailyStatusFormPr
 };
 
 const AddDailyTasksForm: React.FC<DailyStatusFormProps> = (p) => {
-  const [createDailyTask] = useAsyncThunk(createDaliyTaskAction, {
+  const [createDailyTask] = useAsyncThunk(createDailyTaskAction, {
     errorTitle: 'Failed to add Task',
     rethrowError: true,
     successTitle: 'Task added successfully',
