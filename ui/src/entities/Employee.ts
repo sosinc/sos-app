@@ -53,8 +53,8 @@ export const create = async (payload: EmployeeArgs): Promise<Employee> => {
 
 export const update = async (payload: EmployeeArgs): Promise<Employee> => {
   const query = `
-    mutation ($ecode: String!, $email: String, $name: String!, $headshot: String, $designation_id: designations_enum!, $organization_id: uuid!)
-     {update_employees_by_pk ( pk_columns: {ecode: $ecode, organization_id: $organization_id}
+    mutation ($currentEcode: String!, $currentOrgId: uuid! $ecode: String, $email: String, $name: String, $headshot: String, $designation_id: designations_enum, $organization_id: uuid)
+     {update_employees_by_pk ( pk_columns: {ecode: $currentEcode, organization_id: $currentOrgId}
       _set:{
         ecode: $ecode,
         email: $email,
