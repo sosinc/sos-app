@@ -160,6 +160,7 @@ organization_id
       project.teams.map((t: any) => ({
         ...t,
         logo_square: resolveStorageFile(t.logo_square),
+        memberIds: [],
       })),
     ),
   );

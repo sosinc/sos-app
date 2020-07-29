@@ -60,9 +60,9 @@ const adminSection = (
 const team = (t: Team) => {
   const currentRoute = Router.pathname;
   const name =
-    currentRoute === '/profile' ? (
+    currentRoute !== '/dashboard' ? (
       <Link href={`/projects/${t.project_id}/teams/${t.id}`}>
-        <a className={c('team-row-text')}>{t.name}</a>
+        <a className={c('linked-team-row-text')}>{t.name}</a>
       </Link>
     ) : (
       <span className={c('team-row-text')}>{t.name}</span>
@@ -90,9 +90,9 @@ const UserProject: React.FC<Project> = ({ ...item }) => {
   );
 
   const name =
-    currentRoute === '/profile' ? (
+    currentRoute !== '/dashboard' ? (
       <Link href={`/projects/${item.id}`}>
-        <a className={c('row-text')}>{item.name}</a>
+        <a className={c('linked-row-text')}>{item.name}</a>
       </Link>
     ) : (
       <span className={c('row-text')}>{item.name}</span>
@@ -155,7 +155,7 @@ const Index: React.FC<LayoutProps> = (p) => {
         <div className={c('context-box')}>
           <div className={c('context-container')}>
             <Link href={'/profile'}>
-              <a className={c('context-item')}>settings</a>
+              <a className={c('context-item')}>Settings</a>
             </Link>
             <Link href={'/profile'}>
               <a className={c('context-item')}>Profile</a>

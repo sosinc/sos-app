@@ -5,8 +5,8 @@
 
 .pointer {
   border-bottom: 1em solid $color-bg-secondary;
-  border-left: 1em solid transparent;
-  border-right: 1em solid transparent;
+  border-left: 0.8em solid transparent;
+  border-right: 0.8em solid transparent;
   left: 10em;
   margin-bottom: 1px;
   position: absolute;
@@ -39,7 +39,7 @@
   color: $color-text-primary;
   cursor: pointer;
   display: flex;
-  font-size: 0.8em;
+  font-size: 0.9em;
   height: 2.5em;
   padding: 20px;
 
@@ -165,10 +165,14 @@
     height: 23px;
   }
 
-  .row-text {
+  %row-text {
     color: $color-text-primary;
     margin-left: 7px;
     margin-right: 7px;
+  }
+
+  .row-text {
+    @extend %row-text;
   }
 
   .footer {
@@ -209,6 +213,14 @@
   align-items: center;
   display: flex;
   justify-content: center;
+}
+
+.linked-row-text {
+  @extend %row-text;
+
+  &:hover {
+    color: $color-text-dim2;
+  }
 }
 
 .row-menu-container {
@@ -252,10 +264,19 @@
 }
 
 .team-row-text {
-  color: $color-text-primary;
+  @extend %row-text;
+
   font-size: 0.9em;
-  margin-left: 7px;
-  margin-right: 7px;
+}
+
+.linked-team-row-text {
+  @extend %row-text;
+  font-size: 0.9em;
+
+  &:hover {
+    color: $color-text-dim2;
+  }
+
 }
 
 //------------------
