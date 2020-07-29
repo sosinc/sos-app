@@ -50,6 +50,20 @@ export const login = async (payload: LoginPayload): Promise<User> => {
   }
 };
 
+export const logout = async (): Promise<undefined> => {
+  const query = `
+    mutation {
+      logout
+    }`;
+
+  try {
+    const data = await client.request(query);
+    return data;
+  } catch (err) {
+    throw new Error('Something went wrong :-(');
+  }
+};
+
 export interface CurrentUserResponse {
   user: User;
   employees: Employee[];
@@ -93,6 +107,10 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
                 issue_link_template
                 pr_link_template
                 project_id
+                members{
+                  ecode
+                  organization_id
+                }
             }
             teams_aggregate {
               aggregate {
@@ -140,6 +158,7 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
       project.teams.map((t: any) => ({
         ...t,
         logo_square: resolveStorageFile(t.logo_square),
+        memberIds: [],
       })),
     ),
   );

@@ -1,6 +1,8 @@
 import classNames from 'classnames/bind';
 import Head from 'next/head';
 import Link from 'next/link';
+import Router from 'next/router';
+import { useState } from 'react';
 import { FaUsers } from 'react-icons/fa';
 import {
   MdBusiness,
@@ -11,13 +13,15 @@ import {
 } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
-import { useState } from 'react';
+import ContextMenu from 'src/components/Modal/ContextMenu';
 import FallbackIcon from 'src/containers/FallbackIcon';
 import WithUser from 'src/containers/WithUser';
+import { logoutUserAction } from 'src/duck/auth';
 import { teamSelector } from 'src/duck/teams';
 import { Project } from 'src/entities/Project';
 import { Team } from 'src/entities/Team';
 import { currentUser } from 'src/entities/User/selectors';
+import { useAsyncThunk } from 'src/lib/asyncHooks';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -54,37 +58,57 @@ const adminSection = (
 );
 
 const team = (t: Team) => {
+  const currentRoute = Router.pathname;
+  const name =
+    currentRoute !== '/dashboard' ? (
+      <Link href={`/projects/${t.project_id}/teams/${t.id}`}>
+        <a className={c('linked-team-row-text')}>{t.name}</a>
+      </Link>
+    ) : (
+      <span className={c('team-row-text')}>{t.name}</span>
+    );
+
   return (
     <div className={c('team-row')} key={t.id}>
       <div className={c('team-fallback-icon')}>
         <FallbackIcon logo={t.logo_square} name={t.name} />
       </div>
-      <span className={c('team-row-text')}>{t.name}</span>
+      {name}
     </div>
   );
 };
 
 const UserProject: React.FC<Project> = ({ ...item }) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const currentRoute = Router.pathname;
   const allTeams = useSelector(teamSelector.selectAll);
   const teams = allTeams.filter((t) => t.project_id === item.id);
-  const menuIcons = isMenuOpen ? (
+  const menuIcon = isMenuOpen ? (
     <MdKeyboardArrowDown className={c('row-menu-icon')} />
   ) : (
     <MdKeyboardArrowRight className={c('row-menu-icon')} />
   );
 
+  const name =
+    currentRoute !== '/dashboard' ? (
+      <Link href={`/projects/${item.id}`}>
+        <a className={c('linked-row-text')}>{item.name}</a>
+      </Link>
+    ) : (
+      <span className={c('row-text')}>{item.name}</span>
+    );
+
   return (
     <>
-      <div className={c('project-row')} key={item.id}>
+      <div className={c('project-row')}>
         <div className={c('project-container')}>
           <div className={c('fallback-icon')}>
             <FallbackIcon logo={item.logo_square} name={item.name} />
           </div>
-          <span className={c('row-text')}>{item.name}</span>
+          {name}
         </div>
         <div className={c('row-menu-container')} onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          {menuIcons}
+          {menuIcon}
         </div>
       </div>
 
@@ -94,10 +118,17 @@ const UserProject: React.FC<Project> = ({ ...item }) => {
 };
 
 const Index: React.FC<LayoutProps> = (p) => {
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
   const user = currentUser();
   const role = user.role?.id;
   const projects = user.projects ? user.projects : [];
   const organization = user.organization;
+
+  const [logout] = useAsyncThunk(logoutUserAction, {
+    errorTitle: 'Logout Failed',
+    rethrowError: true,
+    successTitle: 'Logout successfully',
+  });
 
   const userSection = () => {
     const userProjects = projects.map((i) => <UserProject key={i.id} {...i} />);
@@ -112,12 +143,43 @@ const Index: React.FC<LayoutProps> = (p) => {
     );
   };
 
+  const handleLogout = async () => {
+    await logout();
+    Router.replace(`/`);
+  };
+
+  const UserContext = () => {
+    return (
+      <>
+        <div className={c('pointer')} />
+        <div className={c('context-box')}>
+          <div className={c('context-container')}>
+            <Link href={'/profile'}>
+              <a className={c('context-item')}>Settings</a>
+            </Link>
+            <Link href={'/profile'}>
+              <a className={c('context-item')}>Profile</a>
+            </Link>
+            <span className={c('separator')} />
+            <span className={c('context-item')} onClick={handleLogout}>
+              Logout
+            </span>
+          </div>
+        </div>
+      </>
+    );
+  };
+
   return (
     <WithUser inverted={false} redirectPath={'/'}>
       <Head>
         <link rel="shortcut icon" href="/assets/images/sos-logo.svg" />
         <title>{p.title}</title>
       </Head>
+
+      <ContextMenu isOpen={isUserMenuOpen} onClose={() => setIsUserMenuOpen(false)}>
+        <UserContext />
+      </ContextMenu>
 
       <div className={c('container')}>
         <div className={c('sidebar')}>
@@ -127,7 +189,8 @@ const Index: React.FC<LayoutProps> = (p) => {
                 <FallbackIcon logo={organization?.square_logo} name={organization?.name} />
               </div>
             </Link>
-            <div className={c('avatar-container')}>
+
+            <div className={c('avatar-container')} onClick={() => setIsUserMenuOpen(true)}>
               <img
                 className={c('pic')}
                 src="/assets/images/avatar.svg"
