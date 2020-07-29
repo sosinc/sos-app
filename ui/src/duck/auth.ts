@@ -5,6 +5,7 @@ import {
   fetchCurrentUser as apiFetchCurrentUser,
   login,
   LoginPayload,
+  logout,
   resetPassword as apiResetPassword,
   ResetPasswordPayload,
   sendPasswordResetOTP as apiResetPasswordOTP,
@@ -26,6 +27,12 @@ export const loginUserAction = createAsyncThunk<
 >('auth/login', (payload) => {
   return login(payload);
 });
+
+export const logoutUserAction = createAsyncThunk<
+  undefined,
+  undefined,
+{ rejectValue: Error; state: AuthState }
+  >('auth/logout', logout);
 
 export const fetchCurrentUser = createAsyncThunk<
   CurrentUserResponse,
@@ -62,6 +69,10 @@ export default createSlice({
     builder.addCase(loginUserAction.fulfilled, (state, { payload }) => {
       state.isLoggingIn = false;
       state.user = payload;
+    });
+
+    builder.addCase(logoutUserAction.fulfilled, () => {
+      return initialState;
     });
 
     builder.addCase(fetchCurrentUser.pending, (state) => {

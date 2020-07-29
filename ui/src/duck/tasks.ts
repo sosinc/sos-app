@@ -11,6 +11,7 @@ import {
   UpdateTaskArgs,
 } from 'src/entities/Task';
 import { RootState } from '.';
+import { logoutUserAction } from './auth';
 
 const taskAdapter = createEntityAdapter<DailyTask>();
 export const taskSelector = taskAdapter.getSelectors<RootState>((state) => state.tasks);
@@ -68,6 +69,10 @@ export default createSlice({
         return;
       }
       taskAdapter.removeOne(state, payload.id);
+    });
+
+    builder.addCase(logoutUserAction.fulfilled, () => {
+      return taskAdapter.getInitialState();
     });
   },
   initialState: taskAdapter.getInitialState(),

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from '@reduxjs/toolkit';
 
-import { fetchCurrentUser } from 'src/duck/auth';
+import { fetchCurrentUser, logoutUserAction } from 'src/duck/auth';
 import { create, Employee, EmployeeArgs, fetchMany, fetchOne, update } from 'src/entities/Employee';
 import { RootState } from '.';
 
@@ -55,6 +55,10 @@ export default createSlice({
       }));
 
       employeeAdapter.upsertMany(state, employees);
+    });
+
+    builder.addCase(logoutUserAction.fulfilled, () => {
+      return employeeAdapter.getInitialState();
     });
   },
   initialState: employeeAdapter.getInitialState(),
