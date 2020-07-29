@@ -11,22 +11,19 @@ interface Props {
   Header?: React.FC<{ onClose: () => void }>;
 }
 
-const SlideBar: React.FC<Props> = (p) => {
+const ContextMenu: React.FC<Props> = (p) => {
   if (!p.isOpen) {
     return null;
   }
 
   return (
-    <>
-      <div className={c('backdrop')} />
-      <div className={c('container')} onClick={p.onClose}>
-        <div className={c('content')}>
-          {p.Header && <p.Header onClose={p.onClose} />}
-          {p.children}
-        </div>
+    <div className={c('container')} onClick={p.onClose}>
+      <div className={c('content')}>
+        {p.Header && <p.Header onClose={p.onClose} />}
+        {p.children}
       </div>
-    </>
+    </div>
   );
 };
 
-export default SlideBar;
+export default ContextMenu;

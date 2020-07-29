@@ -107,12 +107,10 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
                 issue_link_template
                 pr_link_template
                 project_id
-
-members{
-ecode
-organization_id
-}
-
+                members{
+                  ecode
+                  organization_id
+                }
             }
             teams_aggregate {
               aggregate {

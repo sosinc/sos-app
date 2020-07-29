@@ -118,7 +118,7 @@ const UserProject: React.FC<Project> = ({ ...item }) => {
 };
 
 const Index: React.FC<LayoutProps> = (p) => {
-  const [isUserOpen, setIsUserOpen] = useState<boolean>(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
   const user = currentUser();
   const role = user.role?.id;
   const projects = user.projects ? user.projects : [];
@@ -177,7 +177,7 @@ const Index: React.FC<LayoutProps> = (p) => {
         <title>{p.title}</title>
       </Head>
 
-      <ContextMenu isOpen={isUserOpen} onClose={() => setIsUserOpen(false)}>
+      <ContextMenu isOpen={isUserMenuOpen} onClose={() => setIsUserMenuOpen(false)}>
         <UserContext />
       </ContextMenu>
 
@@ -190,7 +190,7 @@ const Index: React.FC<LayoutProps> = (p) => {
               </div>
             </Link>
 
-            <div className={c('avatar-container')} onClick={() => setIsUserOpen(true)}>
+            <div className={c('avatar-container')} onClick={() => setIsUserMenuOpen(true)}>
               <img
                 className={c('pic')}
                 src="/assets/images/avatar.svg"
