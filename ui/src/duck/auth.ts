@@ -9,7 +9,7 @@ import {
   resetPassword as apiResetPassword,
   ResetPasswordPayload,
   sendPasswordResetOTP as apiResetPasswordOTP,
-  setActiveOrg,
+  setCurrentOrg,
   User,
 } from 'src/entities/User';
 
@@ -51,11 +51,11 @@ export const resetPasswordAction = createAsyncThunk<undefined, ResetPasswordPayl
   apiResetPassword,
 );
 
-export const setActiveOrgAction = createAsyncThunk<
+export const setCurrentOrgAction = createAsyncThunk<
   undefined,
 {orgId: string},
 { rejectValue: Error; state: AuthState }
-  >('organizations/setActiveOrganization', setActiveOrg);
+  >('organizations/setCurrentOrganization', setCurrentOrg);
 
 const initialState: AuthState = {
   isFetchingUser: true,

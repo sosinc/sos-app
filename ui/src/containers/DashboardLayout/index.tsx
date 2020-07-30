@@ -17,7 +17,7 @@ import SelectBox from 'src/components/Form/SelectBox';
 import ContextMenu from 'src/components/Modal/ContextMenu';
 import FallbackIcon from 'src/containers/FallbackIcon';
 import WithUser from 'src/containers/WithUser';
-import { logoutUserAction, setActiveOrgAction } from 'src/duck/auth';
+import { logoutUserAction, setCurrentOrgAction } from 'src/duck/auth';
 import { orgSelector } from 'src/duck/organizations';
 import { teamSelector } from 'src/duck/teams';
 import { Organization } from 'src/entities/Organizations';
@@ -154,8 +154,8 @@ const UserContext: React.FC = () => {
   );
 };
 
-const OrgSelectBox: React.FC<{ activeOrg?: Organization }> = ({ activeOrg: o }) => {
-  const [setActiveOrg] = useAsyncThunk(setActiveOrgAction, {
+const OrgSelectBox: React.FC<{ currentOrg?: Organization }> = ({ currentOrg: o }) => {
+  const [setCurrentOrg] = useAsyncThunk(setCurrentOrgAction, {
     errorTitle: 'Failed to change organization, try again',
     rethrowError: true,
     successTitle: 'Organization changed successfully',
@@ -163,7 +163,7 @@ const OrgSelectBox: React.FC<{ activeOrg?: Organization }> = ({ activeOrg: o }) 
   const organizations = useSelector(orgSelector.selectAll);
 
   const handleOrgChange = async (org: { id: string }) => {
-    await setActiveOrg({ orgId: org.id });
+    await setCurrentOrg({ orgId: org.id });
     return;
   };
 
@@ -173,7 +173,7 @@ const OrgSelectBox: React.FC<{ activeOrg?: Organization }> = ({ activeOrg: o }) 
     </div>
   );
 
-  if (!o) {
+  if (!o || organizations.length === 1) {
     return <Link href={'/organizations'}>{currentOrgLogo}</Link>;
   }
 
@@ -194,7 +194,7 @@ const Index: React.FC<LayoutProps> = (p) => {
   const user = currentUser();
   const role = user.role?.id;
   const projects = user.projects ? user.projects : [];
-  const activeOrg = user.organization;
+  const currentOrg = user.organization;
 
   const userSection = () => {
     const userProjects = projects.map((i) => <UserProject key={i.id} {...i} />);
@@ -223,7 +223,7 @@ const Index: React.FC<LayoutProps> = (p) => {
       <div className={c('container')}>
         <div className={c('sidebar')}>
           <div className={c('header')}>
-            <OrgSelectBox activeOrg={activeOrg} />
+            <OrgSelectBox currentOrg={currentOrg} />
 
             <div className={c('avatar-container')} onClick={() => setIsUserMenuOpen(true)}>
               <img

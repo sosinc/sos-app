@@ -214,7 +214,7 @@ export const resetPassword = async (payload: ResetPasswordPayload): Promise<unde
   }
 };
 
-export const setActiveOrg = async (payload: {orgId: string}): Promise<undefined> => {
+export const setCurrentOrg = async (payload: {orgId: string}): Promise<undefined> => {
   const query = `
     mutation($orgId: String!){
       changeActiveOrg(orgId: $orgId)
