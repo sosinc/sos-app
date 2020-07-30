@@ -11,6 +11,7 @@ import ImageUploadField from 'src/components/Form/ImageUploadField';
 import SelectField from 'src/components/Form/SelectField';
 import TextAreaField from 'src/components/Form/TextAreaField';
 import TextField from 'src/components/Form/TextField';
+import { currentUser } from 'src/entities/User/selectors';
 import Listing, { ListingItemProps } from 'src/components/Listing';
 import NoItemsFound from 'src/components/NoItemsFound';
 import { teamSelector } from 'src/duck/teams';
@@ -28,59 +29,64 @@ interface Props {
   projectId?: string;
 }
 
-const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) => (
-  <form className={c('form')} onSubmit={p.handleSubmit}>
-    <div className={c('title-container')}>
-      <h2>{p.projectId ? p.values.name : 'Create Project'} </h2>
+const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) => {
+  const user = currentUser();
+  const isCurrentOrg = user.employee?.isCurrent;
+  const orgSelectField = !isCurrentOrg && (
+    <div className={c('org-container', 'field-container')}>
+      <span className={c('field-title')}>Organization</span>
+      <SelectField
+        className={c('org-add-form')}
+        name="organization_id"
+        options={p.organizations.map((o) => ({ id: o.id, name: o.name, logo: o.square_logo }))}
+        isLoading={p.isFetchingOrgs}
+      />
     </div>
-    <div className={c('name-container', 'field-container')}>
-      <span className={c('field-title')}>Name</span>
-      <TextField placeholder="Enter Name" type="text" name="name" />
-    </div>
-    <div className={c('description-container', 'field-container')}>
-      <span className={c('field-title')}>Description</span>
-      <TextAreaField name="description" placeholder="Enter Description" rows={4} cols={50} />
-    </div>
+  );
 
-    <div className={c('square-logo', 'field-container')}>
-      <span className={c('field-title')}>Square Logo</span>
-      <ImageUploadField className={c('image-container')} type={'file'} name="logo_square" />
-    </div>
-
-    <div className={c('right-container')}>
-      <div className={c('issue-link-container', 'field-container')}>
-        <span className={c('field-title')}>Issue Link Template</span>
-        <TextField placeholder="Enter issue Link Template" type="text" name="issue_link_template" />
-      </div>
-
-      <div className={c('org-container', 'field-container')}>
-        <span className={c('field-title')}>Organization</span>
-        <SelectField
-          className={c('org-add-form')}
-          name="organization_id"
-          options={p.organizations.map((o) => ({ id: o.id, name: o.name, logo: o.square_logo }))}
-          isLoading={p.isFetchingOrgs}
-        />
-      </div>
-    </div>
-
-    <div className={c('pr-link-container', 'field-container')}>
-      <span className={c('field-title')}>Pr Link Template</span>
-      <TextField placeholder="Enter pr link template" type="text" name="pr_link_template" />
-    </div>
-    {submitButton(p)}
-    {p.projectId && addTeam(p)}
-  </form>
-);
-
-const submitButton = (p: any) => {
   return (
-    <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
-      <div className={c({ 'saving-in': p.isSubmitting })}>
-        {p.isSubmitting ? 'Saving' : 'Save'}
-        <span />
+    <form className={c('form')} onSubmit={p.handleSubmit}>
+      <div className={c('title-container')}>
+        <h2>{p.projectId ? p.values.name : 'Create Project'} </h2>
       </div>
-    </button>
+      <div className={c('name-container', 'field-container')}>
+        <span className={c('field-title')}>Name</span>
+        <TextField placeholder="Enter Name" type="text" name="name" />
+      </div>
+      <div className={c('description-container', 'field-container')}>
+        <span className={c('field-title')}>Description</span>
+        <TextAreaField name="description" placeholder="Enter Description" rows={4} cols={50} />
+      </div>
+
+      <div className={c('square-logo', 'field-container')}>
+        <span className={c('field-title')}>Square Logo</span>
+        <ImageUploadField className={c('image-container')} type={'file'} name="logo_square" />
+      </div>
+
+      <div className={c('right-container')}>
+        <div className={c('issue-link-container', 'field-container')}>
+          <span className={c('field-title')}>Issue Link Template</span>
+          <TextField
+            placeholder="Enter issue Link Template"
+            type="text"
+            name="issue_link_template"
+          />
+        </div>
+
+        <div className={c('pr-link-container', 'field-container')}>
+          <span className={c('field-title')}>Pr Link Template</span>
+          <TextField placeholder="Enter pr link template" type="text" name="pr_link_template" />
+        </div>
+      </div>
+      {orgSelectField}
+      <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+        <div className={c({ 'saving-in': p.isSubmitting })}>
+          {p.isSubmitting ? 'Saving' : 'Save'}
+          <span />
+        </div>
+      </button>
+      {p.projectId && addTeam(p)}
+    </form>
   );
 };
 
@@ -96,7 +102,7 @@ const noTeam = (projectId: string) => {
 };
 
 const addTeam = (p: Props) => {
-  const teams = useSelector(teamSelector.selectAll);
+  const teams = useSelector(teamSelector.selectAll).filter((t) => t.project_id === p?.projectId);
   const teamListItems: ListingItemProps[] = teams.map((t) => ({
     href: `/projects/${p.projectId}/teams/${t.id}`,
     id: t.id,
@@ -164,7 +170,7 @@ const validationSchema = Yup.object().shape({
     .min(2, 'Must be 2 characters or more')
     .max(16, 'Must be 16 characters or less')
     .required('Required'),
-  organization_id: Yup.string().required('Required'),
+  organization_id: Yup.string(),
   pr_link_template: Yup.string(),
 });
 

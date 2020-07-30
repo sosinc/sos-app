@@ -53,6 +53,14 @@ export default createSlice({
       projectAdapter.upsertOne(state, payload.project);
     });
 
+    builder.addCase(createProjectAction.fulfilled, (state, { payload }) => {
+      projectAdapter.upsertOne(state, payload);
+    });
+
+    builder.addCase(updateProjectAction.fulfilled, (state, { payload }) => {
+      projectAdapter.upsertOne(state, payload);
+    });
+
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
       projectAdapter.upsertMany(state, payload.projects);
     });
