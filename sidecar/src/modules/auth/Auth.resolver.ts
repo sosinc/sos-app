@@ -93,6 +93,14 @@ export class AuthResolver {
     return "ok";
   }
 
+  @Authorized()
+  @Mutation(returns => String)
+  async changeActiveOrg(@Ctx() { req }: ResolverContext, @Arg("orgId") orgId: string) {
+    req.session.organizationId = orgId;
+
+    return "ok";
+  }
+
   @Mutation(returns => String)
   async sendPasswordResetOtp(@Ctx() { req }: ResolverContext, @Arg("email") email: string) {
     try {

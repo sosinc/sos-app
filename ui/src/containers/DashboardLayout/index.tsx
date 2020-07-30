@@ -17,7 +17,7 @@ import SelectBox from 'src/components/Form/SelectBox';
 import ContextMenu from 'src/components/Modal/ContextMenu';
 import FallbackIcon from 'src/containers/FallbackIcon';
 import WithUser from 'src/containers/WithUser';
-import { logoutUserAction } from 'src/duck/auth';
+import { logoutUserAction, setActiveOrgAction } from 'src/duck/auth';
 import { orgSelector } from 'src/duck/organizations';
 import { teamSelector } from 'src/duck/teams';
 import { Organization } from 'src/entities/Organizations';
@@ -25,6 +25,7 @@ import { Project } from 'src/entities/Project';
 import { Team } from 'src/entities/Team';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
+
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -154,9 +155,15 @@ const UserContext: React.FC = () => {
 };
 
 const OrgSelectBox: React.FC<{ activeOrg?: Organization }> = ({ activeOrg: o }) => {
+  const [setActiveOrg] = useAsyncThunk(setActiveOrgAction, {
+    errorTitle: 'Failed to change organization, try again',
+    rethrowError: true,
+    successTitle: 'Organization changed successfully',
+  });
   const organizations = useSelector(orgSelector.selectAll);
-  const handleOrgChange = () => {
-    // console.warn('-----change');
+
+  const handleOrgChange = async (org: { id: string }) => {
+    await setActiveOrg({ orgId: org.id });
     return;
   };
 

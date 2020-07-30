@@ -213,3 +213,18 @@ export const resetPassword = async (payload: ResetPasswordPayload): Promise<unde
     throw new Error('Something went wrong :-(');
   }
 };
+
+export const setActiveOrg = async (payload: {orgId: string}): Promise<undefined> => {
+  const query = `
+    mutation($orgId: String!){
+      changeActiveOrg(orgId: $orgId)
+    }`;
+
+  try {
+    const data = await client.request(query, payload);
+
+    return data;
+  } catch (err) {
+    throw new Error('Something went wrong :-(');
+  }
+};
