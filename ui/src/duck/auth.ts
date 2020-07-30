@@ -31,8 +31,8 @@ export const loginUserAction = createAsyncThunk<
 export const logoutUserAction = createAsyncThunk<
   undefined,
   undefined,
-{ rejectValue: Error; state: AuthState }
-  >('auth/logout', logout);
+  { rejectValue: Error; state: AuthState }
+>('auth/logout', logout);
 
 export const fetchCurrentUser = createAsyncThunk<
   CurrentUserResponse,

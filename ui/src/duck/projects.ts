@@ -68,7 +68,6 @@ export default createSlice({
     builder.addCase(logoutUserAction.fulfilled, () => {
       return projectAdapter.getInitialState();
     });
-
   },
   initialState: projectAdapter.getInitialState(),
   name: 'projects',

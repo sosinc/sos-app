@@ -90,6 +90,7 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
         organization_id
         organization {
           id
+          is_current
           name
           square_logo
           projects {
@@ -141,8 +142,9 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
   }));
   const organizations = me.as_employee.map((org: any) => ({
     id: org.organization.id,
+    isCurrent: org.organization.is_current,
     name: org.organization.name,
-    square_logo: resolveStorageFile(org.square_logo),
+    square_logo: resolveStorageFile(org.organization.square_logo),
   }));
   const projects = me.as_employee.flatMap((employee: any) =>
     employee.organization.projects.map((project: any) => ({
