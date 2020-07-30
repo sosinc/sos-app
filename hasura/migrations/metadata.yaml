@@ -150,8 +150,11 @@ tables:
       - updated_at
       - user_id
       filter:
-        organization_id:
-          _eq: X-Hasura-Organization-Id
+        _or:
+        - organization_id:
+            _eq: X-Hasura-Organization-Id
+        - user_id:
+            _eq: X-Hasura-User-Id
   update_permissions:
   - role: app_admin
     permission:
