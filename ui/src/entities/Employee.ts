@@ -2,6 +2,7 @@ import client from 'src/lib/client';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
 
 export interface Employee {
+  isCurrent: boolean;
   id: string;
   ecode: string;
   email: string;

@@ -94,7 +94,7 @@ export default createSlice({
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
       state.isFetchingUser = false;
       state.user = payload.user;
-      const employee = payload.employees.length && payload.employees[0];
+      const employee = payload.employees.length && payload.employees.find( (e) => e.isCurrent);
 
       state.activeEmployeeId = employee
         ? `${employee.ecode}-${employee.organization_id}`

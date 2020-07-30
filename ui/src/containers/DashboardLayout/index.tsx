@@ -164,7 +164,7 @@ const OrgSelectBox: React.FC<{ currentOrg?: Organization }> = ({ currentOrg: o }
 
   const handleOrgChange = async (org: { id: string }) => {
     await setCurrentOrg({ orgId: org.id });
-    return;
+    Router.replace(`/`);
   };
 
   const currentOrgLogo = (
