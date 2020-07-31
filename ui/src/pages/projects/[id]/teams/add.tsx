@@ -10,8 +10,8 @@ import { RootState } from 'src/duck';
 import { fetchProject, projectSelector } from 'src/duck/projects';
 import { createTeamAction } from 'src/duck/teams';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
-import style from './style.module.scss';
 import filterOptionalValues from 'src/utils/filterOptionalValues';
+import style from './style.module.scss';
 
 const c = classNames.bind(style);
 

@@ -9,8 +9,8 @@ import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
 import { createProjectAction } from 'src/duck/projects';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
-import style from './style.module.scss';
 import filterOptionalValues from 'src/utils/filterOptionalValues';
+import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
