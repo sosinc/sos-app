@@ -10,6 +10,7 @@ import { RootState } from 'src/duck';
 import { fetchProject, projectSelector } from 'src/duck/projects';
 import { createTeamAction } from 'src/duck/teams';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
+import filterOptionalValues from 'src/utils/filterOptionalValues';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -53,7 +54,8 @@ const AddTeam: React.FC<FormikValues> = () => {
   ) => {
     try {
       helpers.setSubmitting(true);
-      await createTeam({ ...values, project_id: projectId });
+      const finalValues = filterOptionalValues(values);
+      await createTeam({ ...finalValues, project_id: projectId });
       helpers.resetForm();
     } catch (err) {
       if (/Duplicate team name/i.test(err.message)) {

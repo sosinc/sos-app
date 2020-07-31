@@ -9,6 +9,7 @@ import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
 import { createProjectAction } from 'src/duck/projects';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
+import filterOptionalValues from 'src/utils/filterOptionalValues';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -51,7 +52,8 @@ const AddProject: React.FC<FormikValues> = () => {
   ) => {
     try {
       helpers.setSubmitting(true);
-      await createProject(isCurrentOrg ? { ...values, organization_id: '' } : values);
+      const finalValues = filterOptionalValues(values, isCurrentOrg);
+      await createProject(finalValues);
       helpers.resetForm();
     } catch (err) {
       if (/Duplicate project name/i.test(err.message)) {
