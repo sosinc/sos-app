@@ -135,7 +135,6 @@ const UserContext: React.FC = () => {
 
   return (
     <>
-      <div className={c('pointer')} />
       <div className={c('context-box')}>
         <div className={c('context-container')}>
           <Link href={'/profile'}>
