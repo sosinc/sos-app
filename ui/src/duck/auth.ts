@@ -53,9 +53,9 @@ export const resetPasswordAction = createAsyncThunk<undefined, ResetPasswordPayl
 
 export const setCurrentOrgAction = createAsyncThunk<
   undefined,
-{orgId: string},
-{ rejectValue: Error; state: AuthState }
-  >('organizations/setCurrentOrganization', setCurrentOrg);
+  { orgId: string },
+  { rejectValue: Error; state: AuthState }
+>('organizations/setCurrentOrganization', setCurrentOrg);
 
 const initialState: AuthState = {
   isFetchingUser: true,
@@ -94,7 +94,7 @@ export default createSlice({
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
       state.isFetchingUser = false;
       state.user = payload.user;
-      const employee = payload.employees.length && payload.employees.find( (e) => e.isCurrent);
+      const employee = payload.employees.length && payload.employees.find((e) => e.isCurrent);
 
       state.activeEmployeeId = employee
         ? `${employee.ecode}-${employee.organization_id}`

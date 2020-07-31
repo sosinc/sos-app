@@ -11,11 +11,11 @@ import ImageUploadField from 'src/components/Form/ImageUploadField';
 import SelectField from 'src/components/Form/SelectField';
 import TextAreaField from 'src/components/Form/TextAreaField';
 import TextField from 'src/components/Form/TextField';
-import { currentUser } from 'src/entities/User/selectors';
 import Listing, { ListingItemProps } from 'src/components/Listing';
 import NoItemsFound from 'src/components/NoItemsFound';
 import { teamSelector } from 'src/duck/teams';
 import { Organization } from 'src/entities/Organizations';
+import { currentUser } from 'src/entities/User/selectors';
 
 import style from './style.module.scss';
 

@@ -75,7 +75,7 @@ export const create = async ({ organization_id, ...payload }: ProjectArgs): Prom
   try {
     const data = await client.request(query, variables);
     const project = data.insert_projects_one;
-    return ( { ...project, logo_square: resolveStorageFile(project.logo_square) } as Project);
+    return { ...project, logo_square: resolveStorageFile(project.logo_square) } as Project;
   } catch (err) {
     if (/uniqueness violation/i.test(err.message)) {
       throw new Error('Duplicate project name');
@@ -121,7 +121,7 @@ export const update = async (payload: ProjectArgs): Promise<Project> => {
   try {
     const data = await client.request(query, payload);
     const project = data.update_projects_by_pk;
-    return ( { ...project, logo_square: resolveStorageFile(project.logo_square) } as Project);
+    return { ...project, logo_square: resolveStorageFile(project.logo_square) } as Project;
   } catch (err) {
     if (/uniqueness violation/i.test(err.message)) {
       throw new Error('Duplicate project name');
