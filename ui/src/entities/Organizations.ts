@@ -7,6 +7,7 @@ export interface Organization {
   banner: string;
   square_logo: string;
   employees_count: number;
+  isCurrent: boolean;
 }
 
 export interface OrganizationArgs {

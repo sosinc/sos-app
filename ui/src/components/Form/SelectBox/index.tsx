@@ -15,7 +15,7 @@ export interface SelectFieldItem {
 }
 
 interface FileFieldProps {
-  name: string;
+  name?: string;
   className?: string;
   isDropdownIconHidden?: boolean;
   options: SelectFieldItem[];

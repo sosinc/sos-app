@@ -13,15 +13,19 @@ import {
 } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
+import SelectBox from 'src/components/Form/SelectBox';
 import ContextMenu from 'src/components/Modal/ContextMenu';
 import FallbackIcon from 'src/containers/FallbackIcon';
 import WithUser from 'src/containers/WithUser';
-import { logoutUserAction } from 'src/duck/auth';
+import { logoutUserAction, setCurrentOrgAction } from 'src/duck/auth';
+import { orgSelector } from 'src/duck/organizations';
 import { teamSelector } from 'src/duck/teams';
+import { Organization } from 'src/entities/Organizations';
 import { Project } from 'src/entities/Project';
 import { Team } from 'src/entities/Team';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
+
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -117,18 +121,80 @@ const UserProject: React.FC<Project> = ({ ...item }) => {
   );
 };
 
-const Index: React.FC<LayoutProps> = (p) => {
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
-  const user = currentUser();
-  const role = user.role?.id;
-  const projects = user.projects ? user.projects : [];
-  const organization = user.organization;
-
+const UserContext: React.FC = () => {
   const [logout] = useAsyncThunk(logoutUserAction, {
     errorTitle: 'Logout Failed',
     rethrowError: true,
     successTitle: 'Logout successfully',
   });
+
+  const handleLogout = async () => {
+    await logout();
+    Router.replace(`/`);
+  };
+
+  return (
+    <>
+      <div className={c('pointer')} />
+      <div className={c('context-box')}>
+        <div className={c('context-container')}>
+          <Link href={'/profile'}>
+            <a className={c('context-item')}>Settings</a>
+          </Link>
+          <Link href={'/profile'}>
+            <a className={c('context-item')}>Profile</a>
+          </Link>
+          <span className={c('separator')} />
+          <span className={c('context-item')} onClick={handleLogout}>
+            Logout
+          </span>
+        </div>
+      </div>
+    </>
+  );
+};
+
+const OrgSelectBox: React.FC<{ currentOrg?: Organization }> = ({ currentOrg: o }) => {
+  const [setCurrentOrg] = useAsyncThunk(setCurrentOrgAction, {
+    errorTitle: 'Failed to change organization, try again',
+    rethrowError: true,
+    successTitle: 'Organization changed successfully',
+  });
+  const organizations = useSelector(orgSelector.selectAll);
+
+  const handleOrgChange = async (org: { id: string }) => {
+    await setCurrentOrg({ orgId: org.id });
+    Router.replace(`/`);
+  };
+
+  const currentOrgLogo = (
+    <div className={c('logo-image', 'fallback-icon')} title={o?.name || 'No Organization'}>
+      <FallbackIcon logo={o?.square_logo} name={o?.name} />
+    </div>
+  );
+
+  if (!o || organizations.length === 1) {
+    return <Link href={'/organizations'}>{currentOrgLogo}</Link>;
+  }
+
+  return (
+    <SelectBox
+      className={c('org-select-box')}
+      options={organizations.map((org) => ({ ...org, logo: org.square_logo }))}
+      onSelect={handleOrgChange}
+      value={o.id || ''}
+      isDropdownIconHidden={true}
+      Selected={() => currentOrgLogo}
+    />
+  );
+};
+
+const Index: React.FC<LayoutProps> = (p) => {
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
+  const user = currentUser();
+  const role = user.role?.id;
+  const projects = user.projects ? user.projects : [];
+  const currentOrg = user.organization;
 
   const userSection = () => {
     const userProjects = projects.map((i) => <UserProject key={i.id} {...i} />);
@@ -139,33 +205,6 @@ const Index: React.FC<LayoutProps> = (p) => {
           <div className={c('header-row')}> Projects</div>
         </Link>
         {userProjects}
-      </>
-    );
-  };
-
-  const handleLogout = async () => {
-    await logout();
-    Router.replace(`/`);
-  };
-
-  const UserContext = () => {
-    return (
-      <>
-        <div className={c('pointer')} />
-        <div className={c('context-box')}>
-          <div className={c('context-container')}>
-            <Link href={'/profile'}>
-              <a className={c('context-item')}>Settings</a>
-            </Link>
-            <Link href={'/profile'}>
-              <a className={c('context-item')}>Profile</a>
-            </Link>
-            <span className={c('separator')} />
-            <span className={c('context-item')} onClick={handleLogout}>
-              Logout
-            </span>
-          </div>
-        </div>
       </>
     );
   };
@@ -184,11 +223,7 @@ const Index: React.FC<LayoutProps> = (p) => {
       <div className={c('container')}>
         <div className={c('sidebar')}>
           <div className={c('header')}>
-            <Link href={role === 'USER' ? '/' : '/organizations'}>
-              <div className={c('logo-image', 'fallback-icon')} title={organization?.name}>
-                <FallbackIcon logo={organization?.square_logo} name={organization?.name} />
-              </div>
-            </Link>
+            <OrgSelectBox currentOrg={currentOrg} />
 
             <div className={c('avatar-container')} onClick={() => setIsUserMenuOpen(true)}>
               <img

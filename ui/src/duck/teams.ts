@@ -84,7 +84,6 @@ export default createSlice({
     builder.addCase(logoutUserAction.fulfilled, () => {
       return teamAdapter.getInitialState();
     });
-
   },
   initialState: teamAdapter.getInitialState(),
   name: 'teams',

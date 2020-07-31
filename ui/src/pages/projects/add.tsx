@@ -26,6 +26,7 @@ const Header: React.FC = () => (
 
 const AddProject: React.FC<FormikValues> = () => {
   const user = currentUser();
+  const isCurrentOrg = user.employee?.isCurrent;
   let userOrganizations = user.organization ? [user.organization] : [];
   let isFetchingOrgs = false;
 
@@ -50,7 +51,7 @@ const AddProject: React.FC<FormikValues> = () => {
   ) => {
     try {
       helpers.setSubmitting(true);
-      await createProject(values);
+      await createProject(isCurrentOrg ? { ...values, organization_id: '' } : values);
       helpers.resetForm();
     } catch (err) {
       if (/Duplicate project name/i.test(err.message)) {

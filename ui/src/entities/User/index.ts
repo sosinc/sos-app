@@ -90,6 +90,7 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
         organization_id
         organization {
           id
+          is_current
           name
           square_logo
           projects {
@@ -136,13 +137,15 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
 
   const employees = me.as_employee.map((employee: any) => ({
     ecode: employee.ecode,
+    isCurrent: employee.organization.is_current,
     name: employee.name,
     organization_id: employee.organization_id,
   }));
   const organizations = me.as_employee.map((org: any) => ({
     id: org.organization.id,
+    isCurrent: org.organization.is_current,
     name: org.organization.name,
-    square_logo: resolveStorageFile(org.square_logo),
+    square_logo: resolveStorageFile(org.organization.square_logo),
   }));
   const projects = me.as_employee.flatMap((employee: any) =>
     employee.organization.projects.map((project: any) => ({
@@ -152,7 +155,6 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
       teams_count: project?.teams_aggregate?.aggregate?.count || 0,
     })),
   );
-
   const teams = me.as_employee.flatMap((employee: any) =>
     employee.organization.projects.flatMap((project: any) =>
       project.teams.map((t: any) => ({
@@ -208,6 +210,21 @@ export const resetPassword = async (payload: ResetPasswordPayload): Promise<unde
       throw new Error(err.response.errors[0].message);
     }
 
+    throw new Error('Something went wrong :-(');
+  }
+};
+
+export const setCurrentOrg = async (payload: { orgId: string }): Promise<undefined> => {
+  const query = `
+    mutation($orgId: String!){
+      changeActiveOrg(orgId: $orgId)
+    }`;
+
+  try {
+    const data = await client.request(query, payload);
+
+    return data;
+  } catch (err) {
     throw new Error('Something went wrong :-(');
   }
 };

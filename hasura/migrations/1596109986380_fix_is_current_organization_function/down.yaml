@@ -1,0 +1,6 @@
+- args:
+    cascade: false
+    read_only: false
+    sql: |-
+      DROP FUNCTION public.is_current_organization;
+  type: run_sql

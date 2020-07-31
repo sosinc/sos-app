@@ -10,6 +10,7 @@ import makeRandom from "../../lib/makeRandom";
 import { UserLogin } from "../../entity/UserLogin.entity";
 
 import { Employee } from "../../entity/Employee.entity";
+import { CurrentUser } from "../../lib/middleware/currentUser";
 
 const { APP_NAME = "App" } = process.env;
 
@@ -89,6 +90,24 @@ export class AuthResolver {
   @Mutation(returns => String)
   async logout(@Ctx() { req }: ResolverContext) {
     req.session = null;
+
+    return "ok";
+  }
+
+  @Authorized()
+  @Mutation(returns => String)
+  async changeActiveOrg(
+    @Ctx() { req }: ResolverContext,
+    @CurrentUser() user,
+    @Arg("orgId") orgId: string
+  ) {
+    const userEmployees = await this.employeeRepo.find({ user_id: user.id });
+    const isValid = userEmployees.some(i => i.organization_id === orgId);
+
+    if (!isValid) {
+      throw new ServerError("Invalid Organization Id!", { status: 400 });
+    }
+    req.session.organizationId = orgId;
 
     return "ok";
   }

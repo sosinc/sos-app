@@ -9,6 +9,7 @@ import {
   resetPassword as apiResetPassword,
   ResetPasswordPayload,
   sendPasswordResetOTP as apiResetPasswordOTP,
+  setCurrentOrg,
   User,
 } from 'src/entities/User';
 
@@ -31,8 +32,8 @@ export const loginUserAction = createAsyncThunk<
 export const logoutUserAction = createAsyncThunk<
   undefined,
   undefined,
-{ rejectValue: Error; state: AuthState }
-  >('auth/logout', logout);
+  { rejectValue: Error; state: AuthState }
+>('auth/logout', logout);
 
 export const fetchCurrentUser = createAsyncThunk<
   CurrentUserResponse,
@@ -49,6 +50,12 @@ export const resetPasswordAction = createAsyncThunk<undefined, ResetPasswordPayl
   'auth/resetPassword',
   apiResetPassword,
 );
+
+export const setCurrentOrgAction = createAsyncThunk<
+  undefined,
+  { orgId: string },
+  { rejectValue: Error; state: AuthState }
+>('organizations/setCurrentOrganization', setCurrentOrg);
 
 const initialState: AuthState = {
   isFetchingUser: true,
@@ -87,7 +94,7 @@ export default createSlice({
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
       state.isFetchingUser = false;
       state.user = payload.user;
-      const employee = payload.employees.length && payload.employees[0];
+      const employee = payload.employees.length && payload.employees.find((e) => e.isCurrent);
 
       state.activeEmployeeId = employee
         ? `${employee.ecode}-${employee.organization_id}`
