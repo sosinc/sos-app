@@ -13,6 +13,7 @@ import { updateProjectAction } from 'src/duck/projects';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 import style from '../style.module.scss';
+import filterOptionalValues from 'src/utils/filterOptionalValues';
 
 const c = classNames.bind(style);
 
@@ -66,7 +67,8 @@ const ProjectDetails: React.FC<FormikValues> = () => {
   ) => {
     try {
       helpers.setSubmitting(true);
-      await updateProject({ ...values, projectId: queryId });
+      const finalValues = filterOptionalValues(values);
+      await updateProject({ ...finalValues, projectId: queryId });
     } catch (err) {
       if (/Duplicate project name/i.test(err.message)) {
         helpers.setFieldError('name', 'An project with same name already exists');
