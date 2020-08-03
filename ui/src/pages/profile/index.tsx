@@ -1,9 +1,9 @@
-import OuterForm, { UpdateProfileFormValues } from 'src/components/Profile';
-import { currentUser } from 'src/entities/User/selectors';
-import DashboardLayout from 'src/containers/DashboardLayout';
 import { FormikHelpers } from 'formik';
-import { useAsyncThunk } from 'src/lib/asyncHooks';
+import OuterForm, { UpdateProfileFormValues } from 'src/components/Profile';
+import DashboardLayout from 'src/containers/DashboardLayout';
 import { updateProfileAction } from 'src/duck/auth';
+import { currentUser } from 'src/entities/User/selectors';
+import { useAsyncThunk } from 'src/lib/asyncHooks';
 const Header: React.FC = () => <div>Profile</div>;
 /*
  * const router = useRouter();

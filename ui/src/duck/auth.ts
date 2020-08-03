@@ -7,8 +7,8 @@ import {
   LoginPayload,
   resetPassword as apiResetPassword,
   ResetPasswordPayload,
-  updateProfile,
   sendPasswordResetOTP as apiResetPasswordOTP,
+  updateProfile,
   User,
   UserProfileArgs,
 } from 'src/entities/User';

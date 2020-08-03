@@ -69,8 +69,8 @@ const ImageUploadField: React.FC<Props & { formik: FormikContextType<{}> }> = ({
     inputProps.value ? (
       <ImagePreviewField image={resolveStorageFile(inputProps.value)} />
     ) : (
-        <Placeholder isUploading={isUploading} />
-      );
+      <Placeholder isUploading={isUploading} />
+    );
 
   return (
     <div className={containerClass}>
