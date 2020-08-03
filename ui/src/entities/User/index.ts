@@ -172,3 +172,14 @@ export const resetPassword = async (payload: ResetPasswordPayload): Promise<unde
     throw new Error('Something went wrong :-(');
   }
 };
+
+export interface UserProfileArgs {
+  fullName: string;
+  profilePic?: string;
+}
+
+export const updateProfile = async (args: UserProfileArgs): Promise<User> => {
+  console.warn('Making API call to update User Profile', args);
+
+  return {} as User;
+};

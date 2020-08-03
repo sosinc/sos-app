@@ -7,8 +7,10 @@ import {
   LoginPayload,
   resetPassword as apiResetPassword,
   ResetPasswordPayload,
+  updateProfile,
   sendPasswordResetOTP as apiResetPasswordOTP,
   User,
+  UserProfileArgs,
 } from 'src/entities/User';
 
 export interface AuthState {
@@ -42,6 +44,12 @@ export const resetPasswordAction = createAsyncThunk<undefined, ResetPasswordPayl
   'auth/resetPassword',
   apiResetPassword,
 );
+
+export const updateProfileAction = createAsyncThunk<
+  User,
+  UserProfileArgs,
+  { rejectValue: Error; state: AuthState }
+>('auth/update-profile', (payload) => updateProfile(payload));
 
 const initialState: AuthState = {
   isFetchingUser: true,

@@ -87,12 +87,14 @@ const Index: React.FC<LayoutProps> = (p) => {
               </div>
             </Link>
             <div className={c('avatar-container')}>
-              <img
-                className={c('pic')}
-                src="/assets/images/avatar.svg"
-                alt="pic"
-                title={user?.name}
-              />
+              <Link href="/profile">
+                <img
+                  className={c('pic')}
+                  src={user.avatar || '/assets/images/avatar.svg'}
+                  alt="pic"
+                  title={user?.name}
+                />
+              </Link>
               <span className={c('online-status')} />
             </div>
 

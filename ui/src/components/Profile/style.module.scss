@@ -52,13 +52,24 @@
 }
 
 .profile-pic {
+  border-radius: 50%;
   width: 10em;
+}
+
+.preview-image {
   border-radius: 50%;
 }
 
 .image-container-logo {
+  border-radius: 50%;
   grid-column: 1;
   grid-row: 2;
+
+  img {
+    border-radius: 50%;
+    line-height: 50px;
+    text-align: center;
+  }
 }
 
 .input-file {
