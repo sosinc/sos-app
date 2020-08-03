@@ -31,6 +31,8 @@ import {
 import { DailyTask } from 'src/entities/Task';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
 
+import Tippy from '@tippyjs/react';
+
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -224,13 +226,15 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
         <div className={c('task-body')}>
           <div className={c('task-row')}>
             <div className={c('row-left-container')}>
-              <span
-                className={c('task-issue')}
-                title={p.issue_id ? p.issue_id : 'Issue id'}
-                onClick={() => p.issue_id && handleTemplateLink(p.issue_id, 'issue')}
-              >
-                {p.issue_id ? p.issue_id : '?'}
-              </span>
+              <Tippy content={p.issue_id ? `Issue id ${p.issue_id}` : 'Issue id'}>
+                <span
+                  className={c('task-issue')}
+                  onClick={() => p.issue_id && handleTemplateLink(p.issue_id, 'issue')}
+                >
+                  {p.issue_id ? p.issue_id : '?'}
+                </span>
+              </Tippy>
+
               <SelectBox
                 className={c('row-status-item')}
                 name={'task-status'}

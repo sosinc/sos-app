@@ -2,18 +2,6 @@
 
 //----context---------
 
-
-.pointer {
-  border-bottom: 1em solid $color-bg-secondary;
-  border-left: 0.8em solid transparent;
-  border-right: 0.8em solid transparent;
-  left: 10em;
-  margin-bottom: 1px;
-  position: absolute;
-  top: 2.5em;
-  z-index: 1;
-}
-
 .context-box {
   background: $color-bg-secondary;
   border: 0;

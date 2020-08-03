@@ -1,5 +1,13 @@
 @import 'src/scss/lib';
 
+.full-width-container {
+  :global {
+    [data-tippy-root] {
+      min-width: calc(100% - 30px);
+    }
+  }
+}
+
 .input-field-container {
   background: none;
   border: 1px solid $color-button-border;
@@ -50,13 +58,26 @@
   top: 0;
 }
 
+.tippy-container {
+  padding: 0;
+  position: relative;
+  width: 100%;
+  z-index: 1;
+
+  :global {
+    .tippy-content {
+      padding: 0;
+      width: 100%;
+    }
+  }
+}
+
 .select-options {
   border: 0;
-  border-radius: 5px;
-  height: 12em;
+  border-radius: 4px;
+  max-height: 12em;
   overflow-y: auto;
-  position: absolute;
-  z-index: 1;
+  width: 100%;
 }
 
 .select-option {
@@ -102,11 +123,11 @@
 }
 
 .icon {
-  $size: 36px;
+  $size: 25px;
 
   height: $size;
   position: absolute;
   right: 4px;
-  top: 0;
+  top: 5px;
   width: $size;
 }
