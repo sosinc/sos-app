@@ -224,17 +224,23 @@ const Index: React.FC<LayoutProps> = (p) => {
           <div className={c('header')}>
             <OrgSelectBox currentOrg={currentOrg} />
 
-            <div className={c('avatar-container')} onClick={() => setIsUserMenuOpen(true)}>
-              <img
-                className={c('pic')}
-                src="/assets/images/avatar.svg"
-                alt="pic"
-                title={user?.name}
-              />
-              <span className={c('online-status')} />
-            </div>
+            <Link href="/profile">
+              <div className={c('avatar-container')}>
+                <img
+                  className={c('pic')}
+                  src={user.avatar || '/assets/images/avatar.svg'}
+                  alt="pic"
+                  title={user?.name}
+                />
+                <span className={c('online-status')} />
+              </div>
+            </Link>
 
-            <MdMoreHoriz title="more" className={c('dot-menu-icon')} />
+            <MdMoreHoriz
+              title="more"
+              className={c('dot-menu-icon')}
+              onClick={() => setIsUserMenuOpen(true)}
+            />
           </div>
 
           <div className={c('section')}>{role !== 'USER' ? adminSection : userSection()}</div>
