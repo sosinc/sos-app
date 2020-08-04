@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import { connect, FormikContextType, getIn } from 'formik';
 import { useState } from 'react';
-import { MdExpandMore } from 'react-icons/md';
+import { MdKeyboardArrowDown } from 'react-icons/md';
 
 import ErrorMessage from 'src/components/Form/ErrorMessage';
 import FallbackIcon from 'src/containers/FallbackIcon';
@@ -92,7 +92,7 @@ const SelectField: React.FC<FileFieldProps & { formik: FormikContextType<{}> }> 
 
   const selectedItem = p.options.find((i) => i.id === inputProps.value);
 
-  const Icon = () => (isOpen || error ? null : <MdExpandMore className={c('icon')} />);
+  const Icon = () => (isOpen || error ? null : <MdKeyboardArrowDown className={c('icon')} />);
 
   return (
     <div className={containerClass} onClick={handleOpen}>

@@ -1,0 +1,15 @@
+- args:
+    cascade: false
+    read_only: false
+    sql: |-
+      CREATE OR REPLACE FUNCTION public.is_current_organization(organizations_row organizations, hasura_session json)
+       RETURNS boolean
+       LANGUAGE sql
+       STABLE
+      AS $function$
+        SELECT EXISTS (
+          SELECT 1 FROM organizations
+          WHERE organizations_row.id = (hasura_session->>'x-hasura-organization-id')::UUID
+        );
+        $function$;
+  type: run_sql

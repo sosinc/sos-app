@@ -1,6 +1,7 @@
+import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
-import { MdExpandMore } from 'react-icons/md';
+import { MdKeyboardArrowDown } from 'react-icons/md';
 
 import FallbackIcon from 'src/containers/FallbackIcon';
 import styles from './style.module.scss';
@@ -15,7 +16,7 @@ export interface SelectFieldItem {
 }
 
 interface FileFieldProps {
-  name: string;
+  name?: string;
   className?: string;
   isDropdownIconHidden?: boolean;
   options: SelectFieldItem[];
@@ -23,6 +24,7 @@ interface FileFieldProps {
   onSelect: (item: SelectFieldItem) => void;
   value: string;
   Selected: React.FC<{ item?: SelectFieldItem }>;
+  isFullWidth?: boolean;
 }
 
 const noOptions = <li className={c('select-option')}>{'No data'}</li>;
@@ -42,7 +44,7 @@ const SelectFieldRow: React.FC<SelectFieldItem> = (f) => {
   );
 };
 
-const SelectBox: React.FC<FileFieldProps> = ({ ...p }) => {
+const SelectBox: React.FC<FileFieldProps> = (p) => {
   const [isOpen, setOpen] = useState(false);
 
   const handleSelectItem = (item: SelectFieldItem) => () => {
@@ -75,21 +77,30 @@ const SelectBox: React.FC<FileFieldProps> = ({ ...p }) => {
   ));
 
   const selectList = (
-    <>
-      <div className={c('select-backdrop')} onClick={handleClose} />
-      <ul className={c('select-options')}>{p.options.length ? selectOptions : noOptions}</ul>
-    </>
+    <ul className={c('select-options')}>{p.options.length ? selectOptions : noOptions}</ul>
   );
 
-  const Icon = () => <MdExpandMore className={c('icon')} />;
+  const Icon = () => <MdKeyboardArrowDown className={c('icon')} />;
 
   return (
-    <div className={containerClass} onClick={handleOpen}>
-      <div className={c('select-container')}>
-        <p.Selected item={p.options.find((i) => i.id === p.value)} />
-        {!p.isDropdownIconHidden && <Icon />}
-      </div>
-      {isOpen ? selectList : null}
+    <div className={c({ 'full-width-container': p.isFullWidth })}>
+      <Tippy
+        content={selectList}
+        interactive={true}
+        visible={isOpen}
+        onClickOutside={handleClose}
+        arrow={false}
+        className={c('tippy-container')}
+        maxWidth="none"
+        placement="bottom"
+      >
+        <div className={containerClass} onClick={handleOpen}>
+          <div className={c('select-container')}>
+            <p.Selected item={p.options.find((i) => i.id === p.value)} />
+            {!p.isDropdownIconHidden && <Icon />}
+          </div>
+        </div>
+      </Tippy>
     </div>
   );
 };

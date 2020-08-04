@@ -5,10 +5,12 @@ import {
   fetchCurrentUser as apiFetchCurrentUser,
   login,
   LoginPayload,
+  logout,
   resetPassword as apiResetPassword,
   ResetPasswordPayload,
   sendPasswordResetOTP as apiResetPasswordOTP,
   updateProfile,
+  setCurrentOrg,
   User,
   UserProfileArgs,
 } from 'src/entities/User';
@@ -28,6 +30,12 @@ export const loginUserAction = createAsyncThunk<
 >('auth/login', (payload) => {
   return login(payload);
 });
+
+export const logoutUserAction = createAsyncThunk<
+  undefined,
+  undefined,
+  { rejectValue: Error; state: AuthState }
+>('auth/logout', logout);
 
 export const fetchCurrentUser = createAsyncThunk<
   CurrentUserResponse,
@@ -51,6 +59,12 @@ export const updateProfileAction = createAsyncThunk<
   { rejectValue: Error; state: AuthState }
 >('auth/update-profile', (payload) => updateProfile(payload));
 
+export const setCurrentOrgAction = createAsyncThunk<
+  undefined,
+  { orgId: string },
+  { rejectValue: Error; state: AuthState }
+>('organizations/setCurrentOrganization', setCurrentOrg);
+
 const initialState: AuthState = {
   isFetchingUser: true,
   isLoggingIn: false,
@@ -72,6 +86,10 @@ export default createSlice({
       state.user = payload;
     });
 
+    builder.addCase(logoutUserAction.fulfilled, () => {
+      return initialState;
+    });
+
     builder.addCase(fetchCurrentUser.pending, (state) => {
       state.isFetchingUser = true;
     });
@@ -84,7 +102,7 @@ export default createSlice({
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
       state.isFetchingUser = false;
       state.user = payload.user;
-      const employee = payload.employees.length && payload.employees[0];
+      const employee = payload.employees.length && payload.employees.find((e) => e.isCurrent);
 
       state.activeEmployeeId = employee
         ? `${employee.ecode}-${employee.organization_id}`

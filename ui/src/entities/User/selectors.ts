@@ -26,16 +26,16 @@ export const currentUser = (): CurrentUser => {
     const activeEmployee = activeEmployeeId
       ? employeeSelector.selectById(state, activeEmployeeId)
       : undefined;
-    const activeOrg =
+    const currentOrg =
       activeEmployee && orgSelector.selectById(state, activeEmployee.organization_id);
     // TODO: These should be employee's projects
     const activeProjects =
-      activeOrg &&
-      projectSelector.selectAll(state).filter((p) => p.organization_id === activeOrg.id);
+      currentOrg &&
+      projectSelector.selectAll(state).filter((p) => p.organization_id === currentOrg.id);
 
     return {
       employee: activeEmployee,
-      organization: activeOrg,
+      organization: currentOrg,
       projects: activeProjects,
       user: state.auth.user,
     };

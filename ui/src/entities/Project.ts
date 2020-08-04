@@ -32,25 +32,50 @@ export interface ProjectResponse {
   teams: Team[];
 }
 
-export const create = async (payload: ProjectArgs): Promise<Project> => {
+export const create = async ({ organization_id, ...payload }: ProjectArgs): Promise<Project> => {
+  const orgVar = organization_id ? `$organization_id: uuid` : '';
+  const orgVal = organization_id ? `organization_id: $organization_id` : '';
+
+  let variables: object = payload;
+
+  if (organization_id) {
+    variables = { ...payload, organization_id };
+  }
+
   const query = `
-  mutation ($name: String!, $logo_square: String, $description: String, $issue_link_template: String, $pr_link_template: String, $organization_id: uuid!){
+  mutation ($name: String!, $logo_square: String, $description: String, $issue_link_template: String, $pr_link_template: String ${orgVar}){
     insert_projects_one(object: {
     name: $name,
     logo_square: $logo_square,
     description: $description,
-    organization_id: $organization_id,
     issue_link_template: $issue_link_template,
     pr_link_template: $pr_link_template,
+    ${orgVal}
     }) {
       id
+      name
+      logo_square
+      description
+      issue_link_template
+      pr_link_template
+      organization_id
+      issue_link_template
+      pr_link_template
+      teams{
+        id
+        name
+        logo_square
+        members{
+          ecode
+        }
+      }
     }
   }`;
 
   try {
-    const data = await client.request(query, payload);
-
-    return data.payload;
+    const data = await client.request(query, variables);
+    const project = data.insert_projects_one;
+    return { ...project, logo_square: resolveStorageFile(project.logo_square) } as Project;
   } catch (err) {
     if (/uniqueness violation/i.test(err.message)) {
       throw new Error('Duplicate project name');
@@ -61,7 +86,7 @@ export const create = async (payload: ProjectArgs): Promise<Project> => {
 
 export const update = async (payload: ProjectArgs): Promise<Project> => {
   const query = `
-    mutation ($projectId: uuid!, $name: String!, $logo_square: String, $description: String, $issue_link_template: String, $pr_link_template: String, $organization_id: uuid!){
+    mutation ($projectId: uuid!, $name: String!, $logo_square: String, $description: String, $issue_link_template: String, $pr_link_template: String, $organization_id: uuid){
       update_projects_by_pk( pk_columns:
         {id: $projectId }
           _set:{
@@ -70,16 +95,33 @@ export const update = async (payload: ProjectArgs): Promise<Project> => {
             description: $description,
             issue_link_template: $issue_link_template,
             pr_link_template: $pr_link_template,
+            organization_id: $organization_id
           })
         {
           id
+          name
+          logo_square
+          description
+          issue_link_template
+          pr_link_template
+          organization_id
+          issue_link_template
+          pr_link_template
+          teams{
+            id
+            name
+            logo_square
+            members{
+              ecode
+            }
+          }
         }
-    }`;
+      }`;
 
   try {
     const data = await client.request(query, payload);
-
-    return data.payload;
+    const project = data.update_projects_by_pk;
+    return { ...project, logo_square: resolveStorageFile(project.logo_square) } as Project;
   } catch (err) {
     if (/uniqueness violation/i.test(err.message)) {
       throw new Error('Duplicate project name');

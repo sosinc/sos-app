@@ -1,5 +1,50 @@
 @import 'src/scss/lib';
 
+//----context---------
+
+.context-box {
+  background: $color-bg-secondary;
+  border: 0;
+  border-radius: 4px;
+  box-shadow: -40px 0 40px rgba(0, 0, 0, 0.11);
+  left: 8em;
+  max-height: 17em;
+  overflow-y: auto;
+  padding: 2px 0;
+  position: absolute;
+  top: 3.6em;
+  width: 12em;
+  z-index: 1;
+}
+
+.context-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.context-item {
+  align-items: center;
+  color: $color-text-primary;
+  cursor: pointer;
+  display: flex;
+  font-size: 0.9em;
+  height: 2.5em;
+  padding: 20px;
+
+  &:hover {
+    background: $color-select-active;
+    border: 0;
+  }
+
+}
+
+.separator {
+  border: 1px solid #303236;
+  margin: 1px 0;
+}
+
+//----end----
+
 .container {
   display: flex;
   height: 100%;
@@ -23,6 +68,11 @@
     width: 179px;
   }
 
+  .org-select-box {
+    border: 0;
+    width: 3em;
+  }
+
   .dot-menu-icon {
     color: $color-text-dim2;
     cursor: pointer;
@@ -41,6 +91,7 @@
   }
 
   .avatar-container {
+    cursor: pointer;
     display: flex;
     flex-direction: row-reverse;
     height: 18px;
@@ -107,10 +158,14 @@
     height: 23px;
   }
 
-  .row-text {
+  %row-text {
     color: $color-text-primary;
     margin-left: 7px;
     margin-right: 7px;
+  }
+
+  .row-text {
+    @extend %row-text;
   }
 
   .footer {
@@ -139,9 +194,85 @@
       color: $color-text-bright1;
     }
   }
+}
+
+// ----project----
+.project-row {
+  @extend %row;
+  justify-content: space-between;
+}
+
+.project-container {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.linked-row-text {
+  @extend %row-text;
+
+  &:hover {
+    color: $color-text-dim2;
+  }
+}
+
+.row-menu-container {
+  $size: 1.6em;
+
+  align-items: center;
+  border: 0;
+  border-radius: 50%;
+  display: flex;
+  height: $size;
+  justify-content: center;
+  width: $size;
+
+  &:hover {
+    background: $color-select-active;
+    border: 0;
+    border-radius: 3px;
+  }
+}
+
+.row-menu-icon {
+  height: 1.5em;
+  width: 1.5em;
+}
+
+// team component
+
+.team-row {
+  @extend %row;
+  margin-left: 2em;
+}
+
+.team-fallback-icon {
+  $size: 17px;
+  background: $color-text-dim3;
+  border-radius: 50%;
+  color: $color-input-text;
+  font-size: 9px;
+  height: $size;
+  width: $size;
+}
+
+.team-row-text {
+  @extend %row-text;
+
+  font-size: 0.9em;
+}
+
+.linked-team-row-text {
+  @extend %row-text;
+  font-size: 0.9em;
+
+  &:hover {
+    color: $color-text-dim2;
+  }
 
 }
 
+//------------------
 .content {
   align-items: center;
   display: flex;
@@ -149,11 +280,11 @@
   text-align: center;
   width: 100%;
 
-  @media(max-width: $md) {
+  @media (max-width: $md) {
     margin-top: 100px;
   }
 
-  @media(max-width: $sm) {
+  @media (max-width: $sm) {
     margin-top: 60px;
   }
 }

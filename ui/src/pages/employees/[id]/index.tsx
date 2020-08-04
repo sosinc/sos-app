@@ -70,7 +70,11 @@ const EmployeeDetails: React.FC<FormikValues> = () => {
   ) => {
     try {
       helpers.setSubmitting(true);
-      await createEmployee(values);
+      await createEmployee({
+        ...values,
+        currentEcode: employee?.ecode,
+        currentOrgId: employee?.organization_id,
+      });
     } catch (err) {
       if (/Duplicate employee email/i.test(err.message)) {
         helpers.setFieldError('email', 'A employee with same email already exists');

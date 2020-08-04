@@ -7,6 +7,7 @@ import { RootState } from 'src/duck';
 import { useFlash } from 'src/duck/flashMessages';
 import 'src/scss/global.scss';
 import { wrapper } from 'src/store';
+import 'tippy.js/dist/tippy.css';
 
 const App: React.FC<any> = ({ Component, pageProps }) => {
   const flashMessages = useSelector((state: RootState) => state.flashMessage.messages);

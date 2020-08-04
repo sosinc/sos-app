@@ -161,6 +161,7 @@ const TeamMembers = (p: { team: Team; employees: Employee[]; isFetchingEmployees
             onSelect={handleAddMember}
             value=""
             Selected={() => <p>Add a team member</p>}
+            isFullWidth={true}
           />
         </div>
         <div className={c('item-container')}>{ProjectTeams}</div>

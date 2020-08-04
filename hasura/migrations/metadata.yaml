@@ -150,8 +150,11 @@ tables:
       - updated_at
       - user_id
       filter:
-        organization_id:
-          _eq: X-Hasura-Organization-Id
+        _or:
+        - organization_id:
+            _eq: X-Hasura-Organization-Id
+        - user_id:
+            _eq: X-Hasura-User-Id
   update_permissions:
   - role: app_admin
     permission:
@@ -231,7 +234,6 @@ tables:
       filter:
         id:
           _eq: X-Hasura-User-Id
-      limit: 1
 - table:
     schema: public
     name: organizations
@@ -341,17 +343,17 @@ tables:
             user_id:
               _eq: X-Hasura-User-Id
       set:
+        organization_id: x-hasura-Organization-Id
         created_by: x-hasura-User-Id
       columns:
+      - created_at
+      - description
       - id
-      - name
+      - issue_link_template
       - logo
       - logo_square
-      - description
-      - organization_id
-      - issue_link_template
+      - name
       - pr_link_template
-      - created_at
       - updated_at
       backend_only: false
   select_permissions:

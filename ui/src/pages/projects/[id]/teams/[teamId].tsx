@@ -11,7 +11,7 @@ import { employeeSelector, fetchEmployees } from 'src/duck/employees';
 import { projectSelector } from 'src/duck/projects';
 import { fetchTeam, teamSelector, updateTeamAction } from 'src/duck/teams';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
-
+import filterOptionalValues from 'src/utils/filterOptionalValues';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -65,7 +65,8 @@ const TeamDetails: React.FC<FormikValues> = () => {
   ) => {
     try {
       helpers.setSubmitting(true);
-      await updateTeam({ ...values, teamId });
+      const finalValues = filterOptionalValues(values);
+      await updateTeam({ ...finalValues, teamId });
     } catch (err) {
       if (/Duplicate project name/i.test(err.message)) {
         helpers.setFieldError('name', 'An member with same name already exists');

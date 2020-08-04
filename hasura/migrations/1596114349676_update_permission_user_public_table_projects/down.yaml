@@ -1,0 +1,32 @@
+- args:
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: drop_insert_permission
+- args:
+    permission:
+      backend_only: false
+      check:
+        organization:
+          employees:
+            user_id:
+              _eq: X-Hasura-User-Id
+      columns:
+      - id
+      - name
+      - logo
+      - logo_square
+      - description
+      - organization_id
+      - issue_link_template
+      - pr_link_template
+      - created_at
+      - updated_at
+      set:
+        created_by: x-hasura-User-Id
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: create_insert_permission
