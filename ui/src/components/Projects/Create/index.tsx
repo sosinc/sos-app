@@ -163,12 +163,16 @@ export interface CreateProjectFormValues {
 }
 
 const validationSchema = Yup.object().shape({
-  description: Yup.string(),
+  description: Yup.string()
+    .trim()
+    .min(2, 'Must be 2 characters or more')
+    .max(200, 'Must be 200 characters or less'),
   issue_link_template: Yup.string(),
   logo_square: Yup.string(),
   name: Yup.string()
     .min(2, 'Must be 2 characters or more')
-    .max(16, 'Must be 16 characters or less')
+    .max(50, 'Must be 50 characters or less')
+    .trim()
     .required('Required'),
   organization_id: Yup.string(),
   pr_link_template: Yup.string(),

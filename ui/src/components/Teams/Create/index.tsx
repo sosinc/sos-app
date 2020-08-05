@@ -184,7 +184,8 @@ const validationSchema = Yup.object().shape({
   logo_square: Yup.string(),
   name: Yup.string()
     .min(2, 'Must be 2 characters or more')
-    .max(16, 'Must be 16 characters or less')
+    .max(50, 'Must be 50 characters or less')
+    .trim()
     .required('Required'),
   pr_link_template: Yup.string(),
 });
