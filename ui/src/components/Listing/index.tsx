@@ -85,23 +85,23 @@ const PaginationButtons: React.FC<PaginationProps> = (p) => (
 );
 
 const Listing: React.FC<ListingProps> = (p) => {
-  const [pagination, setPagination] = useState({ limit: 3, offset: 0 });
+  const [pagination, setPagination] = useState({ limit: 2, offset: 0 });
   const items = p.items.slice(pagination.offset, pagination.offset + pagination.limit);
   const isNext = p.items.length <= pagination.offset + pagination.limit;
   const isPrevious = pagination.offset > 0;
-  console.warn('------toto', p.items.length, pagination.limit);
 
   const handleOffset = (mode: string) => {
     const newOffset =
       mode === 'pre' ? pagination.offset - pagination.limit : pagination.offset + pagination.limit;
 
     setPagination({ ...pagination, offset: newOffset });
-    p.handlePagination(newOffset, pagination.limit);
-  };
 
-  const paginationCom = p.handlePagination && (
-    <PaginationButtons isNext={isNext} isPrevious={isPrevious} handleOffset={handleOffset} />
-  );
+    if (p.handlePagination) {
+      p.handlePagination(newOffset, pagination.limit);
+    }
+
+    return;
+  };
 
   return (
     <>
@@ -109,7 +109,7 @@ const Listing: React.FC<ListingProps> = (p) => {
         {p.isFetching && <Skeleton />}
         {items.map((i) => ListingItem({ ...i, Actions: p.Actions }))}
       </div>
-      {paginationCom}
+      <PaginationButtons isNext={isNext} isPrevious={isPrevious} handleOffset={handleOffset} />
     </>
   );
 };
