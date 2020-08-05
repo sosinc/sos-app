@@ -64,7 +64,8 @@ const validationSchema = Yup.object().shape({
   banner: Yup.string(),
   name: Yup.string()
     .min(2, 'Must be 2 characters or more')
-    .max(16, 'Must be 16 characters or less')
+    .max(50, 'Must be 50 characters or less')
+    .trim()
     .required('Required'),
   square_logo: Yup.string(),
 });
