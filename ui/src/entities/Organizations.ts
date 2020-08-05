@@ -1,4 +1,5 @@
 import client from 'src/lib/client';
+import { PaginationArgs } from 'src/utils/paginationArgs';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
 
 export interface Organization {
@@ -69,22 +70,22 @@ export const update = async (payload: OrganizationArgs): Promise<Organization> =
   }
 };
 
-export const fetchMany = async (): Promise<Organization[]> => {
-  const query = `{
-  organizations {
-    id
-    name
-    square_logo
-    banner
-    employees_aggregate {
-      aggregate {
-        count
+export const fetchMany = async (payload: PaginationArgs): Promise<Organization[]> => {
+  const query = `query ( $offset: Int, $limit: Int ){
+    organizations(offset: $offset, limit: $limit) {
+      id
+      name
+      square_logo
+      banner
+      employees_aggregate {
+        aggregate {
+          count
+        }
       }
     }
-   }
- }`;
+  }`;
 
-  const data = await client.request(query);
+  const data = await client.request(query, payload);
 
   const organizations: Organization[] = data?.organizations.map((org: any) => {
     return {

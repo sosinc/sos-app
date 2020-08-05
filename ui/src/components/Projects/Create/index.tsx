@@ -45,48 +45,50 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
   );
 
   return (
-    <form className={c('form')} onSubmit={p.handleSubmit}>
-      <div className={c('title-container')}>
-        <h2>{p.projectId ? p.values.name : 'Create Project'} </h2>
-      </div>
-      <div className={c('name-container', 'field-container')}>
-        <span className={c('field-title')}>Name</span>
-        <TextField placeholder="Enter Name" type="text" name="name" />
-      </div>
-      <div className={c('description-container', 'field-container')}>
-        <span className={c('field-title')}>Description</span>
-        <TextAreaField name="description" placeholder="Enter Description" rows={4} cols={50} />
-      </div>
-
-      <div className={c('square-logo', 'field-container')}>
-        <span className={c('field-title')}>Square Logo</span>
-        <ImageUploadField className={c('image-container')} type={'file'} name="logo_square" />
-      </div>
-
-      <div className={c('right-container')}>
-        <div className={c('issue-link-container', 'field-container')}>
-          <span className={c('field-title')}>Issue Link Template</span>
-          <TextField
-            placeholder="Enter issue Link Template"
-            type="text"
-            name="issue_link_template"
-          />
+    <>
+      <form className={c('form')} onSubmit={p.handleSubmit}>
+        <div className={c('title-container')}>
+          <h2>{p.projectId ? p.values.name : 'Create Project'} </h2>
+        </div>
+        <div className={c('name-container', 'field-container')}>
+          <span className={c('field-title')}>Name</span>
+          <TextField placeholder="Enter Name" type="text" name="name" />
+        </div>
+        <div className={c('description-container', 'field-container')}>
+          <span className={c('field-title')}>Description</span>
+          <TextAreaField name="description" placeholder="Enter Description" rows={4} cols={50} />
         </div>
 
-        <div className={c('pr-link-container', 'field-container')}>
-          <span className={c('field-title')}>Pr Link Template</span>
-          <TextField placeholder="Enter pr link template" type="text" name="pr_link_template" />
+        <div className={c('square-logo', 'field-container')}>
+          <span className={c('field-title')}>Square Logo</span>
+          <ImageUploadField className={c('image-container')} type={'file'} name="logo_square" />
         </div>
-      </div>
-      {orgSelectField}
-      <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
-        <div className={c({ 'saving-in': p.isSubmitting })}>
-          {p.isSubmitting ? 'Saving' : 'Save'}
-          <span />
+
+        <div className={c('right-container')}>
+          <div className={c('issue-link-container', 'field-container')}>
+            <span className={c('field-title')}>Issue Link Template</span>
+            <TextField
+              placeholder="Enter issue Link Template"
+              type="text"
+              name="issue_link_template"
+            />
+          </div>
+
+          <div className={c('pr-link-container', 'field-container')}>
+            <span className={c('field-title')}>Pr Link Template</span>
+            <TextField placeholder="Enter pr link template" type="text" name="pr_link_template" />
+          </div>
         </div>
-      </button>
+        {orgSelectField}
+        <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+          <div className={c({ 'saving-in': p.isSubmitting })}>
+            {p.isSubmitting ? 'Saving' : 'Save'}
+            <span />
+          </div>
+        </button>
+      </form>
       {p.projectId && addTeam(p)}
-    </form>
+    </>
   );
 };
 
