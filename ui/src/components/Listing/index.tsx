@@ -85,7 +85,7 @@ const PaginationButtons: React.FC<PaginationProps> = (p) => (
 );
 
 const Listing: React.FC<ListingProps> = (p) => {
-  const [pagination, setPagination] = useState({ limit: 2, offset: 0 });
+  const [pagination, setPagination] = useState({ limit: 3, offset: 0 });
   const items = p.items.slice(pagination.offset, pagination.offset + pagination.limit);
   const isNext = p.items.length <= pagination.offset + pagination.limit;
   const isPrevious = pagination.offset > 0;

@@ -11,9 +11,9 @@ import {
   ProjectResponse,
   update,
 } from 'src/entities/Project';
+import { PaginationArgs } from 'src/utils/paginationArgs';
 import { RootState } from '.';
 import { fetchDailyTasks } from './tasks';
-import { PaginationArgs } from 'src/utils/paginationArgs';
 
 const projectAdapter = createEntityAdapter<Project>({
   sortComparer: (a, b) => a.name.localeCompare(b.name),

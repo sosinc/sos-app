@@ -1,6 +1,6 @@
 import client from 'src/lib/client';
-import resolveStorageFile from 'src/utils/resolveStorageFile';
 import { PaginationArgs } from 'src/utils/paginationArgs';
+import resolveStorageFile from 'src/utils/resolveStorageFile';
 
 export interface Employee {
   isCurrent: boolean;

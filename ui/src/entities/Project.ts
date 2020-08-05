@@ -1,7 +1,7 @@
 import client from 'src/lib/client';
+import { PaginationArgs } from 'src/utils/paginationArgs';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
 import { Team } from './Team';
-import { PaginationArgs } from 'src/utils/paginationArgs';
 
 export interface Project {
   id: string;

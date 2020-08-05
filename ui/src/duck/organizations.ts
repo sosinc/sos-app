@@ -9,8 +9,8 @@ import {
   OrganizationArgs,
   update,
 } from 'src/entities/Organizations';
-import { RootState } from '.';
 import { PaginationArgs } from 'src/utils/paginationArgs';
+import { RootState } from '.';
 
 const orgAdapter = createEntityAdapter<Organization>({
   sortComparer: (a, b) => a.name.localeCompare(b.name),
