@@ -10,9 +10,9 @@ interface Props {
 }
 
 const ContextMenu: React.FC<Props> = (p) => {
-  if (!p.isOpen) {
-    return null;
-  }
+  /* if (!p.isOpen) {
+   *   return null;
+   * } */
   return (
     <div className={p.className}>
       <Tippy

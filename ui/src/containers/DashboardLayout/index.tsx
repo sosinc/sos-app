@@ -159,6 +159,8 @@ const OrgSelectBox: React.FC<{ currentOrg?: Organization }> = ({ currentOrg: o }
 
 const Index: React.FC<LayoutProps> = (p) => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
+  const toggleUserMenu = () => setIsUserMenuOpen(!isUserMenuOpen);
+  const hideUserMenu = () => setIsUserMenuOpen(false);
   const user = currentUser();
   const role = user.role?.id;
   const projects = user.projects ? user.projects : [];
@@ -191,12 +193,7 @@ const Index: React.FC<LayoutProps> = (p) => {
 
             <div className={c('avatar-container')}>
               <Link href="/profile">
-                <img
-                  className={c('pic')}
-                  src={user.avatar || '/assets/images/avatar.svg'}
-                  alt="pic"
-                  title={user?.name}
-                />
+                <FallbackIcon className={c('pic')} logo={user.avatar} name={user.name} />
               </Link>
               <span className={c('online-status')} />
             </div>
@@ -204,15 +201,11 @@ const Index: React.FC<LayoutProps> = (p) => {
             <ContextMenu
               className={c('user-context-menu')}
               content={<UserMenu />}
-              isOpen={true || isUserMenuOpen}
+              isOpen={isUserMenuOpen}
               tippyClassName={c('user-menu')}
-              onClose={() => setIsUserMenuOpen(false)}
+              onClose={hideUserMenu}
             >
-              <MdMoreHoriz
-                title="Menu"
-                className={c('dot-menu-icon')}
-                onClick={() => setIsUserMenuOpen(true)}
-              />
+              <MdMoreHoriz title="Menu" className={c('dot-menu-icon')} onClick={toggleUserMenu} />
             </ContextMenu>
           </div>
 

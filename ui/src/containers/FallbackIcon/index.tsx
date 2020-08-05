@@ -10,19 +10,20 @@ interface Props {
 }
 
 const index: React.FC<Props> = (p) => {
-  const containerClass = c('fallback-brand', p.className);
-
   if (p.logo) {
-    return <img className={c('brand')} src={p.logo} />;
-  } else if (p.name) {
+    return <img className={c(p.className, 'brand')} src={p.logo} />;
+  }
+
+  if (p.name) {
     return (
-      <div className={containerClass}>
+      <div className={c(p.className, 'name')}>
         <span>{p.name[0].toUpperCase()}</span>
       </div>
     );
   }
+
   return (
-    <div className={c('defautl-fallback-icon')}>
+    <div className={c(p.className, 'default-icon')}>
       <span>?</span>
     </div>
   );
