@@ -10,6 +10,7 @@ import {
   update,
 } from 'src/entities/Organizations';
 import { RootState } from '.';
+import { PaginationArgs } from 'src/utils/paginationArgs';
 
 const orgAdapter = createEntityAdapter<Organization>({
   sortComparer: (a, b) => a.name.localeCompare(b.name),
@@ -31,7 +32,7 @@ export const updateOrganizationAction = createAsyncThunk<
 
 export const fetchOrganizations = createAsyncThunk<
   Organization[],
-  undefined,
+  PaginationArgs,
   { rejectValue: Error; state: OrganizationState }
 >('organizations/fetchMany', fetchMany);
 

@@ -27,9 +27,17 @@ const Header: React.FC = () => (
 
 const Index = () => {
   const employees = useSelector(employeeSelector.selectAll);
-  const [isFetching] = useQuery(fetchEmployees, {
-    errorTitle: 'Failed to fetch some Employees :-(',
-  });
+
+  const [isFetching, refetchEmployees] = useQuery(
+    (args = { offset: 0, limit: 3 + 1 }) => fetchEmployees(args),
+    {
+      errorTitle: 'Failed to fetch some Employees :-(',
+    },
+  );
+
+  const handleOffset = (offset: string, limit: string) => {
+    refetchEmployees({ offset, limit });
+  };
 
   if (!employees.length && !isFetching) {
     return (
@@ -54,7 +62,7 @@ const Index = () => {
 
   return (
     <div className={c('list-container')}>
-      <Listing items={listItems} isFetching={isFetching} />
+      <Listing items={listItems} isFetching={isFetching} handlePagination={handleOffset} />
     </div>
   );
 };

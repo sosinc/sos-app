@@ -7,7 +7,6 @@ import Listing, { ListingItemProps } from 'src/components/Listing';
 import NoItemsFound from 'src/components/NoItemsFound';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { fetchProjects, projectSelector } from 'src/duck/projects';
-import { currentUser } from 'src/entities/User/selectors';
 import { useQuery } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
@@ -26,16 +25,18 @@ const Header: React.FC = () => (
 );
 
 const Index = () => {
-  const user = currentUser();
-  let projects = user.projects ? user.projects : [];
-  let isFetching = false;
+  const projects = useSelector(projectSelector.selectAll);
 
-  if (user.role.id === 'APP_ADMIN') {
-    projects = useSelector(projectSelector.selectAll);
-    [isFetching] = useQuery(fetchProjects, {
+  const [isFetching, refetchProjects] = useQuery(
+    (args = { offset: 0, limit: 3 + 1 }) => fetchProjects(args),
+    {
       errorTitle: 'Failed to fetch some Projects :-(',
-    });
-  }
+    },
+  );
+
+  const handleOffset = (offset: string, limit: string) => {
+    refetchProjects({ offset, limit });
+  };
 
   if (!projects.length) {
     return (
@@ -60,7 +61,7 @@ const Index = () => {
 
   return (
     <div className={c('list-container')}>
-      <Listing items={listItems} isFetching={isFetching} />
+      <Listing items={listItems} isFetching={isFetching} handlePagination={handleOffset} />
     </div>
   );
 };

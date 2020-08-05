@@ -1,6 +1,7 @@
 @import 'src/scss/lib';
 
 .container {
+  padding-bottom: 2em;
   width: 100%;
 
   @media(max-width: $md) {
@@ -12,7 +13,7 @@
   }
 }
 
-.content {
+%content {
   align-items: center;
   color: $color-text-bright1;
   display: flex;
@@ -20,6 +21,10 @@
   max-width: 1200px;
   padding: 5px;
   text-align: left;
+}
+
+.content {
+  @extend %content;
 
   &:hover .action {
     visibility: visible;
@@ -64,6 +69,31 @@
 
   cursor: pointer;
   visibility: hidden;
+}
+
+.pagination-buttons {
+  @extend %content;
+
+  justify-content: space-between;
+}
+
+.load-button {
+  background: $color-button-bg;
+  border: 0;
+  border-radius: 4px;
+  color: $color-button-text;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-size: 13px;
+  height: 40px;
+  outline: none;
+  padding: 0 2em;
+  transition: all 0.2s;
+
+  &:disabled {
+    color: $color-text-dim2;
+    cursor: default;
+  }
 }
 
 .skeleton {

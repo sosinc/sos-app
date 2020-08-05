@@ -1,6 +1,7 @@
 import client from 'src/lib/client';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
 import { Team } from './Team';
+import { PaginationArgs } from 'src/utils/paginationArgs';
 
 export interface Project {
   id: string;
@@ -130,9 +131,9 @@ export const update = async (payload: ProjectArgs): Promise<Project> => {
   }
 };
 
-export const fetchMany = async (): Promise<Project[]> => {
-  const query = `{
-  projects {
+export const fetchMany = async (payload: PaginationArgs): Promise<Project[]> => {
+  const query = ` query ( $offset: Int, $limit: Int ){
+  projects(offset: $offset, limit: $limit) {
       id
       name
       logo_square
@@ -146,7 +147,7 @@ export const fetchMany = async (): Promise<Project[]> => {
     }
   }`;
 
-  const data = await client.request(query);
+  const data = await client.request(query, payload);
   return data?.projects.length
     ? data.projects.map((e: any) => ({
         ...e,

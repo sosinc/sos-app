@@ -13,6 +13,7 @@ import {
 } from 'src/entities/Project';
 import { RootState } from '.';
 import { fetchDailyTasks } from './tasks';
+import { PaginationArgs } from 'src/utils/paginationArgs';
 
 const projectAdapter = createEntityAdapter<Project>({
   sortComparer: (a, b) => a.name.localeCompare(b.name),
@@ -23,7 +24,7 @@ export type ProjectState = EntityState<Project>;
 
 export const fetchProjects = createAsyncThunk<
   Project[],
-  undefined,
+  PaginationArgs,
   { rejectValue: Error; state: ProjectState }
 >('projects/fetchMany', fetchMany);
 

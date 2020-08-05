@@ -1,5 +1,6 @@
 import client from 'src/lib/client';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
+import { PaginationArgs } from 'src/utils/paginationArgs';
 
 export interface Employee {
   isCurrent: boolean;
@@ -81,9 +82,9 @@ export const update = async (payload: EmployeeArgs): Promise<Employee> => {
   }
 };
 
-export const fetchMany = async (): Promise<Employee[]> => {
-  const query = `{
-  employees {
+export const fetchMany = async (payload: PaginationArgs): Promise<Employee[]> => {
+  const query = ` query ( $offset: Int, $limit: Int ){
+   employees(offset: $offset, limit: $limit) {
     ecode
     name
     email
@@ -94,7 +95,7 @@ export const fetchMany = async (): Promise<Employee[]> => {
     }
   }`;
 
-  const data = await client.request(query);
+  const data = await client.request(query, payload);
 
   return data?.employees.length
     ? data.employees.map((e: any) => ({

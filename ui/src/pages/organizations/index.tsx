@@ -26,9 +26,17 @@ const Header: React.FC = () => (
 
 const Index = () => {
   const organizations = useSelector(orgSelector.selectAll);
-  const [isFetching] = useQuery(fetchOrganizations, {
-    errorTitle: 'Failed to fetch some Organizations',
-  });
+
+  const [isFetching, refetchOrg] = useQuery(
+    (args = { offset: 0, limit: 3 + 1 }) => fetchOrganizations(args),
+    {
+      errorTitle: 'Failed to fetch some Organizations',
+    },
+  );
+
+  const handleOffset = (offset: number, limit: number) => {
+    refetchOrg({ offset, limit: limit + 1 });
+  };
 
   if (!organizations.length && !isFetching) {
     return (
@@ -53,7 +61,7 @@ const Index = () => {
 
   return (
     <div className={c('list-container')}>
-      <Listing items={listItems} isFetching={isFetching} />
+      <Listing items={listItems} isFetching={isFetching} handlePagination={handleOffset} />
     </div>
   );
 };
