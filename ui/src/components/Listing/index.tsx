@@ -59,7 +59,7 @@ interface ListingProps {
   isFetching?: boolean;
   items: ListingItemProps[];
   Actions?: React.FC<{ id: string }>;
-  refetchData?: (args: { offset: number; limit: number }) => void;
+  onPaginate?: (args: { offset: number; limit: number }) => void;
 }
 
 interface PaginationProps {
@@ -102,8 +102,8 @@ const Listing: React.FC<ListingProps> = (p) => {
 
     setPagination({ ...pagination, offset: newOffset });
 
-    if (p.refetchData) {
-      p.refetchData({ offset: newOffset, limit: pagination.limit });
+    if (p.onPaginate) {
+      p.onPaginate({ offset: newOffset, limit: pagination.limit });
     }
 
     return;

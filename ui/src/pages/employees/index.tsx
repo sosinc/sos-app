@@ -62,7 +62,7 @@ const Index = () => {
 
   return (
     <div className={c('list-container')}>
-      <Listing items={listItems} isFetching={isFetching} refetchData={handleOffset} />
+      <Listing items={listItems} isFetching={isFetching} onPaginate={handleOffset} />
     </div>
   );
 };
