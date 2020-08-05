@@ -71,13 +71,13 @@
   visibility: hidden;
 }
 
-.pagination-buttons {
+.pagination-container {
   @extend %content;
 
   justify-content: space-between;
 }
 
-.load-button {
+.pagination-button {
   background: $color-button-bg;
   border: 0;
   border-radius: 4px;

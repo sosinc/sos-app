@@ -34,8 +34,8 @@ const Index = () => {
     },
   );
 
-  const handleOffset = (offset: number, limit: number) => {
-    refetchOrg({ offset, limit: limit + 1 });
+  const changePagination = (args: { offset: number; limit: number }) => {
+    refetchOrg({ offset: args.offset, limit: args.limit + 1 });
   };
 
   if (!organizations.length && !isFetching) {
@@ -61,7 +61,7 @@ const Index = () => {
 
   return (
     <div className={c('list-container')}>
-      <Listing items={listItems} isFetching={isFetching} handlePagination={handleOffset} />
+      <Listing items={listItems} isFetching={isFetching} refetchData={changePagination} />
     </div>
   );
 };

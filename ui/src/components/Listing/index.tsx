@@ -59,26 +59,30 @@ interface ListingProps {
   isFetching?: boolean;
   items: ListingItemProps[];
   Actions?: React.FC<{ id: string }>;
-  handlePagination?: any;
+  refetchData?: (args: { offset: number; limit: number }) => void;
 }
 
 interface PaginationProps {
-  isNext: boolean;
-  isPrevious: boolean;
-  handleOffset: any;
+  hasNext: boolean;
+  hasPrevious: boolean;
+  onPaginate: (direction: 'previous' | 'next') => void;
 }
 
 const PaginationButtons: React.FC<PaginationProps> = (p) => (
-  <div className={c('pagination-buttons')}>
+  <div className={c('pagination-container')}>
     <button
-      className={c('load-button')}
-      onClick={() => p.handleOffset('pre')}
-      disabled={!p.isPrevious}
+      className={c('pagination-button')}
+      onClick={() => p.onPaginate('previous')}
+      disabled={!p.hasPrevious}
     >
       Previous
     </button>
 
-    <button className={c('load-button')} onClick={() => p.handleOffset('next')} disabled={p.isNext}>
+    <button
+      className={c('pagination-button')}
+      onClick={() => p.onPaginate('next')}
+      disabled={p.hasNext}
+    >
       Next
     </button>
   </div>
@@ -87,17 +91,19 @@ const PaginationButtons: React.FC<PaginationProps> = (p) => (
 const Listing: React.FC<ListingProps> = (p) => {
   const [pagination, setPagination] = useState({ limit: 3, offset: 0 });
   const items = p.items.slice(pagination.offset, pagination.offset + pagination.limit);
-  const isNext = p.items.length <= pagination.offset + pagination.limit;
-  const isPrevious = pagination.offset > 0;
+  const hasNext = p.items.length <= pagination.offset + pagination.limit;
+  const hasPrevious = pagination.offset > 0;
 
-  const handleOffset = (mode: string) => {
+  const onPaginationChange = (mode: string) => {
     const newOffset =
-      mode === 'pre' ? pagination.offset - pagination.limit : pagination.offset + pagination.limit;
+      mode === 'previous'
+        ? pagination.offset - pagination.limit
+        : pagination.offset + pagination.limit;
 
     setPagination({ ...pagination, offset: newOffset });
 
-    if (p.handlePagination) {
-      p.handlePagination(newOffset, pagination.limit);
+    if (p.refetchData) {
+      p.refetchData({ offset: newOffset, limit: pagination.limit });
     }
 
     return;
@@ -109,7 +115,11 @@ const Listing: React.FC<ListingProps> = (p) => {
         {p.isFetching && <Skeleton />}
         {items.map((i) => ListingItem({ ...i, Actions: p.Actions }))}
       </div>
-      <PaginationButtons isNext={isNext} isPrevious={isPrevious} handleOffset={handleOffset} />
+      <PaginationButtons
+        hasNext={hasNext}
+        hasPrevious={hasPrevious}
+        onPaginate={onPaginationChange}
+      />
     </>
   );
 };

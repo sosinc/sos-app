@@ -34,8 +34,8 @@ const Index = () => {
     },
   );
 
-  const handleOffset = (offset: string, limit: string) => {
-    refetchProjects({ offset, limit });
+  const handleOffset = (args: { offset: number; limit: number }) => {
+    refetchProjects({ offset: args.offset, limit: args.limit });
   };
 
   if (!projects.length) {
@@ -61,7 +61,7 @@ const Index = () => {
 
   return (
     <div className={c('list-container')}>
-      <Listing items={listItems} isFetching={isFetching} handlePagination={handleOffset} />
+      <Listing items={listItems} isFetching={isFetching} refetchData={handleOffset} />
     </div>
   );
 };
