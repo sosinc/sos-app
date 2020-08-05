@@ -15,9 +15,10 @@ import { useSelector } from 'react-redux';
 
 import SelectBox from 'src/components/Form/SelectBox';
 import ContextMenu from 'src/components/Modal/ContextMenu';
+import UserMenu from 'src/components/Modal/ContextMenu/UserMenu';
 import FallbackIcon from 'src/containers/FallbackIcon';
 import WithUser from 'src/containers/WithUser';
-import { logoutUserAction, setCurrentOrgAction } from 'src/duck/auth';
+import { setCurrentOrgAction } from 'src/duck/auth';
 import { orgSelector } from 'src/duck/organizations';
 import { teamSelector } from 'src/duck/teams';
 import { Organization } from 'src/entities/Organizations';
@@ -121,38 +122,6 @@ const UserProject: React.FC<Project> = ({ ...item }) => {
   );
 };
 
-const UserContext: React.FC = () => {
-  const [logout] = useAsyncThunk(logoutUserAction, {
-    errorTitle: 'Logout Failed',
-    rethrowError: true,
-    successTitle: 'Logout successfully',
-  });
-
-  const handleLogout = async () => {
-    await logout();
-    Router.replace(`/`);
-  };
-
-  return (
-    <>
-      <div className={c('context-box')}>
-        <div className={c('context-container')}>
-          <Link href={'/profile'}>
-            <a className={c('context-item')}>Settings</a>
-          </Link>
-          <Link href={'/profile'}>
-            <a className={c('context-item')}>Profile</a>
-          </Link>
-          <span className={c('separator')} />
-          <span className={c('context-item')} onClick={handleLogout}>
-            Logout
-          </span>
-        </div>
-      </div>
-    </>
-  );
-};
-
 const OrgSelectBox: React.FC<{ currentOrg?: Organization }> = ({ currentOrg: o }) => {
   const [setCurrentOrg] = useAsyncThunk(setCurrentOrgAction, {
     errorTitle: 'Failed to change organization, try again',
@@ -215,32 +184,36 @@ const Index: React.FC<LayoutProps> = (p) => {
         <title>{p.title}</title>
       </Head>
 
-      <ContextMenu isOpen={isUserMenuOpen} onClose={() => setIsUserMenuOpen(false)}>
-        <UserContext />
-      </ContextMenu>
-
       <div className={c('container')}>
         <div className={c('sidebar')}>
           <div className={c('header')}>
             <OrgSelectBox currentOrg={currentOrg} />
 
-            <Link href="/profile">
-              <div className={c('avatar-container')}>
+            <div className={c('avatar-container')}>
+              <Link href="/profile">
                 <img
                   className={c('pic')}
                   src={user.avatar || '/assets/images/avatar.svg'}
                   alt="pic"
                   title={user?.name}
                 />
-                <span className={c('online-status')} />
-              </div>
-            </Link>
+              </Link>
+              <span className={c('online-status')} />
+            </div>
 
-            <MdMoreHoriz
-              title="more"
-              className={c('dot-menu-icon')}
-              onClick={() => setIsUserMenuOpen(true)}
-            />
+            <ContextMenu
+              className={c('user-context-menu')}
+              content={<UserMenu />}
+              isOpen={true || isUserMenuOpen}
+              tippyClassName={c('user-menu')}
+              onClose={() => setIsUserMenuOpen(false)}
+            >
+              <MdMoreHoriz
+                title="Menu"
+                className={c('dot-menu-icon')}
+                onClick={() => setIsUserMenuOpen(true)}
+              />
+            </ContextMenu>
           </div>
 
           <div className={c('section')}>{role !== 'USER' ? adminSection : userSection()}</div>

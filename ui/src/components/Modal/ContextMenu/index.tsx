@@ -1,35 +1,33 @@
 import Tippy from '@tippyjs/react';
-import classNames from 'classnames/bind';
-
-import style from './style.module.scss';
-
-const c = classNames.bind(style);
 
 interface Props {
   onClose: () => void;
-  children: React.ReactElement;
+  content: React.ReactElement;
   isOpen: boolean;
   Header?: React.FC<{ onClose: () => void }>;
+  className?: string;
+  tippyClassName?: string;
 }
 
 const ContextMenu: React.FC<Props> = (p) => {
   if (!p.isOpen) {
     return null;
   }
-
   return (
-    <Tippy
-      content={p.children}
-      interactive={true}
-      visible={p.isOpen}
-      onClickOutside={p.onClose}
-      maxWidth="none"
-      placement="bottom"
-    >
-      <div className={c('container')} onClick={p.onClose}>
-        {p.children}
-      </div>
-    </Tippy>
+    <div className={p.className}>
+      <Tippy
+        content={p.content}
+        className={p.tippyClassName}
+        interactive={true}
+        visible={p.isOpen}
+        onClickOutside={p.onClose}
+        maxWidth="none"
+        placement="top"
+        arrow={true}
+      >
+        <div>{p.children}</div>
+      </Tippy>
+    </div>
   );
 };
 

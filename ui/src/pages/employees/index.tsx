@@ -60,7 +60,7 @@ const Index = () => {
 };
 
 export default () => (
-  <DashboardLayout title={'Snake Oil Software - Organizations'} Header={Header}>
+  <DashboardLayout title={'Snake Oil Software - Employees'} Header={Header}>
     <Index />
   </DashboardLayout>
 );

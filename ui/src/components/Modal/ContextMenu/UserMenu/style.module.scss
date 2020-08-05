@@ -1,0 +1,39 @@
+@import 'src/scss/lib';
+
+.context-box {
+  background: $color-bg-secondary;
+  border: 0;
+  border-radius: 4px;
+  box-shadow: -40px 0 40px rgba(0, 0, 0, 0.11);
+  left: 8em;
+  max-height: 17em;
+  overflow-y: auto;
+  top: 3.6em;
+  width: 12em;
+}
+
+.context-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.context-item {
+  align-items: center;
+  color: $color-text-primary;
+  cursor: pointer;
+  display: flex;
+  font-size: 0.9em;
+  height: 2.5em;
+  padding: 20px;
+
+  &:hover {
+    background: $color-select-active;
+    border: 0;
+  }
+
+}
+
+.separator {
+  border: 1px solid #303236;
+  margin: 1px 0;
+}
