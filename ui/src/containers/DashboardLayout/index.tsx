@@ -71,8 +71,8 @@ const team = (t: Team) => {
         <a className={c('linked-team-row-text')}>{t.name}</a>
       </Link>
     ) : (
-      <span className={c('team-row-text')}>{t.name}</span>
-    );
+        <span className={c('team-row-text')}>{t.name}</span>
+      );
 
   return (
     <div className={c('team-row')} key={t.id}>
@@ -92,8 +92,8 @@ const UserProject: React.FC<Project> = ({ ...item }) => {
   const menuIcon = isMenuOpen ? (
     <MdKeyboardArrowDown className={c('row-menu-icon')} />
   ) : (
-    <MdKeyboardArrowRight className={c('row-menu-icon')} />
-  );
+      <MdKeyboardArrowRight className={c('row-menu-icon')} />
+    );
 
   const name =
     currentRoute !== '/dashboard' ? (
@@ -101,8 +101,8 @@ const UserProject: React.FC<Project> = ({ ...item }) => {
         <a className={c('linked-row-text')}>{item.name}</a>
       </Link>
     ) : (
-      <span className={c('row-text')}>{item.name}</span>
-    );
+        <span className={c('row-text')}>{item.name}</span>
+      );
 
   return (
     <>
@@ -145,7 +145,11 @@ const OrgSelectBox: React.FC<{ currentOrg?: Organization }> = ({ currentOrg: o }
   );
 
   if (!o || organizations.length === 1) {
-    return <Link href={'/organizations'}>{currentOrgLogo}</Link>;
+    return (
+      <Link href={'/organizations'}>
+        <span>{currentOrgLogo}</span>
+      </Link>
+    );
   }
 
   return (
@@ -195,13 +199,11 @@ const Index: React.FC<LayoutProps> = (p) => {
             <OrgSelectBox currentOrg={currentOrg} />
 
             <div className={c('avatar-container')}>
-              <Tippy content={user.name}>
-                <Link href="/profile">
-                  <span>
-                    <FallbackIcon className={c('pic')} logo={user.avatar} name={user.name} />
-                  </span>
-                </Link>
-              </Tippy>
+              <Link href="/profile">
+                <span>
+                  <FallbackIcon className={c('pic')} logo={user.avatar} name={user.name} />
+                </span>
+              </Link>
               <span className={c('online-status')} />
             </div>
 

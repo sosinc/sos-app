@@ -18,7 +18,7 @@ const c = classNames.bind(style);
 const Header: React.FC = () => (
   <div className={c('header')}>
     Employees
-    <Tippy content={'Add employee'}>
+    <Tippy content="Add employee">
       <span>
         <Link href="/employees/add">
           <a className={c('add-button')}>

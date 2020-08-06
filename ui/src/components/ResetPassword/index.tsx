@@ -58,8 +58,8 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
         ? 'Resetting Password'
         : 'Reset Password'
       : p.isSubmitting
-      ? 'Sending OTP'
-      : 'Send OTP';
+        ? 'Sending OTP'
+        : 'Send OTP';
 
   return (
     <>
@@ -87,7 +87,7 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
           </div>
         </div>
 
-        <Tippy content={'Back'}>
+        <Tippy content="Back">
           <span>
             <FaAngleLeft className={c('back-icon', formStep)} onClick={gotoStep1} />
           </span>
