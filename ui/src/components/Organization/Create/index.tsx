@@ -5,7 +5,6 @@ import * as Yup from 'yup';
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import TextField from 'src/components/Form/TextField';
 import { Organization } from 'src/entities/Organizations';
-
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
