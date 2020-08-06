@@ -1,3 +1,4 @@
+import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -8,7 +9,7 @@ import {
   MdCheckCircle,
   MdDelete,
   MdEdit,
-  MdMoreHoriz,
+  MdMoreVert,
   MdRadioButtonUnchecked,
 } from 'react-icons/md';
 import { RiPlayListAddLine } from 'react-icons/ri';
@@ -30,8 +31,6 @@ import {
 } from 'src/duck/tasks';
 import { DailyTask } from 'src/entities/Task';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
-
-import Tippy from '@tippyjs/react';
 
 import style from './style.module.scss';
 
@@ -78,11 +77,31 @@ const NoTodaysCommitment = () => (
 
 const SelectedValue: React.FC<{ item?: SelectFieldItem }> = (p) => {
   if (!p.item || p.item.id === 'todo') {
-    return <MdRadioButtonUnchecked className={c('row-item-icon')} title={'Done'} />;
+    return (
+      <Tippy content={<span>Todo</span>}>
+        <span>
+          <MdRadioButtonUnchecked className={c('row-item-icon')} />
+        </span>
+      </Tippy>
+    );
   }
 
-  return <MdCheckCircle className={c('row-item-icon', 'done-icon')} title={'Todo'} />;
+  return (
+    <Tippy content={<span>Done</span>}>
+      <span>
+        <MdCheckCircle className={c('row-item-icon', 'done-icon')} />
+      </span>
+    </Tippy>
+  );
 };
+
+const MoreOptionIcon = () => (
+  <Tippy content="More">
+    <span>
+      <MdMoreVert className={c('row-item')} />
+    </span>
+  </Tippy>
+);
 
 const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetching, ...p }) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
@@ -248,13 +267,16 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
             </div>
             <div className={c('row-right-container')}>
               {p.pr_id && prField(p)}
-              <span className={c('row-date')} title={dayjs(p.date).format('DD, MMM YYYY')}>
-                {dateFromNow()}
-              </span>
 
-              <div className={c('fallback-logo')} title={project?.name}>
-                <FallbackIcon logo={project?.logo_square} name={project?.name} />
-              </div>
+              <Tippy content={dayjs(p.date).format('DD, MMM YYYY')}>
+                <span className={c('row-date')}>{dateFromNow()}</span>
+              </Tippy>
+
+              <Tippy content={project?.name}>
+                <div className={c('fallback-logo')}>
+                  <FallbackIcon logo={project?.logo_square} name={project?.name} />
+                </div>
+              </Tippy>
               <SelectBox
                 className={c('row-status-item')}
                 name={'task-status'}
@@ -262,7 +284,7 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
                 onSelect={handleSelectMoreOptions}
                 value=""
                 isDropdownIconHidden={true}
-                Selected={() => <MdMoreHoriz className={c('row-item')} title={'More'} />}
+                Selected={MoreOptionIcon}
               />
             </div>
           </div>

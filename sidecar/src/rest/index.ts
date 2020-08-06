@@ -2,7 +2,7 @@ import * as express from "express";
 import auth from "./auth";
 import onNewUser from "./onNewUser";
 import onNewEmployee from "./onNewEmployee";
-import onNewProject from './onNewProject';
+import onNewProject from "./onNewProject";
 
 const api = express.Router();
 

@@ -1,3 +1,4 @@
+import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -167,9 +168,11 @@ const OrgSelectBox: React.FC<{ currentOrg?: Organization }> = ({ currentOrg: o }
   };
 
   const currentOrgLogo = (
-    <div className={c('logo-image', 'fallback-icon')} title={o?.name || 'No Organization'}>
-      <FallbackIcon logo={o?.square_logo} name={o?.name} />
-    </div>
+    <Tippy content={o?.name || 'No Organization'}>
+      <div className={c('logo-image', 'fallback-icon')}>
+        <FallbackIcon logo={o?.square_logo} name={o?.name} />
+      </div>
+    </Tippy>
   );
 
   if (!o || organizations.length === 1) {
@@ -225,16 +228,17 @@ const Index: React.FC<LayoutProps> = (p) => {
             <OrgSelectBox currentOrg={currentOrg} />
 
             <div className={c('avatar-container')} onClick={() => setIsUserMenuOpen(true)}>
-              <img
-                className={c('pic')}
-                src="/assets/images/avatar.svg"
-                alt="pic"
-                title={user?.name}
-              />
+              <Tippy content={user.name}>
+                <img className={c('pic')} src="/assets/images/avatar.svg" alt="pic" />
+              </Tippy>
               <span className={c('online-status')} />
             </div>
 
-            <MdMoreHoriz title="more" className={c('dot-menu-icon')} />
+            <Tippy content={'More'}>
+              <span>
+                <MdMoreHoriz className={c('dot-menu-icon')} />
+              </span>
+            </Tippy>
           </div>
 
           <div className={c('section')}>{role !== 'USER' ? adminSection : userSection()}</div>

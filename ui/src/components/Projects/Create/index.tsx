@@ -1,3 +1,4 @@
+import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import Link from 'next/link';
@@ -126,11 +127,16 @@ const addTeam = (p: Props) => {
           <h3>Teams </h3>
           <span className={c('sub-title')}>Manage this project teams</span>
         </div>
-        <Link href={`/projects/${p.projectId}/teams/add`}>
-          <a className={c('add-button')} title="Add Team">
-            <MdAdd className={c('icon')} />
-          </a>
-        </Link>
+
+        <Tippy content={'Add Team'}>
+          <span>
+            <Link href={`/projects/${p.projectId}/teams/add`}>
+              <a className={c('add-button')}>
+                <MdAdd className={c('icon')} />
+              </a>
+            </Link>
+          </span>
+        </Tippy>
       </div>
       <div className={c('team-container')}>{isProjectTeams}</div>
     </>
