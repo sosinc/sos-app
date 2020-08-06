@@ -119,15 +119,9 @@ const initialValues = {
 };
 
 const validationSchema = Yup.object({
-  email: Yup.string()
-    .email('Invalid email address')
-    .required('Required'),
-  otp: Yup.string()
-    .min(4, 'Must be 4 or more')
-    .required('Required'),
-  password: Yup.string()
-    .max(15, 'Must be 15 characters or less')
-    .required('Required'),
+  email: Yup.string().email('Invalid email address').required('Required'),
+  otp: Yup.string().min(4, 'Must be 4 or more').required('Required'),
+  password: Yup.string().max(15, 'Must be 15 characters or less').required('Required'),
 });
 
 interface Props {

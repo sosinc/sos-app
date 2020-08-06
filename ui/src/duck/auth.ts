@@ -9,8 +9,8 @@ import {
   resetPassword as apiResetPassword,
   ResetPasswordPayload,
   sendPasswordResetOTP as apiResetPasswordOTP,
-  updateProfile,
   setCurrentOrg,
+  updateProfile,
   User,
   UserProfileArgs,
 } from 'src/entities/User';

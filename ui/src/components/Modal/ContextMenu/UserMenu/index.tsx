@@ -1,8 +1,8 @@
 import classNames from 'classnames/bind';
 import Link from 'next/link';
-import { useAsyncThunk } from 'src/lib/asyncHooks';
-import { logoutUserAction } from 'src/duck/auth';
 import { useRouter } from 'next/router';
+import { logoutUserAction } from 'src/duck/auth';
+import { useAsyncThunk } from 'src/lib/asyncHooks';
 
 import style from './style.module.scss';
 
