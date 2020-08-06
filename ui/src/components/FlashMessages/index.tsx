@@ -28,7 +28,9 @@ const Message: React.FC<{ message: FlashMessage } & Pick<Props, 'onClose'>> = (p
       </div>
 
       <Tippy content="Close">
-        <MdClose className={s['close-icon']} onClick={() => p.onClose(p.message.id)} />
+        <span>
+          <MdClose className={s['close-icon']} onClick={() => p.onClose(p.message.id)} />
+        </span>
       </Tippy>
     </div>
   );

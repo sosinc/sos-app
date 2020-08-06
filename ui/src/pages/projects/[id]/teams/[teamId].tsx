@@ -16,12 +16,9 @@ import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
-const Header: React.FC = () => {
-  const router = useRouter();
-  const projectId = String(router.query.id);
-  const teamId = String(router.query.teamId);
-  const project = useSelector((state: RootState) => projectSelector.selectById(state, projectId));
-  const team = useSelector((state: RootState) => teamSelector.selectById(state, teamId));
+const Header: React.FC<{ teamId: string; projectId: string }> = (p) => {
+  const project = useSelector((state: RootState) => projectSelector.selectById(state, p.projectId));
+  const team = useSelector((state: RootState) => teamSelector.selectById(state, p.teamId));
 
   return (
     <div className={c('header')}>
@@ -29,7 +26,7 @@ const Header: React.FC = () => {
         <Link href="/projects">
           <a>Projects > </a>
         </Link>
-        <Link href={`/projects/${projectId}`}>
+        <Link href={`/projects/${p.projectId}`}>
           <a> {project?.name || 'Project'} > </a>
         </Link>
         {team?.name || 'Team'}
@@ -38,16 +35,15 @@ const Header: React.FC = () => {
   );
 };
 
-const TeamDetails: React.FC<FormikValues> = () => {
-  const router = useRouter();
-  const teamId = String(router.query.teamId);
-
-  const [isFetchingTeam] = useQuery(() => fetchTeam({ id: teamId }), {
+const TeamDetails: React.FC<FormikValues & { teamId: string; projectId: string }> = (p) => {
+  const [isFetchingTeam] = useQuery(() => fetchTeam({ id: p.teamId }), {
     errorTitle: 'Failed to fetch some team details',
   });
-  const team = useSelector((state: RootState) => teamSelector.selectById(state, teamId));
+  const project = useSelector((state: RootState) => projectSelector.selectById(state, p.projectId));
+  const team = useSelector((state: RootState) => teamSelector.selectById(state, p.teamId));
 
-  const employees = useSelector(employeeSelector.selectAll);
+  const allEmployees = useSelector(employeeSelector.selectAll);
+  const employees = allEmployees.filter((e) => e.organization_id === project?.organization_id);
 
   const [isFetchingEmployees] = useQuery(fetchEmployees, {
     errorTitle: 'Failed to fetch some Employees :-(',
@@ -66,7 +62,7 @@ const TeamDetails: React.FC<FormikValues> = () => {
     try {
       helpers.setSubmitting(true);
       const finalValues = filterOptionalValues(values);
-      await updateTeam({ ...finalValues, teamId });
+      await updateTeam({ ...finalValues, teamId: p.teamId });
     } catch (err) {
       if (/Duplicate project name/i.test(err.message)) {
         helpers.setFieldError('name', 'An member with same name already exists');
@@ -95,9 +91,16 @@ const TeamDetails: React.FC<FormikValues> = () => {
 };
 
 export default () => {
+  const router = useRouter();
+  const teamId = String(router.query.teamId);
+  const projectId = String(router.query.id);
+
   return (
-    <DashboardLayout title={'Teams - Snake Oil Software'} Header={Header}>
-      <TeamDetails />
+    <DashboardLayout
+      title={'Teams - Snake Oil Software'}
+      Header={() => <Header teamId={teamId} projectId={projectId} />}
+    >
+      <TeamDetails teamId={teamId} projectId={projectId} />
     </DashboardLayout>
   );
 };

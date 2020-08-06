@@ -1,3 +1,4 @@
+import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { AiOutlineTeam } from 'react-icons/ai';
@@ -114,11 +115,11 @@ const TeamMembers = (p: { team: Team; employees: Employee[]; isFetchingEmployees
   }));
 
   const RemoveMember: React.FC<{ id: string }> = ({ id }) => (
-    <MdDelete
-      className={c('del-icon')}
-      onClick={() => handleDeleteMember(id)}
-      title={'Remove Member'}
-    />
+    <Tippy content="Remove Member">
+      <span>
+        <MdDelete className={c('del-icon')} onClick={() => handleDeleteMember(id)} />
+      </span>
+    </Tippy>
   );
   const employees = p.employees.filter((e) => members.indexOf(e) === -1);
   const ProjectTeams = members.length ? (
