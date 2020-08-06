@@ -1,3 +1,4 @@
+import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { AiOutlineClose } from 'react-icons/ai';
 
@@ -21,7 +22,11 @@ const Modal: React.FC<ModalProps> = (p) => {
       <div className={c('container')} onClick={p.onClose}>
         <div className={c('modal')} onClick={(e) => e.stopPropagation()}>
           <div className={c('back-icon-container')}>
-            <AiOutlineClose title="Close" className={c('back-icon')} onClick={p.onClose} />
+            <Tippy content={'Close'}>
+              <span>
+                <AiOutlineClose className={c('back-icon')} onClick={p.onClose} />
+              </span>
+            </Tippy>
           </div>
           {p.children}
         </div>

@@ -1,3 +1,4 @@
+import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import Link from 'next/link';
 import { MdAdd, MdBusiness } from 'react-icons/md';
@@ -16,11 +17,15 @@ const c = classNames.bind(style);
 const Header: React.FC = () => (
   <div className={c('header')}>
     Organizations
-    <Link href="/organizations/add">
-      <a className={c('add-button')} title="Add organization">
-        <MdAdd className={c('icon')} />
-      </a>
-    </Link>
+    <Tippy content="Add organization">
+      <span>
+        <Link href="/organizations/add">
+          <a className={c('add-button')}>
+            <MdAdd className={c('icon')} />
+          </a>
+        </Link>
+      </span>
+    </Tippy>
   </div>
 );
 
