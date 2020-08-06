@@ -29,7 +29,7 @@ const Index = () => {
   const employees = useSelector(employeeSelector.selectAll);
 
   const [isFetching, refetchEmployees] = useQuery(
-    (args = { offset: 0, limit: 3 + 1 }) => fetchEmployees(args),
+    (args = { offset: 0, limit: 20 + 1 }) => fetchEmployees(args),
     {
       errorTitle: 'Failed to fetch some Employees :-(',
     },

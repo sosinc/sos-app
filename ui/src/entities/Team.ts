@@ -1,5 +1,6 @@
 import client from 'src/lib/client';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
+import uploadDefaultLogo from 'src/utils/uploadDefaultLogo';
 import { Project } from './Project';
 
 export interface Team {
@@ -38,7 +39,7 @@ export interface FetchOneTeamResponse {
   team: Team;
 }
 
-export const create = async (payload: TeamArgs): Promise<Team> => {
+export const create = async (args: TeamArgs): Promise<Team> => {
   const query = `
   mutation ($name: String!, $project_id: uuid!, $logo_square: String, $issue_link_template: String, $pr_link_template: String,){
     insert_teams_one(object: {
@@ -54,7 +55,9 @@ export const create = async (payload: TeamArgs): Promise<Team> => {
   }`;
 
   try {
-    const data = await client.request(query, payload);
+    const logoSquare = args.logo_square || (await uploadDefaultLogo(args.name));
+    const variables: TeamArgs = { ...args, logo_square: logoSquare };
+    const data = await client.request(query, variables);
 
     return data.payload;
   } catch (err) {
