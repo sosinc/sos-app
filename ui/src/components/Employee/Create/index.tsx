@@ -105,14 +105,13 @@ export interface CreateEmployeeFormValues {
 
 const validationSchema = Yup.object().shape({
   designation_id: Yup.string().required('Required'),
-  ecode: Yup.string().required('Required'),
-  email: Yup.string()
-    .email()
-    .required('Required'),
+  ecode: Yup.string().trim().required('Required'),
+  email: Yup.string().email().required('Required'),
   headshot: Yup.string(),
   name: Yup.string()
     .min(2, 'Must be 2 characters or more')
-    .max(100, 'Must be 100 characters or less')
+    .max(50, 'Must be 50 characters or less')
+    .trim()
     .required('Required'),
   organization_id: Yup.string().required('Required'),
 });

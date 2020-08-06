@@ -5,7 +5,6 @@ import * as Yup from 'yup';
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import TextField from 'src/components/Form/TextField';
 import { Organization } from 'src/entities/Organizations';
-
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -64,7 +63,8 @@ const validationSchema = Yup.object().shape({
   banner: Yup.string(),
   name: Yup.string()
     .min(2, 'Must be 2 characters or more')
-    .max(16, 'Must be 16 characters or less')
+    .max(50, 'Must be 50 characters or less')
+    .trim()
     .required('Required'),
   square_logo: Yup.string(),
 });

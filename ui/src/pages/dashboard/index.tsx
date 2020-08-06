@@ -1,3 +1,4 @@
+import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { useRef, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
@@ -16,9 +17,11 @@ const c = classNames.bind(style);
 const Header: React.FC<{ openSlidebar: () => void }> = (p) => (
   <div className={c('header')}>
     Today's Commitments
-    <span className={c('add-button')} title="Add" onClick={p.openSlidebar}>
-      <MdAdd className={c('icon')} />
-    </span>
+    <Tippy content={'Add Task'}>
+      <span className={c('add-button')} onClick={p.openSlidebar}>
+        <MdAdd className={c('icon')} />
+      </span>
+    </Tippy>
   </div>
 );
 

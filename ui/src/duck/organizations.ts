@@ -9,6 +9,7 @@ import {
   OrganizationArgs,
   update,
 } from 'src/entities/Organizations';
+import { PaginationArgs } from 'src/utils/paginationArgs';
 import { RootState } from '.';
 
 const orgAdapter = createEntityAdapter<Organization>({
@@ -31,7 +32,7 @@ export const updateOrganizationAction = createAsyncThunk<
 
 export const fetchOrganizations = createAsyncThunk<
   Organization[],
-  undefined,
+  PaginationArgs,
   { rejectValue: Error; state: OrganizationState }
 >('organizations/fetchMany', fetchMany);
 

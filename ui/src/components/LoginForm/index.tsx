@@ -1,3 +1,4 @@
+import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { Formik, FormikProps } from 'formik';
 import { useRef, useState } from 'react';
@@ -70,7 +71,11 @@ const Login: React.FC<FormikProps<LoginFormValues> & { onResetPassword: () => vo
                 name="email"
               />
               <div className={c('password')}>
-                <FaAngleLeft title="Back" className={c('back-icon')} onClick={gotoStep1} />
+                <Tippy content="Back">
+                  <span>
+                    <FaAngleLeft className={c('back-icon')} onClick={gotoStep1} />
+                  </span>
+                </Tippy>
                 <TextField
                   className={c('login-form-field')}
                   inputRef={passwordRef}

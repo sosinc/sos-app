@@ -22,7 +22,7 @@ export const useAsyncThunk = (
   const [flash] = useFlash();
   const dispatch = useDispatch();
 
-  const runAsyncThunk = useCallback(async (args?: any) => {
+  const runAsyncThunk = useCallback(async (args) => {
     try {
       setIsFetching(true);
       const result = await unwrapResult((await dispatch(asyncThunk(args))) as any);

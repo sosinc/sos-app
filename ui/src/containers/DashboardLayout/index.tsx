@@ -1,3 +1,4 @@
+import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -136,9 +137,11 @@ const OrgSelectBox: React.FC<{ currentOrg?: Organization }> = ({ currentOrg: o }
   };
 
   const currentOrgLogo = (
-    <div className={c('logo-image', 'fallback-icon')} title={o?.name || 'No Organization'}>
-      <FallbackIcon logo={o?.square_logo} name={o?.name} />
-    </div>
+    <Tippy content={o?.name || 'No Organization'}>
+      <div className={c('logo-image', 'fallback-icon')}>
+        <FallbackIcon logo={o?.square_logo} name={o?.name} />
+      </div>
+    </Tippy>
   );
 
   if (!o || organizations.length === 1) {
@@ -192,11 +195,13 @@ const Index: React.FC<LayoutProps> = (p) => {
             <OrgSelectBox currentOrg={currentOrg} />
 
             <div className={c('avatar-container')}>
-              <Link href="/profile">
-                <span>
-                  <FallbackIcon className={c('pic')} logo={user.avatar} name={user.name} />
-                </span>
-              </Link>
+              <Tippy content={user.name}>
+                <Link href="/profile">
+                  <span>
+                    <FallbackIcon className={c('pic')} logo={user.avatar} name={user.name} />
+                  </span>
+                </Link>
+              </Tippy>
               <span className={c('online-status')} />
             </div>
 

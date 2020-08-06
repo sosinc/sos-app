@@ -83,7 +83,7 @@ const SelectBox: React.FC<FileFieldProps> = (p) => {
   const Icon = () => <MdKeyboardArrowDown className={c('icon')} />;
 
   return (
-    <div className={c({ 'full-width-container': p.isFullWidth })}>
+    <div className={c({ 'full-width-container': p.isFullWidth })} onClick={handleOpen}>
       <Tippy
         content={selectList}
         interactive={true}
@@ -94,7 +94,7 @@ const SelectBox: React.FC<FileFieldProps> = (p) => {
         maxWidth="none"
         placement="bottom"
       >
-        <div className={containerClass} onClick={handleOpen}>
+        <div className={containerClass}>
           <div className={c('select-container')}>
             <p.Selected item={p.options.find((i) => i.id === p.value)} />
             {!p.isDropdownIconHidden && <Icon />}

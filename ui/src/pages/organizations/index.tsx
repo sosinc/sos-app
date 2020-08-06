@@ -1,3 +1,4 @@
+import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import Link from 'next/link';
 import { MdAdd, MdBusiness } from 'react-icons/md';
@@ -16,19 +17,31 @@ const c = classNames.bind(style);
 const Header: React.FC = () => (
   <div className={c('header')}>
     Organizations
-    <Link href="/organizations/add">
-      <a className={c('add-button')} title="Add organization">
-        <MdAdd className={c('icon')} />
-      </a>
-    </Link>
+    <Tippy content="Add organization">
+      <span>
+        <Link href="/organizations/add">
+          <a className={c('add-button')}>
+            <MdAdd className={c('icon')} />
+          </a>
+        </Link>
+      </span>
+    </Tippy>
   </div>
 );
 
 const Index = () => {
   const organizations = useSelector(orgSelector.selectAll);
-  const [isFetching] = useQuery(fetchOrganizations, {
-    errorTitle: 'Failed to fetch some Organizations',
-  });
+
+  const [isFetching, refetchOrg] = useQuery(
+    (args = { offset: 0, limit: 20 + 1 }) => fetchOrganizations(args),
+    {
+      errorTitle: 'Failed to fetch some Organizations',
+    },
+  );
+
+  const changePagination = (args: { offset: number; limit: number }) => {
+    refetchOrg({ offset: args.offset, limit: args.limit + 1 });
+  };
 
   if (!organizations.length && !isFetching) {
     return (
@@ -53,7 +66,7 @@ const Index = () => {
 
   return (
     <div className={c('list-container')}>
-      <Listing items={listItems} isFetching={isFetching} />
+      <Listing items={listItems} isFetching={isFetching} onPaginate={changePagination} />
     </div>
   );
 };

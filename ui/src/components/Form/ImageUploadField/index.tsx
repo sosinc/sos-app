@@ -1,3 +1,4 @@
+import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { connect, FormikContextType, getIn } from 'formik';
 import { ChangeEvent, useState } from 'react';
@@ -19,7 +20,11 @@ interface Props {
 
 const Placeholder: React.FC<{ isUploading: boolean }> = (p) => (
   <div className={c('upload-container')}>
-    <MdFileUpload title="Upload image" className={c('upload-icon')} />
+    <Tippy content="Upload image">
+      <span>
+        <MdFileUpload className={c('upload-icon')} />
+      </span>
+    </Tippy>
 
     <span className={c('upload-text')}>{p.isUploading ? 'Uploading...' : 'Browse Files'}</span>
   </div>

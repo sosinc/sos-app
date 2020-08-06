@@ -1,5 +1,7 @@
 import client from 'src/lib/client';
+import { PaginationArgs } from 'src/utils/paginationArgs';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
+import uploadDefaultLogo from 'src/utils/uploadDefaultLogo';
 
 export interface Employee {
   isCurrent: boolean;
@@ -22,7 +24,7 @@ export interface EmployeeArgs {
   designation_id: string;
 }
 
-export const create = async (payload: EmployeeArgs): Promise<Employee> => {
+export const create = async (args: EmployeeArgs): Promise<Employee> => {
   const query = `
   mutation ($ecode: String!, $email: String, $name: String!, $headshot: String, $designation_id: designations_enum!, $organization_id: uuid!){
     insert_employees_one(
@@ -40,7 +42,9 @@ export const create = async (payload: EmployeeArgs): Promise<Employee> => {
   }`;
 
   try {
-    const data = await client.request(query, payload);
+    const headshot = args.headshot || (await uploadDefaultLogo(args.name));
+    const variables: EmployeeArgs = { ...args, headshot };
+    const data = await client.request(query, variables);
 
     return data.payload;
   } catch (err) {
@@ -81,9 +85,9 @@ export const update = async (payload: EmployeeArgs): Promise<Employee> => {
   }
 };
 
-export const fetchMany = async (): Promise<Employee[]> => {
-  const query = `{
-  employees {
+export const fetchMany = async (payload: PaginationArgs): Promise<Employee[]> => {
+  const query = ` query ( $offset: Int, $limit: Int ){
+   employees(offset: $offset, limit: $limit) {
     ecode
     name
     email
@@ -94,7 +98,7 @@ export const fetchMany = async (): Promise<Employee[]> => {
     }
   }`;
 
-  const data = await client.request(query);
+  const data = await client.request(query, payload);
 
   return data?.employees.length
     ? data.employees.map((e: any) => ({

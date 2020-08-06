@@ -1,3 +1,4 @@
+import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { Formik, FormikProps } from 'formik';
 import { useState } from 'react';
@@ -86,7 +87,11 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
           </div>
         </div>
 
-        <FaAngleLeft title="Back" className={c('back-icon', formStep)} onClick={gotoStep1} />
+        <Tippy content={'Back'}>
+          <span>
+            <FaAngleLeft className={c('back-icon', formStep)} onClick={gotoStep1} />
+          </span>
+        </Tippy>
       </form>
       <button
         className={c('button', { working: p.isSubmitting })}

@@ -11,6 +11,7 @@ import {
   ProjectResponse,
   update,
 } from 'src/entities/Project';
+import { PaginationArgs } from 'src/utils/paginationArgs';
 import { RootState } from '.';
 import { fetchDailyTasks } from './tasks';
 
@@ -23,7 +24,7 @@ export type ProjectState = EntityState<Project>;
 
 export const fetchProjects = createAsyncThunk<
   Project[],
-  undefined,
+  PaginationArgs,
   { rejectValue: Error; state: ProjectState }
 >('projects/fetchMany', fetchMany);
 

@@ -1,5 +1,7 @@
 import client from 'src/lib/client';
+import { PaginationArgs } from 'src/utils/paginationArgs';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
+import uploadDefaultLogo from 'src/utils/uploadDefaultLogo';
 import { Team } from './Team';
 
 export interface Project {
@@ -41,6 +43,9 @@ export const create = async ({ organization_id, ...payload }: ProjectArgs): Prom
   if (organization_id) {
     variables = { ...payload, organization_id };
   }
+
+  const logoSquare = payload.logo_square || (await uploadDefaultLogo(payload.name));
+  variables = { ...variables, logo_square: logoSquare };
 
   const query = `
   mutation ($name: String!, $logo_square: String, $description: String, $issue_link_template: String, $pr_link_template: String ${orgVar}){
@@ -130,9 +135,9 @@ export const update = async (payload: ProjectArgs): Promise<Project> => {
   }
 };
 
-export const fetchMany = async (): Promise<Project[]> => {
-  const query = `{
-  projects {
+export const fetchMany = async (payload: PaginationArgs): Promise<Project[]> => {
+  const query = ` query ( $offset: Int, $limit: Int ){
+  projects(offset: $offset, limit: $limit) {
       id
       name
       logo_square
@@ -146,7 +151,7 @@ export const fetchMany = async (): Promise<Project[]> => {
     }
   }`;
 
-  const data = await client.request(query);
+  const data = await client.request(query, payload);
   return data?.projects.length
     ? data.projects.map((e: any) => ({
         ...e,

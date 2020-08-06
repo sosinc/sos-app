@@ -3,5 +3,5 @@ import { ResolverContext } from "../types";
 
 export const CurrentUser = (): ParameterDecorator =>
   createParamDecorator<ResolverContext>(
-  ({ context }) => context.req.session && context.req.session.user
-);
+    ({ context }) => context.req.session && context.req.session.user
+  );
