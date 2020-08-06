@@ -250,13 +250,18 @@ export const updateProfile = async (args: UserProfileArgs): Promise<User> => {
            name: $name
         }
       pk_columns: { id: $id }
-     ) { avatar name }
+     ) { id avatar name }
    }`;
 
   try {
     const data = await client.request(query, variables);
 
-    return data;
+    const user = data?.update_users_by_pk;
+
+    return {
+      ...user,
+      avatar: resolveStorageFile(user.avatar),
+    };
   } catch (err) {
     throw new Error('Something went wrong :-(');
   }

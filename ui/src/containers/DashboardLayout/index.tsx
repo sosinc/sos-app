@@ -193,7 +193,9 @@ const Index: React.FC<LayoutProps> = (p) => {
 
             <div className={c('avatar-container')}>
               <Link href="/profile">
-                <FallbackIcon className={c('pic')} logo={user.avatar} name={user.name} />
+                <span>
+                  <FallbackIcon className={c('pic')} logo={user.avatar} name={user.name} />
+                </span>
               </Link>
               <span className={c('online-status')} />
             </div>
