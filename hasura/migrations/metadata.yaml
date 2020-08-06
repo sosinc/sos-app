@@ -234,6 +234,7 @@ tables:
       filter:
         id:
           _eq: X-Hasura-User-Id
+      limit: 1
 - table:
     schema: public
     name: organizations
@@ -403,22 +404,6 @@ tables:
       - pr_link_template
       filter: {}
       check: null
-  - role: user
-    permission:
-      columns:
-      - description
-      - issue_link_template
-      - logo
-      - logo_square
-      - name
-      - organization_id
-      - pr_link_template
-      filter:
-        organization:
-          employees:
-            user_id:
-              _eq: X-Hasura-User-Id
-      check: null
   delete_permissions:
   - role: app_admin
     permission:
@@ -554,23 +539,6 @@ tables:
       - pr_link_template
       - project_id
       backend_only: false
-  - role: user
-    permission:
-      check:
-        project:
-          teams:
-            members:
-              employee:
-                user_id:
-                  _eq: X-Hasura-User-Id
-      columns:
-      - issue_link_template
-      - logo
-      - logo_square
-      - name
-      - pr_link_template
-      - project_id
-      backend_only: false
   select_permissions:
   - role: app_admin
     permission:
@@ -618,22 +586,6 @@ tables:
       - project_id
       filter: {}
       check: {}
-  - role: user
-    permission:
-      columns:
-      - issue_link_template
-      - logo
-      - logo_square
-      - name
-      - pr_link_template
-      filter:
-        project:
-          teams:
-            members:
-              employee:
-                user_id:
-                  _eq: X-Hasura-User-Id
-      check: null
   delete_permissions:
   - role: app_admin
     permission:
@@ -683,6 +635,27 @@ tables:
         id:
           _eq: X-Hasura-User-Id
       limit: 1
+  update_permissions:
+  - role: app_admin
+    permission:
+      columns:
+      - avatar
+      - email
+      - name
+      - role_id
+      filter: {}
+      check: null
+  - role: user
+    permission:
+      columns:
+      - avatar
+      - name
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      check:
+        id:
+          _eq: X-Hasura-User-Id
   event_triggers:
   - name: default_user_login
     definition:

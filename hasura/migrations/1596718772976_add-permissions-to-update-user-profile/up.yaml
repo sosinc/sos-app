@@ -1,0 +1,32 @@
+- args:
+    permission:
+      backend_only: false
+      columns:
+      - avatar
+      - email
+      - name
+      - role_id
+      filter: {}
+      set: {}
+    role: app_admin
+    table:
+      name: users
+      schema: public
+  type: create_update_permission
+- args:
+    permission:
+      check:
+        id:
+          _eq: X-Hasura-User-Id
+      columns:
+      - avatar
+      - name
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      set: {}
+    role: user
+    table:
+      name: users
+      schema: public
+  type: create_update_permission

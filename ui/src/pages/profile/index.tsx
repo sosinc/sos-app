@@ -5,15 +5,7 @@ import { updateProfileAction } from 'src/duck/auth';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
 const Header: React.FC = () => <div>Profile</div>;
-/*
- * const router = useRouter();
- * const queryId = String(router.query.id);
- * const organization = useSelector((state: RootState) => orgSelector.selectById(state, queryId)); */
 
-/* const [isFetchingOrg] = useQuery(() => fetchCurrentUser(), {
- *   errorTitle: 'Failed to fetch cuurrent user details',
- * });
- *  */
 export default () => {
   const user = currentUser();
   const formValues: UpdateProfileFormValues = {
@@ -31,9 +23,11 @@ export default () => {
     values: UpdateProfileFormValues,
     helpers: FormikHelpers<UpdateProfileFormValues>,
   ) => {
+    const currentUserId = user.id;
+
     try {
       helpers.setSubmitting(true);
-      await updateProfile({ ...values });
+      await updateProfile({ ...values, id: currentUserId });
     } catch (err) {
       helpers.setSubmitting(false);
     }

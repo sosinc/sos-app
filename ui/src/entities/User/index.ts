@@ -215,8 +215,9 @@ export const resetPassword = async (payload: ResetPasswordPayload): Promise<unde
 };
 
 export interface UserProfileArgs {
-  fullName: string;
-  profilePic?: string;
+  id: string;
+  fullname: string;
+  profile_pic?: string;
 }
 
 export const setCurrentOrg = async (payload: { orgId: string }): Promise<undefined> => {
@@ -235,7 +236,28 @@ export const setCurrentOrg = async (payload: { orgId: string }): Promise<undefin
 };
 
 export const updateProfile = async (args: UserProfileArgs): Promise<User> => {
-  console.warn('Making API call to update User Profile', args);
+  const variables = {
+    avatar: args.profile_pic,
+    id: args.id,
+    name: args.fullname,
+  };
 
-  return {} as User;
+  const query = `
+    mutation($id: uuid!, $name: String!, $avatar: String) {
+      update_users_by_pk(
+        _set: {
+           avatar: $avatar,
+           name: $name
+        }
+      pk_columns: { id: $id }
+     ) { avatar name }
+   }`;
+
+  try {
+    const data = await client.request(query, variables);
+
+    return data;
+  } catch (err) {
+    throw new Error('Something went wrong :-(');
+  }
 };
