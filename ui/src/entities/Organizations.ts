@@ -1,6 +1,7 @@
 import client from 'src/lib/client';
 import { PaginationArgs } from 'src/utils/paginationArgs';
 import resolveStorageFile from 'src/utils/resolveStorageFile';
+import uploadDefaultLogo from 'src/utils/uploadDefaultLogo';
 
 export interface Organization {
   id: string;
@@ -18,7 +19,7 @@ export interface OrganizationArgs {
   square_logo?: string;
 }
 
-export const create = async (payload: OrganizationArgs): Promise<Organization> => {
+export const create = async (args: OrganizationArgs): Promise<Organization> => {
   const query = `
   mutation ($name: String!, $banner: String, $square_logo: String){
     insert_organizations_one(
@@ -32,7 +33,9 @@ export const create = async (payload: OrganizationArgs): Promise<Organization> =
   }`;
 
   try {
-    const data = await client.request(query, payload);
+    const squareLogo = args.square_logo || (await uploadDefaultLogo(args.name));
+    const variables: OrganizationArgs = { ...args, square_logo: squareLogo };
+    const data = await client.request(query, variables);
 
     return data.payload;
   } catch (err) {

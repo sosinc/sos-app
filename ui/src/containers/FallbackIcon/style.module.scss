@@ -1,7 +1,7 @@
 @import 'src/scss/lib';
 
 .brand {
-  border: 1px solid $color-text-dim3;
+  border: 0;
   border-radius: 50%;
   height: 100%;
   width: 100%;
@@ -9,6 +9,7 @@
 
 %fallback-brand {
   align-items: center;
+  border: 0;
   border-radius: 50%;
   box-shadow: 1px 2px 0 $color-shadowbox-shadow;
   cursor: pointer;

@@ -28,7 +28,7 @@ const Index = () => {
   const projects = useSelector(projectSelector.selectAll);
 
   const [isFetching, refetchProjects] = useQuery(
-    (args = { offset: 0, limit: 3 + 1 }) => fetchProjects(args),
+    (args = { offset: 0, limit: 20 + 1 }) => fetchProjects(args),
     {
       errorTitle: 'Failed to fetch some Projects :-(',
     },
