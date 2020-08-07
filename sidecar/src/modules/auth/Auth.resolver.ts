@@ -59,7 +59,7 @@ export class AuthResolver {
         });
       }
 
-      const isValidPassword = true; // await compare(password, userLogin.private_key);
+      const isValidPassword = await compare(password, userLogin.private_key);
       if (!isValidPassword) {
         throw new ServerError("Invalid email/password", {
           status: 403,
@@ -144,39 +144,20 @@ export class AuthResolver {
   ): Promise<User> {
     const otp = req.session.passwordReset?.otp;
     const email = req.session.passwordReset?.email;
-    console.log("SESSION::", req.session);
+
     if (!otp || !email) {
       throw new ServerError("Incorrect OTP!", { status: 401 });
     }
 
-    let userLogin = null;
-    try {
-      userLogin = await this.userLoginRepo.findOne({ public_key: email, provider: "EMAIL" });
-      console.warn("USER LOGIN:::::", userLogin);
-    } catch (e) {
-      console.warn("error:", e);
-    }
+    const userLogin = await this.userLoginRepo.findOne({ public_key: email, provider: "EMAIL" });
 
     if (!userLogin || !otp || otp !== inputOtp) {
-      throw new ServerError("Temporary user not found!", { status: 401 });
+      throw new ServerError("Incorrect OTP!", { status: 401 });
     }
 
-    try {
-      console.warn("PRIVATEKEY:::", userLogin);
-      userLogin.private_key = "lol"; // await hash(newPassword, 10);
-      console.warn("userrrrrrrrrrrrrrrrr", userLogin);
-      const loginRepo = await this.userLoginRepo.save(userLogin);
-      console.warn("LOGIN REPO::::::::::::::", loginRepo);
-    } catch (e) {
-      console.warn("User REPO::::::", e);
-    }
+    userLogin.private_key = await hash(newPassword, 10);
+    await this.userLoginRepo.save(userLogin);
 
-    try {
-      const userRepoLog = this.userRepo.findOneOrFail({ id: userLogin.user_id });
-      console.warn("User REPOOO::::", userRepoLog);
-      return userRepoLog;
-    } catch (e) {
-      console.warn("ERROR:::::", e);
-    }
+    return this.userRepo.findOneOrFail({ id: userLogin.user_id });
   }
 }
