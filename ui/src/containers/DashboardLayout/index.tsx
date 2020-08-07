@@ -208,10 +208,9 @@ const Index: React.FC<LayoutProps> = (p) => {
             </div>
 
             <ContextMenu
-              className={c('user-context-menu')}
+              className={c('user-menu')}
               content={<UserMenu />}
               isOpen={isUserMenuOpen}
-              tippyClassName={c('user-menu')}
               onClose={hideUserMenu}
             >
               <MdMoreHoriz title="Menu" className={c('dot-menu-icon')} onClick={toggleUserMenu} />

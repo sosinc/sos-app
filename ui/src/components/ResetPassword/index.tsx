@@ -58,8 +58,8 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
         ? 'Resetting Password'
         : 'Reset Password'
       : p.isSubmitting
-        ? 'Sending OTP'
-        : 'Send OTP';
+      ? 'Sending OTP'
+      : 'Send OTP';
 
   return (
     <>

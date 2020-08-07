@@ -117,8 +117,8 @@ const addTeam = (p: Props) => {
   const isProjectTeams = teams.length ? (
     <Listing items={teamListItems} isFetching={p.isFetchingProject} />
   ) : (
-      noTeam(p?.projectId || '')
-    );
+    noTeam(p?.projectId || '')
+  );
 
   return (
     <>

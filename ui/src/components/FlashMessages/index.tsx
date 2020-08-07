@@ -14,8 +14,8 @@ const Message: React.FC<{ message: FlashMessage } & Pick<Props, 'onClose'>> = (p
     p.message.type === 'success' ? (
       <MdCheckCircle className={c(s['flash-icon'])} />
     ) : (
-        <MdError className={c(s['flash-icon'])} />
-      );
+      <MdError className={c(s['flash-icon'])} />
+    );
 
   return (
     <div className={s['message-container']}>
