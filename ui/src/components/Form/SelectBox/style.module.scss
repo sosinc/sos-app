@@ -78,6 +78,14 @@
   max-height: 12em;
   overflow-y: auto;
   width: 100%;
+
+  @media(max-width: $md) {
+    min-width: 5em;
+  }
+
+  @media(max-width: $sm) {
+    min-width: 8em;
+  }
 }
 
 .select-option {
@@ -89,9 +97,14 @@
   padding: 12px 20px;
   text-align: left;
 
+
   &:hover {
     background-color: $color-select-active;
     color: $color-button-text;
+  }
+
+  @media(max-width: $md) {
+    padding: 12px 10px;
   }
 }
 

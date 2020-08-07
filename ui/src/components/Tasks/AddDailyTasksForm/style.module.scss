@@ -10,6 +10,16 @@
 
 .add-status-row {
   position: relative;
+  width: 37em;
+
+  @media(max-width: $md) {
+    width: 22em;
+  }
+
+  @media(max-width: $sm) {
+    width: 20em;
+  }
+
 }
 
 .add-status {
@@ -20,7 +30,7 @@
   color: $color-text-dim2;
   height: 40px;
   padding: 15px;
-  width: 537px;
+  width: 100%;
 }
 
 .input-action-container {
@@ -62,6 +72,7 @@
   border: 0;
   font-size: 13px;
   height: 30px;
+  min-width: 2em;
   padding: 5px;
 }
 

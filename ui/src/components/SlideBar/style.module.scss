@@ -28,7 +28,7 @@
   padding: 10px 24px;
   position: absolute;
   right: 0;
-  width: 39em;
+  width: 40em;
   z-index: 1;
 
   @media(max-width: $md) {
@@ -36,6 +36,6 @@
   }
 
   @media(max-width: $sm) {
-    width: 39em;
+    width: 23em;
   }
 }

@@ -8,10 +8,10 @@ import { FaUsers } from 'react-icons/fa';
 import {
   MdBusiness,
   MdClose,
-  MdMenu,
   MdFolder,
   MdKeyboardArrowDown,
   MdKeyboardArrowRight,
+  MdMenu,
   MdMoreHoriz,
 } from 'react-icons/md';
 import { useSelector } from 'react-redux';
