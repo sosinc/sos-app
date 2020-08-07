@@ -7,6 +7,8 @@ import { useState } from 'react';
 import { FaUsers } from 'react-icons/fa';
 import {
   MdBusiness,
+  MdClose,
+  MdMenu,
   MdFolder,
   MdKeyboardArrowDown,
   MdKeyboardArrowRight,
@@ -168,6 +170,7 @@ const Index: React.FC<LayoutProps> = (p) => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
   const toggleUserMenu = () => setIsUserMenuOpen(!isUserMenuOpen);
   const hideUserMenu = () => setIsUserMenuOpen(false);
+  const [isBurgerMenuOpen, setBurgerMenu] = useState<boolean>(false);
   const user = currentUser();
   const role = user.role?.id;
   const projects = user.projects ? user.projects : [];
@@ -194,7 +197,13 @@ const Index: React.FC<LayoutProps> = (p) => {
       </Head>
 
       <div className={c('container')}>
-        <div className={c('sidebar')}>
+        <Tippy content="Open Sidebar">
+          <span>
+            <MdMenu className={c('burger-menu')} onClick={() => setBurgerMenu(!isBurgerMenuOpen)} />
+          </span>
+        </Tippy>
+
+        <div className={c('sidebar', isBurgerMenuOpen ? 'show-sidebar' : '')}>
           <div className={c('header')}>
             <OrgSelectBox currentOrg={currentOrg} />
 
@@ -215,6 +224,11 @@ const Index: React.FC<LayoutProps> = (p) => {
             >
               <MdMoreHoriz title="Menu" className={c('dot-menu-icon')} onClick={toggleUserMenu} />
             </ContextMenu>
+            <Tippy content="Close">
+              <span>
+                <MdClose className={c('hide-burger-menu')} onClick={() => setBurgerMenu(false)} />
+              </span>
+            </Tippy>
           </div>
 
           <div className={c('section')}>{role !== 'USER' ? adminSection : userSection()}</div>
