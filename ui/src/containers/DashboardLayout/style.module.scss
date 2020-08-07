@@ -36,14 +36,6 @@
     width: 22px;
   }
 
-  .user-context-menu {
-    :global {
-      .tippy-content {
-        padding: 0;
-      }
-    }
-  }
-
   .user-menu {
     left: 6px;
     top: -10px;
@@ -264,4 +256,12 @@
   height: 56px;
   padding: 0 24px;
   width: 100%;
+}
+
+.user-menu {
+  :global {
+    .tippy-content {
+      padding: 0;
+    }
+  }
 }
