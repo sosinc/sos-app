@@ -16,9 +16,10 @@ import { useSelector } from 'react-redux';
 
 import SelectBox from 'src/components/Form/SelectBox';
 import ContextMenu from 'src/components/Modal/ContextMenu';
+import UserMenu from 'src/components/Modal/ContextMenu/UserMenu';
 import FallbackIcon from 'src/containers/FallbackIcon';
 import WithUser from 'src/containers/WithUser';
-import { logoutUserAction, setCurrentOrgAction } from 'src/duck/auth';
+import { setCurrentOrgAction } from 'src/duck/auth';
 import { orgSelector } from 'src/duck/organizations';
 import { teamSelector } from 'src/duck/teams';
 import { Organization } from 'src/entities/Organizations';
@@ -122,38 +123,6 @@ const UserProject: React.FC<Project> = ({ ...item }) => {
   );
 };
 
-const UserContext: React.FC = () => {
-  const [logout] = useAsyncThunk(logoutUserAction, {
-    errorTitle: 'Logout Failed',
-    rethrowError: true,
-    successTitle: 'Logout successfully',
-  });
-
-  const handleLogout = async () => {
-    await logout();
-    Router.replace(`/`);
-  };
-
-  return (
-    <>
-      <div className={c('context-box')}>
-        <div className={c('context-container')}>
-          <Link href={'/profile'}>
-            <a className={c('context-item')}>Settings</a>
-          </Link>
-          <Link href={'/profile'}>
-            <a className={c('context-item')}>Profile</a>
-          </Link>
-          <span className={c('separator')} />
-          <span className={c('context-item')} onClick={handleLogout}>
-            Logout
-          </span>
-        </div>
-      </div>
-    </>
-  );
-};
-
 const OrgSelectBox: React.FC<{ currentOrg?: Organization }> = ({ currentOrg: o }) => {
   const [setCurrentOrg] = useAsyncThunk(setCurrentOrgAction, {
     errorTitle: 'Failed to change organization, try again',
@@ -176,7 +145,11 @@ const OrgSelectBox: React.FC<{ currentOrg?: Organization }> = ({ currentOrg: o }
   );
 
   if (!o || organizations.length === 1) {
-    return <Link href={'/organizations'}>{currentOrgLogo}</Link>;
+    return (
+      <Link href={'/organizations'}>
+        <span>{currentOrgLogo}</span>
+      </Link>
+    );
   }
 
   return (
@@ -193,6 +166,8 @@ const OrgSelectBox: React.FC<{ currentOrg?: Organization }> = ({ currentOrg: o }
 
 const Index: React.FC<LayoutProps> = (p) => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
+  const toggleUserMenu = () => setIsUserMenuOpen(!isUserMenuOpen);
+  const hideUserMenu = () => setIsUserMenuOpen(false);
   const user = currentUser();
   const role = user.role?.id;
   const projects = user.projects ? user.projects : [];
@@ -218,27 +193,28 @@ const Index: React.FC<LayoutProps> = (p) => {
         <title>{p.title}</title>
       </Head>
 
-      <ContextMenu isOpen={isUserMenuOpen} onClose={() => setIsUserMenuOpen(false)}>
-        <UserContext />
-      </ContextMenu>
-
       <div className={c('container')}>
         <div className={c('sidebar')}>
           <div className={c('header')}>
             <OrgSelectBox currentOrg={currentOrg} />
 
-            <div className={c('avatar-container')} onClick={() => setIsUserMenuOpen(true)}>
-              <Tippy content={user.name}>
-                <img className={c('pic')} src="/assets/images/avatar.svg" alt="pic" />
-              </Tippy>
+            <div className={c('avatar-container')}>
+              <Link href="/profile">
+                <span>
+                  <FallbackIcon className={c('pic')} logo={user.avatar} name={user.name} />
+                </span>
+              </Link>
               <span className={c('online-status')} />
             </div>
 
-            <Tippy content={'More'}>
-              <span>
-                <MdMoreHoriz className={c('dot-menu-icon')} />
-              </span>
-            </Tippy>
+            <ContextMenu
+              className={c('user-menu')}
+              content={<UserMenu />}
+              isOpen={isUserMenuOpen}
+              onClose={hideUserMenu}
+            >
+              <MdMoreHoriz title="Menu" className={c('dot-menu-icon')} onClick={toggleUserMenu} />
+            </ContextMenu>
           </div>
 
           <div className={c('section')}>{role !== 'USER' ? adminSection : userSection()}</div>

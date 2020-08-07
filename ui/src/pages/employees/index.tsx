@@ -18,7 +18,7 @@ const c = classNames.bind(style);
 const Header: React.FC = () => (
   <div className={c('header')}>
     Employees
-    <Tippy content={'Add employee'}>
+    <Tippy content="Add employee">
       <span>
         <Link href="/employees/add">
           <a className={c('add-button')}>
@@ -73,7 +73,7 @@ const Index = () => {
 };
 
 export default () => (
-  <DashboardLayout title={'Snake Oil Software - Organizations'} Header={Header}>
+  <DashboardLayout title={'Snake Oil Software - Employees'} Header={Header}>
     <Index />
   </DashboardLayout>
 );

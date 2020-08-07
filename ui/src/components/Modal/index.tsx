@@ -22,7 +22,7 @@ const Modal: React.FC<ModalProps> = (p) => {
       <div className={c('container')} onClick={p.onClose}>
         <div className={c('modal')} onClick={(e) => e.stopPropagation()}>
           <div className={c('back-icon-container')}>
-            <Tippy content={'Close'}>
+            <Tippy content="Close">
               <span>
                 <AiOutlineClose className={c('back-icon')} onClick={p.onClose} />
               </span>

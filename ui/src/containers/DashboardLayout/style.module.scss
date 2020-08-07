@@ -1,50 +1,5 @@
 @import 'src/scss/lib';
 
-//----context---------
-
-.context-box {
-  background: $color-bg-secondary;
-  border: 0;
-  border-radius: 4px;
-  box-shadow: -40px 0 40px rgba(0, 0, 0, 0.11);
-  left: 8em;
-  max-height: 17em;
-  overflow-y: auto;
-  padding: 2px 0;
-  position: absolute;
-  top: 3.6em;
-  width: 12em;
-  z-index: 1;
-}
-
-.context-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.context-item {
-  align-items: center;
-  color: $color-text-primary;
-  cursor: pointer;
-  display: flex;
-  font-size: 0.9em;
-  height: 2.5em;
-  padding: 20px;
-
-  &:hover {
-    background: $color-select-active;
-    border: 0;
-  }
-
-}
-
-.separator {
-  border: 1px solid #303236;
-  margin: 1px 0;
-}
-
-//----end----
-
 .container {
   display: flex;
   height: 100%;
@@ -79,6 +34,11 @@
     height: 22px;
     margin-left: 12px;
     width: 22px;
+  }
+
+  .user-menu {
+    left: 6px;
+    top: -10px;
   }
 
   .detail {
@@ -296,4 +256,12 @@
   height: 56px;
   padding: 0 24px;
   width: 100%;
+}
+
+.user-menu {
+  :global {
+    .tippy-content {
+      padding: 0;
+    }
+  }
 }

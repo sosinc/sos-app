@@ -31,7 +31,7 @@ const Placeholder: React.FC<{ isUploading: boolean }> = (p) => (
 );
 
 const ImagePreviewField = ({ image }: { image?: string }) => (
-  <img className={c('preview-image')} src={image} alt="org-image" />
+  <img className={c('preview-image')} src={image} alt="preview_img" />
 );
 
 const ImageUploadField: React.FC<Props & { formik: FormikContextType<{}> }> = ({

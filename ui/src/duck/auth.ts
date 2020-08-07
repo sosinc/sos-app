@@ -10,7 +10,9 @@ import {
   ResetPasswordPayload,
   sendPasswordResetOTP as apiResetPasswordOTP,
   setCurrentOrg,
+  updateProfile,
   User,
+  UserProfileArgs,
 } from 'src/entities/User';
 
 export interface AuthState {
@@ -50,6 +52,12 @@ export const resetPasswordAction = createAsyncThunk<undefined, ResetPasswordPayl
   'auth/resetPassword',
   apiResetPassword,
 );
+
+export const updateProfileAction = createAsyncThunk<
+  User,
+  UserProfileArgs,
+  { rejectValue: Error; state: AuthState }
+>('auth/update-profile', updateProfile);
 
 export const setCurrentOrgAction = createAsyncThunk<
   undefined,
@@ -99,6 +107,15 @@ export default createSlice({
       state.activeEmployeeId = employee
         ? `${employee.ecode}-${employee.organization_id}`
         : undefined;
+    });
+
+    builder.addCase(updateProfileAction.fulfilled, (state, { payload }) => {
+      if (!state.user) {
+        return state;
+      }
+
+      state.user.avatar = payload.avatar;
+      state.user.name = payload.name;
     });
   },
   initialState,

@@ -1,12 +1,5 @@
 @import 'src/scss/lib';
 
-.brand {
-  border: 0;
-  border-radius: 50%;
-  height: 100%;
-  width: 100%;
-}
-
 %fallback-brand {
   align-items: center;
   border: 0;
@@ -20,12 +13,21 @@
   width: 100%;
 }
 
-.fallback-brand {
-  @extend %fallback-brand;
-}
-
-.defautl-fallback-icon {
+.default-icon {
   @extend %fallback-brand;
 
   background: $color-text-dim2;
+}
+
+.name {
+  @extend %fallback-brand;
+}
+
+.brand {
+  @extend %fallback-brand;
+
+  border: 1px solid $color-text-dim3;
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
 }

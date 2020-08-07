@@ -1,4 +1,3 @@
-import Tippy from '@tippyjs/react';
 import c from 'classnames';
 import { MdCheckCircle, MdClose, MdError } from 'react-icons/md';
 import { FlashMessage } from 'src/duck/flashMessages';
@@ -15,8 +14,8 @@ const Message: React.FC<{ message: FlashMessage } & Pick<Props, 'onClose'>> = (p
     p.message.type === 'success' ? (
       <MdCheckCircle className={c(s['flash-icon'])} />
     ) : (
-      <MdError className={c(s['flash-icon'])} />
-    );
+        <MdError className={c(s['flash-icon'])} />
+      );
 
   return (
     <div className={s['message-container']}>
@@ -27,11 +26,7 @@ const Message: React.FC<{ message: FlashMessage } & Pick<Props, 'onClose'>> = (p
         <div className={s.body}>{p.message.body}</div>
       </div>
 
-      <Tippy content="Close">
-        <span>
-          <MdClose className={s['close-icon']} onClick={() => p.onClose(p.message.id)} />
-        </span>
-      </Tippy>
+      <MdClose className={s['close-icon']} onClick={() => p.onClose(p.message.id)} title="Close" />
     </div>
   );
 };

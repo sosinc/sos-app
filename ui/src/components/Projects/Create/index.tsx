@@ -128,7 +128,7 @@ const addTeam = (p: Props) => {
           <span className={c('sub-title')}>Manage this project teams</span>
         </div>
 
-        <Tippy content={'Add Team'}>
+        <Tippy content="Add Team">
           <span>
             <Link href={`/projects/${p.projectId}/teams/add`}>
               <a className={c('add-button')}>

@@ -17,7 +17,7 @@ const c = classNames.bind(style);
 const Header: React.FC<{ openSlidebar: () => void }> = (p) => (
   <div className={c('header')}>
     Today's Commitments
-    <Tippy content={'Add Task'}>
+    <Tippy content="Add Task">
       <span className={c('add-button')} onClick={p.openSlidebar}>
         <MdAdd className={c('icon')} />
       </span>

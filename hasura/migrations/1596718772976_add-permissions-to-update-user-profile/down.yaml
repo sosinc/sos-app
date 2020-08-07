@@ -1,0 +1,12 @@
+- args:
+    role: user
+    table:
+      name: users
+      schema: public
+  type: drop_update_permission
+- args:
+    role: app_admin
+    table:
+      name: users
+      schema: public
+  type: drop_update_permission
