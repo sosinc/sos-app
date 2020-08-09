@@ -58,6 +58,25 @@
   }
 }
 
+%save-button {
+  align-items: center;
+  background: $color-button-cta-bg;
+  border: 0;
+  border-radius: 4px;
+  color: $color-button-text;
+  cursor: pointer;
+  display: flex;
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 600;
+  height: 48px;
+  justify-content: center;
+  outline: none;
+  padding: 0 4em;
+  transition: all 0.2s;
+}
+
+
 %title-container {
   border-bottom: 1px solid $color-boundary;
   color: $color-text-primary;

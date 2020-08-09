@@ -28,6 +28,14 @@
   padding: 10px 24px;
   position: absolute;
   right: 0;
-  width: 591px;
+  width: 40em;
   z-index: 1;
+
+  @media(max-width: $md) {
+    width: 25em;
+  }
+
+  @media(max-width: $sm) {
+    width: 23em;
+  }
 }

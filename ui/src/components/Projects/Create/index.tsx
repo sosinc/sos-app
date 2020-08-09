@@ -65,21 +65,20 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
           <ImageUploadField className={c('image-container')} type={'file'} name="logo_square" />
         </div>
 
-        <div className={c('right-container')}>
-          <div className={c('issue-link-container', 'field-container')}>
-            <span className={c('field-title')}>Issue Link Template</span>
-            <TextField
-              placeholder="Enter issue Link Template"
-              type="text"
-              name="issue_link_template"
-            />
-          </div>
-
-          <div className={c('pr-link-container', 'field-container')}>
-            <span className={c('field-title')}>Pr Link Template</span>
-            <TextField placeholder="Enter pr link template" type="text" name="pr_link_template" />
-          </div>
+        <div className={c('issue-link-container', 'field-container')}>
+          <span className={c('field-title')}>Issue Link Template</span>
+          <TextField
+            placeholder="Enter issue Link Template"
+            type="text"
+            name="issue_link_template"
+          />
         </div>
+
+        <div className={c('pr-link-container', 'field-container')}>
+          <span className={c('field-title')}>Pr Link Template</span>
+          <TextField placeholder="Enter pr link template" type="text" name="pr_link_template" />
+        </div>
+
         {orgSelectField}
         <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
           <div className={c({ 'saving-in': p.isSubmitting })}>

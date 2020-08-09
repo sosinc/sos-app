@@ -4,7 +4,11 @@
   color: $color-text-dim2;
   display: flex;
   flex-direction: column;
-  margin-top: 7em;
+  margin-top: 6em 0;
+
+  @media(max-width: $sm) {
+    margin: 3em 0;
+  }
 }
 
 .org-form {
@@ -52,17 +56,26 @@
 }
 
 .org-logo {
-  width: 10em;
+  max-width: 10em;
 }
 
 .image-container-logo {
   grid-column: 1;
   grid-row: 3;
+
+  @media(max-width: $sm) {
+    grid-column: 1/3;
+  }
 }
 
 .image-container-banner {
   grid-column: 2;
   grid-row: 3;
+
+  @media(max-width: $sm) {
+    grid-column: 1/3;
+    grid-row: 4;
+  }
 }
 
 .input-file {
@@ -73,20 +86,13 @@
 }
 
 .save-button {
-  background: $color-button-cta-bg;
-  border: 0;
-  border-radius: 4px;
-  color: $color-button-text;
-  cursor: pointer;
-  flex-shrink: 0;
-  font-size: 14px;
-  font-weight: 600;
+  @extend %save-button;
+
   grid-column: 1;
-  grid-row: 4;
-  height: 48px;
-  outline: none;
-  padding: 0 4em;
-  transition: all 0.2s;
+
+  @media(max-width: $sm) {
+    grid-column: 1/3;
+  }
 }
 
 .saving-in {

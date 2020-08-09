@@ -4,7 +4,11 @@
   color: $color-text-dim2;
   display: flex;
   flex-direction: column;
-  margin-top: 5em;
+  margin-top: 6em 0;
+
+  @media(max-width: $sm) {
+    margin: 3em 0;
+  }
 }
 
 .add-icon {
@@ -66,52 +70,54 @@
 
 .square-logo {
   grid-column: 1;
-  height: 10em;
-  width: 10em;
-}
+  grid-row: 4/6;
+  max-width: 10em;
 
-.right-container {
-  display: grid;
-  grid-auto-rows: minmax(2em, auto);
-  grid-column: 2;
-  grid-column-gap: 15px;
-  grid-row-gap: 2em;
-  grid-template-columns: 1fr 1fr;
-  height: 11em;
+  @media(max-width: $sm) {
+    grid-column: 1/3;
+  }
 }
 
 .issue-link-container {
-  grid-column: 1/3;
+  grid-column: 2;
+  grid-row: 4;
+
+  @media(max-width: $sm) {
+    grid-column: 1/3;
+    grid-row: 6;
+  }
+}
+
+.pr-link-container {
+  grid-column: 2;
+  grid-row: 7;
+
+  @media(max-width: $sm) {
+    grid-column: 1/3;
+  }
 }
 
 .org-container {
   grid-column: 1/3;
 }
 
-.pr-link-container {
-  grid-column: 1/3;
-  grid-row: 2;
-}
-
 .field-title {
+  @extend %handle-text-overflow;
+
   color: $color-text-dim2;
+  height: 1.5em;
   text-align: left;
+  width: 100%;
 }
 
 .save-button {
-  background: $color-button-cta-bg;
-  border: 0;
-  border-radius: 4px;
-  color: $color-button-text;
-  cursor: pointer;
-  flex-shrink: 0;
-  font-size: 14px;
-  font-weight: 600;
+  @extend %save-button;
+
   grid-column: 1;
-  height: 48px;
-  outline: none;
-  padding: 0 4em;
-  transition: all 0.2s;
+
+  @media(max-width: $sm) {
+    grid-column: 1/3;
+  }
 }
 
 .saving-in {

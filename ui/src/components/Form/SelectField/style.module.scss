@@ -37,6 +37,8 @@
 }
 
 .select-container {
+  @extend %handle-text-overflow;
+
   cursor: pointer;
   display: flex;
   text-align: left;
@@ -54,12 +56,21 @@
 .select-options {
   border-radius: 4px;
   max-height: 12em;
+  min-width: 5em;
   overflow-y: auto;
   position: absolute;
   right: 0;
   top: 2.9em;
   width: 100%;
   z-index: 1;
+
+  @media(max-width: $md) {
+    min-width: 8em;
+  }
+
+  @media(max-width: $sm) {
+    min-width: 10em;
+  }
 }
 
 .select-option {
@@ -73,6 +84,10 @@
   &:hover {
     background-color: $color-select-active;
     color: $color-button-text;
+  }
+
+  @media(max-width: $md) {
+    padding: 10px 8px;
   }
 }
 

@@ -53,31 +53,29 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
             <ImageUploadField className={c('image-container')} type={'file'} name="headshot" />
           </div>
 
-          <div className={c('right-container')}>
-            <div className={c('ecode-container', 'field-container')}>
-              <span className={c('field-title')}>E-Code</span>
-              <TextField placeholder="Enter e-code" type="text" name="ecode" />
-            </div>
+          <div className={c('ecode-container', 'field-container')}>
+            <span className={c('field-title')}>E-Code</span>
+            <TextField placeholder="Enter e-code" type="text" name="ecode" />
+          </div>
 
-            <div className={c('designation-container', 'field-container')}>
-              <span className={c('field-title')}>Designation</span>
-              <SelectField
-                className={c('select-field')}
-                name="designation_id"
-                options={p.designations.map((d) => ({ id: d.id, name: d.name }))}
-                isLoading={p.isFetchingDesignations}
-                isLogoHidden={true}
-              />
-            </div>
-            <div className={c('org-container', 'field-container')}>
-              <span className={c('field-title')}>Organization</span>
-              <SelectField
-                className={c('select-field')}
-                name="organization_id"
-                options={p.organizations.map((o) => ({ ...o, logo: o.square_logo }))}
-                isLoading={p.isFetchingOrgs}
-              />
-            </div>
+          <div className={c('designation-container', 'field-container')}>
+            <span className={c('field-title')}>Designation</span>
+            <SelectField
+              className={c('select-field')}
+              name="designation_id"
+              options={p.designations.map((d) => ({ id: d.id, name: d.name }))}
+              isLoading={p.isFetchingDesignations}
+              isLogoHidden={true}
+            />
+          </div>
+          <div className={c('org-container', 'field-container')}>
+            <span className={c('field-title')}>Organization</span>
+            <SelectField
+              className={c('select-field')}
+              name="organization_id"
+              options={p.organizations.map((o) => ({ ...o, logo: o.square_logo }))}
+              isLoading={p.isFetchingOrgs}
+            />
           </div>
 
           <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
