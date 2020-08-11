@@ -2,6 +2,31 @@ version: 2
 tables:
 - table:
     schema: public
+    name: activities
+  insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      columns:
+      - project_id
+      - task_id
+      - type
+      - user_id
+      backend_only: false
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - id
+      - user_id
+      - project_id
+      - task_id
+      - type
+      - created_at
+      - updated_at
+      filter: {}
+- table:
+    schema: public
     name: daily_task_notes
 - table:
     schema: public
@@ -73,6 +98,17 @@ tables:
       filter:
         user_id:
           _eq: X-Hasura-User-Id
+  event_triggers:
+  - name: create_activity_on_task_add
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook_from_env: NEW_TASK_WEBHOOK
 - table:
     schema: public
     name: designations
@@ -234,7 +270,6 @@ tables:
       filter:
         id:
           _eq: X-Hasura-User-Id
-      limit: 1
 - table:
     schema: public
     name: organizations
@@ -404,6 +439,22 @@ tables:
       - pr_link_template
       filter: {}
       check: null
+  - role: user
+    permission:
+      columns:
+      - description
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - organization_id
+      - pr_link_template
+      filter:
+        organization:
+          employees:
+            user_id:
+              _eq: X-Hasura-User-Id
+      check: null
   delete_permissions:
   - role: app_admin
     permission:
@@ -539,6 +590,23 @@ tables:
       - pr_link_template
       - project_id
       backend_only: false
+  - role: user
+    permission:
+      check:
+        project:
+          teams:
+            members:
+              employee:
+                user_id:
+                  _eq: X-Hasura-User-Id
+      columns:
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      - project_id
+      backend_only: false
   select_permissions:
   - role: app_admin
     permission:
@@ -586,6 +654,22 @@ tables:
       - project_id
       filter: {}
       check: {}
+  - role: user
+    permission:
+      columns:
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      filter:
+        project:
+          teams:
+            members:
+              employee:
+                user_id:
+                  _eq: X-Hasura-User-Id
+      check: null
   delete_permissions:
   - role: app_admin
     permission:
@@ -635,27 +719,6 @@ tables:
         id:
           _eq: X-Hasura-User-Id
       limit: 1
-  update_permissions:
-  - role: app_admin
-    permission:
-      columns:
-      - avatar
-      - email
-      - name
-      - role_id
-      filter: {}
-      check: null
-  - role: user
-    permission:
-      columns:
-      - avatar
-      - name
-      filter:
-        id:
-          _eq: X-Hasura-User-Id
-      check:
-        id:
-          _eq: X-Hasura-User-Id
   event_triggers:
   - name: default_user_login
     definition:
