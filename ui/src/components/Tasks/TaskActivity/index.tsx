@@ -15,6 +15,8 @@ import { projectSelector } from 'src/duck/projects';
 import style from './style.module.scss';
 
 import { currentUser } from 'src/entities/User/selectors';
+// import { useQuery } from 'src/lib/asyncHooks';
+// import { activitySelector, fetchTaskActivites } from 'src/duck/activity';
 
 const c = classNames.bind(style);
 dayjs.extend(relativeTime);
@@ -66,32 +68,30 @@ const TaskActivityRow: React.FC<any & { isFetching: boolean }> = ({ isFetching, 
   );
 
   return (
-    <>
-      <div className={c({ skeleton: isFetching })}>
-        <div className={c('task-body')}>
-          <div className={c('task-row')}>
-            <div className={c('row-left-container')}>
-              <Tippy content={p.issue_id ? `Issue id ${p.issue_id}` : 'Issue id'}>
-                <span className={c('task-issue')}>{p.issue_id ? p.issue_id : '?'}</span>
-              </Tippy>
-              <div className={c('row-status-item')}>
-                <TaskStatus status={p.is_delivered} />
-              </div>
-              <span className={c('task-title')}>{p.title}</span>
+    <div className={c({ skeleton: isFetching })} key={p.id}>
+      <div className={c('task-body')}>
+        <div className={c('task-row')}>
+          <div className={c('row-left-container')}>
+            <Tippy content={p.issue_id ? `Issue id ${p.issue_id}` : 'Issue id'}>
+              <span className={c('task-issue')}>{p.issue_id ? p.issue_id : '?'}</span>
+            </Tippy>
+            <div className={c('row-status-item')}>
+              <TaskStatus status={p.is_delivered} />
             </div>
-            <div className={c('row-right-container')}>
-              {p.pr_id && prField(p)}
+            <span className={c('task-title')}>{p.title}</span>
+          </div>
+          <div className={c('row-right-container')}>
+            {p.pr_id && prField(p)}
 
-              <Tippy content={project?.name}>
-                <div className={c('fallback-logo')}>
-                  <FallbackIcon logo={project?.logo_square} name={project?.name} />
-                </div>
-              </Tippy>
-            </div>
+            <Tippy content={project?.name}>
+              <div className={c('fallback-logo')}>
+                <FallbackIcon logo={project?.logo_square} name={project?.name} />
+              </div>
+            </Tippy>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -133,6 +133,11 @@ const ActivitiesRow: React.FC<any & { isFetching: boolean }> = ({ isFetching, ..
 };
 
 const TasksActivity: React.FC = () => {
+  /* const tasksActivities = useSelector(activitySelector.selectAll);
+   * const [isFetching] = useQuery(fetchTaskActivites, {
+   *   errorTitle: 'Failed to fetch some Tasks activities',
+   * }); */
+
   const activites = [
     {
       date: '',

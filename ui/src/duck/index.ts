@@ -1,6 +1,7 @@
 import { HYDRATE } from 'next-redux-wrapper';
 import { combineReducers, Reducer } from 'redux';
 
+import activities from './activity';
 import auth from './auth';
 import designations from './designations';
 import employees from './employees';
@@ -19,6 +20,7 @@ const reducer = combineReducers({
   [projects.name]: projects.reducer,
   [teams.name]: teams.reducer,
   [tasks.name]: tasks.reducer,
+  [activities.name]: activities.reducer,
 });
 
 const rootReducer: Reducer<RootState> = (state, action): RootState => {
