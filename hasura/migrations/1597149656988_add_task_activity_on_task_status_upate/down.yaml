@@ -1,0 +1,39 @@
+- args:
+    role: user
+    table:
+      name: activities
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - id
+      - user_id
+      - project_id
+      - task_id
+      - type
+      - created_at
+      - updated_at
+      computed_fields: []
+      filter: {}
+    role: user
+    table:
+      name: activities
+      schema: public
+  type: create_select_permission
+- args:
+    enable_manual: false
+    headers: []
+    insert:
+      columns: '*'
+    name: create_activity_on_task_status_update
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    table:
+      name: daily_tasks
+      schema: public
+    webhook_from_env: TASK_STATUS_UPDATE_WEBHOOK
+  type: create_event_trigger

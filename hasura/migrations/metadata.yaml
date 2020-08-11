@@ -3,6 +3,10 @@ tables:
 - table:
     schema: public
     name: activities
+  object_relationships:
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
   insert_permissions:
   - role: user
     permission:
@@ -17,13 +21,14 @@ tables:
   - role: user
     permission:
       columns:
+      - created_at
       - id
-      - user_id
+      - payload
       - project_id
       - task_id
       - type
-      - created_at
       - updated_at
+      - user_id
       filter: {}
 - table:
     schema: public
@@ -109,6 +114,17 @@ tables:
       interval_sec: 10
       timeout_sec: 60
     webhook_from_env: NEW_TASK_WEBHOOK
+  - name: create_activity_on_task_status_update
+    definition:
+      enable_manual: false
+      update:
+        columns:
+        - is_delivered
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook_from_env: TASK_STATUS_UPDATE_WEBHOOK
 - table:
     schema: public
     name: designations

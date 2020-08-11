@@ -63,6 +63,7 @@ services:
       SIDECAR_GRAPHQL_URL: http://sidecar/v1/graphql
       NEW_PROJECT_WEBHOOK: http://sidecar/v1/api/on-new-project
       NEW_TASK_WEBHOOK: http://sidecar/v1/api/on-new-task
+      TASK_STATUS_UPDATE_WEBHOOK: http://sidecar/v1/api/on-task-status-updates
 
   sidecar:
     build: ./sidecar

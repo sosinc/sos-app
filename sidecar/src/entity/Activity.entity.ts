@@ -16,4 +16,7 @@ export class Activities extends BaseEntity {
 
   @Column()
   type: string;
+
+  @Column('jsonb')
+  payload: object;
 }

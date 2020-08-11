@@ -1,0 +1,3 @@
+- args:
+    name: create_activity_on_task_status_update
+  type: delete_event_trigger
