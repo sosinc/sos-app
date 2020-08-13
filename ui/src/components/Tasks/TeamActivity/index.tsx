@@ -123,7 +123,7 @@ const ActivitiesRow: React.FC<ActivitiesRowProps> = (p) => {
             </div>
             <span className={c('user-info')}>
               <span>{p.title}</span>
-              <Tippy content={dayjs(p.subtitle).format('DD, MMM YYYY')}>
+              <Tippy content={dayjs(p.subtitle).format('DD, MMM YYYY hh:mm a')}>
                 <span className={c('task-time')}>{date}</span>
               </Tippy>
             </span>
@@ -151,10 +151,14 @@ const TeamActivity: React.FC = () => {
         return null;
       }
 
+      const reGroup = group.filter(
+        (v, i, a) => a.findIndex((t) => t.payload.id === v.payload.id) === i,
+      );
+
       const taskType =
         firstActivity.type === 'TASK_ADDED' ? 'added a task' : 'update the task status';
       return {
-        events: group,
+        events: reGroup,
         logo: firstActivity.user.avatar,
         subtitle: firstActivity.created_at,
         title: `${firstActivity.user.name} ${taskType}`,

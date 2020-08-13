@@ -5,8 +5,8 @@ import { ChangeEvent, useState } from 'react';
 import { MdFileUpload } from 'react-icons/md';
 
 import ErrorMessage from 'src/components/Form/ErrorMessage';
-import resolveStorageFile from 'src/utils/resolveStorageFile';
-import uploadFile from 'src/utils/uploadFile';
+import resolveStorageFile from 'src/lib/resolveStorageFile';
+import uploadFile from 'src/lib/uploadFile';
 
 import styles from './style.module.scss';
 

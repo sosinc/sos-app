@@ -1,7 +1,7 @@
 import client from 'src/lib/client';
-import { PaginationArgs } from 'src/utils/paginationArgs';
-import resolveStorageFile from 'src/utils/resolveStorageFile';
-import uploadDefaultLogo from 'src/utils/uploadDefaultLogo';
+import { PaginationArgs } from 'src/lib/paginationArgs';
+import resolveStorageFile from 'src/lib/resolveStorageFile';
+import uploadDefaultLogo from 'src/lib/uploadDefaultLogo';
 import { Team } from './Team';
 
 export interface Project {

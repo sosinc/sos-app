@@ -1,6 +1,6 @@
 import client from 'src/lib/client';
-import resolveStorageFile from 'src/utils/resolveStorageFile';
-import uploadDefaultLogo from 'src/utils/uploadDefaultLogo';
+import resolveStorageFile from 'src/lib/resolveStorageFile';
+import uploadDefaultLogo from 'src/lib/uploadDefaultLogo';
 import { Project } from './Project';
 
 export interface Team {

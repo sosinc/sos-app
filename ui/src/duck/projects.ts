@@ -11,7 +11,7 @@ import {
   ProjectResponse,
   update,
 } from 'src/entities/Project';
-import { PaginationArgs } from 'src/utils/paginationArgs';
+import { PaginationArgs } from 'src/lib/paginationArgs';
 import { RootState } from '.';
 import { fetchDailyTasks } from './tasks';
 

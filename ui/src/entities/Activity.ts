@@ -1,5 +1,5 @@
 import client from 'src/lib/client';
-import resolveStorageFile from 'src/utils/resolveStorageFile';
+import resolveStorageFile from 'src/lib/resolveStorageFile';
 import { User } from './User';
 
 export interface ActivityEvent {
@@ -8,7 +8,7 @@ export interface ActivityEvent {
   type: string;
   user_id: string;
   created_at: string;
-  payload: {is_delivered: boolean, pr_id: string, issue_id: string, title: string};
+  payload: {id: string, is_delivered: boolean, pr_id: string, issue_id: string, title: string};
   user: User;
 }
 

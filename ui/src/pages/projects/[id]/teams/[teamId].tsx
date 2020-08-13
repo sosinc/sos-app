@@ -11,7 +11,7 @@ import { employeeSelector, fetchEmployees } from 'src/duck/employees';
 import { projectSelector } from 'src/duck/projects';
 import { fetchTeam, teamSelector, updateTeamAction } from 'src/duck/teams';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
-import filterOptionalValues from 'src/utils/filterOptionalValues';
+import filterOptionalValues from 'src/lib/filterOptionalValues';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);

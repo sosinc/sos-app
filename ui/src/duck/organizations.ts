@@ -9,7 +9,7 @@ import {
   OrganizationArgs,
   update,
 } from 'src/entities/Organizations';
-import { PaginationArgs } from 'src/utils/paginationArgs';
+import { PaginationArgs } from 'src/lib/paginationArgs';
 import { RootState } from '.';
 
 const orgAdapter = createEntityAdapter<Organization>({
