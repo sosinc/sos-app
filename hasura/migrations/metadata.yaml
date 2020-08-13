@@ -29,7 +29,9 @@ tables:
       - type
       - updated_at
       - user_id
-      filter: {}
+      filter:
+        user_id:
+          _ne: X-Hasura-User-Id
       allow_aggregations: true
 - table:
     schema: public
