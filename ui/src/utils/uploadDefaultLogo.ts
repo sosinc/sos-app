@@ -1,4 +1,4 @@
-import createSvgImage from './createSvgImage';
+import createSvgImage from '../lib/createSvgImage';
 import uploadFile from './uploadFile';
 
 export default async (name: string) => {

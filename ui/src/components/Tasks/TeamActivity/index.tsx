@@ -12,9 +12,9 @@ import FallbackIcon from 'src/containers/FallbackIcon';
 import { RootState } from 'src/duck';
 import { activitySelector, fetchTaskActivites } from 'src/duck/activity';
 import { projectSelector } from 'src/duck/projects';
-import { taskSelector } from 'src/duck/tasks';
-import { Activity } from 'src/entities/Activity';
+import { ActivityEvent } from 'src/entities/Activity';
 import { useQuery } from 'src/lib/asyncHooks';
+import groupBy from 'src/lib/groupBy';
 
 import style from './style.module.scss';
 
@@ -53,17 +53,21 @@ const TaskStatus: React.FC<{ status: boolean }> = (p) => {
   );
 };
 
-const TaskActivityRow: React.FC<{ taskId: string; project_id: string; status: boolean }> = (p) => {
-  const project = useSelector((state: RootState) =>
-    projectSelector.selectById(state, p.project_id),
-  );
-  const task = useSelector((state: RootState) => taskSelector.selectById(state, p.taskId));
+interface TaskActivity {
+  title: string;
+  pr_id: string;
+  issue_id: string;
+  is_delivered: boolean;
+}
 
-  const prField = (t: any) => (
-    <Tippy content={t.pr_id}>
+const TaskActivityRow: React.FC<TaskActivity & { project_id: string }> = ({ project_id, ...p }) => {
+  const project = useSelector((state: RootState) => projectSelector.selectById(state, project_id));
+
+  const prField = (prId: string) => (
+    <Tippy content={prId}>
       <div className={c('pr-container')}>
         <GoGitPullRequest className={c('pr-icon')} />
-        <div className={c('pr-text')}>{`#${t.pr_id}`}</div>
+        <div className={c('pr-text')}>{`#${prId}`}</div>
       </div>
     </Tippy>
   );
@@ -72,16 +76,16 @@ const TaskActivityRow: React.FC<{ taskId: string; project_id: string; status: bo
     <div className={c('task-body')}>
       <div className={c('task-row')}>
         <div className={c('row-left-container')}>
-          <Tippy content={task?.issue_id ? `Issue id ${task?.issue_id}` : 'Issue id'}>
-            <span className={c('task-issue')}>{task?.issue_id ? task.issue_id : '?'}</span>
+          <Tippy content={p.issue_id ? `Issue id ${p.issue_id}` : 'Issue id'}>
+            <span className={c('task-issue')}>{p.issue_id ? p.issue_id : '?'}</span>
           </Tippy>
           <div className={c('row-status-item')}>
-            <TaskStatus status={p.status} />
+            <TaskStatus status={p.is_delivered} />
           </div>
-          <span className={c('task-title')}>{task?.title}</span>
+          <span className={c('task-title')}>{p.title}</span>
         </div>
         <div className={c('row-right-container')}>
-          {task?.pr_id && prField(p)}
+          {p.pr_id && prField(p.pr_id)}
 
           <Tippy content={project?.name}>
             <div className={c('fallback-logo')}>
@@ -94,37 +98,38 @@ const TaskActivityRow: React.FC<{ taskId: string; project_id: string; status: bo
   );
 };
 
-const ActivitiesRow: React.FC<Activity & { isFetching: boolean }> = ({ isFetching, ...p }) => {
-  const dateFromNow = () => {
-    const day = dayjs(p.updated_at);
-    return day.fromNow();
-  };
+interface ActivitiesRowProps {
+  events: ActivityEvent[];
+  logo: string | undefined;
+  title: string;
+  subtitle: string;
+  isFetching: boolean;
+}
 
-  const taskType = p.type === 'TASK_ADDED' ? 'added a task' : 'update the task status';
+const ActivitiesRow: React.FC<ActivitiesRowProps> = (p) => {
+  const day = dayjs(p.subtitle);
+  const date = day.fromNow();
+  const tasks = p.events.map((event) => (
+    <TaskActivityRow key={event.id} {...event.payload} project_id={event.project_id} />
+  ));
 
   return (
     <>
-      <div className={c({ skeleton: isFetching })}>
+      <div className={c({ skeleton: p.isFetching })}>
         <div className={c('container')}>
           <div className={c('user-container')}>
             <div className={c('user-logo')}>
-              <FallbackIcon logo={p.user.avatar} name={p.user.name} />
+              <FallbackIcon logo={p.logo} name={p.title} />
             </div>
             <span className={c('user-info')}>
-              <span>{`${p.user.name} ${taskType}`}</span>
-              <Tippy content={dayjs(p.updated_at).format('DD, MMM YYYY')}>
-                <span className={c('task-time')}>{dateFromNow()}</span>
+              <span>{p.title}</span>
+              <Tippy content={dayjs(p.subtitle).format('DD, MMM YYYY')}>
+                <span className={c('task-time')}>{date}</span>
               </Tippy>
             </span>
           </div>
 
-          <div className={c('activites')}>
-            <TaskActivityRow
-              taskId={p.task_id}
-              project_id={p.project_id}
-              status={p.payload.new_status}
-            />
-          </div>
+          <div className={c('activites')}>{tasks}</div>
         </div>
       </div>
     </>
@@ -132,13 +137,35 @@ const ActivitiesRow: React.FC<Activity & { isFetching: boolean }> = ({ isFetchin
 };
 
 const TeamActivity: React.FC = () => {
-  const teamActivities = useSelector(activitySelector.selectAll);
+  const activities = useSelector(activitySelector.selectAll);
   const [isFetching] = useQuery(fetchTaskActivites, {
     errorTitle: 'Failed to fetch some Tasks activities',
   });
 
-  const activityRow = teamActivities.length ? (
-    teamActivities.map((i, index) => <ActivitiesRow key={index} {...i} isFetching={isFetching} />)
+  const teamActivities: ActivityEvent[][] = groupBy(activities, 'user_id');
+  const sectionProps = teamActivities
+    .map((group) => {
+      const firstActivity = group[0];
+
+      if (!firstActivity) {
+        return null;
+      }
+
+      const taskType =
+        firstActivity.type === 'TASK_ADDED' ? 'added a task' : 'update the task status';
+      return {
+        events: group,
+        logo: firstActivity.user.avatar,
+        subtitle: firstActivity.created_at,
+        title: `${firstActivity.user.name} ${taskType}`,
+      };
+    })
+    .filter(Boolean) as Array<Omit<ActivitiesRowProps, 'isFetching'>>;
+
+  const activityRow = sectionProps.length ? (
+    sectionProps.map((section, index) => (
+      <ActivitiesRow key={index} {...section} isFetching={isFetching} />
+    ))
   ) : (
     <NoTodaysCommitment />
   );

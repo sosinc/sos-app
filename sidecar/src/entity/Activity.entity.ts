@@ -6,9 +6,6 @@ export class Activities extends BaseEntity {
   id: string;
 
   @Column()
-  task_id: string;
-
-  @Column()
   user_id: string;
 
   @Column()

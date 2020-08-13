@@ -15,10 +15,9 @@ api.post("/on-new-task", async (req, res) => {
 
   const newActivity = new Activities();
   newActivity.type = 'TASK_ADDED';
-  newActivity.task_id = task.id;
   newActivity.user_id = task.created_by;
   newActivity.project_id = task.project_id;
-  newActivity.payload = {old_status: task.is_delivered, new_status: task.is_delivered};
+  newActivity.payload = {id: task.id, is_delivered: task.is_delivered, title: task.title, issue_id: task.issue_id, pr_id: task.pr_id};
 
   await activityRepo.save(newActivity);
 
@@ -37,10 +36,9 @@ api.post("/on-task-status-updates", async (req, res) => {
 
   const newActivity = new Activities();
   newActivity.type = 'TASK_STATUS_UPDATE';
-  newActivity.task_id = task.id;
   newActivity.user_id = task.created_by;
   newActivity.project_id = task.project_id;
-  newActivity.payload = {old_status: !task.is_delivered, new_status: task.is_delivered};
+  newActivity.payload = {id: task.id, is_delivered: task.is_delivered, title: task.title, issue_id: task.issue_id, pr_id: task.pr_id};
 
   await activityRepo.save(newActivity);
 

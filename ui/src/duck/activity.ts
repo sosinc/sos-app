@@ -1,25 +1,25 @@
 import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from '@reduxjs/toolkit';
 
 import {
-  fetchMany, Activity,
+  fetchMany, ActivityEvent,
 } from 'src/entities/Activity';
 import { RootState } from '.';
 
-const activityAdapter = createEntityAdapter<Activity>();
+const activityAdapter = createEntityAdapter<ActivityEvent>();
 
 export const activitySelector = activityAdapter.getSelectors<RootState>((state) => state.activities);
 
 export const fetchTaskActivites = createAsyncThunk<
-  Activity[],
+  ActivityEvent[],
 undefined,
-{ rejectValue: Error; state: Activity }
+{ rejectValue: Error; state: ActivityEvent }
   >('activities/fetchMany', fetchMany);
 
-export type ProjectState = EntityState<Activity>;
+export type ProjectState = EntityState<ActivityEvent>;
 
 export default createSlice({
   extraReducers: (builder) => {
-    builder.addCase(fetchTaskActivites.fulfilled, activityAdapter.upsertMany);
+    builder.addCase(fetchTaskActivites.fulfilled,  activityAdapter.upsertMany);
 
  },
   initialState: activityAdapter.getInitialState(),
