@@ -8,7 +8,7 @@ export interface ActivityEvent {
   type: string;
   user_id: string;
   created_at: string;
-  payload: {id: string, is_delivered: boolean, pr_id: string, issue_id: string, title: string};
+  payload: { id: string; is_delivered: boolean; pr_id: string; issue_id: string; title: string };
   user: User;
 }
 
@@ -35,5 +35,6 @@ export const fetchMany = async (): Promise<ActivityEvent[]> => {
 
   return activities.map((a: any) => ({
     ...a,
-    user: {...a.user, avatar: resolveStorageFile(a.user.avatar)}}));
+    user: { ...a.user, avatar: resolveStorageFile(a.user.avatar) },
+  }));
 };
