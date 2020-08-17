@@ -28,8 +28,13 @@ tables:
       - updated_at
       - user_id
       filter:
-        user_id:
-          _ne: X-Hasura-User-Id
+        _and:
+        - user_id:
+            _ne: X-Hasura-User-Id
+        - user:
+            as_employee:
+              organization_id:
+                _eq: X-Hasura-Organization-Id
       allow_aggregations: true
 - table:
     schema: public
@@ -44,13 +49,7 @@ tables:
   insert_permissions:
   - role: user
     permission:
-      check:
-        _and:
-        - user_id:
-            _eq: X-Hasura-User-Id
-        - project:
-            organization_id:
-              _eq: X-Hasura-Organization-Id
+      check: {}
       set:
         created_by: x-hasura-User-Id
         user_id: x-hasura-User-Id
@@ -84,12 +83,8 @@ tables:
       - id
       - user_id
       filter:
-        _and:
-        - user_id:
-            _eq: X-Hasura-User-Id
-        - project:
-            organization_id:
-              _eq: X-Hasura-Organization-Id
+        user_id:
+          _eq: X-Hasura-User-Id
   update_permissions:
   - role: user
     permission:
@@ -295,12 +290,9 @@ tables:
       - created_by
       - id
       filter:
-        _and:
-        - id:
-            _eq: X-Hasura-User-Id
-        - as_employee:
-            organization_id:
-              _eq: X-Hasura-Organization-Id
+        id:
+          _eq: X-Hasura-User-Id
+      limit: 1
 - table:
     schema: public
     name: organizations
@@ -452,14 +444,11 @@ tables:
       - created_at
       - updated_at
       filter:
-        _and:
-        - teams:
-            members:
-              employee:
-                user_id:
-                  _eq: X-Hasura-User-Id
-        - organization_id:
-            _eq: X-Hasura-Organization-Id
+        teams:
+          members:
+            employee:
+              user_id:
+                _eq: X-Hasura-User-Id
   update_permissions:
   - role: app_admin
     permission:
@@ -472,22 +461,6 @@ tables:
       - organization_id
       - pr_link_template
       filter: {}
-      check: null
-  - role: user
-    permission:
-      columns:
-      - description
-      - issue_link_template
-      - logo
-      - logo_square
-      - name
-      - organization_id
-      - pr_link_template
-      filter:
-        organization:
-          employees:
-            user_id:
-              _eq: X-Hasura-User-Id
       check: null
   delete_permissions:
   - role: app_admin
@@ -624,25 +597,6 @@ tables:
       - pr_link_template
       - project_id
       backend_only: false
-  - role: user
-    permission:
-      check:
-        _and:
-        - members:
-            employee:
-              user_id:
-                _eq: X-Hasura-User-Id
-        - project:
-            organization_id:
-              _eq: X-Hasura-Organization-Id
-      columns:
-      - issue_link_template
-      - logo
-      - logo_square
-      - name
-      - pr_link_template
-      - project_id
-      backend_only: false
   select_permissions:
   - role: app_admin
     permission:
@@ -671,14 +625,12 @@ tables:
       - created_at
       - updated_at
       filter:
-        _and:
-        - members:
-            employee:
-              user_id:
-                _eq: X-Hasura-User-Id
-        - project:
-            organization_id:
-              _eq: X-Hasura-Organization-Id
+        project:
+          teams:
+            members:
+              employee:
+                user_id:
+                  _eq: X-Hasura-User-Id
       allow_aggregations: true
   update_permissions:
   - role: app_admin
@@ -692,24 +644,6 @@ tables:
       - project_id
       filter: {}
       check: {}
-  - role: user
-    permission:
-      columns:
-      - issue_link_template
-      - logo
-      - logo_square
-      - name
-      - pr_link_template
-      filter:
-        _and:
-        - members:
-            employee:
-              user_id:
-                _eq: X-Hasura-User-Id
-        - project:
-            organization_id:
-              _eq: X-Hasura-Organization-Id
-      check: null
   delete_permissions:
   - role: app_admin
     permission:
@@ -749,16 +683,40 @@ tables:
     permission:
       columns:
       - avatar
+      - created_at
       - email
       - id
       - name
       - role_id
+      - updated_at
       filter:
-        as_employee:
-          team_members:
+        _or:
+        - id:
+            _eq: X-Hasura-User-Id
+        - as_employee:
             organization_id:
               _eq: X-Hasura-Organization-Id
-      limit: 0
+  update_permissions:
+  - role: app_admin
+    permission:
+      columns:
+      - avatar
+      - email
+      - name
+      - role_id
+      filter: {}
+      check: null
+  - role: user
+    permission:
+      columns:
+      - avatar
+      - name
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      check:
+        id:
+          _eq: X-Hasura-User-Id
   event_triggers:
   - name: default_user_login
     definition:

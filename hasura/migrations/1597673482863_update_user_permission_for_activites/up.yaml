@@ -1,0 +1,69 @@
+- args:
+    name: user
+    table:
+      name: activities
+      schema: public
+    using:
+      foreign_key_constraint_on: user_id
+  type: create_object_relationship
+- args:
+    role: user
+    table:
+      name: users
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - avatar
+      - created_at
+      - email
+      - id
+      - name
+      - role_id
+      - updated_at
+      computed_fields: []
+      filter:
+        _or:
+        - id:
+            _eq: X-Hasura-User-Id
+        - as_employee:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
+    role: user
+    table:
+      name: users
+      schema: public
+  type: create_select_permission
+- args:
+    role: user
+    table:
+      name: activities
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: true
+      columns:
+      - created_at
+      - id
+      - payload
+      - project_id
+      - type
+      - updated_at
+      - user_id
+      computed_fields: []
+      filter:
+        _and:
+        - user_id:
+            _ne: X-Hasura-User-Id
+        - user:
+            as_employee:
+              organization_id:
+                _eq: X-Hasura-Organization-Id
+    role: user
+    table:
+      name: activities
+      schema: public
+  type: create_select_permission
