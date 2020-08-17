@@ -8,11 +8,13 @@ import {
   FormikHelpers,
   FormikProps,
 } from 'formik';
+import Router from 'next/router';
 import { KeyboardEvent, MutableRefObject } from 'react';
 import { GoGitPullRequest, GoIssueOpened } from 'react-icons/go';
 import { MdAlarm, MdClose, MdKeyboardReturn } from 'react-icons/md';
 
 import SelectField from 'src/components/Form/SelectField';
+import WarningModal from 'src/components/Modal/Warning';
 import { createDailyTaskAction, updateDailyTaskAction } from 'src/duck/tasks';
 import { fetchDailyTasks } from 'src/duck/tasks';
 import { currentUser } from 'src/entities/User/selectors';
@@ -219,11 +221,11 @@ const AddDailyTasksForm: React.FC<DailyTaskFormProps> = (p) => {
     errorTitle: 'Failed to fetch some Tasks',
   });
   const user = currentUser();
-  const projectId = user.projects?.length && user.projects[0].id;
+  const projectId = user.projects?.length ? user.projects[0].id : '';
 
-  if (!projectId) {
-    throw new Error('You are not supposed to be here!');
-  }
+  const closeSlidebar = () => {
+    p.onClose();
+  };
 
   let initialTaskUpdates = initialValues.taskUpdates.map((s) => ({
     ...s,
@@ -255,6 +257,15 @@ const AddDailyTasksForm: React.FC<DailyTaskFormProps> = (p) => {
 
   return (
     <>
+      <WarningModal
+        onAccept={() => Router.push(`/projects/add`)}
+        onCancel={closeSlidebar}
+        acceptButtonText={'Add'}
+        closeButtonText="Cancel"
+        isOpen={!projectId}
+        title={'Warning'}
+        subTitle={'There is no project, add a project'}
+      />
       <Formik
         initialValues={{ ...initialValues, taskUpdates: initialTaskUpdates }}
         onSubmit={handleSubmit}

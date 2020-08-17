@@ -24,10 +24,10 @@ const Header: React.FC<{ teamId: string; projectId: string }> = (p) => {
     <div className={c('header')}>
       <span>
         <Link href="/projects">
-          <a>Projects > </a>
+          <a>{'Projects >'}</a>
         </Link>
         <Link href={`/projects/${p.projectId}`}>
-          <a> {project?.name || 'Project'} > </a>
+          <a> {project?.name + ' > ' || 'Project > '}</a>
         </Link>
         {team?.name || 'Team'}
       </span>

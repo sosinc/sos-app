@@ -27,7 +27,9 @@ const UserMenu: React.FC = () => {
         <Link href={'/profile'}>
           <a className={c('context-item')}> Settings</a>
         </Link>
-
+        <Link href={'/'}>
+          <a className={c('context-item')}> Dashboard</a>
+        </Link>
         <span className={c('separator')} />
         <span className={c('context-item')} onClick={handleLogout}>
           Logout

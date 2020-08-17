@@ -32,7 +32,6 @@ const TextAreaField: React.FC<TextAreaFieldProps & { formik: FormikContextType<{
   return (
     <div className={containerClass}>
       <textarea
-        name={p.name}
         className={p.className}
         placeholder={p.placeholder}
         rows={p.rows}
