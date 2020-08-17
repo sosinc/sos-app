@@ -15,7 +15,7 @@ const Header: React.FC = () => (
   <div className={c('header')}>
     <span>
       <Link href="/organizations">
-        <a>Organizations > </a>
+        <a>{'Organizations >'}</a>
       </Link>
       Create
     </span>

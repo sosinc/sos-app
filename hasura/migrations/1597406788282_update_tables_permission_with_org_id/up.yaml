@@ -1,0 +1,231 @@
+- args:
+    role: user
+    table:
+      name: me
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - avatar
+      - email
+      - name
+      - role_id
+      - created_at
+      - updated_at
+      - created_by
+      - id
+      computed_fields: []
+      filter:
+        _and:
+        - id:
+            _eq: X-Hasura-User-Id
+        - as_employee:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
+    role: user
+    table:
+      name: me
+      schema: public
+  type: create_select_permission
+- args:
+    role: user
+    table:
+      name: daily_tasks
+      schema: public
+  type: drop_insert_permission
+- args:
+    permission:
+      backend_only: false
+      check:
+        _and:
+        - user_id:
+            _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
+      columns:
+      - billable_hours
+      - date
+      - description
+      - estimated_hours
+      - is_delivered
+      - issue_id
+      - pr_id
+      - project_id
+      - title
+      set:
+        created_by: x-hasura-User-Id
+        user_id: x-hasura-User-Id
+    role: user
+    table:
+      name: daily_tasks
+      schema: public
+  type: create_insert_permission
+- args:
+    role: user
+    table:
+      name: daily_tasks
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - project_id
+      - title
+      - description
+      - issue_id
+      - pr_id
+      - is_delivered
+      - created_by
+      - estimated_hours
+      - billable_hours
+      - date
+      - created_at
+      - updated_at
+      - id
+      - user_id
+      computed_fields: []
+      filter:
+        _and:
+        - user_id:
+            _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
+    role: user
+    table:
+      name: daily_tasks
+      schema: public
+  type: create_select_permission
+- args:
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - id
+      - name
+      - logo
+      - logo_square
+      - description
+      - organization_id
+      - issue_link_template
+      - pr_link_template
+      - created_at
+      - updated_at
+      computed_fields: []
+      filter:
+        _and:
+        - teams:
+            members:
+              employee:
+                user_id:
+                  _eq: X-Hasura-User-Id
+        - organization_id:
+            _eq: X-Hasura-Organization-Id
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: create_select_permission
+- args:
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: drop_insert_permission
+- args:
+    permission:
+      backend_only: false
+      check:
+        _and:
+        - members:
+            employee:
+              user_id:
+                _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
+      columns:
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      - project_id
+      set: {}
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: create_insert_permission
+- args:
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: true
+      columns:
+      - id
+      - name
+      - logo
+      - logo_square
+      - issue_link_template
+      - pr_link_template
+      - project_id
+      - created_at
+      - updated_at
+      computed_fields: []
+      filter:
+        _and:
+        - members:
+            employee:
+              user_id:
+                _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: create_select_permission
+- args:
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: drop_update_permission
+- args:
+    permission:
+      columns:
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      filter:
+        _and:
+        - members:
+            employee:
+              user_id:
+                _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
+      set: {}
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: create_update_permission

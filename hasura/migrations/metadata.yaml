@@ -2,6 +2,39 @@ version: 2
 tables:
 - table:
     schema: public
+    name: activities
+  object_relationships:
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+  insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      columns:
+      - project_id
+      - task_id
+      - type
+      - user_id
+      backend_only: false
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - created_at
+      - id
+      - payload
+      - project_id
+      - task_id
+      - type
+      - updated_at
+      - user_id
+      filter:
+        user_id:
+          _ne: X-Hasura-User-Id
+      allow_aggregations: true
+- table:
+    schema: public
     name: daily_task_notes
 - table:
     schema: public
@@ -13,7 +46,13 @@ tables:
   insert_permissions:
   - role: user
     permission:
-      check: {}
+      check:
+        _and:
+        - user_id:
+            _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
       set:
         created_by: x-hasura-User-Id
         user_id: x-hasura-User-Id
@@ -47,8 +86,12 @@ tables:
       - id
       - user_id
       filter:
-        user_id:
-          _eq: X-Hasura-User-Id
+        _and:
+        - user_id:
+            _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
   update_permissions:
   - role: user
     permission:
@@ -73,6 +116,28 @@ tables:
       filter:
         user_id:
           _eq: X-Hasura-User-Id
+  event_triggers:
+  - name: create_activity_on_task_add
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook_from_env: NEW_TASK_WEBHOOK
+  - name: create_activity_on_task_status_update
+    definition:
+      enable_manual: false
+      update:
+        columns:
+        - is_delivered
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook_from_env: TASK_STATUS_UPDATE_WEBHOOK
 - table:
     schema: public
     name: designations
@@ -232,9 +297,12 @@ tables:
       - created_by
       - id
       filter:
-        id:
-          _eq: X-Hasura-User-Id
-      limit: 1
+        _and:
+        - id:
+            _eq: X-Hasura-User-Id
+        - as_employee:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
 - table:
     schema: public
     name: organizations
@@ -386,11 +454,14 @@ tables:
       - created_at
       - updated_at
       filter:
-        teams:
-          members:
-            employee:
-              user_id:
-                _eq: X-Hasura-User-Id
+        _and:
+        - teams:
+            members:
+              employee:
+                user_id:
+                  _eq: X-Hasura-User-Id
+        - organization_id:
+            _eq: X-Hasura-Organization-Id
   update_permissions:
   - role: app_admin
     permission:
@@ -403,6 +474,22 @@ tables:
       - organization_id
       - pr_link_template
       filter: {}
+      check: null
+  - role: user
+    permission:
+      columns:
+      - description
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - organization_id
+      - pr_link_template
+      filter:
+        organization:
+          employees:
+            user_id:
+              _eq: X-Hasura-User-Id
       check: null
   delete_permissions:
   - role: app_admin
@@ -539,6 +626,25 @@ tables:
       - pr_link_template
       - project_id
       backend_only: false
+  - role: user
+    permission:
+      check:
+        _and:
+        - members:
+            employee:
+              user_id:
+                _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
+      columns:
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      - project_id
+      backend_only: false
   select_permissions:
   - role: app_admin
     permission:
@@ -567,12 +673,14 @@ tables:
       - created_at
       - updated_at
       filter:
-        project:
-          teams:
-            members:
-              employee:
-                user_id:
-                  _eq: X-Hasura-User-Id
+        _and:
+        - members:
+            employee:
+              user_id:
+                _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
       allow_aggregations: true
   update_permissions:
   - role: app_admin
@@ -586,6 +694,24 @@ tables:
       - project_id
       filter: {}
       check: {}
+  - role: user
+    permission:
+      columns:
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      filter:
+        _and:
+        - members:
+            employee:
+              user_id:
+                _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
+      check: null
   delete_permissions:
   - role: app_admin
     permission:
@@ -625,37 +751,16 @@ tables:
     permission:
       columns:
       - avatar
-      - created_at
       - email
       - id
       - name
       - role_id
-      - updated_at
       filter:
-        id:
-          _eq: X-Hasura-User-Id
-      limit: 1
-  update_permissions:
-  - role: app_admin
-    permission:
-      columns:
-      - avatar
-      - email
-      - name
-      - role_id
-      filter: {}
-      check: null
-  - role: user
-    permission:
-      columns:
-      - avatar
-      - name
-      filter:
-        id:
-          _eq: X-Hasura-User-Id
-      check:
-        id:
-          _eq: X-Hasura-User-Id
+        as_employee:
+          team_members:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
+      limit: 0
   event_triggers:
   - name: default_user_login
     definition:

@@ -9,21 +9,30 @@ import SlideBar from 'src/components/SlideBar';
 import AddDailyTasksForm from 'src/components/Tasks/AddDailyTasksForm';
 import DailyTasks from 'src/components/Tasks/DailyTasks';
 import DashboardLayout from 'src/containers/DashboardLayout';
+import { currentUser } from 'src/entities/User/selectors';
 
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
 
-const Header: React.FC<{ openSlidebar: () => void }> = (p) => (
-  <div className={c('header')}>
-    Today's Commitments
+const Header: React.FC<{ openSlidebar: () => void }> = (p) => {
+  const user = currentUser();
+  const role = user.role?.id;
+  const addTask = (
     <Tippy content="Add Task">
       <span className={c('add-button')} onClick={p.openSlidebar}>
         <MdAdd className={c('icon')} />
       </span>
     </Tippy>
-  </div>
-);
+  );
+
+  return (
+    <div className={c('header')}>
+      Today's Commitments
+      {role === 'USER' && addTask}
+    </div>
+  );
+};
 
 const Dashboard = () => {
   const [isOpen, setOpen] = useState<boolean>(false);

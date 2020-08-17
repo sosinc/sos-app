@@ -19,7 +19,7 @@ const Header: React.FC = () => (
   <div className={c('header')}>
     <span>
       <Link href="/employees">
-        <a>Employees > </a>
+        <a>{'Employee >'}</a>
       </Link>
       Create
     </span>
