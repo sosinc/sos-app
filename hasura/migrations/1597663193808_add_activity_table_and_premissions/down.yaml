@@ -209,3 +209,33 @@
       name: me
       schema: public
   type: create_select_permission
+- args:
+    role: user
+    table:
+      name: activities
+      schema: public
+  type: drop_select_permission
+- args:
+    enable_manual: false
+    headers: []
+    insert:
+      columns: '*'
+    name: create_activity_on_task_status_update
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    table:
+      name: daily_tasks
+      schema: public
+    webhook_from_env: TASK_STATUS_UPDATE_WEBHOOK
+  type: create_event_trigger
+- args:
+    name: create_activity_on_task_add
+  type: delete_event_trigger
+- args:
+    role: user
+    table:
+      name: activities
+      schema: public
+  type: drop_insert_permission
