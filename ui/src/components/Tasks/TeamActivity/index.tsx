@@ -21,7 +21,6 @@ import style from './style.module.scss';
 const c = classNames.bind(style);
 dayjs.extend(relativeTime);
 
-// const NoTodaysCommitment: React.FC<{ addItemCb: () => void }> = (p) => (
 const NoTodaysCommitment = () => (
   <div className={c('not-found-container')}>
     <NoItemsFound
@@ -71,6 +70,10 @@ const TaskActivityRow: React.FC<TaskActivity & { project_id: string }> = ({ proj
       </div>
     </Tippy>
   );
+
+  if (!project) {
+    return null;
+  }
 
   return (
     <div className={c('task-body')}>
@@ -138,9 +141,7 @@ const ActivitiesRow: React.FC<ActivitiesRowProps> = (p) => {
 
 const TeamActivity: React.FC = () => {
   const activities = useSelector(activitySelector.selectAll);
-  const [isFetching] = useQuery(fetchTaskActivites, {
-    errorTitle: 'Failed to fetch some Tasks activities',
-  });
+  const [isFetching] = useQuery(fetchTaskActivites, {});
 
   const teamActivities: ActivityEvent[][] = groupBy(activities, 'user_id');
   const sectionProps = teamActivities
