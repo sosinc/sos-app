@@ -12,7 +12,6 @@
       - id
       - payload
       - project_id
-      - task_id
       - type
       - updated_at
       - user_id

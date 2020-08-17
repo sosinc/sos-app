@@ -13,7 +13,6 @@ tables:
       check: {}
       columns:
       - project_id
-      - task_id
       - type
       - user_id
       backend_only: false
@@ -25,7 +24,6 @@ tables:
       - id
       - payload
       - project_id
-      - task_id
       - type
       - updated_at
       - user_id

@@ -1,6 +1,6 @@
 - args:
     is_enum: false
-    name: Activities
+    name: activities
     schema: public
   type: track_table
 - args:
@@ -10,7 +10,6 @@
       check: {}
       columns:
       - project_id
-      - task_id
       - type
       - user_id
       set: {}
@@ -43,7 +42,6 @@
       - id
       - user_id
       - project_id
-      - task_id
       - type
       - created_at
       - updated_at
