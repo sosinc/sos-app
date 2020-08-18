@@ -147,11 +147,7 @@ const OrgSelectBox: React.FC<{ currentOrg?: Organization }> = ({ currentOrg: o }
   );
 
   if (!o || organizations.length === 1) {
-    return (
-      <Link href={'/organizations'}>
-        <span>{currentOrgLogo}</span>
-      </Link>
-    );
+    return <span>{currentOrgLogo}</span>;
   }
 
   return (

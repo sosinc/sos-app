@@ -2,7 +2,7 @@ import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from 
 
 import { fetchCurrentUser, logoutUserAction } from 'src/duck/auth';
 import { create, Employee, EmployeeArgs, fetchMany, fetchOne, update } from 'src/entities/Employee';
-import { PaginationArgs } from 'src/utils/paginationArgs';
+import { PaginationArgs } from 'src/lib/paginationArgs';
 import { RootState } from '.';
 
 const employeeAdapter = createEntityAdapter<Employee>({

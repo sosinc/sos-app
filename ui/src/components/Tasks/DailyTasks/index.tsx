@@ -153,10 +153,12 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
   };
 
   const prField = (task: DailyTask) => (
-    <div className={c('pr-container')} onClick={() => handleTemplateLink(task.pr_id, 'pr')}>
-      <GoGitPullRequest className={c('pr-icon')} title={'Pr id'} />
-      {`#${task.pr_id}`}
-    </div>
+    <Tippy content={task.pr_id}>
+      <div className={c('pr-container')} onClick={() => handleTemplateLink(task.pr_id, 'pr')}>
+        <GoGitPullRequest className={c('pr-icon')} title={'Pr id'} />
+        {`#${task.pr_id}`}
+      </div>
+    </Tippy>
   );
 
   const handleSelectMoreOptions = (item: { id: string; name: string }) => {

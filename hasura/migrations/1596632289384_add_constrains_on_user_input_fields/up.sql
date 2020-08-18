@@ -1,6 +1,4 @@
-
 alter table "public"."employees" add constraint "valid_name" check (btrim(name) <> ''::text AND length(name) > 2 AND length(name) < 50);
-alter table "public"."organizations" drop constraint "valid_name";
 alter table "public"."organizations" add constraint "valid_name" check (btrim(name) <> ''::text AND length(name) > 2 AND length(name) < 50);
 alter table "public"."projects" add constraint "valid_name" check (btrim(name) <> ''::text AND length(name) > 2 AND length(name) < 50);
 alter table "public"."projects" add constraint "valid_description" check ( null OR trim(description) <> ''::text AND length(description) > 10 AND length(description) < 200);

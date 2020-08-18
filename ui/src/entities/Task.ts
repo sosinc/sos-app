@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 
 import client from 'src/lib/client';
-import resolveStorageFile from 'src/utils/resolveStorageFile';
+import resolveStorageFile from 'src/lib/resolveStorageFile';
 import { Project } from './Project';
 
 export interface DailyTask {

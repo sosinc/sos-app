@@ -1,5 +1,5 @@
-import createSvgImage from './createSvgImage';
-import uploadFile from './uploadFile';
+import createSvgImage from '../lib/createSvgImage';
+import uploadFile from '../lib/uploadFile';
 
 export default async (name: string) => {
   const svg = createSvgImage(name);

@@ -2,12 +2,11 @@ import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { useRef, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
-import { RiNewspaperLine } from 'react-icons/ri';
 
-import NoItemsFound from 'src/components/NoItemsFound';
 import SlideBar from 'src/components/SlideBar';
 import AddDailyTasksForm from 'src/components/Tasks/AddDailyTasksForm';
 import DailyTasks from 'src/components/Tasks/DailyTasks';
+import TeamActivity from 'src/components/Tasks/TeamActivity';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { currentUser } from 'src/entities/User/selectors';
 
@@ -74,14 +73,7 @@ const Dashboard = () => {
           </div>
 
           <div className={c('activity-feed')}>
-            <div className={c('not-found-container')}>
-              <NoItemsFound
-                Icon={RiNewspaperLine}
-                message=" There is no activity from your team yet"
-                addItemText=""
-                addItemUrl=""
-              />
-            </div>
+            <TeamActivity />
           </div>
         </div>
       </div>
