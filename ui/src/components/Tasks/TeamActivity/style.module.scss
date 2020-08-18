@@ -191,36 +191,3 @@
 
   color: $color-cta;
 }
-
-.skeleton {
-  .tasks-body {
-    width: 100%;
-  }
-
-  .row-left-container {
-    @include bone;
-
-    .row-item {
-      visibility: hidden;
-    }
-
-    .row-status-item {
-      display: none;
-    }
-
-  }
-
-  .row-right-container {
-    @include bone;
-
-    height: 16px;
-
-    .pr-container {
-      visibility: hidden;
-    }
-
-    .fallback-logo {
-      visibility: hidden;
-    }
-  }
-}

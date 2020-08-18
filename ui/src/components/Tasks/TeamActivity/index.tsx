@@ -17,6 +17,7 @@ import { useQuery } from 'src/lib/asyncHooks';
 import groupBy from 'src/lib/groupBy';
 
 import style from './style.module.scss';
+import { useEffect } from 'react';
 
 const c = classNames.bind(style);
 dayjs.extend(relativeTime);
@@ -118,22 +119,20 @@ const ActivitiesRow: React.FC<ActivitiesRowProps> = (p) => {
 
   return (
     <>
-      <div className={c({ skeleton: p.isFetching })}>
-        <div className={c('container')}>
-          <div className={c('user-container')}>
-            <div className={c('user-logo')}>
-              <FallbackIcon logo={p.logo} name={p.title} />
-            </div>
-            <span className={c('user-info')}>
-              <span>{p.title}</span>
-              <Tippy content={dayjs(p.subtitle).format('DD, MMM YYYY hh:mm a')}>
-                <span className={c('task-time')}>{date}</span>
-              </Tippy>
-            </span>
+      <div className={c('container')}>
+        <div className={c('user-container')}>
+          <div className={c('user-logo')}>
+            <FallbackIcon logo={p.logo} name={p.title} />
           </div>
-
-          <div className={c('activites')}>{tasks}</div>
+          <span className={c('user-info')}>
+            <span>{p.title}</span>
+            <Tippy content={dayjs(p.subtitle).format('DD, MMM YYYY hh:mm a')}>
+              <span className={c('task-time')}>{date}</span>
+            </Tippy>
+          </span>
         </div>
+
+        <div className={c('activites')}>{tasks}</div>
       </div>
     </>
   );
@@ -141,7 +140,17 @@ const ActivitiesRow: React.FC<ActivitiesRowProps> = (p) => {
 
 const TeamActivity: React.FC = () => {
   const activities = useSelector(activitySelector.selectAll);
-  const [isFetching] = useQuery(fetchTaskActivites, {});
+  const [isFetching, getTaskActivites] = useQuery(fetchTaskActivites, {});
+
+  useEffect(() => {
+    const reFecth = setInterval(() => {
+      getTaskActivites();
+    }, 600000);
+
+    return () => {
+      clearInterval(reFecth);
+    };
+  }, []);
 
   const teamActivities: ActivityEvent[][] = groupBy(activities, 'user_id');
   const sectionProps = teamActivities
