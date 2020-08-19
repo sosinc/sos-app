@@ -109,6 +109,14 @@
   width: 35%;
 }
 
+.deleted-row {
+  @extend %handle-text-overflow;
+
+  text-align: left;
+  text-decoration: line-through;
+  width: 35%;
+}
+
 .row-right-container {
   align-items: center;
   color: $color-cta;

@@ -2,9 +2,11 @@ import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useEffect } from 'react';
 import { GoGitPullRequest } from 'react-icons/go';
 import { MdCheckCircle, MdRadioButtonUnchecked } from 'react-icons/md';
 import { RiNewspaperLine } from 'react-icons/ri';
+import { TiDeleteOutline } from 'react-icons/ti';
 import { useSelector } from 'react-redux';
 
 import NoItemsFound from 'src/components/NoItemsFound';
@@ -17,7 +19,6 @@ import { useQuery } from 'src/lib/asyncHooks';
 import groupBy from 'src/lib/groupBy';
 
 import style from './style.module.scss';
-import { useEffect } from 'react';
 
 const c = classNames.bind(style);
 dayjs.extend(relativeTime);
@@ -36,7 +37,7 @@ const NoTodaysCommitment = () => (
 const TaskStatus: React.FC<{ status: boolean }> = (p) => {
   if (!p.status) {
     return (
-      <Tippy content={<span>Todo</span>}>
+      <Tippy content={<span>Pending</span>}>
         <span>
           <MdRadioButtonUnchecked className={c('row-item-icon')} />
         </span>
@@ -53,8 +54,19 @@ const TaskStatus: React.FC<{ status: boolean }> = (p) => {
   );
 };
 
+const TaskDeleted = () => {
+  return (
+    <Tippy content={<span>Deleted</span>}>
+      <span>
+        <TiDeleteOutline className={c('row-item-icon')} />
+      </span>
+    </Tippy>
+  );
+};
+
 interface TaskActivity {
   title: string;
+  taskType?: string;
   pr_id: string;
   issue_id: string;
   is_delivered: boolean;
@@ -76,6 +88,10 @@ const TaskActivityRow: React.FC<TaskActivity & { project_id: string }> = ({ proj
     return null;
   }
 
+  const isDeleted = p.taskType === 'TASK_DELETED';
+
+  const rowStatus = isDeleted ? <TaskDeleted /> : <TaskStatus status={p.is_delivered} />;
+
   return (
     <div className={c('task-body')}>
       <div className={c('task-row')}>
@@ -83,10 +99,8 @@ const TaskActivityRow: React.FC<TaskActivity & { project_id: string }> = ({ proj
           <Tippy content={p.issue_id ? `Issue id ${p.issue_id}` : 'Issue id'}>
             <span className={c('task-issue')}>{p.issue_id ? p.issue_id : '?'}</span>
           </Tippy>
-          <div className={c('row-status-item')}>
-            <TaskStatus status={p.is_delivered} />
-          </div>
-          <span className={c('task-title')}>{p.title}</span>
+          <div className={c('row-status-item')}>{rowStatus}</div>
+          <span className={c(isDeleted ? 'deleted-row' : 'task-title')}>{p.title}</span>
         </div>
         <div className={c('row-right-container')}>
           {p.pr_id && prField(p.pr_id)}
