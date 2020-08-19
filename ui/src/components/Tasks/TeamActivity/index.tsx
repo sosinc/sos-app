@@ -153,11 +153,12 @@ const ActivitiesRow: React.FC<ActivitiesRowProps> = (p) => {
 };
 
 const TeamActivity: React.FC = () => {
-  const [pagination, setPagination] = useState({ limit: 20, offset: 0 });
-  const allActivities = useSelector(activitySelector.selectAll);
+  const [pagination, setPagination] = useState({ limit: 10, offset: 0 });
+  const activities = useSelector(activitySelector.selectAll);
 
-  const activities = allActivities.slice(0, pagination.offset + pagination.limit);
-  const hasNext = allActivities.length <= pagination.offset + pagination.limit;
+  //  const activities = allActivities.slice(0, pagination.offset + pagination.limit);
+
+  const hasNext = activities.length <= pagination.offset + pagination.limit;
 
   const [isFetching, getTaskActivities] = useQuery(
     (args = { offset: pagination.offset, limit: pagination.limit + 1 }) => fetchTaskActivites(args),
@@ -177,7 +178,7 @@ const TeamActivity: React.FC = () => {
 
   useEffect(() => {
     const reFecth = setInterval(() => {
-      onPaginationChange();
+      getTaskActivities({ offset: 0, limit: pagination.limit + 1 });
     }, 600000);
 
     return () => {

@@ -301,7 +301,7 @@ const DailyTasks: React.FC = () => {
   const tasks = useSelector(taskSelector.selectAll);
 
   const dailyTasks = tasks.slice(0, pagination.offset + pagination.limit);
-  const hasNext = tasks.length <= pagination.offset + pagination.limit;
+  const hasMore = tasks.length <= pagination.offset + pagination.limit;
 
   const onPaginationChange = () => {
     const newOffset = pagination.offset + pagination.limit;
@@ -319,15 +319,17 @@ const DailyTasks: React.FC = () => {
   );
 
   const row = dailyTasks.map((i) => <DailyTaskRow key={i.id} {...i} isFetching={isFetching} />);
-
+  const hasMoreButton = !hasMore && (
+    <div className={c('pagination-container')}>
+      <button className={c('pagination-button')} onClick={onPaginationChange} disabled={hasMore}>
+        More
+      </button>
+    </div>
+  );
   const dailyTasksRows = dailyTasks.length ? (
     <>
       {row}
-      <div className={c('pagination-container')}>
-        <button className={c('pagination-button')} onClick={onPaginationChange} disabled={hasNext}>
-          More
-        </button>
-      </div>
+      {hasMoreButton}
     </>
   ) : (
     <NoTodaysCommitment />
