@@ -297,13 +297,38 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
 };
 
 const DailyTasks: React.FC = () => {
-  const dailyTasks = useSelector(taskSelector.selectAll);
-  const [isFetching] = useQuery(fetchDailyTasks, {
-    errorTitle: 'Failed to fetch some Tasks',
-  });
+  const [pagination, setPagination] = useState({ limit: 20, offset: 0 });
+  const tasks = useSelector(taskSelector.selectAll);
+
+  const dailyTasks = tasks.slice(0, pagination.offset + pagination.limit);
+  const hasNext = tasks.length <= pagination.offset + pagination.limit;
+
+  const onPaginationChange = () => {
+    const newOffset = pagination.offset + pagination.limit;
+    setPagination({ ...pagination, offset: newOffset });
+    refetchTasks({ offset: newOffset, limit: pagination.limit + 1 });
+
+    return;
+  };
+
+  const [isFetching, refetchTasks] = useQuery(
+    (args = { offset: pagination.offset, limit: pagination.limit + 1 }) => fetchDailyTasks(args),
+    {
+      errorTitle: 'Failed to fetch some Tasks',
+    },
+  );
+
+  const row = dailyTasks.map((i) => <DailyTaskRow key={i.id} {...i} isFetching={isFetching} />);
 
   const dailyTasksRows = dailyTasks.length ? (
-    dailyTasks.map((i) => <DailyTaskRow key={i.id} {...i} isFetching={isFetching} />)
+    <>
+      {row}
+      <div className={c('pagination-container')}>
+        <button className={c('pagination-button')} onClick={onPaginationChange} disabled={hasNext}>
+          More
+        </button>
+      </div>
+    </>
   ) : (
     <NoTodaysCommitment />
   );

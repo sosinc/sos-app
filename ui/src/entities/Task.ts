@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 
 import client from 'src/lib/client';
+import { PaginationArgs } from 'src/lib/paginationArgs';
 import resolveStorageFile from 'src/lib/resolveStorageFile';
 import { Project } from './Project';
 
@@ -46,11 +47,13 @@ export const createDailyTasks = async (payload: DailyTask[]): Promise<undefined>
   }
 };
 
-export const fetchManyDailyTasks = async (): Promise<FetchTasksResponse> => {
+export const fetchManyDailyTasks = async (payload: PaginationArgs): Promise<FetchTasksResponse> => {
   const today = dayjs(new Date()).format('YYYY-MM-DD');
 
-  const query = `{
+  const query = `query ($offset: Int, $limit: Int){
     daily_tasks (
+      offset: $offset,
+      limit: $limit,
       order_by: { created_at: asc },
       where: { _or: [
       { date: { _eq: "${today}" } }
@@ -73,7 +76,7 @@ export const fetchManyDailyTasks = async (): Promise<FetchTasksResponse> => {
       }
     }`;
 
-  const data = await client.request(query);
+  const data = await client.request(query, payload);
 
   const projects = data.daily_tasks.map((d: any) => ({
     ...d.project,

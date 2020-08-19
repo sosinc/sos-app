@@ -2,7 +2,7 @@ import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { GoGitPullRequest } from 'react-icons/go';
 import { MdCheckCircle, MdRadioButtonUnchecked } from 'react-icons/md';
 import { RiNewspaperLine } from 'react-icons/ri';
@@ -153,18 +153,37 @@ const ActivitiesRow: React.FC<ActivitiesRowProps> = (p) => {
 };
 
 const TeamActivity: React.FC = () => {
-  const activities = useSelector(activitySelector.selectAll);
-  const [isFetching, getTaskActivites] = useQuery(fetchTaskActivites, {});
+  const [pagination, setPagination] = useState({ limit: 20, offset: 0 });
+  const allActivities = useSelector(activitySelector.selectAll);
+
+  const activities = allActivities.slice(0, pagination.offset + pagination.limit);
+  const hasNext = allActivities.length <= pagination.offset + pagination.limit;
+
+  const [isFetching, getTaskActivities] = useQuery(
+    (args = { offset: pagination.offset, limit: pagination.limit + 1 }) => fetchTaskActivites(args),
+    {},
+  );
+
+  const onPaginationChange = () => {
+    const newOffset = pagination.offset + pagination.limit;
+    setPagination({ ...pagination, offset: newOffset });
+
+    if (!hasNext) {
+      getTaskActivities({ offset: newOffset, limit: pagination.limit + 1 });
+    }
+
+    return;
+  };
 
   useEffect(() => {
     const reFecth = setInterval(() => {
-      getTaskActivites();
+      onPaginationChange();
     }, 600000);
 
     return () => {
       clearInterval(reFecth);
     };
-  }, []);
+  });
 
   const teamActivities: ActivityEvent[][] = groupBy(activities, 'user_id');
   const sectionProps = teamActivities
@@ -190,10 +209,19 @@ const TeamActivity: React.FC = () => {
     })
     .filter(Boolean) as Array<Omit<ActivitiesRowProps, 'isFetching'>>;
 
+  const row = sectionProps.map((section, index) => (
+    <ActivitiesRow key={index} {...section} isFetching={isFetching} />
+  ));
+
   const activityRow = sectionProps.length ? (
-    sectionProps.map((section, index) => (
-      <ActivitiesRow key={index} {...section} isFetching={isFetching} />
-    ))
+    <>
+      {row}
+      <div className={c('pagination-container')}>
+        <button className={c('pagination-button')} onClick={onPaginationChange} disabled={hasNext}>
+          More
+        </button>
+      </div>
+    </>
   ) : (
     <NoTodaysCommitment />
   );
