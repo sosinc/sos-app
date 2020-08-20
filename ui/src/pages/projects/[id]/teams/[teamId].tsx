@@ -59,7 +59,7 @@ const Header: React.FC<{ teamId: string; projectId: string }> = (p) => {
           {team?.name || 'Team'}
         </span>
 
-        <Tippy content="Delete project">
+        <Tippy content="Delete team">
           <span className={c('add-button')} onClick={() => setModalOpen(true)}>
             <MdDelete className={c('icon')} />
           </span>

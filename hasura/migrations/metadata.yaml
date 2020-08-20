@@ -635,10 +635,6 @@ tables:
     permission:
       check:
         _and:
-        - members:
-            employee:
-              user_id:
-                _eq: X-Hasura-User-Id
         - project:
             organization_id:
               _eq: X-Hasura-Organization-Id
@@ -679,13 +675,19 @@ tables:
       - updated_at
       filter:
         _and:
-        - members:
-            employee:
-              user_id:
-                _eq: X-Hasura-User-Id
+        - project:
+            organization:
+              employees:
+                user_id:
+                  _eq: X-Hasura-User-Id
         - project:
             organization_id:
               _eq: X-Hasura-Organization-Id
+        - is_deleted:
+            _ne: true
+        - project:
+            is_deleted:
+              _ne: true
       allow_aggregations: true
   update_permissions:
   - role: app_admin
@@ -702,6 +704,7 @@ tables:
   - role: user
     permission:
       columns:
+      - is_deleted
       - issue_link_template
       - logo
       - logo_square
