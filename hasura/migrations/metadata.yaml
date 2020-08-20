@@ -123,6 +123,8 @@ tables:
   - name: create_activity_on_task_status_update
     definition:
       enable_manual: false
+      delete:
+        columns: '*'
       update:
         columns:
         - is_delivered
@@ -597,6 +599,22 @@ tables:
       - pr_link_template
       - project_id
       backend_only: false
+  - role: user
+    permission:
+      check:
+        project:
+          organization:
+            employees:
+              user_id:
+                _eq: X-Hasura-User-Id
+      columns:
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      - project_id
+      backend_only: false
   select_permissions:
   - role: app_admin
     permission:
@@ -625,12 +643,14 @@ tables:
       - created_at
       - updated_at
       filter:
-        project:
-          teams:
-            members:
-              employee:
+        _and:
+        - project:
+            organization:
+              employees:
                 user_id:
                   _eq: X-Hasura-User-Id
+        - is_deleted:
+            _ne: true
       allow_aggregations: true
   update_permissions:
   - role: app_admin
@@ -644,6 +664,20 @@ tables:
       - project_id
       filter: {}
       check: {}
+  - role: user
+    permission:
+      columns:
+      - is_deleted
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      filter:
+        project:
+          organization_id:
+            _eq: X-Hasura-Organization-Id
+      check: null
   delete_permissions:
   - role: app_admin
     permission:

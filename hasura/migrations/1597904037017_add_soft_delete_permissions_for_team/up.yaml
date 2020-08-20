@@ -1,0 +1,75 @@
+- args:
+    permission:
+      allow_upsert: true
+      backend_only: false
+      check:
+        project:
+          organization_id:
+            _eq: X-Hasura-Organization-Id
+      columns:
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      - project_id
+      set: {}
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: create_insert_permission
+- args:
+    permission:
+      backend_only: false
+      columns:
+      - is_delteted
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      filter:
+        project:
+          organization_id:
+            _eq: X-Hasura-Organization-Id
+      set: {}
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: create_update_permission
+- args:
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: true
+      columns:
+      - id
+      - name
+      - logo
+      - logo_square
+      - issue_link_template
+      - pr_link_template
+      - project_id
+      - created_at
+      - updated_at
+      computed_fields: []
+      filter:
+        _and:
+        - project:
+            organization:
+              employees:
+                user_id:
+                  _eq: X-Hasura-User-Id
+        - is_deleted:
+            _ne: true
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: create_select_permission
