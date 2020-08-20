@@ -49,7 +49,13 @@ tables:
   insert_permissions:
   - role: user
     permission:
-      check: {}
+      check:
+        _and:
+        - user_id:
+            _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
       set:
         created_by: x-hasura-User-Id
         user_id: x-hasura-User-Id
@@ -83,8 +89,12 @@ tables:
       - id
       - user_id
       filter:
-        user_id:
-          _eq: X-Hasura-User-Id
+        _and:
+        - user_id:
+            _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
   update_permissions:
   - role: user
     permission:
@@ -123,8 +133,6 @@ tables:
   - name: create_activity_on_task_status_update
     definition:
       enable_manual: false
-      delete:
-        columns: '*'
       update:
         columns:
         - is_delivered
@@ -292,9 +300,12 @@ tables:
       - created_by
       - id
       filter:
-        id:
-          _eq: X-Hasura-User-Id
-      limit: 1
+        _and:
+        - id:
+            _eq: X-Hasura-User-Id
+        - as_employee:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
 - table:
     schema: public
     name: organizations
@@ -447,14 +458,15 @@ tables:
       - updated_at
       filter:
         _and:
-        - organization:
-            employees:
-              user_id:
-                _eq: X-Hasura-User-Id
-        - is_deleted:
-            _ne: true
+        - teams:
+            members:
+              employee:
+                user_id:
+                  _eq: X-Hasura-User-Id
         - organization_id:
             _eq: X-Hasura-Organization-Id
+        - is_deleted:
+            _ne: true
   update_permissions:
   - role: app_admin
     permission:
@@ -479,13 +491,10 @@ tables:
       - name
       - pr_link_template
       filter:
-        _and:
-        - organization:
-            employees:
-              user_id:
-                _eq: X-Hasura-User-Id
-        - is_deleted:
-            _ne: true
+        organization:
+          employees:
+            user_id:
+              _eq: X-Hasura-User-Id
       check: null
   delete_permissions:
   - role: app_admin
@@ -625,11 +634,14 @@ tables:
   - role: user
     permission:
       check:
-        project:
-          organization:
-            employees:
+        _and:
+        - members:
+            employee:
               user_id:
                 _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
       columns:
       - issue_link_template
       - logo
@@ -667,13 +679,13 @@ tables:
       - updated_at
       filter:
         _and:
+        - members:
+            employee:
+              user_id:
+                _eq: X-Hasura-User-Id
         - project:
-            organization:
-              employees:
-                user_id:
-                  _eq: X-Hasura-User-Id
-        - is_deleted:
-            _ne: true
+            organization_id:
+              _eq: X-Hasura-Organization-Id
       allow_aggregations: true
   update_permissions:
   - role: app_admin
@@ -690,16 +702,20 @@ tables:
   - role: user
     permission:
       columns:
-      - is_deleted
       - issue_link_template
       - logo
       - logo_square
       - name
       - pr_link_template
       filter:
-        project:
-          organization_id:
-            _eq: X-Hasura-Organization-Id
+        _and:
+        - members:
+            employee:
+              user_id:
+                _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
       check: null
   delete_permissions:
   - role: app_admin
