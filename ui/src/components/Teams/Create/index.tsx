@@ -1,8 +1,6 @@
 import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
-import Router from 'next/router';
-import { useState } from 'react';
 import { AiOutlineTeam } from 'react-icons/ai';
 import { MdDelete } from 'react-icons/md';
 import { useSelector } from 'react-redux';
@@ -12,10 +10,9 @@ import ImageUploadField from 'src/components/Form/ImageUploadField';
 import SelectBox, { SelectFieldItem } from 'src/components/Form/SelectBox';
 import TextField from 'src/components/Form/TextField';
 import Listing, { ListingItemProps } from 'src/components/Listing';
-import WarningModal from 'src/components/Modal/Warning';
 import NoItemsFound from 'src/components/NoItemsFound';
 import { RootState } from 'src/duck';
-import { createMemberAction, deleteMemberAction, deleteTeamAction } from 'src/duck/teams';
+import { createMemberAction, deleteMemberAction } from 'src/duck/teams';
 import { Employee } from 'src/entities/Employee';
 import { Team } from 'src/entities/Team';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
@@ -31,31 +28,8 @@ interface CreateTeamProps {
 }
 
 const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamProps> = (p) => {
-  const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [deleteTeam] = useAsyncThunk(deleteTeamAction, {
-    errorTitle: 'Failed to delete team',
-    rethrowError: true,
-    successTitle: 'Team deleted successfully',
-  });
-
-  const handleDelete = async (id: string) => {
-    await deleteTeam({ teamId: id, isDeleted: true });
-    Router.push(`/projects/${p.team?.project_id}`);
-    setModalOpen(false);
-  };
-
   return (
     <div className={c('container')}>
-      <WarningModal
-        onAccept={() => handleDelete(p.team?.id || '')}
-        onCancel={() => setModalOpen(false)}
-        acceptButtonText={'Ok'}
-        closeButtonText="Close"
-        isOpen={isModalOpen}
-        title={'Are you sure?'}
-        subTitle={`You want to delete this Team`}
-      />
-
       <div className={c({ skeleton: p.isFetchingTeam })}>
         <form className={c('form')} onSubmit={p.handleSubmit}>
           <div className={c('title-container')}>
@@ -91,14 +65,6 @@ const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamPro
           </button>
         </form>
       </div>
-      {p.team && (
-        <button className={c('save-button')} onClick={() => setModalOpen(true)}>
-          <div>
-            {'Delete'}
-            <span />
-          </div>
-        </button>
-      )}
     </div>
   );
 };
