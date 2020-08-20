@@ -35,7 +35,7 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
       <div className={c({ skeleton: p.isFetchingEmployees })}>
         <form className={c('form')} onSubmit={p.handleSubmit}>
           <div className={c('title-container')}>
-            <h2>{p.values ? p.values.name : 'Create Employee'} </h2>
+            <h2>{p.values.name ? p.values.name : 'Create Employee'} </h2>
             <span className={c('sub-title')}>Manage employee</span>
           </div>
 

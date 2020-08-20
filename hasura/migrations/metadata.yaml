@@ -446,11 +446,15 @@ tables:
       - created_at
       - updated_at
       filter:
-        teams:
-          members:
-            employee:
+        _and:
+        - organization:
+            employees:
               user_id:
                 _eq: X-Hasura-User-Id
+        - is_deleted:
+            _ne: true
+        - organization_id:
+            _eq: X-Hasura-Organization-Id
   update_permissions:
   - role: app_admin
     permission:
@@ -463,6 +467,25 @@ tables:
       - organization_id
       - pr_link_template
       filter: {}
+      check: null
+  - role: user
+    permission:
+      columns:
+      - description
+      - is_deleted
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      filter:
+        _and:
+        - organization:
+            employees:
+              user_id:
+                _eq: X-Hasura-User-Id
+        - is_deleted:
+            _ne: true
       check: null
   delete_permissions:
   - role: app_admin
