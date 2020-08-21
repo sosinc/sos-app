@@ -3,6 +3,7 @@ import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from 
 import { fetchCurrentUser, logoutUserAction } from 'src/duck/auth';
 import {
   create,
+  deleteProject,
   fetchMany,
   fetchOne,
   GetOnePayload,
@@ -10,7 +11,6 @@ import {
   ProjectArgs,
   ProjectResponse,
   update,
-  deleteProject,
 } from 'src/entities/Project';
 import { PaginationArgs } from 'src/lib/paginationArgs';
 import { RootState } from '.';
@@ -49,9 +49,9 @@ export const updateProjectAction = createAsyncThunk<
 
 export const deleteProjectAction = createAsyncThunk<
   Project,
-  {id: string, isDeleted: boolean},
+  { id: string; isDeleted: boolean },
   { rejectValue: Error; state: ProjectState }
-  >('project/delete', deleteProject);
+>('project/delete', deleteProject);
 
 export default createSlice({
   extraReducers: async (builder) => {

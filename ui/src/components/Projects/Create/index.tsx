@@ -2,8 +2,8 @@ import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { AiOutlineTeam } from 'react-icons/ai';
 import { MdAdd } from 'react-icons/md';
 import { useSelector } from 'react-redux';
@@ -11,15 +11,15 @@ import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
 import SelectField from 'src/components/Form/SelectField';
-import WarningModal from 'src/components/Modal/Warning';
 import TextAreaField from 'src/components/Form/TextAreaField';
 import TextField from 'src/components/Form/TextField';
 import Listing, { ListingItemProps } from 'src/components/Listing';
+import WarningModal from 'src/components/Modal/Warning';
 import NoItemsFound from 'src/components/NoItemsFound';
+import { deleteProjectAction } from 'src/duck/projects';
 import { teamSelector } from 'src/duck/teams';
 import { Organization } from 'src/entities/Organizations';
 import { currentUser } from 'src/entities/User/selectors';
-import { deleteProjectAction } from 'src/duck/projects';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
 import style from './style.module.scss';
 

@@ -97,7 +97,7 @@ export const update = async (payload: TeamArgs): Promise<Team> => {
   }
 };
 
-export const deleteTeam = async (payload: {id: string, isDeleted: boolean}): Promise<Team> => {
+export const deleteTeam = async (payload: { id: string; isDeleted: boolean }): Promise<Team> => {
   const query = `
     mutation ($teamId: uuid!, $isDeleted: Boolean){
       update_teams_by_pk( pk_columns: {id: $teamId }
