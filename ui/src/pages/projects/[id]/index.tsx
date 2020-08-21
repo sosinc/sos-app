@@ -21,6 +21,7 @@ const Header: React.FC = () => {
   const router = useRouter();
   const queryId = String(router.query.id);
   const project = useSelector((state: RootState) => projectSelector.selectById(state, queryId));
+
   return (
     <div className={c('header')}>
       <span>

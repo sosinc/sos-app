@@ -3,6 +3,7 @@ import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from 
 import { fetchCurrentUser, logoutUserAction } from 'src/duck/auth';
 import {
   create,
+  deleteProject,
   fetchMany,
   fetchOne,
   GetOnePayload,
@@ -46,6 +47,12 @@ export const updateProjectAction = createAsyncThunk<
   { rejectValue: Error; state: ProjectState }
 >('project/update', update);
 
+export const deleteProjectAction = createAsyncThunk<
+  Project,
+  { id: string; isDeleted: boolean },
+  { rejectValue: Error; state: ProjectState }
+>('project/delete', deleteProject);
+
 export default createSlice({
   extraReducers: async (builder) => {
     builder.addCase(fetchProjects.fulfilled, projectAdapter.upsertMany);
@@ -60,6 +67,10 @@ export default createSlice({
 
     builder.addCase(updateProjectAction.fulfilled, (state, { payload }) => {
       projectAdapter.upsertOne(state, payload);
+    });
+
+    builder.addCase(deleteProjectAction.fulfilled, (state, { payload }) => {
+      projectAdapter.removeOne(state, payload.id);
     });
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
