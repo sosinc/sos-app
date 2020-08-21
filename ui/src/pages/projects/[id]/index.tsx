@@ -1,18 +1,14 @@
-import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { FormikHelpers, FormikValues } from 'formik';
 import Link from 'next/link';
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-import { MdDelete } from 'react-icons/md';
 
 import CreateProject, { CreateProjectFormValues } from 'src/components/Projects/Create';
 import DashboardLayout from 'src/containers/DashboardLayout';
-import WarningModal from 'src/components/Modal/Warning';
 import { RootState } from 'src/duck';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
-import { fetchProject, projectSelector, deleteProjectAction } from 'src/duck/projects';
+import { fetchProject, projectSelector } from 'src/duck/projects';
 import { updateProjectAction } from 'src/duck/projects';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk, useQuery } from 'src/lib/asyncHooks';
@@ -22,49 +18,19 @@ import style from '../style.module.scss';
 const c = classNames.bind(style);
 
 const Header: React.FC = () => {
-  const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [deleteProject] = useAsyncThunk(deleteProjectAction, {
-    errorTitle: 'Failed to delete Project',
-    rethrowError: true,
-    successTitle: 'Project deleted successfully',
-  });
-
   const router = useRouter();
   const queryId = String(router.query.id);
   const project = useSelector((state: RootState) => projectSelector.selectById(state, queryId));
 
-  const handleDelete = async (id: string) => {
-    await deleteProject({ id, isDeleted: true });
-    router.push(`/projects`);
-    setModalOpen(false);
-  };
-
   return (
-    <>
-      <WarningModal
-        onAccept={() => handleDelete(queryId)}
-        onCancel={() => setModalOpen(false)}
-        acceptButtonText={'Ok'}
-        closeButtonText="Close"
-        isOpen={isModalOpen}
-        title={'Are you sure?'}
-        subTitle={`You want to delete this Project, it will delete its teams as well`}
-      />
-      <div className={c('header')}>
-        <span>
-          <Link href="/projects">
-            <a>{'Projects > '}</a>
-          </Link>
-          {project?.name || 'Project'}
-        </span>
-
-        <Tippy content="Delete project">
-          <span className={c('add-button')} onClick={() => setModalOpen(true)}>
-            <MdDelete className={c('icon')} />
-          </span>
-        </Tippy>
-      </div>
-    </>
+    <div className={c('header')}>
+      <span>
+        <Link href="/projects">
+          <a>{'Projects > '}</a>
+        </Link>
+        {project?.name || 'Project'}
+      </span>
+    </div>
   );
 };
 

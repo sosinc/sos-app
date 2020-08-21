@@ -144,6 +144,31 @@
   width: $size;
 }
 
+.del-container {
+  display: flex;
+  padding: 15px;
+}
+
+.del-button {
+  background: $color-error-bg;
+  border: 1px solid $color-error-border;
+  border-radius: 4px;
+  color: $color-button-text;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-size: 13px;
+  height: 48px;
+  outline: none;
+  padding: 0 2em;
+  transition: all 0.2s;
+  width: 100%;
+
+  &:disabled {
+    color: $color-text-dim2;
+    cursor: default;
+  }
+}
+
 .skeleton {
   .field-container,
   .button-container {

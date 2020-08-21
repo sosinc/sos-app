@@ -1,29 +1,5 @@
 @import 'src/scss/lib';
 
-.header {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.add-button {
-  $size: 28px;
-  @extend %button-primary;
-
-  align-items: center;
-  display: flex;
-  height: $size;
-  justify-content: center;
-  padding: 0;
-  width: $size;
-
-  .icon {
-    height: 1.2em;
-    width: 1.2em;
-  }
-}
-
 .container {
   color: $color-text-dim2;
   display: flex;

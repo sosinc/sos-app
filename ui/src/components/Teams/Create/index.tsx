@@ -1,6 +1,8 @@
 import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { AiOutlineTeam } from 'react-icons/ai';
 import { MdDelete } from 'react-icons/md';
 import { useSelector } from 'react-redux';
@@ -10,9 +12,10 @@ import ImageUploadField from 'src/components/Form/ImageUploadField';
 import SelectBox, { SelectFieldItem } from 'src/components/Form/SelectBox';
 import TextField from 'src/components/Form/TextField';
 import Listing, { ListingItemProps } from 'src/components/Listing';
+import WarningModal from 'src/components/Modal/Warning';
 import NoItemsFound from 'src/components/NoItemsFound';
 import { RootState } from 'src/duck';
-import { createMemberAction, deleteMemberAction } from 'src/duck/teams';
+import { createMemberAction, deleteMemberAction, deleteTeamAction } from 'src/duck/teams';
 import { Employee } from 'src/entities/Employee';
 import { Team } from 'src/entities/Team';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
@@ -28,44 +31,79 @@ interface CreateTeamProps {
 }
 
 const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamProps> = (p) => {
-  return (
-    <div className={c('container')}>
-      <div className={c({ skeleton: p.isFetchingTeam })}>
-        <form className={c('form')} onSubmit={p.handleSubmit}>
-          <div className={c('title-container')}>
-            <h2>{p.team ? p.values.name : 'Create Team'}</h2>
-          </div>
-          <div className={c('name-container', 'field-container')}>
-            <span className={c('field-title')}>Name</span>
-            <TextField placeholder="Enter Name" type="text" name="name" />
-          </div>
-          <div className={c('square-logo', 'field-container')}>
-            <span className={c('field-title')}>Square Logo</span>
-            <ImageUploadField className={c('image-container')} type={'file'} name="logo_square" />
-          </div>
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const [deleteTeam] = useAsyncThunk(deleteTeamAction, {
+    errorTitle: 'Failed to delete team',
+    rethrowError: true,
+    successTitle: 'Team deleted successfully',
+  });
 
-          <div className={c('issue-link-container', 'field-container')}>
-            <span className={c('field-title')}>Issue Link Template</span>
-            <TextField
-              placeholder="Enter issue Link Template"
-              type="text"
-              name="issue_link_template"
-            />
-          </div>
-          <div className={c('pr-link-container', 'field-container')}>
-            <span className={c('field-title')}>Pr Link Template</span>
-            <TextField placeholder="Enter pr link template" type="text" name="pr_link_template" />
-          </div>
+  const router = useRouter();
+  const handleDelete = async (id: string) => {
+    await deleteTeam({ teamId: id, isDeleted: true });
+    router.push(`/projects/${p.team?.project_id}`);
+    setModalOpen(false);
+  };
 
-          <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
-            <div className={c({ 'saving-in': p.isSubmitting })}>
-              {p.isSubmitting ? 'Saving' : 'Save'}
-              <span />
-            </div>
-          </button>
-        </form>
-      </div>
+  const deleteButton = p.team && (
+    <div className={c('del-container')}>
+      <button className={c('del-button')} onClick={() => setModalOpen(true)}>
+        Delete
+      </button>
     </div>
+  );
+
+  return (
+    <>
+      <WarningModal
+        onAccept={() => handleDelete(p.team?.id || '')}
+        onCancel={() => setModalOpen(false)}
+        acceptButtonText={'Ok'}
+        closeButtonText="Close"
+        isOpen={isModalOpen}
+        title={'Are you sure?'}
+        subTitle={`You want to delete this Team`}
+      />
+      <div className={c('container')}>
+        <div className={c({ skeleton: p.isFetchingTeam })}>
+          <form className={c('form')} onSubmit={p.handleSubmit}>
+            <div className={c('title-container')}>
+              <h2>{p.team ? p.values.name : 'Create Team'}</h2>
+            </div>
+            <div className={c('name-container', 'field-container')}>
+              <span className={c('field-title')}>Name</span>
+              <TextField placeholder="Enter Name" type="text" name="name" />
+            </div>
+            <div className={c('square-logo', 'field-container')}>
+              <span className={c('field-title')}>Square Logo</span>
+              <ImageUploadField className={c('image-container')} type={'file'} name="logo_square" />
+            </div>
+
+            <div className={c('issue-link-container', 'field-container')}>
+              <span className={c('field-title')}>Issue Link Template</span>
+              <TextField
+                placeholder="Enter issue Link Template"
+                type="text"
+                name="issue_link_template"
+              />
+            </div>
+            <div className={c('pr-link-container', 'field-container')}>
+              <span className={c('field-title')}>Pr Link Template</span>
+              <TextField placeholder="Enter pr link template" type="text" name="pr_link_template" />
+            </div>
+
+            <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+              <div className={c({ 'saving-in': p.isSubmitting })}>
+                {p.isSubmitting ? 'Saving' : 'Save'}
+                <span />
+              </div>
+            </button>
+          </form>
+        </div>
+
+        {deleteButton}
+      </div>
+    </>
   );
 };
 
