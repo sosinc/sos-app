@@ -1,0 +1,59 @@
+- args:
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - id
+      - name
+      - logo
+      - logo_square
+      - description
+      - organization_id
+      - issue_link_template
+      - pr_link_template
+      - created_at
+      - updated_at
+      computed_fields: []
+      filter:
+        _and:
+        - teams:
+            members:
+              employee:
+                user_id:
+                  _eq: X-Hasura-User-Id
+        - organization_id:
+            _eq: X-Hasura-Organization-Id
+        - is_deleted:
+            _ne: true
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: create_select_permission
+- args:
+    permission:
+      backend_only: false
+      columns:
+      - description
+      - is_deleted
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      filter:
+        organization:
+          employees:
+            user_id:
+              _eq: X-Hasura-User-Id
+      set: {}
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: create_update_permission

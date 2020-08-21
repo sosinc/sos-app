@@ -7,6 +7,7 @@ import {
   CreateMemberArgs,
   CreateMemberResponse,
   deleteMember,
+  deleteTeam,
   fetchOne,
   FetchOneTeamResponse,
   Team,
@@ -33,7 +34,13 @@ export const updateTeamAction = createAsyncThunk<
   Team,
   TeamArgs,
   { rejectValue: Error; state: ProjectState }
->('team/create', update);
+>('team/update', update);
+
+export const deleteTeamAction = createAsyncThunk<
+  Team,
+  { id: string; isDeleted: boolean },
+  { rejectValue: Error; state: ProjectState }
+>('team/delete', deleteTeam);
 
 export const createMemberAction = createAsyncThunk<
   CreateMemberResponse,

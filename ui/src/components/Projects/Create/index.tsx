@@ -2,7 +2,8 @@ import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { AiOutlineTeam } from 'react-icons/ai';
 import { MdAdd } from 'react-icons/md';
 import { useSelector } from 'react-redux';
@@ -13,11 +14,13 @@ import SelectField from 'src/components/Form/SelectField';
 import TextAreaField from 'src/components/Form/TextAreaField';
 import TextField from 'src/components/Form/TextField';
 import Listing, { ListingItemProps } from 'src/components/Listing';
+import WarningModal from 'src/components/Modal/Warning';
 import NoItemsFound from 'src/components/NoItemsFound';
+import { deleteProjectAction } from 'src/duck/projects';
 import { teamSelector } from 'src/duck/teams';
 import { Organization } from 'src/entities/Organizations';
 import { currentUser } from 'src/entities/User/selectors';
-
+import { useAsyncThunk } from 'src/lib/asyncHooks';
 import style from './style.module.scss';
 
 const c = classNames.bind(style);
@@ -31,6 +34,20 @@ interface Props {
 }
 
 const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) => {
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const [deleteProject] = useAsyncThunk(deleteProjectAction, {
+    errorTitle: 'Failed to delete Project',
+    rethrowError: true,
+    successTitle: 'Project deleted successfully',
+  });
+
+  const router = useRouter();
+  const handleDelete = async (id: string) => {
+    await deleteProject({ id, isDeleted: true });
+    router.push(`/projects`);
+    setModalOpen(false);
+  };
+
   const user = currentUser();
   const isCurrentOrg = user.employee?.isCurrent;
   const orgSelectField = !isCurrentOrg && (
@@ -45,8 +62,26 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
     </div>
   );
 
+  const deleteButton = p.projectId && (
+    <div className={c('del-container')}>
+      <button className={c('del-button')} onClick={() => setModalOpen(true)}>
+        Delete
+      </button>
+    </div>
+  );
+
   return (
     <>
+      <WarningModal
+        onAccept={() => handleDelete(p?.projectId || '')}
+        onCancel={() => setModalOpen(false)}
+        acceptButtonText={'Ok'}
+        closeButtonText="Close"
+        isOpen={isModalOpen}
+        title={'Are you sure?'}
+        subTitle={`You want to delete this Project, it will delete its teams as well`}
+      />
+
       <form className={c('form')} onSubmit={p.handleSubmit}>
         <div className={c('title-container')}>
           <h2>{p.projectId ? p.values.name : 'Create Project'} </h2>
@@ -87,6 +122,8 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
           </div>
         </button>
       </form>
+
+      {deleteButton}
       {p.projectId && addTeam(p)}
     </>
   );
