@@ -155,9 +155,6 @@ const ActivitiesRow: React.FC<ActivitiesRowProps> = (p) => {
 const TeamActivity: React.FC = () => {
   const [pagination, setPagination] = useState({ limit: 10, offset: 0 });
   const activities = useSelector(activitySelector.selectAll);
-
-  //  const activities = allActivities.slice(0, pagination.offset + pagination.limit);
-
   const hasNext = activities.length <= pagination.offset + pagination.limit;
 
   const [isFetching, getTaskActivities] = useQuery(
@@ -177,12 +174,12 @@ const TeamActivity: React.FC = () => {
   };
 
   useEffect(() => {
-    const reFecth = setInterval(() => {
+    const reFecthInterval = setInterval(() => {
       getTaskActivities({ offset: 0, limit: pagination.limit + 1 });
-    }, 600000);
+    }, 10000);
 
     return () => {
-      clearInterval(reFecth);
+      clearInterval(reFecthInterval);
     };
   });
 
@@ -195,14 +192,16 @@ const TeamActivity: React.FC = () => {
         return null;
       }
 
-      const reGroup = group.filter(
-        (v, i, a) => a.findIndex((t) => t.payload.id === v.payload.id) === i,
-      );
+      // Tasks in activity can be duplicate. We pick the latest task with same id
+      const uniqueTasks = group
+        .sort((g1, g2) => new Date(g2.created_at).getTime() - new Date(g1.created_at).getTime())
+        .filter((v, i, a) => a.findIndex((t) => t.payload.id === v.payload.id) === i);
 
       const taskType =
         firstActivity.type === 'TASK_ADDED' ? 'added a task' : 'update the task status';
+
       return {
-        events: reGroup,
+        events: uniqueTasks,
         logo: firstActivity.user.avatar,
         subtitle: firstActivity.created_at,
         title: `${firstActivity.user.name} ${taskType}`,

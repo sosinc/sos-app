@@ -54,7 +54,7 @@ export const fetchManyDailyTasks = async (payload: PaginationArgs): Promise<Fetc
     daily_tasks (
       offset: $offset,
       limit: $limit,
-      order_by: { created_at: asc },
+      order_by: { created_at: desc },
       where: { _or: [
       { date: { _eq: "${today}" } }
       { is_delivered: { _eq: false } }
