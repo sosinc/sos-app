@@ -146,6 +146,32 @@
   color: $color-cta;
 }
 
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2em;
+  width: 98%;
+}
+
+.pagination-button {
+  background: $color-button-bg;
+  border: 0;
+  border-radius: 4px;
+  color: $color-button-text;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-size: 13px;
+  height: 40px;
+  outline: none;
+  padding: 0 2em;
+  transition: all 0.2s;
+
+  &:disabled {
+    color: $color-text-dim2;
+    cursor: default;
+  }
+}
+
 .skeleton {
   .tasks-body {
     width: 100%;

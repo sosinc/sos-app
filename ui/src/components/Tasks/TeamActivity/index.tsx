@@ -2,9 +2,11 @@ import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useEffect, useState } from 'react';
 import { GoGitPullRequest } from 'react-icons/go';
 import { MdCheckCircle, MdRadioButtonUnchecked } from 'react-icons/md';
 import { RiNewspaperLine } from 'react-icons/ri';
+import { TiDeleteOutline } from 'react-icons/ti';
 import { useSelector } from 'react-redux';
 
 import NoItemsFound from 'src/components/NoItemsFound';
@@ -35,7 +37,7 @@ const NoTodaysCommitment = () => (
 const TaskStatus: React.FC<{ status: boolean }> = (p) => {
   if (!p.status) {
     return (
-      <Tippy content={<span>Todo</span>}>
+      <Tippy content={<span>Pending</span>}>
         <span>
           <MdRadioButtonUnchecked className={c('row-item-icon')} />
         </span>
@@ -52,8 +54,19 @@ const TaskStatus: React.FC<{ status: boolean }> = (p) => {
   );
 };
 
+const TaskDeleted = () => {
+  return (
+    <Tippy content={<span>Deleted</span>}>
+      <span>
+        <TiDeleteOutline className={c('row-item-icon')} />
+      </span>
+    </Tippy>
+  );
+};
+
 interface TaskActivity {
   title: string;
+  taskType?: string;
   pr_id: string;
   issue_id: string;
   is_delivered: boolean;
@@ -75,6 +88,10 @@ const TaskActivityRow: React.FC<TaskActivity & { project_id: string }> = ({ proj
     return null;
   }
 
+  const isDeleted = p.taskType === 'TASK_DELETED';
+
+  const rowStatus = isDeleted ? <TaskDeleted /> : <TaskStatus status={p.is_delivered} />;
+
   return (
     <div className={c('task-body')}>
       <div className={c('task-row')}>
@@ -82,10 +99,8 @@ const TaskActivityRow: React.FC<TaskActivity & { project_id: string }> = ({ proj
           <Tippy content={p.issue_id ? `Issue id ${p.issue_id}` : 'Issue id'}>
             <span className={c('task-issue')}>{p.issue_id ? p.issue_id : '?'}</span>
           </Tippy>
-          <div className={c('row-status-item')}>
-            <TaskStatus status={p.is_delivered} />
-          </div>
-          <span className={c('task-title')}>{p.title}</span>
+          <div className={c('row-status-item')}>{rowStatus}</div>
+          <span className={c(isDeleted ? 'deleted-row' : 'task-title')}>{p.title}</span>
         </div>
         <div className={c('row-right-container')}>
           {p.pr_id && prField(p.pr_id)}
@@ -118,30 +133,55 @@ const ActivitiesRow: React.FC<ActivitiesRowProps> = (p) => {
 
   return (
     <>
-      <div className={c({ skeleton: p.isFetching })}>
-        <div className={c('container')}>
-          <div className={c('user-container')}>
-            <div className={c('user-logo')}>
-              <FallbackIcon logo={p.logo} name={p.title} />
-            </div>
-            <span className={c('user-info')}>
-              <span>{p.title}</span>
-              <Tippy content={dayjs(p.subtitle).format('DD, MMM YYYY hh:mm a')}>
-                <span className={c('task-time')}>{date}</span>
-              </Tippy>
-            </span>
+      <div className={c('container')}>
+        <div className={c('user-container')}>
+          <div className={c('user-logo')}>
+            <FallbackIcon logo={p.logo} name={p.title} />
           </div>
-
-          <div className={c('activites')}>{tasks}</div>
+          <span className={c('user-info')}>
+            <span>{p.title}</span>
+            <Tippy content={dayjs(p.subtitle).format('DD, MMM YYYY hh:mm a')}>
+              <span className={c('task-time')}>{date}</span>
+            </Tippy>
+          </span>
         </div>
+
+        <div className={c('activites')}>{tasks}</div>
       </div>
     </>
   );
 };
 
 const TeamActivity: React.FC = () => {
+  const [pagination, setPagination] = useState({ limit: 10, offset: 0 });
   const activities = useSelector(activitySelector.selectAll);
-  const [isFetching] = useQuery(fetchTaskActivites, {});
+  const hasNext = activities.length <= pagination.offset + pagination.limit;
+
+  const [isFetching, getTaskActivities] = useQuery(
+    (args = { offset: pagination.offset, limit: pagination.limit + 1 }) => fetchTaskActivites(args),
+    {},
+  );
+
+  const onPaginationChange = () => {
+    const newOffset = pagination.offset + pagination.limit;
+    setPagination({ ...pagination, offset: newOffset });
+
+    if (!hasNext) {
+      getTaskActivities({ offset: newOffset, limit: pagination.limit + 1 });
+    }
+
+    return;
+  };
+
+  useEffect(() => {
+    const reFecthInterval = setInterval(() => {
+      getTaskActivities({ offset: 0, limit: pagination.limit + 1 });
+    }, 10000);
+
+    return () => {
+      clearInterval(reFecthInterval);
+    };
+  });
 
   const teamActivities: ActivityEvent[][] = groupBy(activities, 'user_id');
   const sectionProps = teamActivities
@@ -152,14 +192,16 @@ const TeamActivity: React.FC = () => {
         return null;
       }
 
-      const reGroup = group.filter(
-        (v, i, a) => a.findIndex((t) => t.payload.id === v.payload.id) === i,
-      );
+      // Tasks in activity can be duplicate. We pick the latest task with same id
+      const uniqueTasks = group
+        .sort((g1, g2) => new Date(g2.created_at).getTime() - new Date(g1.created_at).getTime())
+        .filter((v, i, a) => a.findIndex((t) => t.payload.id === v.payload.id) === i);
 
       const taskType =
         firstActivity.type === 'TASK_ADDED' ? 'added a task' : 'update the task status';
+
       return {
-        events: reGroup,
+        events: uniqueTasks,
         logo: firstActivity.user.avatar,
         subtitle: firstActivity.created_at,
         title: `${firstActivity.user.name} ${taskType}`,
@@ -167,10 +209,19 @@ const TeamActivity: React.FC = () => {
     })
     .filter(Boolean) as Array<Omit<ActivitiesRowProps, 'isFetching'>>;
 
+  const row = sectionProps.map((section, index) => (
+    <ActivitiesRow key={index} {...section} isFetching={isFetching} />
+  ));
+
   const activityRow = sectionProps.length ? (
-    sectionProps.map((section, index) => (
-      <ActivitiesRow key={index} {...section} isFetching={isFetching} />
-    ))
+    <>
+      {row}
+      <div className={c('pagination-container')}>
+        <button className={c('pagination-button')} onClick={onPaginationChange} disabled={hasNext}>
+          More
+        </button>
+      </div>
+    </>
   ) : (
     <NoTodaysCommitment />
   );

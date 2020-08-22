@@ -1,6 +1,7 @@
 import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from '@reduxjs/toolkit';
 
 import { ActivityEvent, fetchMany } from 'src/entities/Activity';
+import { PaginationArgs } from 'src/lib/paginationArgs';
 import { RootState } from '.';
 
 const activityAdapter = createEntityAdapter<ActivityEvent>();
@@ -11,7 +12,7 @@ export const activitySelector = activityAdapter.getSelectors<RootState>(
 
 export const fetchTaskActivites = createAsyncThunk<
   ActivityEvent[],
-  undefined,
+  PaginationArgs,
   { rejectValue: Error; state: ActivityEvent }
 >('activities/fetchMany', fetchMany);
 

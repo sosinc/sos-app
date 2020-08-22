@@ -4,7 +4,6 @@ import { Activities } from "../entity/Activity.entity";
 const api = Router();
 
 api.post("/on-new-task", async (req, res) => {
-
   const {
     event: {
       data: { new: task },
@@ -14,10 +13,17 @@ api.post("/on-new-task", async (req, res) => {
   const activityRepo = Activities.getRepository();
 
   const newActivity = new Activities();
-  newActivity.type = 'TASK_ADDED';
+  newActivity.type = "TASK_ADDED";
   newActivity.user_id = task.created_by;
   newActivity.project_id = task.project_id;
-  newActivity.payload = {id: task.id, is_delivered: task.is_delivered, title: task.title, issue_id: task.issue_id, pr_id: task.pr_id};
+  newActivity.payload = {
+    id: task.id,
+    is_delivered: task.is_delivered,
+    title: task.title,
+    issue_id: task.issue_id,
+    pr_id: task.pr_id,
+    taskType: newActivity.type,
+  };
 
   await activityRepo.save(newActivity);
 
@@ -25,20 +31,36 @@ api.post("/on-new-task", async (req, res) => {
 });
 
 api.post("/on-task-status-updates", async (req, res) => {
-
-  const {
+  let {
     event: {
       data: { new: task },
     },
   } = req.body;
 
   const activityRepo = Activities.getRepository();
-
   const newActivity = new Activities();
-  newActivity.type = 'TASK_STATUS_UPDATE';
+  newActivity.type = "TASK_STATUS_UPDATE";
+
+  if (task === null) {
+    const {
+      event: {
+        data: { old: oldTask },
+      },
+    } = req.body;
+    task = oldTask;
+    newActivity.type = "TASK_DELETED";
+  }
+
   newActivity.user_id = task.created_by;
   newActivity.project_id = task.project_id;
-  newActivity.payload = {id: task.id, is_delivered: task.is_delivered, title: task.title, issue_id: task.issue_id, pr_id: task.pr_id};
+  newActivity.payload = {
+    id: task.id,
+    is_delivered: task.is_delivered,
+    title: task.title,
+    issue_id: task.issue_id,
+    pr_id: task.pr_id,
+    taskType: newActivity.type,
+  };
 
   await activityRepo.save(newActivity);
 
