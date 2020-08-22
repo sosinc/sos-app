@@ -10,6 +10,7 @@ import {
   updateDailyTask,
   UpdateTaskArgs,
 } from 'src/entities/Task';
+import { PaginationArgs } from 'src/lib/paginationArgs';
 import { RootState } from '.';
 import { logoutUserAction } from './auth';
 
@@ -40,7 +41,7 @@ export const deleteDailyTaskAction = createAsyncThunk<{ id: string }, { id: stri
 
 export const fetchDailyTasks = createAsyncThunk<
   FetchTasksResponse,
-  undefined,
+  PaginationArgs,
   { rejectValue: Error; state: TasksState }
 >('user/fetchMany', fetchManyDailyTasks);
 

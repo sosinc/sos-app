@@ -21,7 +21,7 @@ const CreateOrgForm: React.FC<FormikProps<CreateOrgFormValues> & CreateOrgProps>
       <div className={c({ skeleton: p.isFetchingOrganization })}>
         <form className={c('org-form')} onSubmit={p.handleSubmit}>
           <div className={c('title-container')}>
-            <h2>{p.values ? p.values.name : 'Create Organization'} </h2>
+            <h2>{p.values.name ? p.values.name : 'Create Organization'} </h2>
             <span className={c('sub-title')}>Manage your organization</span>
           </div>
           <div className={c('name-container', 'field-container')}>

@@ -1,0 +1,20 @@
+- args:
+    delete: null
+    enable_manual: false
+    headers: []
+    insert: null
+    name: create_activity_on_task_status_update
+    replace: true
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    table:
+      name: daily_tasks
+      schema: public
+    update:
+      columns:
+      - is_delivered
+    webhook: null
+    webhook_from_env: TASK_STATUS_UPDATE_WEBHOOK
+  type: create_event_trigger

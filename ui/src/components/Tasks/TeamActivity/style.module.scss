@@ -109,6 +109,14 @@
   width: 35%;
 }
 
+.deleted-row {
+  @extend %handle-text-overflow;
+
+  text-align: left;
+  text-decoration: line-through;
+  width: 35%;
+}
+
 .row-right-container {
   align-items: center;
   color: $color-cta;
@@ -192,35 +200,29 @@
   color: $color-cta;
 }
 
-.skeleton {
-  .tasks-body {
-    width: 100%;
-  }
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-left: 3em;
+  margin-top: 2em;
+  width: 59%;
+}
 
-  .row-left-container {
-    @include bone;
+.pagination-button {
+  background: $color-button-bg;
+  border: 0;
+  border-radius: 4px;
+  color: $color-button-text;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-size: 13px;
+  height: 40px;
+  outline: none;
+  padding: 0 2em;
+  transition: all 0.2s;
 
-    .row-item {
-      visibility: hidden;
-    }
-
-    .row-status-item {
-      display: none;
-    }
-
-  }
-
-  .row-right-container {
-    @include bone;
-
-    height: 16px;
-
-    .pr-container {
-      visibility: hidden;
-    }
-
-    .fallback-logo {
-      visibility: hidden;
-    }
+  &:disabled {
+    color: $color-text-dim2;
+    cursor: default;
   }
 }

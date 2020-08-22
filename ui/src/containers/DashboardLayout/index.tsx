@@ -203,14 +203,16 @@ const Index: React.FC<LayoutProps> = (p) => {
           <div className={c('header')}>
             <OrgSelectBox currentOrg={currentOrg} />
 
-            <div className={c('avatar-container')}>
-              <Link href="/profile">
-                <span>
-                  <FallbackIcon className={c('pic')} logo={user.avatar} name={user.name} />
-                </span>
-              </Link>
-              <span className={c('online-status')} />
-            </div>
+            <Tippy content={user.name}>
+              <div className={c('avatar-container')}>
+                <Link href="/profile">
+                  <span>
+                    <FallbackIcon className={c('pic')} logo={user.avatar} name={user.name} />
+                  </span>
+                </Link>
+                <span className={c('online-status')} />
+              </div>
+            </Tippy>
 
             <ContextMenu
               className={c('user-menu')}
@@ -218,7 +220,7 @@ const Index: React.FC<LayoutProps> = (p) => {
               isOpen={isUserMenuOpen}
               onClose={hideUserMenu}
             >
-              <MdMoreHoriz title="Menu" className={c('dot-menu-icon')} onClick={toggleUserMenu} />
+              <MdMoreHoriz className={c('dot-menu-icon')} onClick={toggleUserMenu} />
             </ContextMenu>
             <Tippy content="Close">
               <span>

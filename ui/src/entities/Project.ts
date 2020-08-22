@@ -135,6 +135,30 @@ export const update = async (payload: ProjectArgs): Promise<Project> => {
   }
 };
 
+export const deleteProject = async (payload: {
+  id: string;
+  isDeleted: boolean;
+}): Promise<Project> => {
+  const query = `
+    mutation ($id: uuid!, $isDeleted: Boolean){
+      update_projects_by_pk( pk_columns:
+        {id: $id }
+          _set:{
+            is_deleted: $isDeleted
+          })
+        {
+          id
+        }
+      }`;
+
+  try {
+    const data = await client.request(query, payload);
+    return data.update_projects_by_pk;
+  } catch (err) {
+    throw new Error('Something went wrong :-(');
+  }
+};
+
 export const fetchMany = async (payload: PaginationArgs): Promise<Project[]> => {
   const query = ` query ( $offset: Int, $limit: Int ){
   projects(offset: $offset, limit: $limit) {

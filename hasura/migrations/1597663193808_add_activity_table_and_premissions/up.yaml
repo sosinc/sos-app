@@ -208,12 +208,6 @@
       schema: public
   type: create_select_permission
 - args:
-    role: user
-    table:
-      name: teams
-      schema: public
-  type: drop_insert_permission
-- args:
     permission:
       backend_only: false
       check:
@@ -272,12 +266,6 @@
       name: teams
       schema: public
   type: create_select_permission
-- args:
-    role: user
-    table:
-      name: teams
-      schema: public
-  type: drop_update_permission
 - args:
     permission:
       columns:

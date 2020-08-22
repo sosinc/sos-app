@@ -1,4 +1,5 @@
 import client from 'src/lib/client';
+import { PaginationArgs } from 'src/lib/paginationArgs';
 import resolveStorageFile from 'src/lib/resolveStorageFile';
 import { User } from './User';
 
@@ -12,10 +13,10 @@ export interface ActivityEvent {
   user: User;
 }
 
-export const fetchMany = async (): Promise<ActivityEvent[]> => {
+export const fetchMany = async (payload: PaginationArgs): Promise<ActivityEvent[]> => {
   const query = `
-    query {
-      activities(order_by: { created_at: desc }) {
+    query ($offset: Int, $limit: Int) {
+      activities(offset: $offset, limit: $limit, order_by: { created_at: desc }) {
         id
         project_id
         user_id
@@ -30,7 +31,7 @@ export const fetchMany = async (): Promise<ActivityEvent[]> => {
       }
   }`;
 
-  const data = await client.request(query);
+  const data = await client.request(query, payload);
   const activities = data?.activities;
 
   return activities.map((a: any) => ({

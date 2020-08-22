@@ -19,7 +19,6 @@ const c = classNames.bind(style);
 const Header: React.FC<{ teamId: string; projectId: string }> = (p) => {
   const project = useSelector((state: RootState) => projectSelector.selectById(state, p.projectId));
   const team = useSelector((state: RootState) => teamSelector.selectById(state, p.teamId));
-
   return (
     <div className={c('header')}>
       <span>
