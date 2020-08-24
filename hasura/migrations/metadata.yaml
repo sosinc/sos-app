@@ -133,8 +133,6 @@ tables:
   - name: create_activity_on_task_status_update
     definition:
       enable_manual: false
-      delete:
-        columns: '*'
       update:
         columns:
         - is_delivered
@@ -149,6 +147,12 @@ tables:
   is_enum: true
   select_permissions:
   - role: app_admin
+    permission:
+      columns:
+      - id
+      - name
+      filter: {}
+  - role: user
     permission:
       columns:
       - id
@@ -188,6 +192,25 @@ tables:
       - organization_id
       - relieving_date
       backend_only: false
+  - role: user
+    permission:
+      check:
+        _or:
+        - organization_id:
+            _eq: X-Hasura-Organization-Id
+        - user_id:
+            _eq: X-Hasura-User-Id
+      columns:
+      - designation_id
+      - ecode
+      - email
+      - headshot
+      - joining_date
+      - name
+      - organization_id
+      - relieving_date
+      - user_id
+      backend_only: false
   select_permissions:
   - role: app_admin
     permission:
@@ -225,6 +248,7 @@ tables:
             _eq: X-Hasura-Organization-Id
         - user_id:
             _eq: X-Hasura-User-Id
+      allow_aggregations: true
   update_permissions:
   - role: app_admin
     permission:
@@ -239,8 +263,30 @@ tables:
       - relieving_date
       filter: {}
       check: null
+  - role: user
+    permission:
+      columns:
+      - designation_id
+      - ecode
+      - email
+      - headshot
+      - joining_date
+      - name
+      - organization_id
+      - relieving_date
+      - user_id
+      filter:
+        _or:
+        - organization_id:
+            _eq: X-Hasura-Organization-Id
+        - user_id:
+            _eq: X-Hasura-User-Id
+      check: null
   delete_permissions:
   - role: app_admin
+    permission:
+      filter: {}
+  - role: user
     permission:
       filter: {}
   event_triggers:

@@ -76,8 +76,8 @@ const EmployeeDetails: React.FC<FormikValues> = () => {
         currentOrgId: employee?.organization_id,
       });
     } catch (err) {
-      if (/Duplicate employee email/i.test(err.message)) {
-        helpers.setFieldError('email', 'A employee with same email already exists');
+      if (/Duplicate employee ecode/i.test(err.message)) {
+        helpers.setFieldError('ecode', 'A employee with same ecode already exists');
       }
       helpers.setSubmitting(false);
     }
