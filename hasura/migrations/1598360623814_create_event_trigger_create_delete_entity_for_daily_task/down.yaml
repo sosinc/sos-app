@@ -1,0 +1,3 @@
+- args:
+    name: create_delete_entity_for_daily_task
+  type: delete_event_trigger
