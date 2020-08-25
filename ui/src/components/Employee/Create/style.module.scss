@@ -130,11 +130,8 @@
 .save-button {
   @extend %save-button;
 
-  grid-column: 1;
+  grid-column: 1/3;
 
-  @media(max-width: $sm) {
-    grid-column: 1/3;
-  }
 }
 
 .saving-in {
@@ -144,6 +141,26 @@
     @extend %working;
     position: absolute;
   }
+}
+
+.del-container {
+  display: flex;
+  padding: 15px;
+}
+
+.del-button {
+  background: $color-error-bg;
+  border: 1px solid $color-error-border;
+  border-radius: 4px;
+  color: $color-button-text;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-size: 13px;
+  height: 48px;
+  outline: none;
+  padding: 0 2em;
+  transition: all 0.2s;
+  width: 100%;
 }
 
 .skeleton {

@@ -1,7 +1,15 @@
 import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from '@reduxjs/toolkit';
 
 import { fetchCurrentUser, logoutUserAction } from 'src/duck/auth';
-import { create, Employee, EmployeeArgs, fetchMany, fetchOne, update } from 'src/entities/Employee';
+import {
+  create,
+  deleteEmployee,
+  Employee,
+  EmployeeArgs,
+  fetchMany,
+  fetchOne,
+  update,
+} from 'src/entities/Employee';
 import { PaginationArgs } from 'src/lib/paginationArgs';
 import { RootState } from '.';
 
@@ -29,6 +37,12 @@ export const createEmployeeAction = createAsyncThunk<
   EmployeeArgs,
   { rejectValue: Error; state: EmployeeState }
 >('employees/create', create);
+
+export const deleteEmployeeAction = createAsyncThunk<
+  Employee,
+  { orgId: string; ecode: string },
+  { rejectValue: Error; state: EmployeeState }
+>('employees/delete', deleteEmployee);
 
 export const updateEmployeeAction = createAsyncThunk<
   Employee,
@@ -60,6 +74,11 @@ export default createSlice({
 
     builder.addCase(logoutUserAction.fulfilled, () => {
       return employeeAdapter.getInitialState();
+    });
+
+    builder.addCase(deleteEmployeeAction.fulfilled, (state, { payload }) => {
+      const id = `${payload.ecode}-${payload.organization_id}`;
+      employeeAdapter.removeOne(state, id);
     });
   },
   initialState: employeeAdapter.getInitialState(),
