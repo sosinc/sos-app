@@ -55,7 +55,7 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
     </div>
   );
 
-  if (p.organizations.length && !p.values.organization_id) {
+  if (p.organizations.length > 1 && !p.values.organization_id) {
     p.setFieldValue('organization_id', p.organizations[0].id);
   }
 
