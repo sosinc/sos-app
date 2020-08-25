@@ -38,7 +38,7 @@ export const updateTeamAction = createAsyncThunk<
 
 export const deleteTeamAction = createAsyncThunk<
   Team,
-  { id: string; isDeleted: boolean },
+  { id: string },
   { rejectValue: Error; state: ProjectState }
 >('team/delete', deleteTeam);
 

@@ -97,13 +97,13 @@ export const update = async (payload: TeamArgs): Promise<Team> => {
   }
 };
 
-export const deleteTeam = async (payload: { id: string; isDeleted: boolean }): Promise<Team> => {
+export const deleteTeam = async (payload: { id: string }): Promise<Team> => {
   const query = `
-    mutation ($teamId: uuid!, $isDeleted: Boolean){
-      update_teams_by_pk( pk_columns: {id: $teamId }
-        _set:{
-          is_deleted: $isDeleted
-          }){
+    mutation ($teamId: uuid!){
+      delete_teams_by_pk(
+        id: $teamId
+      )
+      {
           id
           name
        }
@@ -114,6 +114,10 @@ export const deleteTeam = async (payload: { id: string; isDeleted: boolean }): P
 
     return data.payload;
   } catch (err) {
+    if (/Foreign key violation/i.test(err.message)) {
+      throw new Error('You have to delete team member for this action');
+    }
+
     throw new Error('Something went wrong :-(');
   }
 };

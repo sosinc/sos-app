@@ -43,9 +43,9 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
 
   const router = useRouter();
   const handleDelete = async (id: string) => {
-    await deleteProject({ id, isDeleted: true });
-    router.push(`/projects`);
     setModalOpen(false);
+    await deleteProject({ id });
+    router.push(`/projects`);
   };
 
   const user = currentUser();
