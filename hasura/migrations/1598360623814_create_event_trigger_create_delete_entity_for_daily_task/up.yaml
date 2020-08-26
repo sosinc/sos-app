@@ -1,0 +1,20 @@
+- args:
+    delete:
+      columns: '*'
+    enable_manual: false
+    headers: []
+    insert: null
+    name: create_delete_entity_for_daily_task
+    replace: false
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+      tolerance_sec: null
+    table:
+      name: daily_tasks
+      schema: public
+    update: null
+    webhook: null
+    webhook_from_env: DELETED_ENTITIES_WEBHOOK
+  type: create_event_trigger

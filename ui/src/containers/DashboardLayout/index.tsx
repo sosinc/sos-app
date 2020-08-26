@@ -177,6 +177,13 @@ const Index: React.FC<LayoutProps> = (p) => {
 
     return (
       <>
+        <Link href="/employees">
+          <div className={c('row')}>
+            <FaUsers />
+            <span className={c('row-text')}>Employees</span>
+          </div>
+        </Link>
+
         <Link href="/projects">
           <div className={c('header-row')}> Projects</div>
         </Link>

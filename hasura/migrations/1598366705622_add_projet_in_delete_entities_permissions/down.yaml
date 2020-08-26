@@ -1,0 +1,149 @@
+- args:
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: drop_delete_permission
+- args:
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: drop_update_permission
+- args:
+    permission:
+      columns:
+      - description
+      - is_deleted
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      filter:
+        organization:
+          employees:
+            user_id:
+              _eq: X-Hasura-User-Id
+      set: {}
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: create_update_permission
+- args:
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - id
+      - name
+      - logo
+      - logo_square
+      - description
+      - organization_id
+      - issue_link_template
+      - pr_link_template
+      - created_at
+      - updated_at
+      computed_fields: []
+      filter:
+        _and:
+        - teams:
+            members:
+              employee:
+                user_id:
+                  _eq: X-Hasura-User-Id
+        - organization_id:
+            _eq: X-Hasura-Organization-Id
+        - is_deleted:
+            _ne: true
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: create_select_permission
+- args:
+    name: create_delete_entity_for_team
+  type: delete_event_trigger
+- args:
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: drop_update_permission
+- args:
+    permission:
+      columns:
+      - is_deleted
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      filter:
+        _and:
+        - members:
+            employee:
+              user_id:
+                _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
+      set: {}
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: create_update_permission
+- args:
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: drop_delete_permission
+- args:
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: true
+      columns:
+      - id
+      - name
+      - logo
+      - logo_square
+      - issue_link_template
+      - pr_link_template
+      - project_id
+      - created_at
+      - updated_at
+      computed_fields: []
+      filter:
+        _and:
+        - project:
+            organization:
+              employees:
+                user_id:
+                  _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
+        - is_deleted:
+            _ne: true
+        - project:
+            is_deleted:
+              _ne: true
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: create_select_permission

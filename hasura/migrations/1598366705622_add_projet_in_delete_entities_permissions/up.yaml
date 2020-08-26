@@ -1,0 +1,167 @@
+- args:
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: true
+      columns:
+      - id
+      - name
+      - logo
+      - logo_square
+      - issue_link_template
+      - pr_link_template
+      - project_id
+      - created_at
+      - updated_at
+      computed_fields: []
+      filter:
+        _and:
+        - project:
+            organization:
+              employees:
+                user_id:
+                  _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: create_select_permission
+- args:
+    permission:
+      backend_only: false
+      filter:
+        _and:
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: create_delete_permission
+- args:
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: drop_update_permission
+- args:
+    permission:
+      columns:
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      filter:
+        _and:
+        - members:
+            employee:
+              user_id:
+                _eq: X-Hasura-User-Id
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
+      set: {}
+    role: user
+    table:
+      name: teams
+      schema: public
+  type: create_update_permission
+- args:
+    delete:
+      columns: '*'
+    enable_manual: false
+    headers: []
+    name: create_delete_entity_for_team
+    replace: false
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    table:
+      name: teams
+      schema: public
+    webhook_from_env: DELETED_ENTITIES_WEBHOOK
+  type: create_event_trigger
+- args:
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - id
+      - name
+      - logo
+      - logo_square
+      - description
+      - organization_id
+      - issue_link_template
+      - pr_link_template
+      - created_at
+      - updated_at
+      computed_fields: []
+      filter:
+        _and:
+        - teams:
+            members:
+              employee:
+                user_id:
+                  _eq: X-Hasura-User-Id
+        - organization_id:
+            _eq: X-Hasura-Organization-Id
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: create_select_permission
+- args:
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: drop_update_permission
+- args:
+    permission:
+      columns:
+      - description
+      - issue_link_template
+      - logo
+      - logo_square
+      - name
+      - pr_link_template
+      filter:
+        organization:
+          employees:
+            user_id:
+              _eq: X-Hasura-User-Id
+      set: {}
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: create_update_permission
+- args:
+    permission:
+      backend_only: false
+      filter:
+        organization:
+          employees:
+            user_id:
+              _eq: X-Hasura-User-Id
+    role: user
+    table:
+      name: projects
+      schema: public
+  type: create_delete_permission

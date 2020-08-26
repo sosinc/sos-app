@@ -1,0 +1,57 @@
+- args:
+    role: user
+    table:
+      name: employees
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - created_at
+      - designation_id
+      - ecode
+      - email
+      - headshot
+      - joining_date
+      - name
+      - organization_id
+      - relieving_date
+      - updated_at
+      - user_id
+      computed_fields: []
+      filter:
+        _or:
+        - organization_id:
+            _eq: X-Hasura-Organization-Id
+        - user_id:
+            _eq: X-Hasura-User-Id
+    role: user
+    table:
+      name: employees
+      schema: public
+  type: create_select_permission
+- args:
+    role: user
+    table:
+      name: employees
+      schema: public
+  type: drop_update_permission
+- args:
+    role: user
+    table:
+      name: employees
+      schema: public
+  type: drop_insert_permission
+- args:
+    role: user
+    table:
+      name: employees
+      schema: public
+  type: drop_delete_permission
+- args:
+    role: user
+    table:
+      name: designations
+      schema: public
+  type: drop_select_permission

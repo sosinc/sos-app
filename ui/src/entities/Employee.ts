@@ -49,9 +49,29 @@ export const create = async (args: EmployeeArgs): Promise<Employee> => {
     return data.payload;
   } catch (err) {
     if (/uniqueness violation/i.test(err.message)) {
-      throw new Error('Duplicate employee email');
+      throw new Error('Duplicate employee ecode');
     }
 
+    throw new Error('Something went wrong :-(');
+  }
+};
+
+export const deleteEmployee = async (args: { orgId: string; ecode: string }): Promise<Employee> => {
+  const query = `
+    mutation ($orgId: uuid!, $ecode: String!)  {
+      delete_employees_by_pk(
+        organization_id: $orgId,
+        ecode: $ecode) {
+          ecode,
+          organization_id
+        }
+      }`;
+
+  try {
+    const data = await client.request(query, args);
+
+    return data.delete_employees_by_pk;
+  } catch (err) {
     throw new Error('Something went wrong :-(');
   }
 };

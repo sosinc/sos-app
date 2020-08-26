@@ -133,8 +133,6 @@ tables:
   - name: create_activity_on_task_status_update
     definition:
       enable_manual: false
-      delete:
-        columns: '*'
       update:
         columns:
         - is_delivered
@@ -143,12 +141,53 @@ tables:
       interval_sec: 10
       timeout_sec: 60
     webhook_from_env: TASK_STATUS_UPDATE_WEBHOOK
+  - name: create_delete_entity_for_daily_task
+    definition:
+      enable_manual: false
+      delete:
+        columns: '*'
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook_from_env: DELETED_ENTITIES_WEBHOOK
+- table:
+    schema: public
+    name: deleted_entities
+  object_relationships:
+  - name: user
+    using:
+      foreign_key_constraint_on: deleted_by
+  insert_permissions:
+  - role: app_admin
+    permission:
+      check: {}
+      columns:
+      - organization_id
+      - row
+      - type
+      backend_only: false
+  - role: user
+    permission:
+      check: {}
+      columns:
+      - organization_id
+      - row
+      - type
+      - deleted_by
+      backend_only: false
 - table:
     schema: public
     name: designations
   is_enum: true
   select_permissions:
   - role: app_admin
+    permission:
+      columns:
+      - id
+      - name
+      filter: {}
+  - role: user
     permission:
       columns:
       - id
@@ -188,6 +227,25 @@ tables:
       - organization_id
       - relieving_date
       backend_only: false
+  - role: user
+    permission:
+      check:
+        _or:
+        - organization_id:
+            _eq: X-Hasura-Organization-Id
+        - user_id:
+            _eq: X-Hasura-User-Id
+      columns:
+      - designation_id
+      - ecode
+      - email
+      - headshot
+      - joining_date
+      - name
+      - organization_id
+      - relieving_date
+      - user_id
+      backend_only: false
   select_permissions:
   - role: app_admin
     permission:
@@ -225,6 +283,7 @@ tables:
             _eq: X-Hasura-Organization-Id
         - user_id:
             _eq: X-Hasura-User-Id
+      allow_aggregations: true
   update_permissions:
   - role: app_admin
     permission:
@@ -239,11 +298,43 @@ tables:
       - relieving_date
       filter: {}
       check: null
+  - role: user
+    permission:
+      columns:
+      - designation_id
+      - ecode
+      - email
+      - headshot
+      - joining_date
+      - name
+      - organization_id
+      - relieving_date
+      - user_id
+      filter:
+        _or:
+        - organization_id:
+            _eq: X-Hasura-Organization-Id
+        - user_id:
+            _eq: X-Hasura-User-Id
+      check: null
   delete_permissions:
   - role: app_admin
     permission:
       filter: {}
+  - role: user
+    permission:
+      filter: {}
   event_triggers:
+  - name: create_delete_entity_for_employee
+    definition:
+      enable_manual: false
+      delete:
+        columns: '*'
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook_from_env: DELETED_ENTITIES_WEBHOOK
   - name: create_user_for_new_employee
     definition:
       enable_manual: false
@@ -467,8 +558,6 @@ tables:
                   _eq: X-Hasura-User-Id
         - organization_id:
             _eq: X-Hasura-Organization-Id
-        - is_deleted:
-            _ne: true
   update_permissions:
   - role: app_admin
     permission:
@@ -486,7 +575,6 @@ tables:
     permission:
       columns:
       - description
-      - is_deleted
       - issue_link_template
       - logo
       - logo_square
@@ -502,7 +590,24 @@ tables:
   - role: app_admin
     permission:
       filter: {}
+  - role: user
+    permission:
+      filter:
+        organization:
+          employees:
+            user_id:
+              _eq: X-Hasura-User-Id
   event_triggers:
+  - name: create_delete_entity_for_project
+    definition:
+      enable_manual: false
+      delete:
+        columns: '*'
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook_from_env: DELETED_ENTITIES_WEBHOOK
   - name: create_team_for_new_project
     definition:
       enable_manual: false
@@ -685,11 +790,6 @@ tables:
         - project:
             organization_id:
               _eq: X-Hasura-Organization-Id
-        - is_deleted:
-            _ne: true
-        - project:
-            is_deleted:
-              _ne: true
       allow_aggregations: true
   update_permissions:
   - role: app_admin
@@ -706,7 +806,6 @@ tables:
   - role: user
     permission:
       columns:
-      - is_deleted
       - issue_link_template
       - logo
       - logo_square
@@ -726,6 +825,24 @@ tables:
   - role: app_admin
     permission:
       filter: {}
+  - role: user
+    permission:
+      filter:
+        _and:
+        - project:
+            organization_id:
+              _eq: X-Hasura-Organization-Id
+  event_triggers:
+  - name: create_delete_entity_for_team
+    definition:
+      enable_manual: false
+      delete:
+        columns: '*'
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook_from_env: DELETED_ENTITIES_WEBHOOK
 - table:
     schema: public
     name: user_logins

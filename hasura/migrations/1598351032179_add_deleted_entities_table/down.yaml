@@ -1,0 +1,15 @@
+- args:
+    name: create_delete_entity_for_project
+  type: delete_event_trigger
+- args:
+    role: user
+    table:
+      name: deleted_entities
+      schema: public
+  type: drop_insert_permission
+- args:
+    role: app_admin
+    table:
+      name: deleted_entities
+      schema: public
+  type: drop_insert_permission
