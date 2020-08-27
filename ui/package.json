@@ -4,7 +4,7 @@
   "private": true,
   "license": "GPLv3",
   "scripts": {
-    "dev": "next",
+    "dev": "next --port $PORT",
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
