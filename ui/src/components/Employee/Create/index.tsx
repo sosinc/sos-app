@@ -31,7 +31,7 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
   p,
 ) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [deleteTeam] = useAsyncThunk(deleteEmployeeAction, {
+  const [deleteEmployee] = useAsyncThunk(deleteEmployeeAction, {
     errorTitle: 'Failed to delete Employee',
     rethrowError: true,
     successTitle: 'Employee deleted successfully',
@@ -39,7 +39,7 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
 
   const router = useRouter();
   const handleDelete = async () => {
-    await deleteTeam({
+    await deleteEmployee({
       ecode: p.employee?.ecode,
       orgId: p.employee?.organization_id,
     });
