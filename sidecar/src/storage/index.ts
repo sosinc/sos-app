@@ -1,7 +1,7 @@
 import * as express from "express";
 import * as uuid from "uuid";
 
-import { buckets, client } from "./client";
+import { buckets, client, STORAGE_GATEWAY_ENDPOINT, MINIO_ENDPOINT, MINIO_PORT } from "./client";
 
 const api = express.Router();
 
@@ -19,7 +19,11 @@ api.get("/:bucket/:filename", async (req, res) => {
   }
 
   try {
-    const readUrl = await client.presignedGetObject(bucket, filename, 24 * 60 * 60);
+    let readUrl = await client.presignedGetObject(bucket, filename, 24 * 60 * 60);
+
+    if (STORAGE_GATEWAY_ENDPOINT) {
+      readUrl = readUrl.replace(`${MINIO_ENDPOINT}:${MINIO_PORT}`, STORAGE_GATEWAY_ENDPOINT);
+    }
 
     return res.redirect(readUrl);
   } catch (err) {

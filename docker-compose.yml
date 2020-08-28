@@ -9,6 +9,18 @@ services:
       POSTGRES_PASSWORD: sos
       POSTGRES_DATABASE: sos
 
+  gateway:
+    build: ./gateway
+    volumes:
+      - ./gateway/gateway.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 5000:80
+    depends_on:
+      - hasura
+      - pgadmin
+      - ui
+      - minio
+
   redis:
     image: redis:alpine
     volumes:
@@ -16,42 +28,37 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
-    depends_on:
-    - postgres
     ports:
     - 5050:80
     volumes:
-      - "./pgadmin-config.py:/pgadmin4/config_local.py"
       - "./docker-volumes/pgadmin:/var/lib/pgadmin4"
-    logging:
-      driver: none
     environment:
       PGADMIN_DEFAULT_EMAIL: sos@sos.com
       PGADMIN_DEFAULT_PASSWORD: sos
+    depends_on:
+    - postgres
 
   minio:
     image: minio/minio:RELEASE.2020-06-14T18-32-17Z
     volumes:
       - ./docker-volumes/minio:/data
-    ports:
-      - "9000:9000"
     environment:
+      PORT: 80
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio123
     command: server /data/minio
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      test: ["CMD", "curl", "-f", "http://localhost:5000/storage/health/live"]
       interval: 30s
       timeout: 20s
       retries: 3
 
   hasura:
     image: hasura/graphql-engine:v1.3.0
-    ports:
-    - "8080:8080"
     depends_on:
     - "postgres"
     environment:
+      PORT: 80
       HASURA_GRAPHQL_DATABASE_URL: postgres://sos:sos@postgres:5432/sos
       HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
       HASURA_GRAPHQL_ADMIN_SECRET: myadminsupersecretkey
@@ -73,8 +80,7 @@ services:
       STORAGE_PORT: 9090
       DATABASE_URL: postgres://sos:sos@postgres:5432/sos
       SOS_ADMIN_EMAILS: "admin@test.com"
-    ports:
-      - 9090:9090
+      STORAGE_GATEWAY_ENDPOINT: "localhost:5000/storage"
     volumes:
       - "./sidecar/:/app"
       - /app/node_modules
@@ -86,13 +92,11 @@ services:
 
   ui:
     build: ./ui
-    ports:
-      - "3000:3000"
     environment:
-      PORT: "3000"
-      CLIENT_GRAPHQL_URL: "http://localhost:8080/v1/graphql"
-      SERVER_GRAPHQL_URL: "http://hasura:8080/v1/graphql"
-      STORAGE_API_URL: "http://localhost:9090/v1/storage"
+      PORT: 80
+      CLIENT_GRAPHQL_URL: "http://localhost:5000/hasura/v1/graphql"
+      SERVER_GRAPHQL_URL: "http://localhost:5000/hasura/v1/graphql"
+      STORAGE_API_URL: "http://localhost:5000/uploads/v1/storage"
     volumes:
       - ./ui:/app
       - /app/node_modules
