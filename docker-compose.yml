@@ -42,25 +42,23 @@ services:
     image: minio/minio:RELEASE.2020-06-14T18-32-17Z
     volumes:
       - ./docker-volumes/minio:/data
-    ports:
-      - "9000:9000"
     environment:
+      PORT: 80
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio123
     command: server /data/minio
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      test: ["CMD", "curl", "-f", "http://localhost:5000/storage/health/live"]
       interval: 30s
       timeout: 20s
       retries: 3
 
   hasura:
     image: hasura/graphql-engine:v1.3.0
-    ports:
-    - "8080:8080"
     depends_on:
     - "postgres"
     environment:
+      PORT: 80
       HASURA_GRAPHQL_DATABASE_URL: postgres://sos:sos@postgres:5432/sos
       HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
       HASURA_GRAPHQL_ADMIN_SECRET: myadminsupersecretkey
@@ -95,8 +93,8 @@ services:
     build: ./ui
     environment:
       PORT: 80
-      CLIENT_GRAPHQL_URL: "http://localhost:8080/v1/graphql"
-      SERVER_GRAPHQL_URL: "http://hasura:8080/v1/graphql"
+      CLIENT_GRAPHQL_URL: "http://localhost:5000/hasura/v1/graphql"
+      SERVER_GRAPHQL_URL: "http://localhost:5000/hasura/v1/graphql"
       STORAGE_API_URL: "http://localhost:5000/sidecar/v1/storage"
     volumes:
       - ./ui:/app
