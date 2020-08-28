@@ -40,9 +40,9 @@ const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamPro
 
   const router = useRouter();
   const handleDelete = async (id: string) => {
-    await deleteTeam({ teamId: id, isDeleted: true });
-    router.push(`/projects/${p.team?.project_id}`);
     setModalOpen(false);
+    await deleteTeam({ teamId: id });
+    router.push(`/projects/${p.team?.project_id}`);
   };
 
   const deleteButton = p.team && (

@@ -49,7 +49,7 @@ export const updateProjectAction = createAsyncThunk<
 
 export const deleteProjectAction = createAsyncThunk<
   Project,
-  { id: string; isDeleted: boolean },
+  { id: string },
   { rejectValue: Error; state: ProjectState }
 >('project/delete', deleteProject);
 

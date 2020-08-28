@@ -84,12 +84,7 @@ const TaskActivityRow: React.FC<TaskActivity & { project_id: string }> = ({ proj
     </Tippy>
   );
 
-  if (!project) {
-    return null;
-  }
-
   const isDeleted = p.taskType === 'TASK_DELETED';
-
   const rowStatus = isDeleted ? <TaskDeleted /> : <TaskStatus status={p.is_delivered} />;
 
   return (
@@ -105,7 +100,7 @@ const TaskActivityRow: React.FC<TaskActivity & { project_id: string }> = ({ proj
         <div className={c('row-right-container')}>
           {p.pr_id && prField(p.pr_id)}
 
-          <Tippy content={project?.name}>
+          <Tippy content={project?.name || 'NA'}>
             <div className={c('fallback-logo')}>
               <FallbackIcon logo={project?.logo_square} name={project?.name} />
             </div>
@@ -154,7 +149,15 @@ const ActivitiesRow: React.FC<ActivitiesRowProps> = (p) => {
 
 const TeamActivity: React.FC = () => {
   const [pagination, setPagination] = useState({ limit: 10, offset: 0 });
-  const activities = useSelector(activitySelector.selectAll);
+  let activities = useSelector(activitySelector.selectAll);
+  const projects = useSelector(projectSelector.selectAll);
+
+  activities = activities.filter((i) => {
+    if (projects.some((p) => p.id === i.project_id)) {
+      return i;
+    }
+  });
+
   const hasNext = activities.length <= pagination.offset + pagination.limit;
 
   const [isFetching, getTaskActivities] = useQuery(

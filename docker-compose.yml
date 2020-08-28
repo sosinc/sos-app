@@ -64,6 +64,7 @@ services:
       NEW_PROJECT_WEBHOOK: http://sidecar/v1/api/on-new-project
       NEW_TASK_WEBHOOK: http://sidecar/v1/api/on-new-task
       TASK_STATUS_UPDATE_WEBHOOK: http://sidecar/v1/api/on-task-status-updates
+      DELETED_ENTITIES_WEBHOOK: http://sidecar/v1/api/add-deleted-entities
 
   sidecar:
     build: ./sidecar
