@@ -250,16 +250,17 @@ tables:
   - role: app_admin
     permission:
       columns:
-      - joining_date
-      - relieving_date
+      - created_at
       - designation_id
       - ecode
       - email
       - headshot
+      - id
+      - joining_date
       - name
-      - created_at
-      - updated_at
       - organization_id
+      - relieving_date
+      - updated_at
       - user_id
       filter: {}
       allow_aggregations: true
@@ -271,6 +272,7 @@ tables:
       - ecode
       - email
       - headshot
+      - id
       - joining_date
       - name
       - organization_id
@@ -657,6 +659,7 @@ tables:
       check: {}
       columns:
       - ecode
+      - employee_id
       - organization_id
       - team_id
       backend_only: false
@@ -665,6 +668,7 @@ tables:
       check: {}
       columns:
       - ecode
+      - employee_id
       - organization_id
       - team_id
       backend_only: false
@@ -672,20 +676,22 @@ tables:
   - role: app_admin
     permission:
       columns:
-      - ecode
       - created_at
-      - updated_at
+      - ecode
+      - employee_id
       - organization_id
       - team_id
+      - updated_at
       filter: {}
   - role: user
     permission:
       columns:
-      - ecode
-      - team_id
       - created_at
-      - updated_at
+      - ecode
+      - employee_id
       - organization_id
+      - team_id
+      - updated_at
       filter: {}
   update_permissions:
   - role: app_admin
