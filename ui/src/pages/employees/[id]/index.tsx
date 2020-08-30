@@ -39,14 +39,10 @@ const EmployeeDetails: React.FC<FormikValues> = () => {
   const router = useRouter();
   const queryId = String(router.query.id);
   const employee = useSelector((state: RootState) => employeeSelector.selectById(state, queryId));
-  const employeeId = queryId.split('-');
 
-  const [isFetchingEmployee] = useQuery(
-    () => fetchEmployee({ orgId: employeeId.slice(1).join('-'), ecode: employeeId[0] }),
-    {
-      errorTitle: 'Failed to fetch some employee details',
-    },
-  );
+  const [isFetchingEmployee] = useQuery(() => fetchEmployee({ id: queryId }), {
+    errorTitle: 'Failed to fetch some employee details',
+  });
   const { organizations, designations } = useSelector((state: RootState) => ({
     designations: designationSelector.selectAll(state),
     organizations: orgSelector.selectAll(state),
@@ -58,7 +54,7 @@ const EmployeeDetails: React.FC<FormikValues> = () => {
     errorTitle: 'Failed to fetch designations. Please refresh the page',
   });
 
-  const [createEmployee] = useAsyncThunk(updateEmployeeAction, {
+  const [updateEmployee] = useAsyncThunk(updateEmployeeAction, {
     errorTitle: 'Failed to update Employee',
     rethrowError: true,
     successTitle: 'Employee updated successfully',
@@ -70,10 +66,9 @@ const EmployeeDetails: React.FC<FormikValues> = () => {
   ) => {
     try {
       helpers.setSubmitting(true);
-      await createEmployee({
+      await updateEmployee({
         ...values,
-        currentEcode: employee?.ecode,
-        currentOrgId: employee?.organization_id,
+        id: employee?.id,
       });
     } catch (err) {
       if (/Duplicate employee ecode/i.test(err.message)) {

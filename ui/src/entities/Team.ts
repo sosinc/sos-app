@@ -25,6 +25,7 @@ export interface TeamArgs {
 
 export interface CreateMemberArgs {
   ecode: string;
+  employee_id: string;
   team_id: string;
   organization_id: string;
 }
@@ -140,8 +141,7 @@ export const fetchOne = async (payload: { id: string }): Promise<FetchOneTeamRes
         pr_link_template
       }
       members{
-        ecode
-        organization_id
+        employee_id
       }
     }
   }`;
@@ -152,9 +152,7 @@ export const fetchOne = async (payload: { id: string }): Promise<FetchOneTeamRes
     ).teams_by_pk;
 
     const project = { ...projectData, logo_square: resolveStorageFile(projectData.logo_square) };
-    const memberIds = members.map(
-      (m: { ecode: string; organization_id: string }) => `${m.ecode}-${m.organization_id}`,
-    );
+    const memberIds = members.map((m: { employee_id: string }) => m.employee_id);
 
     const team = { ...teamData, logo_square: resolveStorageFile(teamData.logo_square), memberIds };
 
@@ -166,9 +164,10 @@ export const fetchOne = async (payload: { id: string }): Promise<FetchOneTeamRes
 
 export const createMember = async (args: CreateMemberArgs): Promise<CreateMemberResponse> => {
   const query = `
-    mutation ($ecode: String!, $team_id: uuid!, $organization_id: uuid!){
+    mutation ($ecode: String!, $team_id: uuid!, $organization_id: uuid!, $employee_id: uuid!){
       insert_team_members_one(object: {
       ecode: $ecode
+      employee_id: $employee_id
       organization_id: $organization_id
       team_id: $team_id
     }) {
@@ -180,7 +179,7 @@ export const createMember = async (args: CreateMemberArgs): Promise<CreateMember
     await client.request(query, args);
 
     return {
-      employeeId: `${args.ecode}-${args.organization_id}`,
+      employeeId: args.employee_id,
       teamId: args.team_id,
     };
   } catch (err) {
@@ -194,12 +193,13 @@ export const createMember = async (args: CreateMemberArgs): Promise<CreateMember
 
 export const deleteMember = async (args: CreateMemberArgs): Promise<CreateMemberResponse> => {
   const query = `
-    mutation ($team_id: uuid!, $ecode: String!, $organization_id: uuid!) {
+    mutation ($team_id: uuid!, $ecode: String!, $organization_id: uuid!, $employee_id: uuid!) {
       delete_team_members_by_pk(
         ecode: $ecode,
         organization_id: $organization_id,
         team_id: $team_id)
        {
+         employee_id
          ecode
          organization_id
       }
@@ -209,7 +209,7 @@ export const deleteMember = async (args: CreateMemberArgs): Promise<CreateMember
     await client.request(query, args);
 
     return {
-      employeeId: `${args.ecode}-${args.organization_id}`,
+      employeeId: args.employee_id,
       teamId: args.team_id,
     };
   } catch (err) {

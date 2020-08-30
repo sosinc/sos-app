@@ -40,8 +40,7 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
   const router = useRouter();
   const handleDelete = async () => {
     await deleteEmployee({
-      ecode: p.employee?.ecode,
-      orgId: p.employee?.organization_id,
+      id: p.employee?.id,
     });
     router.push(`/employees`);
     setModalOpen(false);

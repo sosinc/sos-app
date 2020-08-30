@@ -28,7 +28,7 @@ export const fetchEmployees = createAsyncThunk<
 
 export const fetchEmployee = createAsyncThunk<
   Employee,
-  { orgId: string; ecode: string },
+  { id: string },
   { rejectValue: Error; state: EmployeeState }
 >('employees/fetchOne', fetchOne);
 
@@ -40,7 +40,7 @@ export const createEmployeeAction = createAsyncThunk<
 
 export const deleteEmployeeAction = createAsyncThunk<
   Employee,
-  { orgId: string; ecode: string },
+  { id: string },
   { rejectValue: Error; state: EmployeeState }
 >('employees/delete', deleteEmployee);
 
@@ -53,10 +53,7 @@ export const updateEmployeeAction = createAsyncThunk<
 export default createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchEmployees.fulfilled, (state, { payload }) => {
-      // Employees get their unique ID from combination of Ecode and organization ID
-      const employees = payload.map((e) => ({ ...e, id: `${e.ecode}-${e.organization_id}` }));
-
-      employeeAdapter.upsertMany(state, employees);
+      employeeAdapter.upsertMany(state, payload);
     });
 
     builder.addCase(fetchEmployee.fulfilled, (state, { payload }) => {
@@ -64,12 +61,7 @@ export default createSlice({
     });
 
     builder.addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
-      const employees = payload.employees.map((e) => ({
-        ...e,
-        id: `${e.ecode}-${e.organization_id}`,
-      }));
-
-      employeeAdapter.upsertMany(state, employees);
+      employeeAdapter.upsertMany(state, payload.employees);
     });
 
     builder.addCase(logoutUserAction.fulfilled, () => {
@@ -77,8 +69,7 @@ export default createSlice({
     });
 
     builder.addCase(deleteEmployeeAction.fulfilled, (state, { payload }) => {
-      const id = `${payload.ecode}-${payload.organization_id}`;
-      employeeAdapter.removeOne(state, id);
+      employeeAdapter.removeOne(state, payload.id);
     });
   },
   initialState: employeeAdapter.getInitialState(),

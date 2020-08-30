@@ -56,14 +56,15 @@ export const create = async (args: EmployeeArgs): Promise<Employee> => {
   }
 };
 
-export const deleteEmployee = async (args: { orgId: string; ecode: string }): Promise<Employee> => {
+export const deleteEmployee = async (args: { id: string }): Promise<Employee> => {
   const query = `
-    mutation ($orgId: uuid!, $ecode: String!)  {
+    mutation ($id: uuid!)  {
       delete_employees_by_pk(
-        organization_id: $orgId,
-        ecode: $ecode) {
-          ecode,
-          organization_id
+        id: $id,)
+        {
+         id
+         ecode,
+         organization_id
         }
       }`;
 
@@ -78,8 +79,8 @@ export const deleteEmployee = async (args: { orgId: string; ecode: string }): Pr
 
 export const update = async (payload: EmployeeArgs): Promise<Employee> => {
   const query = `
-    mutation ($currentEcode: String!, $currentOrgId: uuid! $ecode: String, $email: String, $name: String, $headshot: String, $designation_id: designations_enum, $organization_id: uuid)
-     {update_employees_by_pk ( pk_columns: {ecode: $currentEcode, organization_id: $currentOrgId}
+    mutation ($id: uuid!, $ecode: String, $email: String, $name: String, $headshot: String, $designation_id: designations_enum, $organization_id: uuid)
+     {update_employees_by_pk ( pk_columns: {id: $id}
       _set:{
         ecode: $ecode,
         email: $email,
@@ -88,6 +89,7 @@ export const update = async (payload: EmployeeArgs): Promise<Employee> => {
         designation_id: $designation_id,
         organization_id: $organization_id
         }){
+        id
         ecode
       }
     }`;
@@ -108,6 +110,7 @@ export const update = async (payload: EmployeeArgs): Promise<Employee> => {
 export const fetchMany = async (payload: PaginationArgs): Promise<Employee[]> => {
   const query = ` query ( $offset: Int, $limit: Int ){
    employees(offset: $offset, limit: $limit) {
+    id
     ecode
     name
     email
@@ -128,9 +131,10 @@ export const fetchMany = async (payload: PaginationArgs): Promise<Employee[]> =>
     : [];
 };
 
-export const fetchOne = async (payload: { orgId: string; ecode: string }): Promise<Employee> => {
-  const query = `query ($orgId: uuid!, $ecode: String!){
-    employees_by_pk(ecode: $ecode, organization_id: $orgId ) {
+export const fetchOne = async (payload: { id: string }): Promise<Employee> => {
+  const query = `query ($id: uuid!){
+    employees_by_pk(id: $id ) {
+      id
       ecode
       name
       email
@@ -147,5 +151,5 @@ export const fetchOne = async (payload: { orgId: string; ecode: string }): Promi
   if (!employee) {
     throw new Error('Could not get employee at the moment');
   }
-  return { ...employee, id: `${employee.ecode}-${employee.organization_id}` };
+  return employee;
 };

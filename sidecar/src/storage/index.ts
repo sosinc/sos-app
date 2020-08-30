@@ -38,11 +38,21 @@ api.get("/", async (req, res) => {
 
   try {
     const filename = uuid.v4();
-    const uploadUrl = await client.presignedPutObject(buckets.userUploads, filename, 24 * 60 * 60);
+    // URL which directly uploads to internal minio service
+    const originalUploadUrl = await client.presignedPutObject(
+      buckets.userUploads,
+      filename,
+      24 * 60 * 60
+    );
+    let uploadUrl = originalUploadUrl;
+
+    if (STORAGE_GATEWAY_ENDPOINT) {
+      uploadUrl = uploadUrl.replace(`${MINIO_ENDPOINT}:${MINIO_PORT}`, STORAGE_GATEWAY_ENDPOINT);
+    }
 
     return res.json({
       uploadUrl,
-      filePath: new URL(uploadUrl).pathname,
+      filePath: new URL(originalUploadUrl).pathname,
     });
   } catch (err) {
     return res.status(500).json();
