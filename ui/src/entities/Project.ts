@@ -137,7 +137,7 @@ export const update = async (payload: ProjectArgs): Promise<Project> => {
 
 export const deleteProject = async (payload: { id: string }): Promise<Project> => {
   const query = `
-    mutation ($id: uuid!, $isDeleted: Boolean){
+    mutation ($id: uuid!){
       delete_projects_by_pk(
         id: $id
         )

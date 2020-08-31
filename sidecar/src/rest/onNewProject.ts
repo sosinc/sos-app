@@ -16,8 +16,8 @@ api.post("/on-new-project", async (req, res) => {
   const employeeRepo = Employee.getRepository();
 
   // if admin creates a project than there is not need to create a team automatically since admin has no ecode
-  const user = await employeeRepo.findOneOrFail({ user_id: project.created_by });
-  if (!user.ecode) {
+  const employee = await employeeRepo.findOneOrFail({ user_id: project.created_by });
+  if (!employee.ecode) {
     res.status(201).send();
     return;
   }
@@ -35,8 +35,9 @@ api.post("/on-new-project", async (req, res) => {
   const newMember = new TeamMember();
 
   newMember.team_id = team.id;
-  newMember.ecode = user.ecode;
-  newMember.organization_id = user.organization_id;
+  newMember.ecode = employee.ecode;
+  newMember.employee_id = employee.id;
+  newMember.organization_id = employee.organization_id;
 
   await memberRepo.save(newMember);
 

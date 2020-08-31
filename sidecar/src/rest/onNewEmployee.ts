@@ -30,10 +30,9 @@ api.post("/on-new-employee", async (req, res) => {
   }
 
   const user = await userRepo.findOneOrFail({ email: employee.new.email });
-  const emp = await employeeRepo.findOneOrFail({ email: employee.new.email });
+  const emp = await employeeRepo.findOneOrFail({ id: employee.new.id });
 
   emp.user_id = user.id;
-
   await employeeRepo.save(emp);
 
   res.status(201).send();

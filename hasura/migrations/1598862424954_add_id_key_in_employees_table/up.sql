@@ -1,4 +1,5 @@
 
+
 ALTER TABLE "public"."employees" ALTER COLUMN "user_id" SET NOT NULL;
 ALTER TABLE "public"."employees" ALTER COLUMN "user_id" DROP NOT NULL;
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
