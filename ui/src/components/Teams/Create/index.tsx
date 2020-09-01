@@ -136,6 +136,7 @@ const TeamMembers = (p: { team: Team; employees: Employee[]; isFetchingEmployees
 
     await deleteMember({
       ecode: removeMember?.ecode,
+      employee_id: removeMember?.id,
       organization_id: removeMember?.organization_id,
       team_id: p.team.id,
     });
@@ -177,6 +178,7 @@ const TeamMembers = (p: { team: Team; employees: Employee[]; isFetchingEmployees
 
     await createMember({
       ecode: member.ecode,
+      employee_id: member.id,
       organization_id: member.organization_id,
       team_id: p.team.id,
     });
