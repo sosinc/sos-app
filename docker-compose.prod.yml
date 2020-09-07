@@ -1,14 +1,59 @@
 version: '3.6'
 services:
+  postgres:
+    image: postgres:12
+    volumes:
+    - ./docker-volumes/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: sos
+      POSTGRES_PASSWORD: sos
+      POSTGRES_DATABASE: sos
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - ./docker-volumes/redis:/data
+
+  minio:
+    image: minio/minio:latest
+    volumes:
+      - ./docker-volumes/minio:/data
+    environment:
+      PORT: 80
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+    command: server /data/minio
+
+  hasura:
+    image: hasura/graphql-engine:v1.3.0
+    depends_on:
+    - "postgres"
+    environment:
+      PORT: 80
+      HASURA_GRAPHQL_DATABASE_URL: postgres://sos:sos@postgres:5432/sos
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
+      HASURA_GRAPHQL_ADMIN_SECRET: $HASURA_SECRET
+
+      HASURA_GRAPHQL_AUTH_HOOK: http://sidecar/v1/api/authenticate
+      HASURA_GRAPHQL_AUTH_HOOK_MODE: GET
+      NEW_USER_WEBHOOK: http://sidecar/v1/api/on-new-user
+      NEW_EMPLOYEE_WEBHOOK: http://sidecar/v1/api/on-new-employee
+      SIDECAR_GRAPHQL_URL: http://sidecar/v1/graphql
+      NEW_PROJECT_WEBHOOK: http://sidecar/v1/api/on-new-project
+      NEW_TASK_WEBHOOK: http://sidecar/v1/api/on-new-task
+      TASK_STATUS_UPDATE_WEBHOOK: http://sidecar/v1/api/on-task-status-updates
+      DELETED_ENTITIES_WEBHOOK: http://sidecar/v1/api/add-deleted-entities
+
   ui:
     image: jkhabra/sosapp-ui:latest
     build:
       context: ./ui
       dockerfile: Dockerfile-prod
     environment:
-      CLIENT_GRAPHQL_URL: "http://localhost:9645/hasura/v1/graphql"
-      SERVER_GRAPHQL_URL: "http://localhost:9645/hasura/v1/graphql"
-      STORAGE_API_URL: "http://localhost:9645/uploads/v1/storage"
+      PORT: 80
+      CLIENT_GRAPHQL_URL: "${HOSTNAME}/hasura/v1/graphql"
+      SERVER_GRAPHQL_URL: "${HOSTNAME}/hasura/v1/graphql"
+      STORAGE_API_URL: "${HOSTNAME}/uploads/v1/storage${HOSTNAME}"
 
   sidecar:
     image: jkhabra/sosapp-sidecar:latest
@@ -19,4 +64,13 @@ services:
       PORT: 80
       STORAGE_PORT: 9090
       DATABASE_URL: postgres://sos:sos@postgres:5432/sos
-      SOS_ADMIN_EMAILS: "admin@test.com"
+      SOS_ADMIN_EMAILS: $ADMIN_EMAILS
+
+  gateway:
+    build: ./gateway
+    ports:
+      - $GATEWAY_PORT:80
+    depends_on:
+      - hasura
+      - ui
+      - minio

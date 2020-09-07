@@ -1,3 +1,3 @@
 FROM nginx:alpine
 
-COPY gateway.conf /etc/nginx/conf.d/default.conf
+COPY gateway-prod.conf /etc/nginx/conf.d/default.conf
