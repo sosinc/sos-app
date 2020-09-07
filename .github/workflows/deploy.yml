@@ -1,0 +1,19 @@
+on:
+  pull_request:
+  push:
+    branches:
+      - feature/setup-production-build
+
+jobs:
+  build-ui-docker-image:
+    name: Build UI DockerImage
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Build image
+      run: docker build . -t jkhabra/sosapp-ui:latest -f Dockerfile-prod
+      working-directory: ui
+
+    - name: Push image
+      run: docker push jkhabra/sosapp-ui:latest

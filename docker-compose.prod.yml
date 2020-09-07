@@ -67,6 +67,7 @@ services:
       SOS_ADMIN_EMAILS: $ADMIN_EMAILS
 
   gateway:
+    image: jkhabra/sosapp-gateway:latest
     build: ./gateway
     ports:
       - $GATEWAY_PORT:80
