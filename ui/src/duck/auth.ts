@@ -104,9 +104,7 @@ export default createSlice({
       state.user = payload.user;
       const employee = payload.employees.length && payload.employees.find((e) => e.isCurrent);
 
-      state.activeEmployeeId = employee
-        ? `${employee.ecode}-${employee.organization_id}`
-        : undefined;
+      state.activeEmployeeId = employee ? employee.id : undefined;
     });
 
     builder.addCase(updateProfileAction.fulfilled, (state, { payload }) => {

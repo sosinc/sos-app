@@ -85,6 +85,7 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
       avatar
       email
       as_employee {
+        id
         ecode
         name
         organization_id
@@ -137,6 +138,7 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
 
   const employees = me.as_employee.map((employee: any) => ({
     ecode: employee.ecode,
+    id: employee.id,
     isCurrent: employee.organization.is_current,
     name: employee.name,
     organization_id: employee.organization_id,
@@ -150,7 +152,7 @@ export const fetchCurrentUser = async (): Promise<CurrentUserResponse> => {
   const projects = me.as_employee.flatMap((employee: any) =>
     employee.organization.projects.map((project: any) => ({
       ...project,
-      employeeId: project.id,
+      employeeId: employee.id,
       logo_square: resolveStorageFile(project.logo_square),
       teams_count: project?.teams_aggregate?.aggregate?.count || 0,
     })),

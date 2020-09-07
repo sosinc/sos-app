@@ -3,12 +3,13 @@
  */
 import { Client } from "minio";
 
-const {
+export const {
   MINIO_ENDPOINT = "minio",
   MINIO_PORT = 9000,
   MINIO_ACCESS_KEY = "minio",
   MINIO_SECRET_KEY = "minio123",
   USER_UPLOADS_BUCKET_NAME = "user-uploads",
+  STORAGE_GATEWAY_ENDPOINT = null,
 } = process.env;
 
 export const client = new Client({

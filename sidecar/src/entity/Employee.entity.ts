@@ -3,9 +3,12 @@ import { Entity, BaseEntity, PrimaryColumn, Column } from "typeorm";
 @Entity({ name: "employees" })
 export class Employee extends BaseEntity {
   @PrimaryColumn()
+  id: string;
+
+  @Column()
   ecode: string;
 
-  @PrimaryColumn()
+  @Column()
   organization_id: string;
 
   @Column()

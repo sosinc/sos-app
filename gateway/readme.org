@@ -1,0 +1,12 @@
+* SoS Gateway
+
+Gateway is a simple reverse proxy setup, which redirects traffic to SoS
+components. This is meant to be used as the entry-point into the SoS cloud for:
+
+- Development setup
+- Single node deployments i.e deployments which don't need to horizontally
+  scale; which want to conveniently just point all traffic to a single port and
+  expect everything else to just work
+
+When horizontal scaling comes into picture, we need to switch to something more
+sophisticated.
