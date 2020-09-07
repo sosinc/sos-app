@@ -11,9 +11,9 @@
       columns:
       - id
       - organization_id
-      - payload
+      - row
       - type
-      - user_id
+      - deleted_by
       set: {}
     role: app_admin
     table:
@@ -27,9 +27,9 @@
       check: {}
       columns:
       - organization_id
-      - payload
+      - row
       - type
-      - user_id
+      - deleted_by
       set: {}
     role: user
     table:
