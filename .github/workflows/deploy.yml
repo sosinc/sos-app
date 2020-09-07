@@ -23,7 +23,6 @@ jobs:
     - name: Push image
       run: docker push jkhabra/sosapp-ui:latest
 
-jobs:
   build-sidecar-docker-image:
     name: Build SIDECAR DockerImage
     runs-on: ubuntu-latest
@@ -43,7 +42,6 @@ jobs:
     - name: Push image
       run: docker push jkhabra/sosapp-sidecar:latest
 
-jobs:
   build-gateway-docker-image:
     name: Build GATEWAY DockerImage
     runs-on: ubuntu-latest
