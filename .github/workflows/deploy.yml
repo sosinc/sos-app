@@ -55,7 +55,7 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build image
-      run: docker build . -t jkhabra/sosapp-gateway:latest -f Dockerfile-prod
+      run: docker build . -t jkhabra/sosapp-gateway:latest -f gateway-prod.conf
       working-directory: gateway
 
     - name: Push image
