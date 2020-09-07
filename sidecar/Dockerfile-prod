@@ -1,0 +1,13 @@
+FROM node:12-alpine
+
+WORKDIR /app
+
+RUN apk add python make g++
+
+COPY ./package.json /app/
+COPY ./yarn.lock /app/
+RUN yarn --frozen-lockfile
+
+COPY . /app
+
+CMD yarn build && yarn start

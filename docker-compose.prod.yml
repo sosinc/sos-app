@@ -9,3 +9,14 @@ services:
       CLIENT_GRAPHQL_URL: "http://localhost:9645/hasura/v1/graphql"
       SERVER_GRAPHQL_URL: "http://localhost:9645/hasura/v1/graphql"
       STORAGE_API_URL: "http://localhost:9645/uploads/v1/storage"
+
+  sidecar:
+    image: jkhabra/sosapp-sidecar:latest
+    build:
+      context: ./sidecar
+      dockerfile: Dockerfile-prod
+    environment:
+      PORT: 80
+      STORAGE_PORT: 9090
+      DATABASE_URL: postgres://sos:sos@postgres:5432/sos
+      SOS_ADMIN_EMAILS: "admin@test.com"
