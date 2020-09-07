@@ -1,0 +1,11 @@
+version: '3.6'
+services:
+  ui:
+    image: jkhabra/sosapp-ui:latest
+    build:
+      context: ./ui
+      dockerfile: Dockerfile-prod
+    environment:
+      CLIENT_GRAPHQL_URL: "http://localhost:9645/hasura/v1/graphql"
+      SERVER_GRAPHQL_URL: "http://localhost:9645/hasura/v1/graphql"
+      STORAGE_API_URL: "http://localhost:9645/uploads/v1/storage"
