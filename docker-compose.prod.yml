@@ -65,6 +65,7 @@ services:
       STORAGE_PORT: 9090
       DATABASE_URL: postgres://sos:sos@postgres:5432/sos
       SOS_ADMIN_EMAILS: $ADMIN_EMAILS
+      REDISCLOUD_SESSION_URL: redis://redis:6379
 
   gateway:
     image: jkhabra/sosapp-gateway:latest
