@@ -46,9 +46,9 @@ services:
 
   ui:
     image: jkhabra/sosapp-ui:latest
-    build:
-      context: ./ui
-      dockerfile: Dockerfile-prod
+    # build:
+    #   context: ./ui
+    #   dockerfile: Dockerfile-prod
     environment:
       PORT: 80
       CLIENT_GRAPHQL_URL: "${HOSTNAME}/hasura/v1/graphql"
@@ -57,23 +57,26 @@ services:
 
   sidecar:
     image: jkhabra/sosapp-sidecar:latest
-    build:
-      context: ./sidecar
-      dockerfile: Dockerfile-prod
+    # build:
+    #   context: ./sidecar
+    #   dockerfile: Dockerfile-prod
     environment:
       PORT: 80
       STORAGE_PORT: 9090
       DATABASE_URL: postgres://sos:sos@postgres:5432/sos
       SOS_ADMIN_EMAILS: $ADMIN_EMAILS
       REDISCLOUD_SESSION_URL: redis://redis:6379
+      STORAGE_GATEWAY_ENDPOINT: "${HOSTNAME}/storage"
       NODE_ENV: production
 
   gateway:
     image: jkhabra/sosapp-gateway:latest
-    build: ./gateway
+    # build: ./gateway
     ports:
       - $GATEWAY_PORT:80
     depends_on:
       - hasura
       - ui
       - minio
+    volumes:
+      - ./gateway.conf:/etc/nginx/conf.d/default.conf

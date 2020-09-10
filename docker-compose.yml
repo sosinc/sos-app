@@ -80,7 +80,7 @@ services:
       STORAGE_PORT: 9090
       DATABASE_URL: postgres://sos:sos@postgres:5432/sos
       SOS_ADMIN_EMAILS: "admin@test.com"
-      STORAGE_GATEWAY_ENDPOINT: "localhost:5000/storage"
+      STORAGE_GATEWAY_ENDPOINT: "http://localhost:5000/storage"
       REDISCLOUD_SESSION_URL: redis://redis:6379
     volumes:
       - "./sidecar/:/app"
