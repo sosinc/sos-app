@@ -53,7 +53,7 @@ services:
       PORT: 80
       CLIENT_GRAPHQL_URL: "${HOSTNAME}/hasura/v1/graphql"
       SERVER_GRAPHQL_URL: "${HOSTNAME}/hasura/v1/graphql"
-      STORAGE_API_URL: "${HOSTNAME}/uploads/v1/storage${HOSTNAME}"
+      STORAGE_API_URL: "${HOSTNAME}/uploads/v1/storage"
 
   sidecar:
     image: jkhabra/sosapp-sidecar:latest
