@@ -13,6 +13,7 @@ interface TextFieldProps {
   inputRef?: MutableRefObject<HTMLInputElement | null>;
   tabIndex?: number;
   type?: string;
+  onkeyDown?: any;
 }
 
 const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = ({
@@ -37,6 +38,7 @@ const TextField: React.FC<TextFieldProps & { formik: FormikContextType<{}> }> = 
         placeholder={p.placeholder}
         {...inputProps}
         ref={p.inputRef}
+        onKeyDown={p.onkeyDown}
         disabled={formik.isSubmitting}
       />
       <ErrorMessage error={error} />

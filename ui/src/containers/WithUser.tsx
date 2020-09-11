@@ -1,4 +1,5 @@
 import c from 'classnames';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,13 +29,16 @@ const WithUser: React.FC<WithUserProps> = (p) => {
 
   if (isFetchingUser) {
     return (
-      <div className={c(s['loader-container'])}>
-        <div className={c(s['lds-ripple'])}>
-          <div />
-          <div />
+      <>
+        <Head>
+          <link rel="shortcut icon" href="/assets/images/sos-logo.svg" />
+          <title>{'Snake Oil Software - Loading...'}</title>
+        </Head>
+
+        <div className={c(s['loader-container'])}>
+          <img className={c(s['super-logo'])} src="/assets/images/sos-logo.svg" alt="O" />
         </div>
-        <p>Loading...</p>
-      </div>
+      </>
     );
   }
 
