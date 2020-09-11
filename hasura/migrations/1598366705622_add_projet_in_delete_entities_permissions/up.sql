@@ -1,8 +1,6 @@
 
 
 ALTER TABLE "public"."teams" DROP COLUMN "is_deleted" CASCADE;
-ALTER TABLE "public"."teams" DROP COLUMN "is_deleted" CASCADE;
-ALTER TABLE "public"."teams" DROP COLUMN "is_deleted" CASCADE;
 ALTER TABLE "public"."projects" DROP COLUMN "is_deleted" CASCADE;
 
 alter table "public"."teams" drop constraint "teams_project_id_fkey",

@@ -1,0 +1,62 @@
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-ui-docker-image:
+    name: Build UI DockerImage
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Login to DockerHub Registry
+      run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build image
+      run: docker build . -t jkhabra/sosapp-ui:latest -f Dockerfile-prod
+      working-directory: ui
+
+    - name: Push image
+      run: docker push jkhabra/sosapp-ui:latest
+
+  build-sidecar-docker-image:
+    name: Build SIDECAR DockerImage
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Login to DockerHub Registry
+      run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build image
+      run: docker build . -t jkhabra/sosapp-sidecar:latest -f Dockerfile-prod
+      working-directory: sidecar
+
+    - name: Push image
+      run: docker push jkhabra/sosapp-sidecar:latest
+
+  build-gateway-docker-image:
+    name: Build GATEWAY DockerImage
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Login to DockerHub Registry
+      run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build image
+      run: docker build . -t jkhabra/sosapp-gateway:latest -f Dockerfile
+      working-directory: gateway
+
+    - name: Push image
+      run: docker push jkhabra/sosapp-gateway:latest

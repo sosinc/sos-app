@@ -22,7 +22,10 @@ api.get("/:bucket/:filename", async (req, res) => {
     let readUrl = await client.presignedGetObject(bucket, filename, 24 * 60 * 60);
 
     if (STORAGE_GATEWAY_ENDPOINT) {
-      readUrl = readUrl.replace(`${MINIO_ENDPOINT}:${MINIO_PORT}`, STORAGE_GATEWAY_ENDPOINT);
+      readUrl = readUrl.replace(
+        new RegExp(`https?://${MINIO_ENDPOINT}:${MINIO_PORT}`),
+        STORAGE_GATEWAY_ENDPOINT
+      );
     }
 
     return res.redirect(readUrl);
@@ -47,7 +50,10 @@ api.get("/", async (req, res) => {
     let uploadUrl = originalUploadUrl;
 
     if (STORAGE_GATEWAY_ENDPOINT) {
-      uploadUrl = uploadUrl.replace(`${MINIO_ENDPOINT}:${MINIO_PORT}`, STORAGE_GATEWAY_ENDPOINT);
+      uploadUrl = uploadUrl.replace(
+        new RegExp(`https?://${MINIO_ENDPOINT}:${MINIO_PORT}`),
+        STORAGE_GATEWAY_ENDPOINT
+      );
     }
 
     return res.json({

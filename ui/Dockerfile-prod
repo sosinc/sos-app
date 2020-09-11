@@ -1,0 +1,18 @@
+FROM node:12-alpine
+
+WORKDIR /app
+
+ENV HOST=0.0.0.0
+ENV NODE_ENV=production
+ENV PORT=3000
+EXPOSE 3000
+
+RUN apk add python make g++
+
+COPY ./package.json /app/
+COPY ./yarn.lock /app/
+RUN yarn --frozen-lockfile
+
+COPY . /app
+
+CMD yarn build && yarn start

@@ -9,37 +9,13 @@ services:
       POSTGRES_PASSWORD: sos
       POSTGRES_DATABASE: sos
 
-  gateway:
-    build: ./gateway
-    volumes:
-      - ./gateway/gateway.conf:/etc/nginx/conf.d/default.conf
-    ports:
-      - 5000:80
-    depends_on:
-      - hasura
-      - pgadmin
-      - ui
-      - minio
-
   redis:
     image: redis:alpine
     volumes:
       - ./docker-volumes/redis:/data
 
-  pgadmin:
-    image: dpage/pgadmin4
-    ports:
-    - 5050:80
-    volumes:
-      - "./docker-volumes/pgadmin:/var/lib/pgadmin4"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: sos@sos.com
-      PGADMIN_DEFAULT_PASSWORD: sos
-    depends_on:
-    - postgres
-
   minio:
-    image: minio/minio:RELEASE.2020-06-14T18-32-17Z
+    image: minio/minio:latest
     volumes:
       - ./docker-volumes/minio:/data
     environment:
@@ -47,11 +23,6 @@ services:
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio123
     command: server /data/minio
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/storage/health/live"]
-      interval: 30s
-      timeout: 20s
-      retries: 3
 
   hasura:
     image: hasura/graphql-engine:v1.3.0
@@ -61,7 +32,7 @@ services:
       PORT: 80
       HASURA_GRAPHQL_DATABASE_URL: postgres://sos:sos@postgres:5432/sos
       HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
-      HASURA_GRAPHQL_ADMIN_SECRET: myadminsupersecretkey
+      HASURA_GRAPHQL_ADMIN_SECRET: $HASURA_SECRET
 
       HASURA_GRAPHQL_AUTH_HOOK: http://sidecar/v1/api/authenticate
       HASURA_GRAPHQL_AUTH_HOOK_MODE: GET
@@ -73,32 +44,39 @@ services:
       TASK_STATUS_UPDATE_WEBHOOK: http://sidecar/v1/api/on-task-status-updates
       DELETED_ENTITIES_WEBHOOK: http://sidecar/v1/api/add-deleted-entities
 
+  ui:
+    image: jkhabra/sosapp-ui:latest
+    # build:
+    #   context: ./ui
+    #   dockerfile: Dockerfile-prod
+    environment:
+      PORT: 80
+      CLIENT_GRAPHQL_URL: "${HOSTNAME}/hasura/v1/graphql"
+      SERVER_GRAPHQL_URL: "${HOSTNAME}/hasura/v1/graphql"
+      STORAGE_API_URL: "${HOSTNAME}/uploads/v1/storage"
+
   sidecar:
-    build: ./sidecar
+    image: jkhabra/sosapp-sidecar:latest
+    # build:
+    #   context: ./sidecar
+    #   dockerfile: Dockerfile-prod
     environment:
       PORT: 80
       STORAGE_PORT: 9090
       DATABASE_URL: postgres://sos:sos@postgres:5432/sos
-      SOS_ADMIN_EMAILS: "admin@test.com"
-      STORAGE_GATEWAY_ENDPOINT: "http://localhost:5000/storage"
+      SOS_ADMIN_EMAILS: $ADMIN_EMAILS
       REDISCLOUD_SESSION_URL: redis://redis:6379
-    volumes:
-      - "./sidecar/:/app"
-      - /app/node_modules
-    depends_on:
-      - postgres
-      - redis
-      - hasura
-    command: yarn dev
+      STORAGE_GATEWAY_ENDPOINT: "${HOSTNAME}/storage"
+      NODE_ENV: production
 
-  ui:
-    build: ./ui
-    environment:
-      PORT: 80
-      CLIENT_GRAPHQL_URL: "http://localhost:5000/hasura/v1/graphql"
-      SERVER_GRAPHQL_URL: "http://localhost:5000/hasura/v1/graphql"
-      STORAGE_API_URL: "http://localhost:5000/uploads/v1/storage"
+  gateway:
+    image: jkhabra/sosapp-gateway:latest
+    # build: ./gateway
+    ports:
+      - $GATEWAY_PORT:80
+    depends_on:
+      - hasura
+      - ui
+      - minio
     volumes:
-      - ./ui:/app
-      - /app/node_modules
-    command: yarn dev
+      - ./gateway.conf:/etc/nginx/conf.d/default.conf

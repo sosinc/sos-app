@@ -7,16 +7,14 @@ export const {
   PORT = 4000,
   DATABASE_URL = "postgres://user:pass@postgres:5432/",
   GRAPHQL_LOGGER = true,
-  HOSTNAME = "localhost",
+  APP_HOSTNAME = "localhost",
 } = process.env;
 
 // IS PRODUCTION
 export const isProduction = NODE_ENV === "production";
 
 // WEB URL
-export const whitelist = isProduction
-  ? ["https://lab.channikhabra.com"]
-  : ["http://localhost:3000"];
+export const whitelist = isProduction ? ["https://app.sosinc.io"] : ["http://localhost:5000"];
 
 export const apolloCors = {
   credentials: true,

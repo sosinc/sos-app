@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next --port $PORT",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --port $PORT",
     "typecheck": "tsc --noEmit",
     "lint-styles": "stylelint 'src/**/*.scss'",
     "fmt-styles": "yarn lint-styles --fix",

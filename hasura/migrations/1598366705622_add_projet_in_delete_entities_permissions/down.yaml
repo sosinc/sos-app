@@ -14,7 +14,6 @@
     permission:
       columns:
       - description
-      - is_deleted
       - issue_link_template
       - logo
       - logo_square
@@ -61,8 +60,6 @@
                   _eq: X-Hasura-User-Id
         - organization_id:
             _eq: X-Hasura-Organization-Id
-        - is_deleted:
-            _ne: true
     role: user
     table:
       name: projects
@@ -137,11 +134,6 @@
         - project:
             organization_id:
               _eq: X-Hasura-Organization-Id
-        - is_deleted:
-            _ne: true
-        - project:
-            is_deleted:
-              _ne: true
     role: user
     table:
       name: teams

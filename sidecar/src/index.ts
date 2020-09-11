@@ -41,7 +41,7 @@ const createApp = async () => {
       .use(morgan("dev"))
       .use(bodyParser.json())
       .use(bodyParser.urlencoded({ extended: false }))
-      .use(cookieParser())
+      .use(cookieParser(config.EXPRESS_SESSION_SECRET))
       .use(useragent.express())
       .use(cors(config.corsOptions));
 
@@ -62,9 +62,8 @@ const createApp = async () => {
       cookie: {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 Week
-        secure: config.isProduction,
-        sameSite: config.isProduction ? "strict" : "none",
-        domain: config.isProduction ? config.HOSTNAME : undefined,
+        secure: false,
+        sameSite: config.isProduction ? "lax" : "none",
       },
       name: "sos.cookie",
       proxy: config.isProduction,

@@ -1,1 +1,2 @@
 endpoint: http://localhost:5000/hasura
+admin_secret: myadminsupersecretkey
