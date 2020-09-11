@@ -198,7 +198,7 @@ const InnerForm: React.FC<FormikProps<DailyTaskFormValues> & DailyTaskFormProps>
 
   return (
     <Form>
-      <Header onClose={p.onClose} onSubmit={p.submitForm} />
+      <Header onClose={p.onClose} onSubmit={p.submitForm} isSubmitting={p.isSubmitting} />
       <FieldArray name="taskUpdates" render={(props) => DailyTaskFields(dsfProps(props))} />
     </Form>
   );

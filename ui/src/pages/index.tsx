@@ -2,6 +2,8 @@ import classNames from 'classnames/bind';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/duck';
 
 import FullPageLayout from 'src/components/FullPageLayout';
 import LoginForm from 'src/components/LoginForm';
@@ -9,7 +11,6 @@ import Modal from 'src/components/Modal';
 import ResetPassword from 'src/components/ResetPassword';
 import WithUser from 'src/containers/WithUser';
 import { loginUserAction, resetPasswordAction, sendPasswordResetOTPAction } from 'src/duck/auth';
-import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
 
 import style from './index.module.scss';
@@ -17,7 +18,6 @@ import style from './index.module.scss';
 const c = classNames.bind(style);
 
 const Index = () => {
-  const user = currentUser();
   const [isModalOpen, setModalOpen] = useState(false);
   const [login] = useAsyncThunk(loginUserAction, {
     errorTitle: 'Login Failed',
@@ -48,10 +48,14 @@ const Index = () => {
     setModalOpen(false);
   };
 
+  const user = useSelector((state: RootState) => {
+    return state.auth.user;
+  });
+
   return (
     <WithUser
       inverted={true}
-      redirectPath={user && user.name === 'Admin' ? '/organizations' : '/dashboard'}
+      redirectPath={user && user.role.id === 'USER' ? '/dashboard' : '/organizations'}
     >
       <Head>
         <link rel="shortcut icon" href="/assets/images/sos-logo.svg" />
