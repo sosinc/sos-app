@@ -99,12 +99,13 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
             </div>
           </div>
         </div>
-
-        <Tippy content="Back">
-          <span>
-            <FaAngleLeft className={c('back-icon', formStep)} onClick={gotoStep1} />
-          </span>
-        </Tippy>
+        <div className={c('back-icon-container', formStep)} onClick={gotoStep1}>
+          <Tippy content="Back" placement="right-end">
+            <span>
+              <FaAngleLeft className={c('back-icon')} />
+            </span>
+          </Tippy>
+        </div>
       </form>
       <button
         className={c('button', { working: p.isSubmitting })}

@@ -25,7 +25,7 @@
   }
 }
 
-.back-icon {
+.back-icon-container {
   color: $color-text-dim2;
   cursor: pointer;
   height: 30px;
@@ -37,6 +37,11 @@
   &.step1 {
     display: none;
   }
+}
+
+.back-icon {
+  height: 30px;
+  width: 30px;
 }
 
 .2-step-swiper {

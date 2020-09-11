@@ -27,7 +27,7 @@ const Index = () => {
   const [resetPasswordOtp] = useAsyncThunk(sendPasswordResetOTPAction, {
     errorTitle: 'Failed to send OTP',
     rethrowError: true,
-    successTitle: 'OTP send successfully',
+    successTitle: 'We will send you an OTP',
   });
   const [resetPassword] = useAsyncThunk(resetPasswordAction, {
     errorTitle: 'Reset password failed',

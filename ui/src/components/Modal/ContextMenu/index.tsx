@@ -10,18 +10,19 @@ interface Props {
 
 const ContextMenu: React.FC<Props> = (p) => {
   return (
-    <Tippy
-      content={p.content}
-      className={p.className}
-      interactive={true}
-      visible={p.isOpen}
-      onClickOutside={p.onClose}
-      maxWidth="none"
-      placement="top"
-      arrow={true}
-    >
-      <div>{p.children}</div>
-    </Tippy>
+    <div className={p.className}>
+      <Tippy
+        content={p.content}
+        interactive={true}
+        visible={p.isOpen}
+        onClickOutside={p.onClose}
+        maxWidth="none"
+        placement="top"
+        arrow={true}
+      >
+        <div>{p.children}</div>
+      </Tippy>
+    </div>
   );
 };
 
