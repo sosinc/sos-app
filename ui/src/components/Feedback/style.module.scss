@@ -1,0 +1,102 @@
+@import 'src/scss/lib';
+
+.container {
+  color: $color-text-dim2;
+  display: flex;
+  flex-direction: column;
+  margin: 1em 0;
+
+  @media(max-width: $md) {
+    margin: 0.1em 0;
+  }
+}
+
+.form {
+  display: grid;
+  font: inherit;
+  grid-auto-rows: minmax(2em, auto);
+  grid-column-gap: 15px;
+  grid-row-gap: 2em;
+  grid-template-columns: 1fr 1fr;
+  max-width: 90vw;
+  padding: 2.5em;
+  position: relative;
+  width: 45em;
+
+  @media(max-width: $md) {
+    padding: 2em;
+    width: 35em;
+  }
+
+  @media(max-width: $sm) {
+    flex-direction: column;
+    padding: 1.6em;
+    width: 30em;
+  }
+}
+
+.title-container {
+  @extend %title-container;
+
+  grid-column: 1/3;
+  grid-row: 1;
+
+  @media(max-width: $md) {
+    margin-bottom: 0.5em;
+    padding-bottom: 1em;
+  }
+}
+
+.field-container {
+  display: grid;
+  grid-row-gap: 7px;
+}
+
+.first-name {
+  grid-column: 1;
+
+  @media(max-width: $sm) {
+    grid-column: 1/3;
+  }
+
+}
+
+.last-name {
+  grid-column: 2;
+
+  @media(max-width: $sm) {
+    grid-column: 1/3;
+  }
+}
+
+.email-container {
+  grid-column: 1/3;
+}
+
+.feedback-container {
+  grid-column: 1/3;
+}
+
+.field-title {
+  color: $color-text-dim2;
+  text-align: left;
+}
+
+.save-button {
+  @extend %save-button;
+
+  grid-column: 1/3;
+
+  @media(max-width: $sm) {
+    grid-column: 1/3;
+  }
+}
+
+.saving-in {
+  position: relative;
+
+  span {
+    @extend %working;
+    position: absolute;
+  }
+}
