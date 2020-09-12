@@ -32,7 +32,7 @@ const WithUser: React.FC<WithUserProps> = (p) => {
       <>
         <Head>
           <link rel="shortcut icon" href="/assets/images/sos-logo.svg" />
-          <title>{'Snake Oil Software - Loading...'}</title>
+          <title>{'SoS App - Snake Oil Software'}</title>
         </Head>
 
         <div className={c(s['loader-container'])}>

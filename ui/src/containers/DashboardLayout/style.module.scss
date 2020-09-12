@@ -178,11 +178,18 @@
     margin-top: auto;
   }
 
+  .feddback-container {
+    align-items: center;
+    color: $color-text-dim3;
+    display: flex;
+    justify-content: center;
+  }
+
   .feedback-icon {
-    background: url('/assets/images/feedback-icon.svg') 0 0 no-repeat;
-    height: 12px;
+    $size: 20px;
+    height: $size;
     margin-right: 8px;
-    width: 12px;
+    width: $size;
   }
 
   .feedback-text {
