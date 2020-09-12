@@ -17,11 +17,11 @@ import {
 } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
+import Feedback from 'src/components/Feedback';
 import SelectBox from 'src/components/Form/SelectBox';
 import ContextMenu from 'src/components/Modal/ContextMenu';
 import UserMenu from 'src/components/Modal/ContextMenu/UserMenu';
 import FallbackIcon from 'src/containers/FallbackIcon';
-import Feedback from 'src/components/Feedback';
 import WithUser from 'src/containers/WithUser';
 import { setCurrentOrgAction } from 'src/duck/auth';
 import { orgSelector } from 'src/duck/organizations';
@@ -244,7 +244,7 @@ const Index: React.FC<LayoutProps> = (p) => {
           <div className={c('section')}>{role !== 'USER' ? adminSection : userSection()}</div>
 
           <Modal onClose={() => setFeedbackOpen(false)} isOpen={isFeedbackOpen}>
-            <Feedback />
+            <Feedback onClose={() => setFeedbackOpen(false)} />
           </Modal>
 
           <div className={c('footer')}>
