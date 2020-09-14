@@ -1,13 +1,13 @@
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
+import { useState } from 'react';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
+import SaveButton from 'src/components/Form/SaveButton';
 import TextField from 'src/components/Form/TextField';
-/* import { Profile } from 'src/entities/Profile'; */
 
 import style from './style.module.scss';
-import { useRef } from 'react';
 
 const c = classNames.bind(style);
 
@@ -20,7 +20,10 @@ interface UpdateProfileProps {
 const CreateProfileForm: React.FC<FormikProps<UpdateProfileFormValues> & UpdateProfileProps> = (
   p,
 ) => {
-  const isImageUploading = useRef<boolean>(false);
+  const [uploadStatus, setUploadStatus] = useState<boolean>(false);
+  const hadleUploadStatus = (status: boolean) => {
+    setUploadStatus(status);
+  };
 
   return (
     <div className={c('profile-container')}>
@@ -37,7 +40,7 @@ const CreateProfileForm: React.FC<FormikProps<UpdateProfileFormValues> & UpdateP
               className={c('profile-pic')}
               type={'file'}
               name="profile_pic"
-              isUploading={isImageUploading}
+              uploadStatus={hadleUploadStatus}
             />
           </div>
 
@@ -46,18 +49,12 @@ const CreateProfileForm: React.FC<FormikProps<UpdateProfileFormValues> & UpdateP
             <TextField placeholder="Enter full name" type="name" name="fullname" />
           </div>
 
-          <button
-            className={c(
-              p.isSubmitting || isImageUploading.current ? 'disable-button' : 'save-button',
-            )}
-            type="submit"
-            disabled={p.isSubmitting || isImageUploading.current}
-          >
-            <div className={c({ 'saving-in': p.isSubmitting })}>
-              {p.isSubmitting ? 'Updating' : 'Update'}
-              <span />
-            </div>
-          </button>
+          <SaveButton
+            isSubmitting={p.isSubmitting}
+            isUploading={uploadStatus}
+            className={c('save-button')}
+            buttonText={'Update'}
+          />
         </form>
       </div>
     </div>

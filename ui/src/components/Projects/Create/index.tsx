@@ -3,13 +3,14 @@ import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { AiOutlineTeam } from 'react-icons/ai';
 import { MdAdd } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
+import SaveButton from 'src/components/Form/SaveButton';
 import SelectField from 'src/components/Form/SelectField';
 import TextAreaField from 'src/components/Form/TextAreaField';
 import TextField from 'src/components/Form/TextField';
@@ -35,7 +36,11 @@ interface Props {
 
 const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const isImageUploading = useRef<boolean>(false);
+  const [uploadStatus, setUploadStatus] = useState<boolean>(false);
+  const hadleUploadStatus = (status: boolean) => {
+    setUploadStatus(status);
+  };
+
   const [deleteProject] = useAsyncThunk(deleteProjectAction, {
     errorTitle: 'Failed to delete Project',
     rethrowError: true,
@@ -102,7 +107,7 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
             className={c('image-container')}
             type={'file'}
             name="logo_square"
-            isUploading={isImageUploading}
+            uploadStatus={hadleUploadStatus}
           />
         </div>
 
@@ -121,16 +126,11 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
         </div>
 
         {orgSelectField}
-        <button
+        <SaveButton
+          isSubmitting={p.isSubmitting}
+          isUploading={uploadStatus}
           className={c('save-button')}
-          type="submit"
-          disabled={p.isSubmitting || isImageUploading.current}
-        >
-          <div className={c({ 'saving-in': p.isSubmitting })}>
-            {p.isSubmitting ? 'Saving' : 'Save'}
-            <span />
-          </div>
-        </button>
+        />
       </form>
 
       {deleteButton}

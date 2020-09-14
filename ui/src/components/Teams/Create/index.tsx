@@ -2,13 +2,14 @@ import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { useRouter } from 'next/router';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { AiOutlineTeam } from 'react-icons/ai';
 import { MdDelete } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
+import SaveButton from 'src/components/Form/SaveButton';
 import SelectBox, { SelectFieldItem } from 'src/components/Form/SelectBox';
 import TextField from 'src/components/Form/TextField';
 import Listing, { ListingItemProps } from 'src/components/Listing';
@@ -32,7 +33,11 @@ interface CreateTeamProps {
 
 const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamProps> = (p) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const isImageUploading = useRef<boolean>(false);
+  const [uploadStatus, setUploadStatus] = useState<boolean>(false);
+  const hadleUploadStatus = (status: boolean) => {
+    setUploadStatus(status);
+  };
+
   const [deleteTeam] = useAsyncThunk(deleteTeamAction, {
     errorTitle: 'Failed to delete team',
     rethrowError: true,
@@ -81,7 +86,7 @@ const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamPro
                 className={c('image-container')}
                 type={'file'}
                 name="logo_square"
-                isUploading={isImageUploading}
+                uploadStatus={hadleUploadStatus}
               />
             </div>
 
@@ -98,16 +103,11 @@ const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamPro
               <TextField placeholder="Enter pr link template" type="text" name="pr_link_template" />
             </div>
 
-            <button
+            <SaveButton
+              isSubmitting={p.isSubmitting}
+              isUploading={uploadStatus}
               className={c('save-button')}
-              type="submit"
-              disabled={p.isSubmitting || isImageUploading.current}
-            >
-              <div className={c({ 'saving-in': p.isSubmitting })}>
-                {p.isSubmitting ? 'Saving' : 'Save'}
-                <span />
-              </div>
-            </button>
+            />
           </form>
         </div>
 

@@ -1,10 +1,11 @@
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { useRouter } from 'next/router';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
+import SaveButton from 'src/components/Form/SaveButton';
 import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import WarningModal from 'src/components/Modal/Warning';
@@ -31,7 +32,10 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
   p,
 ) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const isImageUploading = useRef<boolean>(false);
+  const [uploadStatus, setUploadStatus] = useState<boolean>(false);
+  const hadleUploadStatus = (status: boolean) => {
+    setUploadStatus(status);
+  };
   const [deleteEmployee] = useAsyncThunk(deleteEmployeeAction, {
     errorTitle: 'Failed to delete Employee',
     rethrowError: true,
@@ -94,7 +98,7 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
                 className={c('image-container')}
                 type={'file'}
                 name="headshot"
-                isUploading={isImageUploading}
+                uploadStatus={hadleUploadStatus}
               />
             </div>
 
@@ -123,16 +127,11 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
               />
             </div>
 
-            <button
+            <SaveButton
+              isSubmitting={p.isSubmitting}
+              isUploading={uploadStatus}
               className={c('save-button')}
-              type="submit"
-              disabled={p.isSubmitting || isImageUploading.current}
-            >
-              <div className={c({ 'saving-in': p.isSubmitting })}>
-                {p.isSubmitting ? 'Saving' : 'Save'}
-                <span />
-              </div>
-            </button>
+            />
           </form>
         </div>
         {deleteButton}

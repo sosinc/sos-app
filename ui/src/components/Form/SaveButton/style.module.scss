@@ -1,0 +1,25 @@
+@import 'src/scss/lib';
+
+%main-button {
+  @extend %save-button;
+}
+
+.save-button {
+  @extend %main-button;
+}
+
+.disable-button {
+  @extend %main-button;
+
+  background: $color-text-dim3;
+  cursor: default;
+}
+
+.saving-in {
+  position: relative;
+
+  span {
+    @extend %working;
+    position: absolute;
+  }
+}

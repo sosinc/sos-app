@@ -1,9 +1,10 @@
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
-import { useRef } from 'react';
+import { useState } from 'react';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
+import SaveButton from 'src/components/Form/SaveButton';
 import TextField from 'src/components/Form/TextField';
 import { Organization } from 'src/entities/Organizations';
 import style from './style.module.scss';
@@ -17,7 +18,10 @@ interface CreateOrgProps {
 }
 
 const CreateOrgForm: React.FC<FormikProps<CreateOrgFormValues> & CreateOrgProps> = (p) => {
-  const isImageUploading = useRef<boolean>(false);
+  const [uploadStatus, setUploadStatus] = useState<boolean>(false);
+  const hadleUploadStatus = (status: boolean) => {
+    setUploadStatus(status);
+  };
 
   return (
     <div className={c('org-container')}>
@@ -38,7 +42,7 @@ const CreateOrgForm: React.FC<FormikProps<CreateOrgFormValues> & CreateOrgProps>
               className={c('org-logo')}
               type={'file'}
               name="square_logo"
-              isUploading={isImageUploading}
+              uploadStatus={hadleUploadStatus}
             />
           </div>
 
@@ -48,20 +52,15 @@ const CreateOrgForm: React.FC<FormikProps<CreateOrgFormValues> & CreateOrgProps>
               className={c('org-banner')}
               type="file"
               name="banner"
-              isUploading={isImageUploading}
+              uploadStatus={hadleUploadStatus}
             />
           </div>
 
-          <button
+          <SaveButton
+            isSubmitting={p.isSubmitting}
+            isUploading={uploadStatus}
             className={c('save-button')}
-            type="submit"
-            disabled={p.isSubmitting || isImageUploading.current}
-          >
-            <div className={c({ 'saving-in': p.isSubmitting })}>
-              {p.isSubmitting ? 'Saving' : 'Save'}
-              <span />
-            </div>
-          </button>
+          />
         </form>
       </div>
     </div>
