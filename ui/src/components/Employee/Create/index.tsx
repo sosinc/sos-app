@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
@@ -31,6 +31,7 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
   p,
 ) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const isImageUploading = useRef<boolean>(false);
   const [deleteEmployee] = useAsyncThunk(deleteEmployeeAction, {
     errorTitle: 'Failed to delete Employee',
     rethrowError: true,
@@ -89,7 +90,12 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
 
             <div className={c('logo', 'field-container')}>
               <span className={c('field-title')}>Head Shot</span>
-              <ImageUploadField className={c('image-container')} type={'file'} name="headshot" />
+              <ImageUploadField
+                className={c('image-container')}
+                type={'file'}
+                name="headshot"
+                isUploading={isImageUploading}
+              />
             </div>
 
             <div className={c('ecode-container', 'field-container')}>
@@ -117,7 +123,11 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
               />
             </div>
 
-            <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+            <button
+              className={c('save-button')}
+              type="submit"
+              disabled={p.isSubmitting || isImageUploading.current}
+            >
               <div className={c({ 'saving-in': p.isSubmitting })}>
                 {p.isSubmitting ? 'Saving' : 'Save'}
                 <span />

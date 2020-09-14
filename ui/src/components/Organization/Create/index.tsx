@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
+import { useRef } from 'react';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
@@ -16,6 +17,8 @@ interface CreateOrgProps {
 }
 
 const CreateOrgForm: React.FC<FormikProps<CreateOrgFormValues> & CreateOrgProps> = (p) => {
+  const isImageUploading = useRef<boolean>(false);
+
   return (
     <div className={c('org-container')}>
       <div className={c({ skeleton: p.isFetchingOrganization })}>
@@ -31,15 +34,29 @@ const CreateOrgForm: React.FC<FormikProps<CreateOrgFormValues> & CreateOrgProps>
 
           <div className={c('image-container-logo', 'field-container')}>
             <span className={c('field-title')}>Logo</span>
-            <ImageUploadField className={c('org-logo')} type={'file'} name="square_logo" />
+            <ImageUploadField
+              className={c('org-logo')}
+              type={'file'}
+              name="square_logo"
+              isUploading={isImageUploading}
+            />
           </div>
 
           <div className={c('image-container-banner', 'field-container')}>
             <span className={c('field-title')}>Banner</span>
-            <ImageUploadField className={c('org-banner')} type="file" name="banner" />
+            <ImageUploadField
+              className={c('org-banner')}
+              type="file"
+              name="banner"
+              isUploading={isImageUploading}
+            />
           </div>
 
-          <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+          <button
+            className={c('save-button')}
+            type="submit"
+            disabled={p.isSubmitting || isImageUploading.current}
+          >
             <div className={c({ 'saving-in': p.isSubmitting })}>
               {p.isSubmitting ? 'Saving' : 'Save'}
               <span />

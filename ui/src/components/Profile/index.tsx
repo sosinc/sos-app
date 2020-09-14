@@ -7,6 +7,7 @@ import TextField from 'src/components/Form/TextField';
 /* import { Profile } from 'src/entities/Profile'; */
 
 import style from './style.module.scss';
+import { useRef } from 'react';
 
 const c = classNames.bind(style);
 
@@ -19,6 +20,8 @@ interface UpdateProfileProps {
 const CreateProfileForm: React.FC<FormikProps<UpdateProfileFormValues> & UpdateProfileProps> = (
   p,
 ) => {
+  const isImageUploading = useRef<boolean>(false);
+
   return (
     <div className={c('profile-container')}>
       <div className={c({ skeleton: p.isFetchingProfile })}>
@@ -30,7 +33,12 @@ const CreateProfileForm: React.FC<FormikProps<UpdateProfileFormValues> & UpdateP
 
           <div className={c('image-container-logo', 'field-container')}>
             <span className={c('field-title')}>Profile Picture</span>
-            <ImageUploadField className={c('profile-pic')} type={'file'} name="profile_pic" />
+            <ImageUploadField
+              className={c('profile-pic')}
+              type={'file'}
+              name="profile_pic"
+              isUploading={isImageUploading}
+            />
           </div>
 
           <div className={c('name-container', 'field-container')}>
@@ -38,7 +46,13 @@ const CreateProfileForm: React.FC<FormikProps<UpdateProfileFormValues> & UpdateP
             <TextField placeholder="Enter full name" type="name" name="fullname" />
           </div>
 
-          <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+          <button
+            className={c(
+              p.isSubmitting || isImageUploading.current ? 'disable-button' : 'save-button',
+            )}
+            type="submit"
+            disabled={p.isSubmitting || isImageUploading.current}
+          >
             <div className={c({ 'saving-in': p.isSubmitting })}>
               {p.isSubmitting ? 'Updating' : 'Update'}
               <span />

@@ -2,6 +2,7 @@ import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { connect, FormikContextType, getIn } from 'formik';
 import { ChangeEvent, useState } from 'react';
+import { MutableRefObject } from 'react';
 import { MdFileUpload } from 'react-icons/md';
 
 import ErrorMessage from 'src/components/Form/ErrorMessage';
@@ -16,6 +17,7 @@ interface Props {
   name: string;
   className?: string;
   type?: string;
+  isUploading: MutableRefObject<boolean>;
 }
 
 const Placeholder: React.FC<{ isUploading: boolean }> = (p) => (
@@ -57,6 +59,7 @@ const ImageUploadField: React.FC<Props & { formik: FormikContextType<{}> }> = ({
     }
 
     setIsUploading(true);
+    p.isUploading.current = true;
     try {
       const uploadedFilePath = await uploadFile(file, (progress) => {
         setUploadProgress(progress);
@@ -68,6 +71,7 @@ const ImageUploadField: React.FC<Props & { formik: FormikContextType<{}> }> = ({
     }
 
     setIsUploading(false);
+    p.isUploading.current = false;
   };
 
   const Content = () =>

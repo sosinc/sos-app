@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { AiOutlineTeam } from 'react-icons/ai';
 import { MdAdd } from 'react-icons/md';
 import { useSelector } from 'react-redux';
@@ -35,6 +35,7 @@ interface Props {
 
 const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const isImageUploading = useRef<boolean>(false);
   const [deleteProject] = useAsyncThunk(deleteProjectAction, {
     errorTitle: 'Failed to delete Project',
     rethrowError: true,
@@ -97,7 +98,12 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
 
         <div className={c('square-logo', 'field-container')}>
           <span className={c('field-title')}>Square Logo</span>
-          <ImageUploadField className={c('image-container')} type={'file'} name="logo_square" />
+          <ImageUploadField
+            className={c('image-container')}
+            type={'file'}
+            name="logo_square"
+            isUploading={isImageUploading}
+          />
         </div>
 
         <div className={c('issue-link-container', 'field-container')}>
@@ -115,7 +121,11 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
         </div>
 
         {orgSelectField}
-        <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+        <button
+          className={c('save-button')}
+          type="submit"
+          disabled={p.isSubmitting || isImageUploading.current}
+        >
           <div className={c({ 'saving-in': p.isSubmitting })}>
             {p.isSubmitting ? 'Saving' : 'Save'}
             <span />

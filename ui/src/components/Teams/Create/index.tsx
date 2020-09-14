@@ -2,7 +2,7 @@ import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { AiOutlineTeam } from 'react-icons/ai';
 import { MdDelete } from 'react-icons/md';
 import { useSelector } from 'react-redux';
@@ -32,6 +32,7 @@ interface CreateTeamProps {
 
 const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamProps> = (p) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const isImageUploading = useRef<boolean>(false);
   const [deleteTeam] = useAsyncThunk(deleteTeamAction, {
     errorTitle: 'Failed to delete team',
     rethrowError: true,
@@ -76,7 +77,12 @@ const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamPro
             </div>
             <div className={c('square-logo', 'field-container')}>
               <span className={c('field-title')}>Square Logo</span>
-              <ImageUploadField className={c('image-container')} type={'file'} name="logo_square" />
+              <ImageUploadField
+                className={c('image-container')}
+                type={'file'}
+                name="logo_square"
+                isUploading={isImageUploading}
+              />
             </div>
 
             <div className={c('issue-link-container', 'field-container')}>
@@ -92,7 +98,11 @@ const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamPro
               <TextField placeholder="Enter pr link template" type="text" name="pr_link_template" />
             </div>
 
-            <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
+            <button
+              className={c('save-button')}
+              type="submit"
+              disabled={p.isSubmitting || isImageUploading.current}
+            >
               <div className={c({ 'saving-in': p.isSubmitting })}>
                 {p.isSubmitting ? 'Saving' : 'Save'}
                 <span />
