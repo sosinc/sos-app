@@ -59,7 +59,7 @@ const Index = () => {
     >
       <Head>
         <link rel="shortcut icon" href="/assets/images/sos-logo.svg" />
-        <title>{'SoS App - Snake Oil Software'}</title>
+        <title>{'SoS App - SOS'}</title>
       </Head>
 
       <FullPageLayout className={c('container')}>

@@ -50,7 +50,7 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout
-      title={'Dashboard - Snake Oil Software'}
+      title={'Dashboard - SOS App'}
       Header={() => <Header openSlidebar={() => setOpen(true)} />}
     >
       <SlideBar
