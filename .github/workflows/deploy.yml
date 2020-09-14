@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - feature/setup-production-build
+      - master
 
 jobs:
   build-ui-docker-image:
