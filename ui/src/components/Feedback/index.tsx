@@ -64,13 +64,13 @@ export interface FeedbackFormValues {
 const validationSchema = Yup.object().shape({
   description: Yup.string()
     .min(2, 'Must be 2 characters or more')
-    .max(50, 'Must be 50 characters or less')
+    .max(500, 'Must be 500 characters or less')
     .trim()
     .required('Required'),
   email: Yup.string().email().required('Required'),
   first_name: Yup.string()
     .min(2, 'Must be 2 characters or more')
-    .max(500, 'Must be 500 characters or less')
+    .max(50, 'Must be 50 characters or less')
     .trim()
     .required('Required'),
   last_name: Yup.string().max(50, 'Must be 50 characters or less').trim(),
