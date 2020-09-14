@@ -2,6 +2,7 @@ import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { Formik, FormikProps } from 'formik';
 import { useState } from 'react';
+import { KeyboardEvent } from 'react';
 import { FaAngleLeft } from 'react-icons/fa';
 // import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
@@ -49,6 +50,12 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
     untouchStep2();
   };
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.keyCode === 13) {
+      gotoNextStep();
+    }
+  };
+
   const otpMessage =
     'We will send you a otp to verify your email account and fill the otp and your new password';
 
@@ -71,7 +78,12 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
           </div>
 
           <div className={c('2-step-swiper', c(formStep))}>
-            <TextField placeholder="Enter your registered email" type="email" name="email" />
+            <TextField
+              placeholder="Enter your registered email"
+              type="email"
+              name="email"
+              onkeyDown={handleKeyDown}
+            />
 
             <div className={c('password-container')}>
               <div className={c('password-fields')}>
@@ -81,17 +93,19 @@ const ResetPassword: React.FC<FormikProps<ResetFormValues> & Pick<Props, 'onSend
                   type="password"
                   name="password"
                   tabIndex={2}
+                  onkeyDown={handleKeyDown}
                 />
               </div>
             </div>
           </div>
         </div>
-
-        <Tippy content="Back">
-          <span>
-            <FaAngleLeft className={c('back-icon', formStep)} onClick={gotoStep1} />
-          </span>
-        </Tippy>
+        <div className={c('back-icon-container', formStep)} onClick={gotoStep1}>
+          <Tippy content="Back" placement="right-end">
+            <span>
+              <FaAngleLeft className={c('back-icon')} />
+            </span>
+          </Tippy>
+        </div>
       </form>
       <button
         className={c('button', { working: p.isSubmitting })}

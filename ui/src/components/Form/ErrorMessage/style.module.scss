@@ -1,7 +1,13 @@
 @import 'src/scss/lib';
 
-.error-icon {
+.error-icon-container {
   @extend %error-icon-outer;
 
   top: calc(50% - 10px);
+}
+
+.error-icon {
+  $size: 20px;
+  height: $size;
+  width: $size;
 }

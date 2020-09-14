@@ -34,7 +34,7 @@ export default () => {
   };
 
   return (
-    <DashboardLayout title={'Snake Oil Software - Profile'} Header={Header}>
+    <DashboardLayout title={'Profile - Snake Oil Software'} Header={Header}>
       <OuterForm onSubmit={handleSubmit} values={formValues} />
     </DashboardLayout>
   );

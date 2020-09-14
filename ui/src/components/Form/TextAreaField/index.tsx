@@ -1,6 +1,7 @@
 import c from 'classnames';
 import { connect, FormikContextType, getIn } from 'formik';
 import { MutableRefObject } from 'react';
+import ErrorMessage from 'src/components/Form/ErrorMessage';
 
 import s from './style.module.scss';
 
@@ -38,6 +39,8 @@ const TextAreaField: React.FC<TextAreaFieldProps & { formik: FormikContextType<{
         cols={p.cols}
         {...inputProps}
       />
+
+      <ErrorMessage error={error} />
     </div>
   );
 };

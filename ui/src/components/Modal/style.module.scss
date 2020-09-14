@@ -31,8 +31,14 @@
   box-shadow: $color-shadowbox-shadow 0 4px 78px;
   display: flex;
   flex-direction: column;
+  min-width: 480px;
   position: relative;
-  width: 480px;
+  width: auto;
+
+  @media(max-width: $md) {
+    min-width: 380px;
+  }
+
 }
 
 .back-icon-container {

@@ -1,9 +1,13 @@
+import c from 'classnames';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from 'src/duck';
 import { AuthState, fetchCurrentUser } from 'src/duck/auth';
+
+import s from './style.module.scss';
 
 interface WithUserProps {
   children: ReactNode;
@@ -24,7 +28,18 @@ const WithUser: React.FC<WithUserProps> = (p) => {
   }, []);
 
   if (isFetchingUser) {
-    return <p>Logging in...</p>;
+    return (
+      <>
+        <Head>
+          <link rel="shortcut icon" href="/assets/images/sos-logo.svg" />
+          <title>{'SoS App - Snake Oil Software'}</title>
+        </Head>
+
+        <div className={c(s['loader-container'])}>
+          <img className={c(s['super-logo'])} src="/assets/images/sos-logo.svg" alt="O" />
+        </div>
+      </>
+    );
   }
 
   if ((user && p.inverted) || (!user && !p.inverted)) {

@@ -41,3 +41,12 @@
 .cancel-button {
   @extend %slide-bar-button;
 }
+
+.saving-in {
+  position: relative;
+
+  span {
+    @extend %working;
+    position: absolute;
+  }
+}

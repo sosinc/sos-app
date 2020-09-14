@@ -54,6 +54,7 @@ services:
       CLIENT_GRAPHQL_URL: "${HOSTNAME}/hasura/v1/graphql"
       SERVER_GRAPHQL_URL: "${HOSTNAME}/hasura/v1/graphql"
       STORAGE_API_URL: "${HOSTNAME}/uploads/v1/storage"
+      FEEDBACK_FORM_URL: "https://formspree.io/moqpaazn"
 
   sidecar:
     image: jkhabra/sosapp-sidecar:latest

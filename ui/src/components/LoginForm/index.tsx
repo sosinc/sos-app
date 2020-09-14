@@ -2,6 +2,7 @@ import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { Formik, FormikProps } from 'formik';
 import { useRef, useState } from 'react';
+import { KeyboardEvent } from 'react';
 import { FaAngleLeft } from 'react-icons/fa';
 import * as Yup from 'yup';
 
@@ -47,6 +48,12 @@ const Login: React.FC<FormikProps<LoginFormValues> & { onResetPassword: () => vo
     untouchStep2();
   };
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.keyCode === 13) {
+      gotoNextStep();
+    }
+  };
+
   const formHasError = hasFormError(p);
 
   const buttonText = p.isSubmitting ? (
@@ -69,6 +76,7 @@ const Login: React.FC<FormikProps<LoginFormValues> & { onResetPassword: () => vo
                 placeholder="> enter your work email"
                 type="email"
                 name="email"
+                onkeyDown={handleKeyDown}
               />
               <div className={c('password')}>
                 <Tippy content="Back">
@@ -82,6 +90,7 @@ const Login: React.FC<FormikProps<LoginFormValues> & { onResetPassword: () => vo
                   placeholder="*******"
                   type="password"
                   name="password"
+                  onkeyDown={handleKeyDown}
                   tabIndex={1}
                 />
               </div>

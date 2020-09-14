@@ -9,6 +9,7 @@ import {
   MdBusiness,
   MdClose,
   MdFolder,
+  MdForum,
   MdKeyboardArrowDown,
   MdKeyboardArrowRight,
   MdMenu,
@@ -16,6 +17,7 @@ import {
 } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
+import Feedback from 'src/components/Feedback';
 import SelectBox from 'src/components/Form/SelectBox';
 import ContextMenu from 'src/components/Modal/ContextMenu';
 import UserMenu from 'src/components/Modal/ContextMenu/UserMenu';
@@ -29,6 +31,8 @@ import { Project } from 'src/entities/Project';
 import { Team } from 'src/entities/Team';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
+
+import Modal from 'src/components/Modal';
 
 import style from './style.module.scss';
 
@@ -164,6 +168,7 @@ const OrgSelectBox: React.FC<{ currentOrg?: Organization }> = ({ currentOrg: o }
 
 const Index: React.FC<LayoutProps> = (p) => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
+  const [isFeedbackOpen, setFeedbackOpen] = useState(false);
   const toggleUserMenu = () => setIsUserMenuOpen(!isUserMenuOpen);
   const hideUserMenu = () => setIsUserMenuOpen(false);
   const [isBurgerMenuOpen, setBurgerMenu] = useState<boolean>(false);
@@ -238,9 +243,15 @@ const Index: React.FC<LayoutProps> = (p) => {
 
           <div className={c('section')}>{role !== 'USER' ? adminSection : userSection()}</div>
 
+          <Modal onClose={() => setFeedbackOpen(false)} isOpen={isFeedbackOpen}>
+            <Feedback onClose={() => setFeedbackOpen(false)} />
+          </Modal>
+
           <div className={c('footer')}>
-            <span className={c('feedback-icon')} />
-            <a className={c('feedback-text')}>Send Feedback</a>
+            <span className={c('feddback-container')} onClick={() => setFeedbackOpen(true)}>
+              <MdForum className={c('feedback-icon')} />
+              <span className={c('feedback-text')}>Send Feedback</span>
+            </span>
           </div>
         </div>
 
