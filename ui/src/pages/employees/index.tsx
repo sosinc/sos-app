@@ -6,8 +6,8 @@ import { MdAdd } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
 import Listing, { ListingItemProps } from 'src/components/Listing';
-import config from 'src/config';
 import NoItemsFound from 'src/components/NoItemsFound';
+import config from 'src/config';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { employeeSelector, fetchEmployees } from 'src/duck/employees';
 import { useQuery } from 'src/lib/asyncHooks';

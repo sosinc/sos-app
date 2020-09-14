@@ -171,8 +171,6 @@ const TeamMembers = (p: { team: Team; employees: Employee[]; isFetchingEmployees
     const member = p.employees.find((e: Employee) => e.id === item?.id);
 
     if (!member) {
-      // tslint:disable-next-line:no-console
-      // console.warn('Failed to add employee');
       return;
     }
 

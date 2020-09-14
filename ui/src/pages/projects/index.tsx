@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { MdAdd, MdFolder } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
-import config from 'src/config';
 import Listing, { ListingItemProps } from 'src/components/Listing';
 import NoItemsFound from 'src/components/NoItemsFound';
+import config from 'src/config';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { fetchProjects, projectSelector } from 'src/duck/projects';
 import { useQuery } from 'src/lib/asyncHooks';

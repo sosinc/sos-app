@@ -6,10 +6,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'src/duck';
 
 import FullPageLayout from 'src/components/FullPageLayout';
-import config from 'src/config';
 import LoginForm from 'src/components/LoginForm';
 import Modal from 'src/components/Modal';
 import ResetPassword from 'src/components/ResetPassword';
+import config from 'src/config';
 import WithUser from 'src/containers/WithUser';
 import { loginUserAction, resetPasswordAction, sendPasswordResetOTPAction } from 'src/duck/auth';
 import { useAsyncThunk } from 'src/lib/asyncHooks';

@@ -17,7 +17,7 @@ const FeedbackForm: React.FC<FormikProps<FeedbackFormValues>> = (p) => {
         <div className={c('title-container')}>
           <h2>Feedback</h2>
           <span className={c('sub-title')}>
-            Send your complains, suggestions, or feature requests
+            Send your complaints, suggestions, or feature requests
           </span>
         </div>
 
@@ -64,7 +64,7 @@ export interface FeedbackFormValues {
 const validationSchema = Yup.object().shape({
   description: Yup.string()
     .min(2, 'Must be 2 characters or more')
-    .max(50, 'Must be 50 characters or less')
+    .max(500, 'Must be 500 characters or less')
     .trim()
     .required('Required'),
   email: Yup.string().email().required('Required'),
