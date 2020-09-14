@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
 import CreateEmployee, { CreateEmployeeFormValues } from 'src/components/Employee/Create';
+import config from 'src/config';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
 import { designationSelector, fetchDesignations } from 'src/duck/designations';
@@ -103,7 +104,7 @@ const EmployeeDetails: React.FC<FormikValues> = () => {
 
 export default () => {
   return (
-    <DashboardLayout title={'Organization - Snake Oil Software'} Header={Header}>
+    <DashboardLayout title={`Employee - ${config.appName}`} Header={Header}>
       <EmployeeDetails />
     </DashboardLayout>
   );

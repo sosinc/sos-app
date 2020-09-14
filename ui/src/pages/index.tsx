@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'src/duck';
 
 import FullPageLayout from 'src/components/FullPageLayout';
+import config from 'src/config';
 import LoginForm from 'src/components/LoginForm';
 import Modal from 'src/components/Modal';
 import ResetPassword from 'src/components/ResetPassword';
@@ -59,7 +60,7 @@ const Index = () => {
     >
       <Head>
         <link rel="shortcut icon" href="/assets/images/sos-logo.svg" />
-        <title>{'SoS App - SOS'}</title>
+        <title>{config.appName}</title>
       </Head>
 
       <FullPageLayout className={c('container')}>
@@ -78,7 +79,7 @@ const Index = () => {
         <div className={c('content')}>
           <span className={c('brand-name')}>
             <img className={c('super-logo')} src="/assets/images/sos-logo.svg" alt="O" />
-            <h4>Snake Oil Software</h4>
+            <h4>SoS App</h4>
           </span>
 
           <span className={c('hero')}>

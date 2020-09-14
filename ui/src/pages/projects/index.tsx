@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { MdAdd, MdFolder } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
+import config from 'src/config';
 import Listing, { ListingItemProps } from 'src/components/Listing';
 import NoItemsFound from 'src/components/NoItemsFound';
 import DashboardLayout from 'src/containers/DashboardLayout';
@@ -72,7 +73,7 @@ const Index = () => {
 };
 
 export default () => (
-  <DashboardLayout title={'Projects - Snake Oil Software'} Header={Header}>
+  <DashboardLayout title={`Projects - ${config.appName}`} Header={Header}>
     <Index />
   </DashboardLayout>
 );

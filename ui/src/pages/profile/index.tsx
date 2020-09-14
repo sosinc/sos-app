@@ -1,5 +1,7 @@
 import { FormikHelpers } from 'formik';
+
 import OuterForm, { UpdateProfileFormValues } from 'src/components/Profile';
+import config from 'src/config';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { updateProfileAction } from 'src/duck/auth';
 import { currentUser } from 'src/entities/User/selectors';
@@ -34,7 +36,7 @@ export default () => {
   };
 
   return (
-    <DashboardLayout title={'Profile - Snake Oil Software'} Header={Header}>
+    <DashboardLayout title={`Profile - ${config.appName}`} Header={Header}>
       <OuterForm onSubmit={handleSubmit} values={formValues} />
     </DashboardLayout>
   );

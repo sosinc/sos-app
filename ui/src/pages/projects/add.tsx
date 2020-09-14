@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 
 import CreateProject, { CreateProjectFormValues } from 'src/components/Projects/Create';
+import config from 'src/config';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
 import { createProjectAction } from 'src/duck/projects';
@@ -74,7 +75,7 @@ const AddProject: React.FC<FormikValues> = () => {
 
 export default () => {
   return (
-    <DashboardLayout title={'Projects - Snake Oil Software'} Header={Header}>
+    <DashboardLayout title={`Project - ${config.appName}`} Header={Header}>
       <AddProject />
     </DashboardLayout>
   );

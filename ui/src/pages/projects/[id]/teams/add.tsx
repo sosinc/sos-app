@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { useSelector } from 'react-redux';
+import config from 'src/config';
 import CreateTeam, { CreateTeamFormValues } from 'src/components/Teams/Create';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
@@ -70,7 +71,7 @@ const AddTeam: React.FC<FormikValues> = () => {
 
 export default () => {
   return (
-    <DashboardLayout title={'Teams - Snake Oil Software'} Header={Header}>
+    <DashboardLayout title={`Team - ${config.appName}`} Header={Header}>
       <AddTeam />
     </DashboardLayout>
   );

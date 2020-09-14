@@ -6,6 +6,7 @@ import { MdAdd } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
 import Listing, { ListingItemProps } from 'src/components/Listing';
+import config from 'src/config';
 import NoItemsFound from 'src/components/NoItemsFound';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { employeeSelector, fetchEmployees } from 'src/duck/employees';
@@ -73,7 +74,7 @@ const Index = () => {
 };
 
 export default () => (
-  <DashboardLayout title={'Employees - Snake Oil Software'} Header={Header}>
+  <DashboardLayout title={`Employees - ${config.appName}`} Header={Header}>
     <Index />
   </DashboardLayout>
 );

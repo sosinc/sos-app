@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 
 import SlideBar from 'src/components/SlideBar';
+import config from 'src/config';
 import AddDailyTasksForm from 'src/components/Tasks/AddDailyTasksForm';
 import DailyTasks from 'src/components/Tasks/DailyTasks';
 import TeamActivity from 'src/components/Tasks/TeamActivity';
@@ -50,7 +51,7 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout
-      title={'Dashboard - SOS App'}
+      title={`Dashboard - ${config.appName}`}
       Header={() => <Header openSlidebar={() => setOpen(true)} />}
     >
       <SlideBar

@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
 import CreateTeam, { CreateTeamFormValues } from 'src/components/Teams/Create';
+import config from 'src/config';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
 import { employeeSelector, fetchEmployees } from 'src/duck/employees';
@@ -96,7 +97,7 @@ export default () => {
 
   return (
     <DashboardLayout
-      title={'Teams - Snake Oil Software'}
+      title={`Team - ${config.appName}`}
       Header={() => <Header teamId={teamId} projectId={projectId} />}
     >
       <TeamDetails teamId={teamId} projectId={projectId} />

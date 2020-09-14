@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { ReactNode, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import config from 'src/config';
 import { RootState } from 'src/duck';
 import { AuthState, fetchCurrentUser } from 'src/duck/auth';
 
@@ -32,7 +33,7 @@ const WithUser: React.FC<WithUserProps> = (p) => {
       <>
         <Head>
           <link rel="shortcut icon" href="/assets/images/sos-logo.svg" />
-          <title>{'SoS App - Snake Oil Software'}</title>
+          <title>{`${config.appName}`}</title>
         </Head>
 
         <div className={c(s['loader-container'])}>
