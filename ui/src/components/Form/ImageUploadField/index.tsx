@@ -16,7 +16,7 @@ interface Props {
   name: string;
   className?: string;
   type?: string;
-  uploadStatus: any;
+  uploadStatus: (status: boolean) => void;
 }
 
 const Placeholder: React.FC<{ isUploading: boolean }> = (p) => (

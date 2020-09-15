@@ -18,9 +18,10 @@ interface CreateOrgProps {
 }
 
 const CreateOrgForm: React.FC<FormikProps<CreateOrgFormValues> & CreateOrgProps> = (p) => {
-  const [uploadStatus, setUploadStatus] = useState<boolean>(false);
-  const hadleUploadStatus = (status: boolean) => {
-    setUploadStatus(status);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  const handleUploading = (status: boolean) => {
+    setIsUploading(status);
   };
 
   return (
@@ -42,7 +43,7 @@ const CreateOrgForm: React.FC<FormikProps<CreateOrgFormValues> & CreateOrgProps>
               className={c('org-logo')}
               type={'file'}
               name="square_logo"
-              uploadStatus={hadleUploadStatus}
+              uploadStatus={handleUploading}
             />
           </div>
 
@@ -52,13 +53,13 @@ const CreateOrgForm: React.FC<FormikProps<CreateOrgFormValues> & CreateOrgProps>
               className={c('org-banner')}
               type="file"
               name="banner"
-              uploadStatus={hadleUploadStatus}
+              uploadStatus={handleUploading}
             />
           </div>
 
           <SaveButton
             isSubmitting={p.isSubmitting}
-            isUploading={uploadStatus}
+            isUploading={isUploading}
             className={c('save-button')}
           />
         </form>

@@ -20,9 +20,9 @@ interface UpdateProfileProps {
 const CreateProfileForm: React.FC<FormikProps<UpdateProfileFormValues> & UpdateProfileProps> = (
   p,
 ) => {
-  const [uploadStatus, setUploadStatus] = useState<boolean>(false);
-  const hadleUploadStatus = (status: boolean) => {
-    setUploadStatus(status);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const handleUploading = (status: boolean) => {
+    setIsUploading(status);
   };
 
   return (
@@ -40,7 +40,7 @@ const CreateProfileForm: React.FC<FormikProps<UpdateProfileFormValues> & UpdateP
               className={c('profile-pic')}
               type={'file'}
               name="profile_pic"
-              uploadStatus={hadleUploadStatus}
+              uploadStatus={handleUploading}
             />
           </div>
 
@@ -51,7 +51,7 @@ const CreateProfileForm: React.FC<FormikProps<UpdateProfileFormValues> & UpdateP
 
           <SaveButton
             isSubmitting={p.isSubmitting}
-            isUploading={uploadStatus}
+            isUploading={isUploading}
             className={c('save-button')}
             buttonText={'Update'}
           />

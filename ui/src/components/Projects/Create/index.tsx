@@ -36,9 +36,10 @@ interface Props {
 
 const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [uploadStatus, setUploadStatus] = useState<boolean>(false);
-  const hadleUploadStatus = (status: boolean) => {
-    setUploadStatus(status);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  const handleUploading = (status: boolean) => {
+    setIsUploading(status);
   };
 
   const [deleteProject] = useAsyncThunk(deleteProjectAction, {
@@ -107,7 +108,7 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
             className={c('image-container')}
             type={'file'}
             name="logo_square"
-            uploadStatus={hadleUploadStatus}
+            uploadStatus={handleUploading}
           />
         </div>
 
@@ -128,7 +129,7 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
         {orgSelectField}
         <SaveButton
           isSubmitting={p.isSubmitting}
-          isUploading={uploadStatus}
+          isUploading={isUploading}
           className={c('save-button')}
         />
       </form>

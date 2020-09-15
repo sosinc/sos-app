@@ -33,9 +33,10 @@ interface CreateTeamProps {
 
 const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamProps> = (p) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [uploadStatus, setUploadStatus] = useState<boolean>(false);
-  const hadleUploadStatus = (status: boolean) => {
-    setUploadStatus(status);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  const hadnleUploading = (status: boolean) => {
+    setIsUploading(status);
   };
 
   const [deleteTeam] = useAsyncThunk(deleteTeamAction, {
@@ -86,7 +87,7 @@ const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamPro
                 className={c('image-container')}
                 type={'file'}
                 name="logo_square"
-                uploadStatus={hadleUploadStatus}
+                uploadStatus={hadnleUploading}
               />
             </div>
 
@@ -105,7 +106,7 @@ const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamPro
 
             <SaveButton
               isSubmitting={p.isSubmitting}
-              isUploading={uploadStatus}
+              isUploading={isUploading}
               className={c('save-button')}
             />
           </form>

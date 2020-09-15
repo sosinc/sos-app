@@ -32,10 +32,12 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
   p,
 ) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [uploadStatus, setUploadStatus] = useState<boolean>(false);
-  const hadleUploadStatus = (status: boolean) => {
-    setUploadStatus(status);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  const handleUploading = (status: boolean) => {
+    setIsUploading(status);
   };
+
   const [deleteEmployee] = useAsyncThunk(deleteEmployeeAction, {
     errorTitle: 'Failed to delete Employee',
     rethrowError: true,
@@ -98,7 +100,7 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
                 className={c('image-container')}
                 type={'file'}
                 name="headshot"
-                uploadStatus={hadleUploadStatus}
+                uploadStatus={handleUploading}
               />
             </div>
 
@@ -129,7 +131,7 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
 
             <SaveButton
               isSubmitting={p.isSubmitting}
-              isUploading={uploadStatus}
+              isUploading={isUploading}
               className={c('save-button')}
             />
           </form>
