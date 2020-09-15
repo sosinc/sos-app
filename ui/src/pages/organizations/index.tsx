@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 
 import Listing, { ListingItemProps } from 'src/components/Listing';
 import NoItemsFound from 'src/components/NoItemsFound';
+import config from 'src/config';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { fetchOrganizations, orgSelector } from 'src/duck/organizations';
 import { useQuery } from 'src/lib/asyncHooks';
@@ -72,7 +73,7 @@ const Index = () => {
 };
 
 export default () => (
-  <DashboardLayout title={'Organizations - Snake Oil Software'} Header={Header}>
+  <DashboardLayout title={`Organizations - ${config.appName}`} Header={Header}>
     <Index />
   </DashboardLayout>
 );

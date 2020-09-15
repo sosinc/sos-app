@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
+import SaveButton from 'src/components/Form/SaveButton';
 import SelectBox, { SelectFieldItem } from 'src/components/Form/SelectBox';
 import TextField from 'src/components/Form/TextField';
 import Listing, { ListingItemProps } from 'src/components/Listing';
@@ -32,6 +33,12 @@ interface CreateTeamProps {
 
 const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamProps> = (p) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  const hadnleUploading = (status: boolean) => {
+    setIsUploading(status);
+  };
+
   const [deleteTeam] = useAsyncThunk(deleteTeamAction, {
     errorTitle: 'Failed to delete team',
     rethrowError: true,
@@ -76,7 +83,12 @@ const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamPro
             </div>
             <div className={c('square-logo', 'field-container')}>
               <span className={c('field-title')}>Square Logo</span>
-              <ImageUploadField className={c('image-container')} type={'file'} name="logo_square" />
+              <ImageUploadField
+                className={c('image-container')}
+                type={'file'}
+                name="logo_square"
+                uploadStatus={hadnleUploading}
+              />
             </div>
 
             <div className={c('issue-link-container', 'field-container')}>
@@ -92,12 +104,11 @@ const CreateTeamForm: React.FC<FormikProps<CreateTeamFormValues> & CreateTeamPro
               <TextField placeholder="Enter pr link template" type="text" name="pr_link_template" />
             </div>
 
-            <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
-              <div className={c({ 'saving-in': p.isSubmitting })}>
-                {p.isSubmitting ? 'Saving' : 'Save'}
-                <span />
-              </div>
-            </button>
+            <SaveButton
+              isSubmitting={p.isSubmitting}
+              isUploading={isUploading}
+              className={c('save-button')}
+            />
           </form>
         </div>
 

@@ -31,11 +31,15 @@
   height: 30px;
   left: 20px;
   position: absolute;
-  top: 63%;
+  top: 55%;
   width: 30px;
 
   &.step1 {
     display: none;
+  }
+
+  @media(max-width: $md) {
+    top: 65%;
   }
 }
 

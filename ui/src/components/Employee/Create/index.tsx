@@ -5,6 +5,7 @@ import { useState } from 'react';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
+import SaveButton from 'src/components/Form/SaveButton';
 import SelectField from 'src/components/Form/SelectField';
 import TextField from 'src/components/Form/TextField';
 import WarningModal from 'src/components/Modal/Warning';
@@ -31,6 +32,12 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
   p,
 ) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  const handleUploading = (status: boolean) => {
+    setIsUploading(status);
+  };
+
   const [deleteEmployee] = useAsyncThunk(deleteEmployeeAction, {
     errorTitle: 'Failed to delete Employee',
     rethrowError: true,
@@ -89,7 +96,12 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
 
             <div className={c('logo', 'field-container')}>
               <span className={c('field-title')}>Head Shot</span>
-              <ImageUploadField className={c('image-container')} type={'file'} name="headshot" />
+              <ImageUploadField
+                className={c('image-container')}
+                type={'file'}
+                name="headshot"
+                uploadStatus={handleUploading}
+              />
             </div>
 
             <div className={c('ecode-container', 'field-container')}>
@@ -117,12 +129,11 @@ const CreateEmployeeForm: React.FC<FormikProps<CreateEmployeeFormValues> & Creat
               />
             </div>
 
-            <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
-              <div className={c({ 'saving-in': p.isSubmitting })}>
-                {p.isSubmitting ? 'Saving' : 'Save'}
-                <span />
-              </div>
-            </button>
+            <SaveButton
+              isSubmitting={p.isSubmitting}
+              isUploading={isUploading}
+              className={c('save-button')}
+            />
           </form>
         </div>
         {deleteButton}

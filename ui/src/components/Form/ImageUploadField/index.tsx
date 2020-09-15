@@ -16,6 +16,7 @@ interface Props {
   name: string;
   className?: string;
   type?: string;
+  uploadStatus: (status: boolean) => void;
 }
 
 const Placeholder: React.FC<{ isUploading: boolean }> = (p) => (
@@ -57,6 +58,7 @@ const ImageUploadField: React.FC<Props & { formik: FormikContextType<{}> }> = ({
     }
 
     setIsUploading(true);
+    p.uploadStatus(true);
     try {
       const uploadedFilePath = await uploadFile(file, (progress) => {
         setUploadProgress(progress);
@@ -68,6 +70,7 @@ const ImageUploadField: React.FC<Props & { formik: FormikContextType<{}> }> = ({
     }
 
     setIsUploading(false);
+    p.uploadStatus(false);
   };
 
   const Content = () =>

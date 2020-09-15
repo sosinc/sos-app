@@ -7,6 +7,7 @@ import SlideBar from 'src/components/SlideBar';
 import AddDailyTasksForm from 'src/components/Tasks/AddDailyTasksForm';
 import DailyTasks from 'src/components/Tasks/DailyTasks';
 import TeamActivity from 'src/components/Tasks/TeamActivity';
+import config from 'src/config';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { currentUser } from 'src/entities/User/selectors';
 
@@ -50,7 +51,7 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout
-      title={'Dashboard - Snake Oil Software'}
+      title={`Dashboard - ${config.appName}`}
       Header={() => <Header openSlidebar={() => setOpen(true)} />}
     >
       <SlideBar

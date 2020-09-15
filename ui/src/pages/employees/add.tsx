@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 
 import CreateEmployee, { CreateEmployeeFormValues } from 'src/components/Employee/Create';
+import config from 'src/config';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
 import { designationSelector, fetchDesignations } from 'src/duck/designations';
@@ -73,7 +74,7 @@ const AddEmployee: React.FC<FormikValues> = () => {
 
 export default () => {
   return (
-    <DashboardLayout title={'Snake Oil Software - Employees'} Header={Header}>
+    <DashboardLayout title={`Employee - ${config.appName}`} Header={Header}>
       <AddEmployee />
     </DashboardLayout>
   );

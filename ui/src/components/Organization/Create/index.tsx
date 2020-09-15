@@ -1,8 +1,10 @@
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
+import { useState } from 'react';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
+import SaveButton from 'src/components/Form/SaveButton';
 import TextField from 'src/components/Form/TextField';
 import { Organization } from 'src/entities/Organizations';
 import style from './style.module.scss';
@@ -16,6 +18,12 @@ interface CreateOrgProps {
 }
 
 const CreateOrgForm: React.FC<FormikProps<CreateOrgFormValues> & CreateOrgProps> = (p) => {
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  const handleUploading = (status: boolean) => {
+    setIsUploading(status);
+  };
+
   return (
     <div className={c('org-container')}>
       <div className={c({ skeleton: p.isFetchingOrganization })}>
@@ -31,20 +39,29 @@ const CreateOrgForm: React.FC<FormikProps<CreateOrgFormValues> & CreateOrgProps>
 
           <div className={c('image-container-logo', 'field-container')}>
             <span className={c('field-title')}>Logo</span>
-            <ImageUploadField className={c('org-logo')} type={'file'} name="square_logo" />
+            <ImageUploadField
+              className={c('org-logo')}
+              type={'file'}
+              name="square_logo"
+              uploadStatus={handleUploading}
+            />
           </div>
 
           <div className={c('image-container-banner', 'field-container')}>
             <span className={c('field-title')}>Banner</span>
-            <ImageUploadField className={c('org-banner')} type="file" name="banner" />
+            <ImageUploadField
+              className={c('org-banner')}
+              type="file"
+              name="banner"
+              uploadStatus={handleUploading}
+            />
           </div>
 
-          <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
-            <div className={c({ 'saving-in': p.isSubmitting })}>
-              {p.isSubmitting ? 'Saving' : 'Save'}
-              <span />
-            </div>
-          </button>
+          <SaveButton
+            isSubmitting={p.isSubmitting}
+            isUploading={isUploading}
+            className={c('save-button')}
+          />
         </form>
       </div>
     </div>

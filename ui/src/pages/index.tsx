@@ -9,6 +9,7 @@ import FullPageLayout from 'src/components/FullPageLayout';
 import LoginForm from 'src/components/LoginForm';
 import Modal from 'src/components/Modal';
 import ResetPassword from 'src/components/ResetPassword';
+import config from 'src/config';
 import WithUser from 'src/containers/WithUser';
 import { loginUserAction, resetPasswordAction, sendPasswordResetOTPAction } from 'src/duck/auth';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
@@ -59,7 +60,7 @@ const Index = () => {
     >
       <Head>
         <link rel="shortcut icon" href="/assets/images/sos-logo.svg" />
-        <title>{'SoS App - Snake Oil Software'}</title>
+        <title>{config.appName}</title>
       </Head>
 
       <FullPageLayout className={c('container')}>
@@ -78,7 +79,7 @@ const Index = () => {
         <div className={c('content')}>
           <span className={c('brand-name')}>
             <img className={c('super-logo')} src="/assets/images/sos-logo.svg" alt="O" />
-            <h4>Snake Oil Software</h4>
+            <h4>SoS App</h4>
           </span>
 
           <span className={c('hero')}>

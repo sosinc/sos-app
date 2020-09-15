@@ -1,10 +1,11 @@
 import classNames from 'classnames/bind';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
+import { useState } from 'react';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
+import SaveButton from 'src/components/Form/SaveButton';
 import TextField from 'src/components/Form/TextField';
-/* import { Profile } from 'src/entities/Profile'; */
 
 import style from './style.module.scss';
 
@@ -19,6 +20,11 @@ interface UpdateProfileProps {
 const CreateProfileForm: React.FC<FormikProps<UpdateProfileFormValues> & UpdateProfileProps> = (
   p,
 ) => {
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const handleUploading = (status: boolean) => {
+    setIsUploading(status);
+  };
+
   return (
     <div className={c('profile-container')}>
       <div className={c({ skeleton: p.isFetchingProfile })}>
@@ -30,7 +36,12 @@ const CreateProfileForm: React.FC<FormikProps<UpdateProfileFormValues> & UpdateP
 
           <div className={c('image-container-logo', 'field-container')}>
             <span className={c('field-title')}>Profile Picture</span>
-            <ImageUploadField className={c('profile-pic')} type={'file'} name="profile_pic" />
+            <ImageUploadField
+              className={c('profile-pic')}
+              type={'file'}
+              name="profile_pic"
+              uploadStatus={handleUploading}
+            />
           </div>
 
           <div className={c('name-container', 'field-container')}>
@@ -38,12 +49,12 @@ const CreateProfileForm: React.FC<FormikProps<UpdateProfileFormValues> & UpdateP
             <TextField placeholder="Enter full name" type="name" name="fullname" />
           </div>
 
-          <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
-            <div className={c({ 'saving-in': p.isSubmitting })}>
-              {p.isSubmitting ? 'Updating' : 'Update'}
-              <span />
-            </div>
-          </button>
+          <SaveButton
+            isSubmitting={p.isSubmitting}
+            isUploading={isUploading}
+            className={c('save-button')}
+            buttonText={'Update'}
+          />
         </form>
       </div>
     </div>

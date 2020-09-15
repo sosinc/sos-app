@@ -3,6 +3,7 @@ import { FormikHelpers, FormikValues } from 'formik';
 import Link from 'next/link';
 
 import CreateOrganization, { CreateOrgFormValues } from 'src/components/Organization/Create';
+import config from 'src/config';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { createOrganizationAction } from 'src/duck/organizations';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
@@ -50,7 +51,7 @@ const AddOrg: React.FC<FormikValues> = () => {
 
 export default () => {
   return (
-    <DashboardLayout title={'Snake Oil Software - Organizations'} Header={Header}>
+    <DashboardLayout title={`Organization - ${config.appName}`} Header={Header}>
       <AddOrg />
     </DashboardLayout>
   );

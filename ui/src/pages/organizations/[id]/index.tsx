@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
 import CreateOrganization, { CreateOrgFormValues } from 'src/components/Organization/Create';
+import config from 'src/config';
 import DashboardLayout from 'src/containers/DashboardLayout';
 import { RootState } from 'src/duck';
 import { fetchOrganization, orgSelector, updateOrganizationAction } from 'src/duck/organizations';
@@ -80,7 +81,7 @@ const OrganizationDetails: React.FC<FormikValues> = () => {
 
 export default () => {
   return (
-    <DashboardLayout title={'Organization - Snake Oil Software'} Header={Header}>
+    <DashboardLayout title={`Organization - ${config.appName}`} Header={Header}>
       <OrganizationDetails />
     </DashboardLayout>
   );

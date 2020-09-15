@@ -80,28 +80,10 @@
 }
 
 .save-button {
-  background: $color-button-cta-bg;
-  border: 0;
-  border-radius: 4px;
-  color: $color-button-text;
-  cursor: pointer;
-  flex-shrink: 0;
-  font-size: 14px;
-  font-weight: 600;
   grid-column: 1;
-  grid-row: 4;
-  height: 48px;
-  outline: none;
-  padding: 0 4em;
-  transition: all 0.2s;
-}
 
-.saving-in {
-  position: relative;
-
-  span {
-    @extend %working;
-    position: absolute;
+  @media(max-width: $sm) {
+    grid-column: 1/3;
   }
 }
 

@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
 import ImageUploadField from 'src/components/Form/ImageUploadField';
+import SaveButton from 'src/components/Form/SaveButton';
 import SelectField from 'src/components/Form/SelectField';
 import TextAreaField from 'src/components/Form/TextAreaField';
 import TextField from 'src/components/Form/TextField';
@@ -35,6 +36,12 @@ interface Props {
 
 const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  const handleUploading = (status: boolean) => {
+    setIsUploading(status);
+  };
+
   const [deleteProject] = useAsyncThunk(deleteProjectAction, {
     errorTitle: 'Failed to delete Project',
     rethrowError: true,
@@ -97,7 +104,12 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
 
         <div className={c('square-logo', 'field-container')}>
           <span className={c('field-title')}>Square Logo</span>
-          <ImageUploadField className={c('image-container')} type={'file'} name="logo_square" />
+          <ImageUploadField
+            className={c('image-container')}
+            type={'file'}
+            name="logo_square"
+            uploadStatus={handleUploading}
+          />
         </div>
 
         <div className={c('issue-link-container', 'field-container')}>
@@ -115,12 +127,11 @@ const ProjectForm: React.FC<FormikProps<CreateProjectFormValues> & Props> = (p) 
         </div>
 
         {orgSelectField}
-        <button className={c('save-button')} type="submit" disabled={p.isSubmitting}>
-          <div className={c({ 'saving-in': p.isSubmitting })}>
-            {p.isSubmitting ? 'Saving' : 'Save'}
-            <span />
-          </div>
-        </button>
+        <SaveButton
+          isSubmitting={p.isSubmitting}
+          isUploading={isUploading}
+          className={c('save-button')}
+        />
       </form>
 
       {deleteButton}

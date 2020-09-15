@@ -1,4 +1,5 @@
 interface Config {
+  appName: string;
   basename: string;
   urls: {
     graphql: string;
@@ -24,6 +25,7 @@ if (!process.env.storageApiUrl) {
 const basename = process.env.basePath || '/';
 
 const config: Config = {
+  appName: 'SoS App',
   basename,
   urls: {
     feedbackForm: process.env.feedbackFormUrl,
