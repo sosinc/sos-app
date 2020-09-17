@@ -4,59 +4,106 @@ on:
       - master
 
 jobs:
-  build-ui-docker-image:
-    name: Build UI DockerImage
+  # build-ui-docker-image:
+  #   name: Build UI DockerImage
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v1
+
+  #   - name: Login to DockerHub Registry
+  #     run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+  #     env:
+  #       DOCKER_USER: ${{ secrets.DOCKER_USER }}
+  #       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  #   - name: Build image
+  #     run: docker build . -t jkhabra/sosapp-ui:latest -f Dockerfile-prod
+  #     working-directory: ui
+
+  #   - name: Push image
+  #     run: docker push jkhabra/sosapp-ui:latest
+
+  # build-sidecar-docker-image:
+  #   name: Build SIDECAR DockerImage
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v1
+
+  #   - name: Login to DockerHub Registry
+  #     run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+  #     env:
+  #       DOCKER_USER: ${{ secrets.DOCKER_USER }}
+  #       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  #   - name: Build image
+  #     run: docker build . -t jkhabra/sosapp-sidecar:latest -f Dockerfile-prod
+  #     working-directory: sidecar
+
+  #   - name: Push image
+  #     run: docker push jkhabra/sosapp-sidecar:latest
+
+  # build-gateway-docker-image:
+  #   name: Build GATEWAY DockerImage
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v1
+
+  #   - name: Login to DockerHub Registry
+  #     run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+  #     env:
+  #       DOCKER_USER: ${{ secrets.DOCKER_USER }}
+  #       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  #   - name: Build image
+  #     run: docker build . -t jkhabra/sosapp-gateway:latest -f Dockerfile
+  #     working-directory: gateway
+
+  #   - name: Push image
+  #     run: docker push jkhabra/sosapp-gateway:latest
+
+  upload-files:
+    name: Upload files to app.sosinc.io
     runs-on: ubuntu-latest
+    # needs: [ build-gateway-docker-image, build-sidecar-docker-image, build-ui-docker-image ]
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@master
 
-    - name: Login to DockerHub Registry
-      run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
-      env:
-        DOCKER_USER: ${{ secrets.DOCKER_USER }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Upload docker-compose
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SOS_APP_DEPLOYMENT_HOST }}
+        port: ${{ secrets.SOS_APP_DEPLOYMENT_PORT }}
+        username: ${{ secrets.SOS_APP_DEPLOYMENT_USER }}
+        key: ${{ secrets.SOS_APP_DEPLOYMENT_KEY }}
+        source: "docker-compose.prod.yml"
+        target: "sos-app"
+        overwrite: true
 
-    - name: Build image
-      run: docker build . -t jkhabra/sosapp-ui:latest -f Dockerfile-prod
-      working-directory: ui
+    - name: Upload gateway conf
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SOS_APP_DEPLOYMENT_HOST }}
+        port: ${{ secrets.SOS_APP_DEPLOYMENT_PORT }}
+        username: ${{ secrets.SOS_APP_DEPLOYMENT_USER }}
+        key: ${{ secrets.SOS_APP_DEPLOYMENT_KEY }}
+        source: "gateway/gateway-prod.conf"
+        target: "sos-app"
+        overwrite: true
 
-    - name: Push image
-      run: docker push jkhabra/sosapp-ui:latest
-
-  build-sidecar-docker-image:
-    name: Build SIDECAR DockerImage
+  restart-docker-compose:
+    name: Restart Docker compose
     runs-on: ubuntu-latest
+    needs: upload-files
     steps:
-    - uses: actions/checkout@v1
-
-    - name: Login to DockerHub Registry
-      run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
-      env:
-        DOCKER_USER: ${{ secrets.DOCKER_USER }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
-    - name: Build image
-      run: docker build . -t jkhabra/sosapp-sidecar:latest -f Dockerfile-prod
-      working-directory: sidecar
-
-    - name: Push image
-      run: docker push jkhabra/sosapp-sidecar:latest
-
-  build-gateway-docker-image:
-    name: Build GATEWAY DockerImage
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-
-    - name: Login to DockerHub Registry
-      run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
-      env:
-        DOCKER_USER: ${{ secrets.DOCKER_USER }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
-    - name: Build image
-      run: docker build . -t jkhabra/sosapp-gateway:latest -f Dockerfile
-      working-directory: gateway
-
-    - name: Push image
-      run: docker push jkhabra/sosapp-gateway:latest
+    - name: Restart docker-compose from SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SOS_APP_DEPLOYMENT_HOST }}
+        port: ${{ secrets.SOS_APP_DEPLOYMENT_PORT }}
+        username: ${{ secrets.SOS_APP_DEPLOYMENT_USER }}
+        key: ${{ secrets.SOS_APP_DEPLOYMENT_KEY }}
+        script: |
+          cd sos-app
+          docker-compose pull -q
+          docker-compose down
+          docker-compose -f docker-compose.prod.yml up -d

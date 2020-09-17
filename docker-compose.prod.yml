@@ -80,4 +80,4 @@ services:
       - ui
       - minio
     volumes:
-      - ./gateway.conf:/etc/nginx/conf.d/default.conf
+      - ./gateway-prod.conf:/etc/nginx/conf.d/default.conf
