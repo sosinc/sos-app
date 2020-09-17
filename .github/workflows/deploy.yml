@@ -4,67 +4,67 @@ on:
       - master
 
 jobs:
-  # build-ui-docker-image:
-  #   name: Build UI DockerImage
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v1
+  build-ui-docker-image:
+    name: Build UI DockerImage
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
 
-  #   - name: Login to DockerHub Registry
-  #     run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
-  #     env:
-  #       DOCKER_USER: ${{ secrets.DOCKER_USER }}
-  #       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Login to DockerHub Registry
+      run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-  #   - name: Build image
-  #     run: docker build . -t jkhabra/sosapp-ui:latest -f Dockerfile-prod
-  #     working-directory: ui
+    - name: Build image
+      run: docker build . -t jkhabra/sosapp-ui:latest -f Dockerfile-prod
+      working-directory: ui
 
-  #   - name: Push image
-  #     run: docker push jkhabra/sosapp-ui:latest
+    - name: Push image
+      run: docker push jkhabra/sosapp-ui:latest
 
-  # build-sidecar-docker-image:
-  #   name: Build SIDECAR DockerImage
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v1
+  build-sidecar-docker-image:
+    name: Build SIDECAR DockerImage
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
 
-  #   - name: Login to DockerHub Registry
-  #     run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
-  #     env:
-  #       DOCKER_USER: ${{ secrets.DOCKER_USER }}
-  #       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Login to DockerHub Registry
+      run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-  #   - name: Build image
-  #     run: docker build . -t jkhabra/sosapp-sidecar:latest -f Dockerfile-prod
-  #     working-directory: sidecar
+    - name: Build image
+      run: docker build . -t jkhabra/sosapp-sidecar:latest -f Dockerfile-prod
+      working-directory: sidecar
 
-  #   - name: Push image
-  #     run: docker push jkhabra/sosapp-sidecar:latest
+    - name: Push image
+      run: docker push jkhabra/sosapp-sidecar:latest
 
-  # build-gateway-docker-image:
-  #   name: Build GATEWAY DockerImage
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v1
+  build-gateway-docker-image:
+    name: Build GATEWAY DockerImage
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
 
-  #   - name: Login to DockerHub Registry
-  #     run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
-  #     env:
-  #       DOCKER_USER: ${{ secrets.DOCKER_USER }}
-  #       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Login to DockerHub Registry
+      run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-  #   - name: Build image
-  #     run: docker build . -t jkhabra/sosapp-gateway:latest -f Dockerfile
-  #     working-directory: gateway
+    - name: Build image
+      run: docker build . -t jkhabra/sosapp-gateway:latest -f Dockerfile
+      working-directory: gateway
 
-  #   - name: Push image
-  #     run: docker push jkhabra/sosapp-gateway:latest
+    - name: Push image
+      run: docker push jkhabra/sosapp-gateway:latest
 
   upload-files:
     name: Upload files to app.sosinc.io
     runs-on: ubuntu-latest
-    # needs: [ build-gateway-docker-image, build-sidecar-docker-image, build-ui-docker-image ]
+    needs: [ build-gateway-docker-image, build-sidecar-docker-image, build-ui-docker-image ]
     steps:
     - uses: actions/checkout@master
 
@@ -90,12 +90,15 @@ jobs:
         target: "sos-app"
         overwrite: true
 
-  restart-docker-compose:
+  deploy:
     name: Restart Docker compose
     runs-on: ubuntu-latest
     needs: upload-files
     steps:
-    - name: Restart docker-compose from SSH
+    - name: Checkout Repo
+      uses: actions/checkout@master
+
+    - name: Restart docker-compose
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SOS_APP_DEPLOYMENT_HOST }}
@@ -107,3 +110,12 @@ jobs:
           docker-compose pull -q
           docker-compose down
           docker-compose -f docker-compose.prod.yml up -d
+
+    - name: Apply hasura migrations
+      uses: tibotiber/hasura-action@master
+      with:
+        args: migrate apply
+      env:
+        HASURA_ENDPOINT: ${{ secrets.HASURA_ENDPOINT }}
+        HASURA_ADMIN_SECRET: ${{ secrets.HASURA_ADMIN_SECRET }}
+        HASURA_WORKDIR: hasura
