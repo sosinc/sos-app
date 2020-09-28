@@ -25,7 +25,7 @@ services:
     command: server /data/minio
 
   hasura:
-    image: hasura/graphql-engine:v1.3.0
+    image: hasura/graphql-engine:v1.3.2
     depends_on:
     - "postgres"
     environment:
