@@ -54,7 +54,7 @@ services:
       retries: 3
 
   hasura:
-    image: hasura/graphql-engine:v1.3.0
+    image: hasura/graphql-engine:v1.3.2
     depends_on:
     - "postgres"
     environment:

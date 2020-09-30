@@ -60,3 +60,62 @@ jobs:
 
     - name: Push image
       run: docker push jkhabra/sosapp-gateway:latest
+
+  upload-files:
+    name: Upload files to app.sosinc.io
+    runs-on: ubuntu-latest
+    needs: [ build-gateway-docker-image, build-sidecar-docker-image, build-ui-docker-image ]
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Upload docker-compose
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SOS_APP_DEPLOYMENT_HOST }}
+        port: ${{ secrets.SOS_APP_DEPLOYMENT_PORT }}
+        username: ${{ secrets.SOS_APP_DEPLOYMENT_USER }}
+        key: ${{ secrets.SOS_APP_DEPLOYMENT_KEY }}
+        source: "docker-compose.prod.yml"
+        target: "sos-app"
+        overwrite: true
+
+    - name: Upload gateway conf
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SOS_APP_DEPLOYMENT_HOST }}
+        port: ${{ secrets.SOS_APP_DEPLOYMENT_PORT }}
+        username: ${{ secrets.SOS_APP_DEPLOYMENT_USER }}
+        key: ${{ secrets.SOS_APP_DEPLOYMENT_KEY }}
+        source: "gateway/gateway-prod.conf"
+        target: "sos-app"
+        overwrite: true
+
+  deploy:
+    name: Restart Docker compose
+    runs-on: ubuntu-latest
+    needs: upload-files
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@master
+
+    - name: Restart docker-compose
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SOS_APP_DEPLOYMENT_HOST }}
+        port: ${{ secrets.SOS_APP_DEPLOYMENT_PORT }}
+        username: ${{ secrets.SOS_APP_DEPLOYMENT_USER }}
+        key: ${{ secrets.SOS_APP_DEPLOYMENT_KEY }}
+        script: |
+          cd sos-app
+          docker-compose pull -q
+          docker-compose down
+          docker-compose -f docker-compose.prod.yml up -d
+
+    - name: Apply hasura migrations
+      uses: tibotiber/hasura-action@master
+      with:
+        args: migrate apply
+      env:
+        HASURA_ENDPOINT: ${{ secrets.HASURA_ENDPOINT }}
+        HASURA_ADMIN_SECRET: ${{ secrets.HASURA_ADMIN_SECRET }}
+        HASURA_WORKDIR: hasura
