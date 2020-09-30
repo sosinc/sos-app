@@ -133,6 +133,8 @@ tables:
   - name: create_activity_on_task_status_update
     definition:
       enable_manual: false
+      delete:
+        columns: '*'
       update:
         columns:
         - is_delivered

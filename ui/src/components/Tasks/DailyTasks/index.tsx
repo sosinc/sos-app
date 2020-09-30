@@ -63,14 +63,14 @@ const selectMoreOptions = [
   },
 ];
 
-// const NoTodaysCommitment: React.FC<{ addItemCb: () => void }> = (p) => (
-const NoTodaysCommitment = () => (
+const NoTodaysCommitment: React.FC<{ onAddCommitment: () => void }> = (p) => (
   <div className={c('not-found-container')}>
     <NoItemsFound
       Icon={RiPlayListAddLine}
       message=" You haven't added a status update for today."
       addItemText="Add one"
       addItemUrl=""
+      addItemCb={p.onAddCommitment}
     />
   </div>
 );
@@ -296,7 +296,7 @@ const DailyTaskRow: React.FC<DailyTask & { isFetching: boolean }> = ({ isFetchin
   );
 };
 
-const DailyTasks: React.FC = () => {
+const DailyTasks: React.FC<{ onAddCommitment: () => void }> = (p) => {
   const [pagination, setPagination] = useState({ limit: 20, offset: 0 });
   const tasks = useSelector(taskSelector.selectAll);
 
@@ -332,7 +332,7 @@ const DailyTasks: React.FC = () => {
       {hasMoreButton}
     </>
   ) : (
-    <NoTodaysCommitment />
+    <NoTodaysCommitment onAddCommitment={p.onAddCommitment} />
   );
 
   return <>{dailyTasksRows}</>;

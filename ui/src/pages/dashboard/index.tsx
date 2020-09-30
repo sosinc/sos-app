@@ -64,7 +64,7 @@ const Dashboard = () => {
       </SlideBar>
       <div className={c('container')}>
         <div className={c('todays-commitments')}>
-          <DailyTasks />
+          <DailyTasks onAddCommitment={() => setOpen(true)} />
         </div>
 
         <div className={c('team-activity')}>

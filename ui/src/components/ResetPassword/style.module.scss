@@ -3,13 +3,14 @@
 .form {
   display: flex;
   font: inherit;
-  max-width: 90vw;
   min-height: 17em;
   padding: 46px;
   position: relative;
+  width: 40em;
 
   @media(max-width: $sm) {
     flex-direction: column;
+    width: 35em;
   }
 
   &.step1 {
@@ -31,7 +32,7 @@
   height: 30px;
   left: 20px;
   position: absolute;
-  top: 55%;
+  top: 65%;
   width: 30px;
 
   &.step1 {
@@ -39,7 +40,7 @@
   }
 
   @media(max-width: $md) {
-    top: 65%;
+    top: 55%;
   }
 }
 
