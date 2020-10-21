@@ -56,7 +56,8 @@ services:
   hasura:
     image: hasura/graphql-engine:v1.3.2
     depends_on:
-    - "postgres"
+    - postgres
+    - sidecar
     environment:
       PORT: 80
       HASURA_GRAPHQL_DATABASE_URL: postgres://sos:sos@postgres:5432/sos
@@ -88,7 +89,6 @@ services:
     depends_on:
       - postgres
       - redis
-      - hasura
     command: yarn dev
 
   ui:

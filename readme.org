@@ -3,25 +3,19 @@
 SoS is an insolent app meant for Software Development teams to be more effective
 in creating good quality software.
 
-It does so by bringing transparency in your team and by aiming to save you from
-meetings.
-
 Being an insolent software, you can start using it without waiting on anyone to
 adopt it organization wide. Although to get most out of SoS, it is better if you
 join along your team.
 
 * MVP
 
-SoS is in early stages of development. In its MVP form, it has following goals:
-
-#+begin_quote
-Replace daily standup meetings while enhancing its intended value
-#+end_quote
+SoS is in early stages of development. In its MVP form, it strives to bring
+transparency in your team.
 
 It does so by allowing developers to update their team on:
    - What they are working on today
    - What they accomplished the previous working day
-   - Any challenges and impediments they are facing for a particular task
+   - Any challenges and impediments they are facing
 
 * Development Setup
 
@@ -36,13 +30,7 @@ Following must be installed:
 
 ** Setup
 
-1. *Start the services*
-  #+begin_src sh
-  cd /path/to/sos-app
-  docker-compose up
-  #+end_src
-
-2. Create =.env= files
+1. Create =.env= files
 
   #+begin_src sh
     # hasura/.env
@@ -63,6 +51,12 @@ Following must be installed:
     APP_NAME="SoS App"
   #+end_src
 
+2. *Start the services*
+  #+begin_src sh
+  cd /path/to/sos-app
+  docker-compose up
+  #+end_src
+
 3. *Apply [[https://hasura.io/docs/1.0/graphql/manual/migrations/index.html][hasura migration]]*
    #+begin_src sh
      cd ./hasura
@@ -70,10 +64,35 @@ Following must be installed:
      hasura migrate apply
    #+end_src
 
-4. *Start hasura console*
+   You need to do this when you are starting the app for first time, and any
+   time when hasura migrations have been changed.
+
+4. *Restart sidecar*
+  #+begin_src sh
+  docker-compose restart sidecar
+  #+end_src
+
+  You need to do this when you are starting the app for first time.
+
+5. (Optional) *Start hasura console*
   #+begin_src sh
     hasura console
   #+end_src
+
+** Troubleshooting
+
+1. *Services failing to start*: docker-compose don't start the applications in
+   any particular order, but sos-app's services need an order when they are
+   started for the first time. E.g =postgres= must be up for =hasura= to run its
+   migrations. You might need to start some services again with =docker-compose
+   restart=; e.g if =postgres= took some time to set itself up, you will likely
+   need to restart =hasura=, and hence =sidecar= after that.
+
+2. *Gateway crashing*: Gateway uses nginx, which crashes if any of the proxied
+   services is unreachable during startup. This is quite likely to happen during
+   initial startup of the app. If this is the case, please check gateway logs to
+   see which service is unreachable with =docker-compose logs gateway=, and
+   restart it with =docker-compose restart <service>=
 
 ** How to access different services?
 
