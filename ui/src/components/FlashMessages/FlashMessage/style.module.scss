@@ -1,14 +1,6 @@
 @import 'src/scss/lib';
 
 .container {
-  bottom: 2em;
-  position: fixed;
-  right: 2em;
-  width: 380px;
-  z-index: 20;
-}
-
-.message-container {
   align-items: center;
   background: $color-flash-bg;
   border: 1px solid $color-flash-border;

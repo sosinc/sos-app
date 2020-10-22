@@ -99,6 +99,8 @@ services:
       SERVER_GRAPHQL_URL: "http://localhost:5000/hasura/v1/graphql"
       STORAGE_API_URL: "http://localhost:5000/uploads/v1/storage"
       FEEDBACK_FORM_URL: "https://formspree.io/moqpaazn"
+    ports:
+      - 6006:6006
     volumes:
       - ./ui:/app
       - /app/node_modules

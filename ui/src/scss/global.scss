@@ -18,3 +18,11 @@ a {
   color: $color-text-bright1;
   text-decoration: none;
 }
+
+.flash-messages-portal {
+  bottom: 2em;
+  position: fixed;
+  right: 2em;
+  width: 380px;
+  z-index: 20;
+}
