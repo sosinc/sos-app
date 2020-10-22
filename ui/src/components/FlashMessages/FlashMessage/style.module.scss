@@ -1,0 +1,52 @@
+@import 'src/scss/lib';
+
+.container {
+  align-items: center;
+  background: $color-flash-bg;
+  border: 1px solid $color-flash-border;
+  border-radius: 4px;
+  color: $color-text-primary;
+  display: flex;
+  margin-top: 12px;
+  overflow: hidden;
+  padding: 12px;
+  position: relative;
+}
+
+.status-icon {
+  color: $color-text-primary;
+  height: 20px;
+  margin-right: 6px;
+  width: 20px;
+
+  &.error {
+    color: $color-error-border;
+  }
+
+  &.success {
+    color: $color-success-border;
+  }
+}
+
+.flash-icon {
+  height: 100%;
+  width: 100%;
+}
+
+
+.title {
+  font-weight: bold;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.body {
+  font-size: 13px;
+}
+
+.close-icon {
+  cursor: pointer;
+  position: absolute;
+  right: 6px;
+  top: 6px;
+}
