@@ -24,8 +24,8 @@ export const FlashMessage: React.FC<FlashMessageProps> = (p) => {
     p.type === 'success' ? (
       <MdCheckCircle className={s['flash-icon']} />
     ) : (
-        <MdError className={s['flash-icon']} />
-      );
+      <MdError className={s['flash-icon']} />
+    );
 
   return (
     <div className={s.container}>
