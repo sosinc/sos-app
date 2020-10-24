@@ -75,27 +75,6 @@
     width: 3em;
   }
 
-  .pro-container {
-    align-items: center;
-    border: 1px solid $color-boundary;
-    border-radius: 12px;
-    display: flex;
-    justify-content: center;
-    padding: 4px;
-
-    &:hover {
-      background: $color-bg-secondary;
-      padding: 4px;
-    }
-  }
-
-  .up-icon {
-    color: $color-text-dim2;
-    cursor: pointer;
-    height: 15px;
-    width: 17px;
-  }
-
   .user-menu {
     left: 6px;
     top: -10px;

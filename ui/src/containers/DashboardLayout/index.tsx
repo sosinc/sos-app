@@ -17,11 +17,13 @@ import {
 import { useSelector } from 'react-redux';
 
 import Feedback from 'src/components/Feedback';
+import BorderButton from 'src/components/Form/BorderButton';
 import SelectBox from 'src/components/Form/SelectBox';
-import ContextMenu, { Separator, ContextMenuItem } from 'src/components/Modal/ContextMenu';
+import ContextMenu, { ContextMenuItem, Separator } from 'src/components/Modal/ContextMenu';
 import FallbackIcon from 'src/containers/FallbackIcon';
 import WithUser from 'src/containers/WithUser';
 import { setCurrentOrgAction } from 'src/duck/auth';
+import { logoutUserAction } from 'src/duck/auth';
 import { orgSelector } from 'src/duck/organizations';
 import { teamSelector } from 'src/duck/teams';
 import { Organization } from 'src/entities/Organizations';
@@ -29,7 +31,6 @@ import { Project } from 'src/entities/Project';
 import { Team } from 'src/entities/Team';
 import { currentUser } from 'src/entities/User/selectors';
 import { useAsyncThunk } from 'src/lib/asyncHooks';
-import { logoutUserAction } from 'src/duck/auth';
 
 import Modal from 'src/components/Modal';
 
@@ -248,16 +249,16 @@ const Index: React.FC<LayoutProps> = (p) => {
                 isOpen={isUserMenuOpen}
                 onClose={hideUserMenu}
               >
-                <div className={c('pro-container')} onClick={toggleUserMenu}>
-                  <Tippy content={user.name}>
-                    <div className={c('avatar-container')}>
-                      <FallbackIcon className={c('pic')} logo={user.avatar} name={user.name} />
-                      <span className={c('online-status')} />
-                    </div>
-                  </Tippy>
-
-                  <MdKeyboardArrowDown className={c('up-icon')} />
-                </div>
+                <span onClick={toggleUserMenu}>
+                  <BorderButton>
+                    <Tippy content={user.name}>
+                      <div className={c('avatar-container')}>
+                        <FallbackIcon className={c('pic')} logo={user.avatar} name={user.name} />
+                        <span className={c('online-status')} />
+                      </div>
+                    </Tippy>
+                  </BorderButton>
+                </span>
               </ContextMenu>
             </div>
 
