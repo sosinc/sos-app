@@ -1,4 +1,4 @@
-#+title: [S]nake [O]il [S]oftware App
+#+title: SoS App
 
 SoS is an insolent app meant for Software Development teams to be more effective
 in creating good quality software.
