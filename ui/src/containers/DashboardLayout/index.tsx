@@ -13,17 +13,17 @@ import {
   MdKeyboardArrowDown,
   MdKeyboardArrowRight,
   MdMenu,
-  MdMoreHoriz,
 } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
 import Feedback from 'src/components/Feedback';
+import BorderButton from 'src/components/Form/BorderButton';
 import SelectBox from 'src/components/Form/SelectBox';
-import ContextMenu from 'src/components/Modal/ContextMenu';
-import UserMenu from 'src/components/Modal/ContextMenu/UserMenu';
+import ContextMenu, { ContextMenuItem, Separator } from 'src/components/Modal/ContextMenu';
 import FallbackIcon from 'src/containers/FallbackIcon';
 import WithUser from 'src/containers/WithUser';
 import { setCurrentOrgAction } from 'src/duck/auth';
+import { logoutUserAction } from 'src/duck/auth';
 import { orgSelector } from 'src/duck/organizations';
 import { teamSelector } from 'src/duck/teams';
 import { Organization } from 'src/entities/Organizations';
@@ -177,6 +177,17 @@ const Index: React.FC<LayoutProps> = (p) => {
   const projects = user.projects ? user.projects : [];
   const currentOrg = user.organization;
 
+  const [logout] = useAsyncThunk(logoutUserAction, {
+    errorTitle: 'Logout Failed',
+    rethrowError: true,
+    successTitle: 'Logout successfully',
+  });
+
+  const handleLogout = async () => {
+    await logout();
+    Router.replace(`/`);
+  };
+
   const userSection = () => {
     const userProjects = projects.map((i) => <UserProject key={i.id} {...i} />);
 
@@ -197,6 +208,23 @@ const Index: React.FC<LayoutProps> = (p) => {
     );
   };
 
+  const userContext = [
+    <ContextMenuItem key="0">
+      <Link href={'/'}>
+        <a>Dashboard</a>
+      </Link>
+    </ContextMenuItem>,
+    <ContextMenuItem key="1">
+      <Link href={'/profile'}>
+        <a>Settings</a>
+      </Link>
+    </ContextMenuItem>,
+    <Separator key="2" />,
+    <ContextMenuItem key="3">
+      <span onClick={handleLogout}>Logout</span>
+    </ContextMenuItem>,
+  ];
+
   return (
     <WithUser inverted={false} redirectPath={'/'}>
       <Head>
@@ -213,27 +241,27 @@ const Index: React.FC<LayoutProps> = (p) => {
 
         <div className={c('sidebar', isBurgerMenuOpen ? 'show-sidebar' : '')}>
           <div className={c('header')}>
-            <OrgSelectBox currentOrg={currentOrg} />
+            <div className={c('header-top')}>
+              <OrgSelectBox currentOrg={currentOrg} />
+              <ContextMenu
+                className={c('user-menu')}
+                items={userContext}
+                isOpen={isUserMenuOpen}
+                onClose={hideUserMenu}
+              >
+                <span onClick={toggleUserMenu}>
+                  <BorderButton>
+                    <Tippy content={user.name}>
+                      <div className={c('avatar-container')}>
+                        <FallbackIcon className={c('pic')} logo={user.avatar} name={user.name} />
+                        <span className={c('online-status')} />
+                      </div>
+                    </Tippy>
+                  </BorderButton>
+                </span>
+              </ContextMenu>
+            </div>
 
-            <Tippy content={user.name}>
-              <div className={c('avatar-container')}>
-                <Link href="/profile">
-                  <span>
-                    <FallbackIcon className={c('pic')} logo={user.avatar} name={user.name} />
-                  </span>
-                </Link>
-                <span className={c('online-status')} />
-              </div>
-            </Tippy>
-
-            <ContextMenu
-              className={c('user-menu')}
-              content={<UserMenu />}
-              isOpen={isUserMenuOpen}
-              onClose={hideUserMenu}
-            >
-              <MdMoreHoriz className={c('dot-menu-icon')} onClick={toggleUserMenu} />
-            </ContextMenu>
             <Tippy content="Close">
               <span>
                 <MdClose className={c('hide-burger-menu')} onClick={() => setBurgerMenu(false)} />

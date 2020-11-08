@@ -56,23 +56,23 @@
   }
 
   .header {
+    display: flex;
+    margin: 12px 15px 0 20px;
+    width: 179px;
+  }
+
+  .header-top {
     align-items: center;
     display: flex;
-    margin: 9px 21px 0 20px;
-    width: 179px;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
   }
 
   .org-select-box {
     border: 0;
+    padding: 4px;
     width: 3em;
-  }
-
-  .dot-menu-icon {
-    color: $color-text-dim2;
-    cursor: pointer;
-    height: 22px;
-    margin-left: 12px;
-    width: 22px;
   }
 
   .user-menu {
