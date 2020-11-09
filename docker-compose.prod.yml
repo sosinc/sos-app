@@ -69,6 +69,9 @@ services:
       REDISCLOUD_SESSION_URL: redis://redis:6379
       STORAGE_GATEWAY_ENDPOINT: "${HOSTNAME}/storage"
       NODE_ENV: production
+      SMTP_HOST: "${SMTP_HOST}"
+      SMTP_USER: "${SMTP_USER}"
+      SMTP_PASSWORD: "${SMTP_PASSWORD}"
 
   gateway:
     image: jkhabra/sosapp-gateway:latest
